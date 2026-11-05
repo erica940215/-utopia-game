@@ -4,13 +4,34 @@
    ========================================================= */
 const MODEL_EXT='glb'/*@@MODEL_EXT@@*/;
 const assetCache={}, assetWait={};
+function modelUrl(file){
+  const hasExt=/\.(glb|gltf)$/.test(file);
+  if(MODEL_EXT==='json') return 'models/'+file.replace(/\.(glb|gltf)$/,'')+'.json';
+  return 'models/'+file+(hasExt?'':'.glb');
+}
+/* 0 A.D. 動物：模型、動畫、貼圖分開放，載入後組合成一份 */
+function loadZad(name){
+  const key='zad:'+name; if(assetCache[key]) return Promise.resolve(assetCache[key]); if(assetWait[key]) return assetWait[key];
+  const def=DATA.assets.zad[name]; if(!def) return Promise.reject(new Error('no zad'));
+  const raw=f=>new Promise((res,rej)=>new THREE.GLTFLoader().load(modelUrl(f),res,undefined,rej));
+  const tex=def.tex?new Promise(res=>{ try{ new THREE.TextureLoader().load('models/'+def.tex,t=>{ t.flipY=false; res(t); },undefined,()=>res(null)); }catch(e){ res(null); } }):Promise.resolve(null);
+  assetWait[key]=Promise.all([raw(def.mesh),tex,...Object.entries(def.anims||{}).map(([k,f])=>raw(f).then(g=>[k,g]).catch(()=>null))]).then(([g,t,...an])=>{
+    g.scene.traverse(o=>{ if(o.isMesh){ o.material=new THREE.MeshStandardMaterial({map:t||null,color:t?0xffffff:0x9a8a7a,roughness:0.9,metalness:0,skinning:!!o.isSkinnedMesh}); } });
+    const clips=[];
+    for(const x of an){ if(!x) continue; const [k,ga]=x; for(const c of ga.animations){ const cl=c.clone(); cl.name=k; cl.tracks=cl.tracks.filter(tr=>g.scene.getObjectByName(tr.name.split('.')[0])); if(cl.tracks.length) clips.push(cl); break; } }
+    g.animations=clips; g.scene.updateMatrixWorld(true);
+    g.userData={box:new THREE.Box3().setFromObject(g.scene)};
+    assetCache[key]=g; return g;
+  });
+  return assetWait[key];
+}
 const mixers=new Set();
 function loadAsset(file){
   if(assetCache[file]) return Promise.resolve(assetCache[file]);
   if(assetWait[file]) return assetWait[file];
   if(!THREE.GLTFLoader) return Promise.reject(new Error('no loader'));
   assetWait[file]=new Promise((res,rej)=>{
-    try{ new THREE.GLTFLoader().load(`models/${file}.${MODEL_EXT}`,g=>{
+    try{ new THREE.GLTFLoader().load(modelUrl(file),g=>{
       g.scene.updateMatrixWorld(true);
       g.userData={box:new THREE.Box3().setFromObject(g.scene)};
       assetCache[file]=g; res(g);
@@ -39,7 +60,7 @@ function instAsset(g,opt){
 }
 /* 把程序模型換成外部模型（載入完成才換，失敗就維持程序模型） */
 function swapInAsset(group,file,opt,anims){
-  loadAsset(file).then(g=>{
+  (typeof file==='function'?file():loadAsset(file)).then(g=>{
     if(group.userData.disposed) return;
     for(const c of [...group.children]) group.remove(c);
     const inst=instAsset(g,opt); group.add(inst.obj);
@@ -66,6 +87,7 @@ function updateMixers(dt){
 function speciesAsset(sp){
   const A=DATA.assets; if(!A) return null;
   const map=A.species[sp.id]; if(!map) return null;
+  if(map.zad&&A.zad&&A.zad[map.zad]) return {file:()=>loadZad(map.zad),anim:{walk:'walk',idle:'idle',run:'walk',eat:'idle',swim:'walk'},opt:map};
   const an=A.animals[map.asset]; return an?{file:an.file,anim:an.anim,opt:map}:null;
 }
 /* 靜態物件（樹、岩石）：已載入就直接複製，否則先回傳 null */
@@ -93,4 +115,4 @@ function upgradeTrain(){
 }
 
 /* 測試用：讓自動測試檢查場景與已載入的素材 */
-try{ window.__utopiaDebug={assetCache,get zooScene(){ return zooScene; },get scene(){ return scene; }}; }catch(e){}
+try{ window.__utopiaDebug={assetCache,loadZad,get zooScene(){ return zooScene; },get scene(){ return scene; }}; }catch(e){}

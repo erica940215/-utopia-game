@@ -147,26 +147,25 @@
  },
  "species": {
   "arctic_fox": {
-   "asset": "fox",
-   "height": 0.75,
-   "tint": "#f2f5f8"
+   "zad": "fox_arctic",
+   "height": 0.45
   },
   "gray_wolf": {
-   "asset": "wolf",
-   "height": 0.9
+   "zad": "wolf",
+   "height": 0.85
   },
   "sika_deer": {
-   "asset": "deer",
-   "height": 1.3
+   "zad": "deer",
+   "height": 1.0
   },
   "formosan_reeve_s_muntjac": {
-   "asset": "deer",
-   "height": 0.65,
+   "zad": "deer",
+   "height": 0.55,
    "tint": "#9a6a42"
   },
   "formosan_sambar": {
-   "asset": "stag",
-   "height": 1.6,
+   "zad": "deer",
+   "height": 1.3,
    "tint": "#5a4434"
   },
   "alpaca": {
@@ -174,22 +173,22 @@
    "height": 1.7
   },
   "przewalski_horse": {
-   "asset": "horse",
-   "height": 1.45,
+   "zad": "horse_brown",
+   "height": 1.4,
    "tint": "#c49a64"
   },
   "pony": {
-   "asset": "horse",
+   "zad": "pony",
    "height": 1.0
   },
   "donkey": {
-   "asset": "donkey",
-   "height": 1.25
+   "zad": "donkey",
+   "height": 1.2
   },
   "african_wild_ass": {
-   "asset": "donkey",
+   "zad": "donkey",
    "height": 1.3,
-   "tint": "#a8a49c"
+   "tint": "#b8b0a6"
   },
   "arapaima": {
    "asset": "tuna",
@@ -234,6 +233,179 @@
    "asset": "manta",
    "length": 0.8,
    "tint": "#3a3430"
+  },
+  "african_elephant": {
+   "zad": "elephant_african_bush",
+   "height": 3.2
+  },
+  "asian_elephant": {
+   "zad": "elephant_asian",
+   "height": 2.7
+  },
+  "giraffe": {
+   "zad": "giraffe_adult",
+   "height": 5.0
+  },
+  "chapman_zebra": {
+   "zad": "zebra",
+   "height": 1.4
+  },
+  "lion": {
+   "zad": "lion",
+   "height": 1.2
+  },
+  "bengal_tiger": {
+   "zad": "tiger",
+   "height": 1.0
+  },
+  "malayan_tiger": {
+   "zad": "tiger",
+   "height": 0.9
+  },
+  "white_rhino": {
+   "zad": "rhino",
+   "height": 1.8
+  },
+  "hippo": {
+   "zad": "hippopotamus",
+   "height": 1.5
+  },
+  "pygmy_hippo": {
+   "zad": "hippopotamus",
+   "height": 0.85,
+   "tint": "#4a3f42"
+  },
+  "polar_bear": {
+   "zad": "bear_white",
+   "height": 1.6
+  },
+  "brown_bear": {
+   "zad": "bear_brown",
+   "height": 1.4
+  },
+  "asiatic_black_bear": {
+   "zad": "bear_black",
+   "height": 1.0
+  },
+  "formosan_black_bear": {
+   "zad": "bear_black",
+   "height": 0.95
+  },
+  "malayan_sun_bear": {
+   "zad": "bear_black",
+   "height": 0.7
+  },
+  "dromedary_camel_one_humped_camel": {
+   "zad": "camel",
+   "height": 2.0
+  },
+  "bactrian_camel": {
+   "zad": "camel",
+   "height": 2.0,
+   "tint": "#8a6a48"
+  },
+  "chinese_alligator": {
+   "zad": "crocodile",
+   "height": 0.4
+  },
+  "false_gharial": {
+   "zad": "crocodile",
+   "height": 0.55,
+   "tint": "#4a4a3a"
+  },
+  "musk_ox": {
+   "zad": "muskox",
+   "height": 1.4
+  },
+  "common_peafowl": {
+   "zad": "peacock",
+   "height": 1.0
+  },
+  "wildebeest": {
+   "zad": "wildebeest",
+   "height": 1.3
+  },
+  "addax": {
+   "zad": "gazelle",
+   "height": 1.1,
+   "tint": "#e0d4bc"
+  },
+  "gemsbok": {
+   "zad": "gazelle",
+   "height": 1.2,
+   "tint": "#b8aea2"
+  },
+  "common_eland": {
+   "zad": "gazelle",
+   "height": 1.6,
+   "tint": "#c4a27a"
+  },
+  "bongo": {
+   "zad": "gazelle",
+   "height": 1.2,
+   "tint": "#a8452a"
+  },
+  "taiwan_serow": {
+   "zad": "goat",
+   "height": 0.8,
+   "tint": "#3a3430"
+  },
+  "barbary_sheep_aoudad": {
+   "zad": "goat",
+   "height": 0.9,
+   "tint": "#a8845a"
+  },
+  "domestic_pig": {
+   "zad": "pig1",
+   "height": 0.8
+  },
+  "lanyu_pig": {
+   "zad": "pig1",
+   "height": 0.6,
+   "tint": "#2a2624"
+  },
+  "wild_boar": {
+   "zad": "boar",
+   "height": 0.85
+  },
+  "rabbit": {
+   "zad": "rabbit1",
+   "height": 0.3
+  },
+  "arctic_hare": {
+   "zad": "rabbit1",
+   "height": 0.35,
+   "tint": "#f2f2f0"
+  },
+  "chicken": {
+   "zad": "chicken",
+   "height": 0.4
+  },
+  "gray_jungle_fowl": {
+   "zad": "chicken",
+   "height": 0.4
+  },
+  "crested_serpent_eagle": {
+   "zad": "hawk",
+   "height": 0.6
+  },
+  "hodgson_s_hawk_eagle": {
+   "zad": "hawk",
+   "height": 0.7
+  },
+  "jungle_crow": {
+   "zad": "crow",
+   "height": 0.4
+  },
+  "american_bison": {
+   "zad": "bull",
+   "height": 1.7,
+   "tint": "#4a3424"
+  },
+  "harbor_seal": {
+   "zad": "walrus",
+   "height": 0.6,
+   "tint": "#7a7470"
   }
  },
  "nature": {
@@ -270,5 +442,259 @@
   "textures/terrain_sand.jpg",
   "textures/terrain_rock.jpg",
   "textures/terrain_stone.jpg"
+ ],
+ "zad": {
+  "elephant_african_bush": {
+   "mesh": "0ad/elephant_african_bush.glb",
+   "anims": {
+    "idle": "0ad/elephant_african_bush__idle.glb",
+    "walk": "0ad/elephant_african_bush__walk.glb"
+   },
+   "tex": "0ad/elephant_african_bush.jpg"
+  },
+  "elephant_asian": {
+   "mesh": "0ad/elephant_asian.glb",
+   "anims": {
+    "idle": "0ad/elephant_asian__idle.glb",
+    "walk": "0ad/elephant_asian__walk.glb"
+   },
+   "tex": "0ad/elephant_asian.jpg"
+  },
+  "giraffe_adult": {
+   "mesh": "0ad/giraffe_adult.glb",
+   "anims": {
+    "walk": "0ad/giraffe_adult__walk.glb",
+    "idle": "0ad/giraffe_adult__idle.glb"
+   },
+   "tex": "0ad/giraffe_adult.jpg"
+  },
+  "zebra": {
+   "mesh": "0ad/zebra.gltf",
+   "anims": {
+    "idle": "0ad/zebra__idle.gltf",
+    "walk": "0ad/zebra__walk.gltf"
+   },
+   "tex": "0ad/zebra.jpg"
+  },
+  "lion": {
+   "mesh": "0ad/lion.glb",
+   "anims": {
+    "walk": "0ad/lion__walk.glb",
+    "idle": "0ad/lion__idle.glb"
+   },
+   "tex": "0ad/lion.jpg"
+  },
+  "tiger": {
+   "mesh": "0ad/tiger.glb",
+   "anims": {
+    "idle": "0ad/tiger__idle.glb",
+    "walk": "0ad/tiger__walk.glb"
+   },
+   "tex": "0ad/tiger.jpg"
+  },
+  "rhino": {
+   "mesh": "0ad/rhino.glb",
+   "anims": {
+    "idle": "0ad/rhino__idle.glb",
+    "walk": "0ad/rhino__walk.glb"
+   },
+   "tex": "0ad/rhino.jpg"
+  },
+  "hippopotamus": {
+   "mesh": "0ad/hippopotamus.glb",
+   "anims": {
+    "idle": "0ad/hippopotamus__idle.glb",
+    "walk": "0ad/hippopotamus__walk.glb"
+   },
+   "tex": "0ad/hippopotamus.jpg"
+  },
+  "bear_white": {
+   "mesh": "0ad/bear_white.glb",
+   "anims": {
+    "idle": "0ad/bear_white__idle.glb",
+    "walk": "0ad/bear_white__walk.glb"
+   },
+   "tex": "0ad/bear_white.jpg"
+  },
+  "bear_brown": {
+   "mesh": "0ad/bear_brown.glb",
+   "anims": {
+    "idle": "0ad/bear_brown__idle.glb",
+    "walk": "0ad/bear_brown__walk.glb"
+   },
+   "tex": "0ad/bear_brown.jpg"
+  },
+  "bear_black": {
+   "mesh": "0ad/bear_black.glb",
+   "anims": {
+    "idle": "0ad/bear_black__idle.glb",
+    "walk": "0ad/bear_black__walk.glb"
+   },
+   "tex": "0ad/bear_black.jpg"
+  },
+  "wolf": {
+   "mesh": "0ad/wolf.glb",
+   "anims": {
+    "walk": "0ad/wolf__walk.glb",
+    "idle": "0ad/wolf__idle.glb"
+   },
+   "tex": "0ad/wolf.jpg"
+  },
+  "fox_arctic": {
+   "mesh": "0ad/fox_arctic.glb",
+   "anims": {
+    "idle": "0ad/fox_arctic__idle.glb",
+    "walk": "0ad/fox_arctic__walk.glb"
+   },
+   "tex": "0ad/fox_arctic.jpg"
+  },
+  "camel": {
+   "mesh": "0ad/camel.glb",
+   "anims": {
+    "idle": "0ad/camel__idle.glb",
+    "walk": "0ad/camel__walk.glb"
+   },
+   "tex": "0ad/camel.jpg"
+  },
+  "crocodile": {
+   "mesh": "0ad/crocodile.gltf",
+   "anims": {
+    "idle": "0ad/crocodile__idle.gltf",
+    "walk": "0ad/crocodile__walk.gltf"
+   },
+   "tex": "0ad/crocodile.jpg"
+  },
+  "muskox": {
+   "mesh": "0ad/muskox.glb",
+   "anims": {},
+   "tex": "0ad/muskox.jpg"
+  },
+  "peacock": {
+   "mesh": "0ad/peacock.gltf",
+   "anims": {
+    "idle": "0ad/peacock__idle.gltf",
+    "walk": "0ad/peacock__walk.gltf"
+   },
+   "tex": "0ad/peacock.jpg"
+  },
+  "wildebeest": {
+   "mesh": "0ad/wildebeest.glb",
+   "anims": {
+    "idle": "0ad/wildebeest__idle.glb",
+    "walk": "0ad/wildebeest__walk.glb"
+   },
+   "tex": "0ad/wildebeest.jpg"
+  },
+  "gazelle": {
+   "mesh": "0ad/gazelle.glb",
+   "anims": {
+    "idle": "0ad/gazelle__idle.glb",
+    "walk": "0ad/gazelle__walk.glb"
+   },
+   "tex": "0ad/gazelle.jpg"
+  },
+  "deer": {
+   "mesh": "0ad/deer.glb",
+   "anims": {
+    "idle": "0ad/deer__idle.glb",
+    "walk": "0ad/deer__walk.glb"
+   },
+   "tex": "0ad/deer.jpg"
+  },
+  "goat": {
+   "mesh": "0ad/goat.glb",
+   "anims": {
+    "walk": "0ad/goat__walk.glb",
+    "idle": "0ad/goat__idle.glb"
+   },
+   "tex": "0ad/goat.jpg"
+  },
+  "pig1": {
+   "mesh": "0ad/pig1.gltf",
+   "anims": {
+    "idle": "0ad/pig1__idle.glb",
+    "walk": "0ad/pig1__walk.glb"
+   },
+   "tex": "0ad/pig1.jpg"
+  },
+  "boar": {
+   "mesh": "0ad/boar.glb",
+   "anims": {
+    "idle": "0ad/boar__idle.glb",
+    "walk": "0ad/boar__walk.gltf"
+   },
+   "tex": "0ad/boar.jpg"
+  },
+  "horse_brown": {
+   "mesh": "0ad/horse_brown.glb",
+   "anims": {
+    "idle": "0ad/horse_brown__idle.glb",
+    "walk": "0ad/horse_brown__walk.glb"
+   },
+   "tex": "0ad/horse_brown.jpg"
+  },
+  "pony": {
+   "mesh": "0ad/pony.glb",
+   "anims": {
+    "idle": "0ad/pony__idle.glb",
+    "walk": "0ad/pony__walk.glb"
+   },
+   "tex": "0ad/pony.jpg"
+  },
+  "donkey": {
+   "mesh": "0ad/donkey.glb",
+   "anims": {
+    "idle": "0ad/donkey__idle.glb",
+    "walk": "0ad/donkey__walk.glb"
+   },
+   "tex": "0ad/donkey.jpg"
+  },
+  "rabbit1": {
+   "mesh": "0ad/rabbit1.glb",
+   "anims": {
+    "idle": "0ad/rabbit1__idle.gltf",
+    "walk": "0ad/rabbit1__walk.gltf"
+   },
+   "tex": "0ad/rabbit1.jpg"
+  },
+  "chicken": {
+   "mesh": "0ad/chicken.glb",
+   "anims": {
+    "idle": "0ad/chicken__idle.glb",
+    "walk": "0ad/chicken__walk.glb"
+   },
+   "tex": "0ad/chicken.jpg"
+  },
+  "hawk": {
+   "mesh": "0ad/hawk.glb",
+   "anims": {
+    "walk": "0ad/hawk__walk.glb",
+    "idle": "0ad/hawk__idle.glb"
+   },
+   "tex": "0ad/hawk.jpg"
+  },
+  "crow": {
+   "mesh": "0ad/crow.glb",
+   "anims": {
+    "idle": "0ad/crow__idle.glb"
+   },
+   "tex": "0ad/crow.jpg"
+  },
+  "bull": {
+   "mesh": "0ad/bull.glb",
+   "anims": {
+    "idle": "0ad/bull__idle.glb",
+    "walk": "0ad/bull__walk.glb"
+   },
+   "tex": "0ad/bull.jpg"
+  },
+  "walrus": {
+   "mesh": "0ad/walrus.gltf",
+   "anims": {},
+   "tex": "0ad/walrus.jpg"
+  }
+ },
+ "_credits": [
+  "0 A.D. 動物模型 © Wildfire Games（https://www.wildfiregames.com/），CC-BY-SA 3.0（https://creativecommons.org/licenses/by-sa/3.0/）"
  ]
 }

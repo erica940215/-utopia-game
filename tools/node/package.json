@@ -1,0 +1,2 @@
+{ "name": "utopia-asset-tools", "private": true, "description": "0 A.D. 模型轉檔工具（tools/import_0ad.py 會呼叫）",
+  "dependencies": { "assimpjs": "0.0.10", "three": "0.128.0", "jsdom": "24.1.3" } }

@@ -121,6 +121,35 @@
   }
  },
  {
+  "id": "polar_bear",
+  "name": "北極熊",
+  "category": "mammal",
+  "zone": "冰原原生",
+  "rarity": "endangered",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.6,
+   "color": "#f2efe6",
+   "accent": "#f2efe6",
+   "bulky": true
+  },
+  "tempRange": [
+   -45,
+   5
+  ],
+  "diet": "肉",
+  "social": "獨居",
+  "attract": 15,
+  "fact": "北極最大的陸地肉食動物，靠海冰獵捕海豹。",
+  "spawn": [
+   "ruins",
+   "lake",
+   "greenhouse",
+   "stall"
+  ]
+ },
+ {
   "id": "harbor_seal",
   "name": "港海豹",
   "category": "aquatic",

@@ -11,3 +11,4 @@
 - 火車：[Kenney](https://kenney.nl) Train Kit
 - 地形材質：[ambientCG](https://ambientcg.com)
 - 物種資料：臺北市立動物園開放資料
+- 寫實動物：[0 A.D.](https://play0ad.com) © [Wildfire Games](https://www.wildfiregames.com/)，[CC-BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)。`models/0ad/` 內的檔案由原始 .dae 轉檔而來，依同授權釋出。轉檔流程見 `tools/import_0ad.py`

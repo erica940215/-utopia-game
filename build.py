@@ -26,10 +26,13 @@ page = f"{HEAD}<style>\n{style}</style>\n{markup}{SCRIPTS}<script>\n{js}</script
 if len(sys.argv) > 1 and sys.argv[1] == 'artifact':
     page = page.replace("'glb'/*@@MODEL_EXT@@*/", "'json'")
     import json as _j, struct as _s, base64 as _b
-    for f in (root / 'models').rglob('*.glb'):
-        d = f.read_bytes(); jl = _s.unpack('<I', d[12:16])[0]; j = _j.loads(d[20:20+jl]); o = 20+jl
-        if o < len(d):
-            bl = _s.unpack('<I', d[o:o+4])[0]; j['buffers'][0]['uri'] = 'data:application/octet-stream;base64,' + _b.b64encode(d[o+8:o+8+bl]).decode()
+    for f in list((root / 'models').rglob('*.glb')) + list((root / 'models').rglob('*.gltf')):
+        d = f.read_bytes()
+        if f.suffix == '.gltf': j = _j.loads(d)
+        else:
+            jl = _s.unpack('<I', d[12:16])[0]; j = _j.loads(d[20:20+jl]); o = 20+jl
+            if o < len(d):
+                bl = _s.unpack('<I', d[o:o+4])[0]; j['buffers'][0]['uri'] = 'data:application/octet-stream;base64,' + _b.b64encode(d[o+8:o+8+bl]).decode()
         out = root / 'dist' / f.relative_to(root).with_suffix('.json'); out.parent.mkdir(parents=True, exist_ok=True); out.write_text(_j.dumps(j, separators=(',', ':')))
     (root / 'dist').mkdir(exist_ok=True)
     (root / 'dist' / 'artifact.html').write_text(page)

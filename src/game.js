@@ -668,6 +668,11 @@ function showDex(){
     <div class="soon">水生與昆蟲要等冰湖、溫室站點開放後才能取得（第三階段）。</div>
     <div class="keys">${isTouch?`<kbd>左側搖桿</kbd><span>移動</span><kbd>右半邊拖曳</kbd><span>轉視角</span><kbd>互動</kbd><span>搜刮・長按融冰・登車出發</span><kbd>信號槍</kbd><span>驅散霜影</span>`
       :`<kbd>WASD</kbd><span>移動</span><kbd>滑鼠</kbd><span>轉視角（點畫面鎖定游標）</span><kbd>Shift</kbd><span>奔跑（更耗體溫）</span><kbd>E</kbd><span>搜刮・長按融冰・登車出發</span><kbd>左鍵</kbd><span>信號槍</span>`}</div>
+    <details class="credits"><summary>製作群與素材授權</summary>
+      <p>動物模型：0 A.D. © <a href="https://www.wildfiregames.com/" target="_blank" rel="noopener">Wildfire Games</a>，以 <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC-BY-SA 3.0</a> 授權（模型經過格式轉換）。</p>
+      <p>動物、魚、樹木與岩石：<a href="https://quaternius.com" target="_blank" rel="noopener">Quaternius</a>（CC0）。火車：<a href="https://kenney.nl" target="_blank" rel="noopener">Kenney</a>（CC0）。地形材質：<a href="https://ambientcg.com" target="_blank" rel="noopener">ambientCG</a>（CC0）。</p>
+      <p>物種資料：臺北市立動物園開放資料。</p>
+    </details>
     <div class="btns"><button class="btn ghost" id="backZoo" type="button">回到園區</button><button class="btn" id="goExp" type="button">出發遠征</button></div>
   </div>`;
   $('goExp').onclick=()=>showMap();
