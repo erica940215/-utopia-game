@@ -52,7 +52,7 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
 #ammo{position:absolute;left:50%;top:50%;transform:translate(14px,10px);font-size:13px;color:var(--ember);white-space:nowrap}
 #prompt{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 150px);transform:translateX(-50%);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:7px 14px;font-size:14px;white-space:nowrap}
 #prog{display:block;height:3px;background:var(--ice);width:0;margin-top:5px;border-radius:2px}
-#toast{position:absolute;left:50%;top:32%;transform:translateX(-50%);font-size:15px;font-weight:700;text-shadow:0 1px 6px rgba(0,0,0,.8);text-align:center;transition:opacity .4s}
+#toast{position:fixed;pointer-events:none;z-index:5;width:max-content;max-width:calc(100vw - 32px);left:50%;top:32%;transform:translateX(-50%);font-size:15px;font-weight:700;text-shadow:0 1px 6px rgba(0,0,0,.8);text-align:center;transition:opacity .4s}
 #vignette{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 45%,rgba(150,215,255,.55) 100%);opacity:0;transition:opacity .3s}
 #hurt{position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 40%,rgba(120,0,40,.5) 100%);opacity:0;transition:opacity .15s}
 
@@ -126,11 +126,52 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
 .auth input:focus-visible{outline:2px solid var(--ice);outline-offset:1px}
 .auth .btn{padding:10px 14px;font-size:14px}
 .auth-note{font-size:12px;color:var(--frost-dim)}
-</style>
-</head>
+
+/* 園區介面 */
+#touch.walk #btnAct,#touch.walk #btnFire{display:none}
+#zooUI{position:fixed;inset:0;pointer-events:none}
+#zooUI button{pointer-events:auto;cursor:pointer}
+.ztop{position:absolute;top:calc(env(safe-area-inset-top,0px) + 10px);left:max(12px,env(safe-area-inset-left,0px));right:max(12px,env(safe-area-inset-right,0px));display:flex;justify-content:space-between;align-items:flex-start;gap:10px;flex-wrap:wrap}
+.zres{display:flex;flex-wrap:wrap;gap:6px}
+.zres span{background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:4px 9px;display:flex;align-items:baseline;gap:6px;font-size:12px}
+.zres i{font-style:normal;color:var(--frost-dim)}
+.zres b{font-size:17px;font-weight:700}
+.zres .warnchip{color:var(--danger);font-weight:700}
+.zacts{display:flex;gap:6px;align-items:center;flex-wrap:wrap;justify-content:flex-end}
+.zpool{font-size:13px;color:var(--ember)}
+.zbtn{appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--frost);font:700 13px var(--font-ui);border-radius:6px;padding:8px 12px}
+.zbtn.go{background:var(--ember);color:#1a0d02;border-color:transparent}
+.zbtn:focus-visible,.ztool:focus-visible,.zmini:focus-visible{outline:2px solid var(--ice);outline-offset:2px}
+.ztools{position:absolute;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 10px);display:flex;gap:6px;overflow-x:auto;padding-left:max(12px,env(safe-area-inset-left,0px));padding-right:max(12px,env(safe-area-inset-right,0px));pointer-events:auto;scrollbar-width:none}
+.ztool{flex:0 0 auto;appearance:none;border:1px solid var(--line);background:var(--panel);color:var(--frost);border-radius:6px;padding:7px 11px;text-align:left;display:flex;flex-direction:column;gap:1px;font-family:var(--font-ui)}
+.ztool b{font-size:13px}
+.ztool span{font-size:11px;color:var(--frost-dim);white-space:nowrap}
+.ztool.on{border-color:var(--ember);box-shadow:inset 0 0 0 1px var(--ember)}
+.ztool.poor span{color:var(--danger)}
+.zpanel{position:absolute;right:max(12px,env(safe-area-inset-right,0px));bottom:calc(env(safe-area-inset-bottom,0px) + 70px);width:min(340px,calc(100vw - 24px));max-height:55vh;overflow-y:auto;background:rgba(9,16,28,.9);border:1px solid var(--line);border-radius:8px;padding:12px;pointer-events:auto;display:flex;flex-direction:column;gap:10px}
+.zp-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+.zp-head b{display:block;font-size:16px}
+.zp-head span{font-size:12px;color:var(--frost-dim)}
+.zpanel em{font-style:normal;color:var(--danger)}
+.zclose{appearance:none;background:transparent;border:1px solid var(--line);color:var(--frost);border-radius:6px;width:30px;height:30px}
+.zp-row{display:grid;grid-template-columns:1fr auto;gap:4px 10px;border-top:1px solid var(--line);padding-top:8px}
+.zp-name{min-width:0}
+.zp-name b{font-size:14px}
+.zp-name span{display:block;font-size:11px;color:var(--frost-dim)}
+.zp-bars{grid-column:1;display:flex;gap:10px}
+.zp-bars label{flex:1;display:flex;align-items:center;gap:5px;font-size:11px;color:var(--frost-dim)}
+.zbar{flex:1;height:5px;background:rgba(124,200,232,.15);border-radius:3px;overflow:hidden}
+.zbar i{display:block;height:100%;background:var(--ice)}
+.zbar.low i{background:var(--danger)}
+.zp-row .zmini{grid-column:2;grid-row:1 / span 2;align-self:center}
+.zmini{appearance:none;border:1px solid var(--line);background:transparent;color:var(--frost);font:700 12px var(--font-ui);border-radius:6px;padding:6px 10px}
+.zmini.add{border-color:rgba(255,154,60,.5);color:var(--ember)}
+.zp-add{display:flex;flex-wrap:wrap;gap:6px}
+.zp-empty{font-size:12px;color:var(--frost-dim);margin:0}
+#zWalkExit{margin-left:auto}
+@media (orientation:landscape) and (max-height:520px){.zpanel{max-height:62vh;bottom:calc(env(safe-area-inset-bottom,0px) + 60px)}.zres b{font-size:15px}}
+</style></head>
 <body>
-
-
 <canvas id="c"></canvas>
 
 <div id="hud" hidden>
@@ -157,7 +198,6 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
   <div id="cross"></div>
   <div id="ammo" class="num"></div>
   <div id="prompt" hidden><span id="promptTxt"></span><i id="prog"></i></div>
-  <div id="toast"></div>
   <div id="vignette"></div>
   <div id="hurt"></div>
 </div>
@@ -170,6 +210,21 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
 </div>
 
 <div id="rotateHint" hidden>把手機轉成橫向，視野更大</div>
+<div id="zooUI" hidden>
+  <div class="ztop">
+    <div class="zres" id="zRes"></div>
+    <div class="zacts" id="zMain">
+      <span class="zpool num" id="zPool"></span>
+      <button type="button" class="zbtn" id="zWalk">逛園</button>
+      <button type="button" class="zbtn" id="zDex">圖鑑・倉庫</button>
+      <button type="button" class="zbtn go" id="zGo">出發遠征</button>
+    </div>
+    <button type="button" class="zbtn" id="zWalkExit" hidden>回到俯視</button>
+  </div>
+  <div class="zpanel" id="zPanel" hidden></div>
+  <div class="ztools" id="zTools"></div>
+</div>
+<div id="toast"></div>
 <div id="screen"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -186,13 +241,14 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
    ========================================================= */
 const DATA = {};
 async function loadData(){
-  const names = ['config','species','items','equipment','stations'];
+  const names = ['config','species','items','equipment','stations','buildings'];
   const res = await Promise.all(names.map(n => fetch(`data/${n}.json`).then(r => { if(!r.ok) throw new Error(n); return r.json(); })));
   names.forEach((n,i) => DATA[n] = res[i]);
   DATA.speciesById = Object.fromEntries(DATA.species.map(s => [s.id, s]));
   DATA.itemsById = Object.fromEntries(DATA.items.map(s => [s.id, s]));
   DATA.equipById = Object.fromEntries(DATA.equipment.map(s => [s.id, s]));
   DATA.stationById = Object.fromEntries(DATA.stations.map(s => [s.id, s]));
+  DATA.buildingById = Object.fromEntries(DATA.buildings.map(s => [s.id, s]));
 }
 
 /* =========================================================
@@ -230,7 +286,8 @@ async function makeCloudStore(){
 }
 let store = LocalStore, save = emptySave(), saving = Promise.resolve();
 const SB_URL='https://pujvupwghochfklrgvtq.supabase.co', SB_KEY='sb_publishable_jHEGIwFLfpGOriA-ijixGg_dytbHXQH';
-const sb=(window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
+const onOwnSite=/github\.io$|^localhost$|^127\./.test(location.hostname);
+const sb=(onOwnSite&&window.supabase&&window.supabase.createClient)?window.supabase.createClient(SB_URL,SB_KEY):null;
 let sbUser=null;
 function makeSupabaseStore(u){
   return {
@@ -309,6 +366,7 @@ function heightAt(x,z){
 const TRAIN_Z0=-6, TRAIN_Z1=35;
 const DEPART=new THREE.Vector3(2.7,0,26);
 const colliders=[];
+let trainGroup=null;
 {
   const t=new THREE.Group();
   const iron=M(0x2b323b), dark=M(0x15181d), plate=M(0x47352a), brass=M(0xb08a4a);
@@ -330,7 +388,7 @@ const colliders=[];
   }
   const wg=new THREE.CylinderGeometry(0.55,0.55,0.25,14); wg.rotateZ(Math.PI/2);
   for(const z of [-3,1,3,9,13,17,21,25,29,33]) for(const s of [-1,1]){ const w=new THREE.Mesh(wg,dark); w.position.set(s*1.05,0.6,z); t.add(w); }
-  scene.add(t);
+  scene.add(t); trainGroup=t;
   colliders.push({x0:-1.8,x1:1.8,z0:TRAIN_Z0+0.5,z1:TRAIN_Z1+0.8});
   const warm=new THREE.PointLight(0xff9a3c,1.7,30,1.2); warm.position.set(0,4.5,15); scene.add(warm);
   const warm2=new THREE.PointLight(0xff9a3c,1.1,18,1.2); warm2.position.set(3,3,26); scene.add(warm2);
@@ -477,6 +535,7 @@ function startExpedition(){
   timeLeft=CFG().runSeconds; collapses=0; nextSpawn=DATA.config.wraith.firstSpawnAt; sprint=false;
   player.pos.set(4.5,0,8); player.yaw=-Math.PI/2; player.pitch=0; player.temp=TMP().max;
   buildBagHud();
+  zooActive=false; $('zooUI').hidden=true;
   state='play'; screenEl.hidden=true; $('hud').hidden=false; $('touch').hidden=!isTouch;
   if(!isTouch) tryLock(); else goLandscape();
   $('rotateHint').hidden=!isTouch;
@@ -498,14 +557,14 @@ document.addEventListener('pointerlockchange',()=>{ locked=document.pointerLockE
 document.addEventListener('pointerlockerror',()=>{ noLock=true; });
 let mDown=false,mMoved=0,mx=0,my=0;
 canvas.addEventListener('mousedown',e=>{ if(isTouch) return; mDown=true; mMoved=0; mx=e.clientX; my=e.clientY; });
-addEventListener('mouseup',()=>{ if(isTouch||!mDown) return; mDown=false; if(state!=='play') return; if(locked) fire(); else if(noLock){ if(mMoved<6) fire(); } else tryLock(); });
-addEventListener('mousemove',e=>{ if(isTouch||state!=='play') return; if(locked) look(e.movementX,e.movementY,0.0022); else if(mDown&&noLock){ const dx=e.clientX-mx, dy=e.clientY-my; mMoved+=Math.abs(dx)+Math.abs(dy); mx=e.clientX; my=e.clientY; look(dx,dy,0.004); } });
+addEventListener('mouseup',()=>{ if(isTouch||!mDown) return; mDown=false; if(state==='zoowalk'){ if(!locked&&!noLock) tryLock(); return; } if(state!=='play') return; if(locked) fire(); else if(noLock){ if(mMoved<6) fire(); } else tryLock(); });
+addEventListener('mousemove',e=>{ if(isTouch||(state!=='play'&&state!=='zoowalk')) return; if(locked) look(e.movementX,e.movementY,0.0022); else if(mDown&&noLock){ const dx=e.clientX-mx, dy=e.clientY-my; mMoved+=Math.abs(dx)+Math.abs(dy); mx=e.clientX; my=e.clientY; look(dx,dy,0.004); } });
 function look(dx,dy,s){ player.yaw-=dx*s; player.pitch=Math.max(-1.35,Math.min(1.35,player.pitch-dy*s)); }
 const stick=$('stick'), knob=$('knob'), lookTouch={id:null,x:0,y:0};
 stick.addEventListener('touchstart',e=>{ e.preventDefault(); const t=e.changedTouches[0]; joy.id=t.identifier; moveJoy(t); },{passive:false});
 function moveJoy(t){ const r=stick.getBoundingClientRect(); let dx=t.clientX-(r.left+r.width/2), dy=t.clientY-(r.top+r.height/2); const d=Math.hypot(dx,dy), m=50; if(d>m){dx=dx/d*m;dy=dy/d*m;} joy.x=dx/m; joy.y=dy/m; knob.style.transform=`translate(${dx}px,${dy}px)`; }
 canvas.addEventListener('touchstart',e=>{ for(const t of e.changedTouches) if(lookTouch.id===null){ lookTouch.id=t.identifier; lookTouch.x=t.clientX; lookTouch.y=t.clientY; } },{passive:true});
-addEventListener('touchmove',e=>{ for(const t of e.changedTouches){ if(t.identifier===joy.id) moveJoy(t); else if(t.identifier===lookTouch.id){ look(t.clientX-lookTouch.x,t.clientY-lookTouch.y,0.006); lookTouch.x=t.clientX; lookTouch.y=t.clientY; } } if(state==='play') e.preventDefault(); },{passive:false});
+addEventListener('touchmove',e=>{ for(const t of e.changedTouches){ if(t.identifier===joy.id) moveJoy(t); else if(t.identifier===lookTouch.id){ look(t.clientX-lookTouch.x,t.clientY-lookTouch.y,0.006); lookTouch.x=t.clientX; lookTouch.y=t.clientY; } } if(state==='play'||state==='zoowalk'||state==='zoo') e.preventDefault(); },{passive:false});
 const endTouch=e=>{ for(const t of e.changedTouches){ if(t.identifier===joy.id){ joy.id=null; joy.x=joy.y=0; knob.style.transform=''; } if(t.identifier===lookTouch.id) lookTouch.id=null; } };
 addEventListener('touchend',endTouch); addEventListener('touchcancel',endTouch);
 const btnAct=$('btnAct'), btnFire=$('btnFire'), btnRun=$('btnRun');
@@ -634,7 +693,8 @@ function finish(failed){
   const newOnes=rescued.filter(id=>!save.collection[id]);
   save.runs++;
   for(const k in haul) save.resources[k]=(save.resources[k]||0)+haul[k];
-  for(const id of rescued) save.collection[id]=(save.collection[id]||0)+1;
+  ensureZoo();
+  for(const id of rescued){ save.collection[id]=(save.collection[id]||0)+1; save.zoo.unplaced[id]=(save.zoo.unplaced[id]||0)+1; }
   persist();
   const total=Object.values(haul).reduce((a,b)=>a+b,0);
   const grade=failed?'列車在暴風雪中被迫出發':rescued.length>=4?'傳奇救援':rescued.length>=2?'順利歸隊':'勉強撐過';
@@ -647,15 +707,14 @@ function finish(failed){
     <p>共帶回物資 ${total} 單位${collapses?`，途中倒下 ${collapses} 次`:''}${newOnes.length?`，圖鑑新增 ${new Set(newOnes).size} 種`:''}。</p>
     <button class="btn" id="toHub" type="button">回到烏托邦</button>
   </div>`;
-  $('toHub').onclick=()=>showHub();
+  $('toHub').onclick=()=>enterZoo();
 }
 
 /* =========================================================
    7. 營地：存檔總覽與圖鑑
    ========================================================= */
-function showHub(){
-  state='hub'; $('hud').hidden=true; $('touch').hidden=true;
-  player.pos.set(6,0,12); player.yaw=-0.6; player.pitch=0.05;
+function showDex(){
+  state='dex';
   const cats=DATA.config.categories, rar=DATA.config.rarity;
   const found=DATA.species.filter(s=>save.collection[s.id]).length;
   const dexHtml=Object.keys(cats).map(c=>{
@@ -678,15 +737,16 @@ function showHub(){
     </div>
     <div class="sec"><div class="sec-title"><span>圖鑑</span><b>${found}/${DATA.species.length}</b></div></div>
     ${dexHtml}
-    <div class="soon">動物園建造（第二階段）：這些物資和生物之後會用來蓋棲地、水池和昆蟲館。水生與昆蟲要等冰湖、溫室站點開放後才能取得。</div>
+    <div class="soon">水生與昆蟲要等冰湖、溫室站點開放後才能取得（第三階段）。</div>
     <div class="keys">${isTouch?`<kbd>左側搖桿</kbd><span>移動</span><kbd>右半邊拖曳</kbd><span>轉視角</span><kbd>互動</kbd><span>搜刮・長按融冰・登車出發</span><kbd>信號槍</kbd><span>驅散霜影</span>`
       :`<kbd>WASD</kbd><span>移動</span><kbd>滑鼠</kbd><span>轉視角（點畫面鎖定游標）</span><kbd>Shift</kbd><span>奔跑（更耗體溫）</span><kbd>E</kbd><span>搜刮・長按融冰・登車出發</span><kbd>左鍵</kbd><span>信號槍</span>`}</div>
-    <button class="btn" id="goExp" type="button">出發遠征：城鎮廢墟</button>
+    <div class="btns"><button class="btn ghost" id="backZoo" type="button">回到園區</button><button class="btn" id="goExp" type="button">出發遠征</button></div>
   </div>`;
-  $('goExp').onclick=()=>startExpedition();
+  $('goExp').onclick=()=>leaveZooForExpedition();
+  $('backZoo').onclick=()=>{ screenEl.hidden=true; state='zoo'; $('zooUI').hidden=false; };
   if(sb) wireAuth();
 }
-if(sb) sb.auth.onAuthStateChange(async (ev)=>{ if(ev==='SIGNED_IN' && !sbUser && state==='hub'){ await initSave(); showHub(); } });
+if(sb) sb.auth.onAuthStateChange(async (ev)=>{ if(ev==='SIGNED_IN' && !sbUser && (state==='dex'||state==='zoo')){ await initSave(); enterZoo(); } });
 function authHtml(){
   if(sbUser) return `<div class="sec"><div class="auth"><span class="auth-note">已登入 ${esc(sbUser.email||'')}，進度會同步到雲端</span><button class="btn ghost" id="logout" type="button">登出</button></div></div>`;
   return `<div class="sec"><form class="auth" id="loginForm"><input id="email" type="email" required placeholder="輸入 Email 登入，跨裝置同步存檔" autocomplete="email"><button class="btn" type="submit">寄登入連結</button></form><span class="auth-note" id="authMsg">沒登入也能玩，進度會先存在這台裝置。</span></div>`;
@@ -701,8 +761,374 @@ function wireAuth(){
     msg.textContent=error?`寄送失敗：${error.message}`:`登入連結已寄到 ${email}，在這台裝置打開信件裡的連結就完成登入。`;
   });
   const lo=$('logout');
-  if(lo) lo.onclick=async()=>{ await sb.auth.signOut(); sbUser=null; store=LocalStore; showHub(); };
+  if(lo) lo.onclick=async()=>{ await sb.auth.signOut(); sbUser=null; store=LocalStore; enterZoo(); };
 }
+
+/* =========================================================
+   動物園（第二階段）：俯視建造、需求模擬、門票、離線收益
+   建築與數值都來自 data/buildings.json 與 config.zoo
+   ========================================================= */
+const zooScene=new THREE.Scene();
+zooScene.background=new THREE.Color(0xb7ccdc);
+zooScene.fog=new THREE.Fog(0xb7ccdc,110,230);
+zooScene.add(new THREE.HemisphereLight(0xeaf4ff,0x8a9aa6,0.85));
+const zsun=new THREE.DirectionalLight(0xfff1dc,0.75); zsun.position.set(30,60,20); zooScene.add(zsun);
+const zooCam=new THREE.PerspectiveCamera(50,1,0.5,500);
+function zooResize(){ zooCam.aspect=innerWidth/innerHeight; zooCam.updateProjectionMatrix(); }
+addEventListener('resize',zooResize); zooResize();
+
+let zooActive=false, zooBaseBuilt=false, zooRoot=null, zTool='select', zSelUid=null, zooAcc=0, zSaveT=0, zHudT=0;
+const zooCamT={x:0,z:4,d:48};
+const zooBMeshes=new Map();   // uid → THREE.Group
+let zooAnimals=[];            // 動畫中的動物 {mesh,a,tx,tz,hop,wait}
+const zooStats={visitors:0,coinsPerMin:0,heatOn:true};
+const ZC=()=>DATA.config.zoo, GN=()=>ZC().gridSize, TS=()=>ZC().tile;
+const bdef=t=>DATA.buildingById[t];
+const SOCIAL_GROUP=['群居','小群','群聚','魚群'];
+
+function ensureZoo(){
+  if(save.zoo) return;
+  const g=GN();
+  save.zoo={ buildings:[{uid:1,type:'gate',x:Math.floor(g/2)-1,z:g-1,rot:0}], animals:[], unplaced:{...save.collection},
+             coins:ZC().startCoins, fuelDebt:0, lastTick:Date.now(), nextUid:2 };
+}
+const tileCenter=(b)=>{ const d=bdef(b.type); return { x:(b.x+d.size[0]/2-GN()/2)*TS(), z:(b.z+d.size[1]/2-GN()/2)*TS() }; };
+const tileDist=(a,b)=>{ const d1=bdef(a.type), d2=bdef(b.type); return Math.hypot((a.x+d1.size[0]/2)-(b.x+d2.size[0]/2),(a.z+d1.size[1]/2)-(b.z+d2.size[1]/2)); };
+const findB=uid=>save.zoo.buildings.find(b=>b.uid===uid);
+function occupancy(){ const m=new Map(); for(const b of save.zoo.buildings){ const d=bdef(b.type); for(let i=0;i<d.size[0];i++) for(let j=0;j<d.size[1];j++) m.set((b.x+i)+','+(b.z+j),b.uid); } return m; }
+function canPlace(d,x,z){ if(x<0||z<0||x+d.size[0]>GN()||z+d.size[1]>GN()) return false; const o=occupancy(); for(let i=0;i<d.size[0];i++) for(let j=0;j<d.size[1];j++) if(o.has((x+i)+','+(z+j))) return false; return true; }
+const resOf=k=>k==='coins'?save.zoo.coins:(save.resources[k]||0);
+const resName=k=>k==='coins'?'金幣':(DATA.itemsById[k]?DATA.itemsById[k].name:k);
+const affordable=c=>Object.entries(c).every(([k,v])=>resOf(k)>=v);
+function pay(c,sign){ for(const [k,v] of Object.entries(c)){ if(k==='coins') save.zoo.coins+=sign*v; else save.resources[k]=(save.resources[k]||0)+sign*v; } }
+const costText=c=>Object.entries(c).map(([k,v])=>`${resName(k)} ${v}`).join('・')||'免費';
+
+/* ---------- 場景 ---------- */
+function buildZooBase(){
+  zooBaseBuilt=true;
+  const side=GN()*TS();
+  const snowG=new THREE.Mesh(new THREE.PlaneGeometry(400,400),M(0xe6eff5)); snowG.rotation.x=-Math.PI/2; snowG.position.y=-0.05; zooScene.add(snowG);
+  const plot=new THREE.Mesh(new THREE.PlaneGeometry(side,side),M(0xcfdce4)); plot.rotation.x=-Math.PI/2; plot.position.y=-0.02; zooScene.add(plot);
+  const grid=new THREE.GridHelper(side,GN(),0x90a4b2,0xa9bac6); grid.position.y=0.005; grid.material.transparent=true; grid.material.opacity=0.45; zooScene.add(grid);
+  // 圍牆（入口處留缺口）
+  const wall=M(0x6b7178), cap=M(0xf2f6fa), h=2.2, half=side/2;
+  const gx0=(Math.floor(GN()/2)-1-GN()/2)*TS(), gx1=gx0+2*TS();
+  const segs=[[-half,-half,half,-half],[-half,-half,-half,half],[half,-half,half,half],[-half,half,gx0,half],[gx1,half,half,half]];
+  for(const [x0,z0,x1,z1] of segs){
+    const w=Math.max(0.6,Math.abs(x1-x0)), d=Math.max(0.6,Math.abs(z1-z0));
+    const m=box(w,h,d,wall); m.position.set((x0+x1)/2,h/2,(z0+z1)/2); zooScene.add(m);
+    const c=box(w+0.1,0.18,d+0.1,cap); c.position.set(m.position.x,h+0.05,m.position.z); zooScene.add(c);
+  }
+  // 停靠在北側的火車
+  if(trainGroup){ const t=trainGroup.clone(); t.rotation.y=Math.PI/2; t.position.set(-14,0,-half-7); zooScene.add(t);
+    for(const x of [-0.75,0.75]){ const r=box(120,0.12,0.12,0x50565e); r.position.set(0,0.12,-half-7+x); zooScene.add(r); }
+    const plat=box(46,0.5,4,0x8a8f95); plat.position.set(0,0.25,-half-3.5); zooScene.add(plat); }
+  // 外圍的樹
+  const trunk=M(0x2b2420), pine=M(0x2f4a3e), snowCap=M(0xf2f6fa);
+  for(let i=0;i<60;i++){
+    const a=Math.random()*Math.PI*2, r=half+10+Math.random()*60, x=Math.cos(a)*r, z=Math.sin(a)*r;
+    if(z<-half-2&&z>-half-12) continue;
+    const g=new THREE.Group(), hh=3+Math.random()*3;
+    const tr=cyl(0.15,0.25,hh,trunk,6); tr.position.y=hh/2; g.add(tr);
+    const c=new THREE.Mesh(new THREE.ConeGeometry(1.2+Math.random()*0.6,hh*0.8,7),pine); c.position.y=hh*0.75; g.add(c);
+    const s=new THREE.Mesh(new THREE.ConeGeometry(0.7,0.8,7),snowCap); s.position.y=hh*1.1; g.add(s);
+    g.position.set(x,0,z); zooScene.add(g);
+  }
+  zooRoot=new THREE.Group(); zooScene.add(zooRoot);
+  // 預覽框與選取框
+  zGhost=new THREE.Mesh(new THREE.BoxGeometry(1,0.3,1),new THREE.MeshBasicMaterial({color:0x7cc8e8,transparent:true,opacity:0.45,depthWrite:false}));
+  zGhost.visible=false; zooScene.add(zGhost);
+  zSelBox=new THREE.Mesh(new THREE.BoxGeometry(1,1,1),new THREE.MeshBasicMaterial({color:0xff9a3c,wireframe:true}));
+  zSelBox.visible=false; zooScene.add(zSelBox);
+}
+let zGhost=null, zSelBox=null;
+
+function makeBuildingMesh(b){
+  const d=bdef(b.type), c=tileCenter(b), W=d.size[0]*TS(), D=d.size[1]*TS(), g=new THREE.Group();
+  g.position.set(c.x,0,c.z); g.userData.uid=b.uid;
+  if(d.kind==='path'){ const p=box(W,0.08,D,hex(d.color)); p.position.y=0.04; g.add(p); }
+  else if(d.kind==='habitat'){
+    const gr=box(W-0.2,0.1,D-0.2,hex(d.ground)); gr.position.y=0.05; g.add(gr);
+    if(d.water){ const w=box(W-1.2,0.05,D-1.2,new THREE.MeshPhongMaterial({color:0x2a6f99,shininess:90,transparent:true,opacity:0.9})); w.position.y=0.11; g.add(w); }
+    const fm=M(hex(d.fence)), fh=d.house?2.6:1.0;
+    if(d.house){
+      const glass=box(W-0.4,fh,D-0.4,new THREE.MeshPhongMaterial({color:0xcfe9f0,transparent:true,opacity:0.32,shininess:100,depthWrite:false})); glass.position.y=fh/2+0.1; g.add(glass);
+      for(const [sx,sz] of [[-1,-1],[1,-1],[-1,1],[1,1]]){ const p=box(0.15,fh,0.15,fm); p.position.set(sx*(W/2-0.2),fh/2+0.1,sz*(D/2-0.2)); g.add(p); }
+    } else {
+      for(const [w,dd,x,z] of [[W,0.12,0,-D/2+0.06],[W,0.12,0,D/2-0.06],[0.12,D,-W/2+0.06,0],[0.12,D,W/2-0.06,0]]){ const f=box(w,fh,dd,fm); f.position.set(x,fh/2,z); g.add(f); }
+    }
+  }
+  else if(d.kind==='feeder'){ const f=box(1.1,0.9,1.1,hex(d.color)); f.position.y=0.45; g.add(f); const t=box(1.4,0.2,1.4,0x5a4434); t.position.y=0.95; g.add(t); }
+  else if(d.kind==='heater'){
+    const h=cyl(0.45,0.55,1.2,hex(d.color),10); h.position.y=0.6; g.add(h);
+    const pipe=cyl(0.12,0.12,0.9,0x15181d,6); pipe.position.y=1.6; g.add(pipe);
+    const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:DOT,color:0xff9a3c,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending})); glow.scale.set(3.4,3.4,1); glow.position.y=0.8; g.add(glow); g.userData.glow=glow;
+  }
+  else if(d.kind==='gate'){
+    const pm=M(hex(d.color));
+    for(const s of [-1,1]){ const p=box(0.6,3.4,0.6,pm); p.position.set(s*(W/2-0.3),1.7,0); g.add(p); }
+    const beam=box(W,0.5,0.7,pm); beam.position.y=3.4; g.add(beam);
+    const sign=box(W*0.7,0.6,0.1,0xff9a3c); sign.position.set(0,2.8,0.4); g.add(sign);
+  }
+  return g;
+}
+function rebuildZoo(){
+  for(const g of zooBMeshes.values()) zooRoot.remove(g);
+  zooBMeshes.clear();
+  for(const b of save.zoo.buildings){ const g=makeBuildingMesh(b); zooRoot.add(g); zooBMeshes.set(b.uid,g); }
+  rebuildZooAnimals(); updateSelBox();
+}
+function rebuildZooAnimals(){
+  for(const a of zooAnimals) zooRoot.remove(a.mesh);
+  zooAnimals=[];
+  for(const a of save.zoo.animals){
+    const hb=findB(a.habitat); if(!hb) continue;
+    const sp=DATA.speciesById[a.species]; if(!sp) continue;
+    const m=makeModel(sp.model); const c=tileCenter(hb), d=bdef(hb.type);
+    const hw=d.size[0]*TS()/2-0.8, hd=d.size[1]*TS()/2-0.8;
+    m.position.set(c.x+(Math.random()*2-1)*hw,0.1,c.z+(Math.random()*2-1)*hd); m.scale.setScalar(1.3);
+    zooRoot.add(m);
+    zooAnimals.push({mesh:m,a,c,hw,hd,tx:m.position.x,tz:m.position.z,hop:Math.random()*6,wait:Math.random()*3});
+  }
+}
+function updateSelBox(){
+  const b=zSelUid&&findB(zSelUid);
+  if(!b){ zSelBox.visible=false; return; }
+  const d=bdef(b.type), c=tileCenter(b);
+  zSelBox.visible=true; zSelBox.scale.set(d.size[0]*TS()+0.2,1.4,d.size[1]*TS()+0.2); zSelBox.position.set(c.x,0.7,c.z);
+}
+
+/* ---------- 模擬：需求、溫度、門票 ---------- */
+function heatersOn(){ return zooStats.heatOn; }
+function habitatTemp(b){
+  const d=bdef(b.type); let t=d.baseTemp||0;
+  if(heatersOn()) for(const h of save.zoo.buildings){ const hd=bdef(h.type); if(hd.kind==='heater' && tileDist(h,b)<=hd.radius+Math.max(...d.size)/2) t+=hd.heat; }
+  return t;
+}
+function habitatFed(b){ const d=bdef(b.type); return save.zoo.buildings.some(f=>{ const fd=bdef(f.type); return fd.kind==='feeder' && tileDist(f,b)<=fd.radius+Math.max(...d.size)/2; }); }
+function simulate(min){
+  const Z=ZC(), zoo=save.zoo;
+  // 暖爐耗煤
+  const heaters=zoo.buildings.filter(b=>bdef(b.type).kind==='heater');
+  if(heaters.length){
+    zoo.fuelDebt+=heaters.reduce((s,h)=>s+bdef(h.type).fuelPerMin,0)*min;
+    while(zoo.fuelDebt>=1 && (save.resources.fuel||0)>0){ save.resources.fuel--; zoo.fuelDebt--; }
+    zooStats.heatOn=(save.resources.fuel||0)>0 || zoo.fuelDebt<1;
+  } else zooStats.heatOn=true;
+  const temps=new Map(), fed=new Map(), counts=new Map();
+  for(const a of zoo.animals){ const k=a.habitat+'|'+a.species; counts.set(k,(counts.get(k)||0)+1); }
+  let attract=0;
+  for(const a of zoo.animals){
+    const b=findB(a.habitat), sp=DATA.speciesById[a.species]; if(!b||!sp) continue;
+    if(!temps.has(b.uid)){ temps.set(b.uid,habitatTemp(b)); fed.set(b.uid,habitatFed(b)); }
+    a.food=Math.max(0,(a.food??80)-Z.foodDecayPerMin*min);
+    while(a.food<Z.feedRefillAt && fed.get(b.uid) && (save.resources.feed||0)>=1){ save.resources.feed--; a.food=Math.min(100,a.food+Z.feedRefillAmount); }
+    const T=temps.get(b.uid), tempOK=T>=sp.tempRange[0]&&T<=sp.tempRange[1];
+    const socialOK=!SOCIAL_GROUP.includes(sp.social) || counts.get(b.uid+'|'+a.species)>=2;
+    const target=Math.min(40,a.food/30*40)+(tempOK?40:0)+(socialOK?20:5);
+    const h=a.happy??60, step=Z.happinessPerMin*min;
+    a.happy=Math.abs(target-h)<=step?target:h+Math.sign(target-h)*step;
+    attract+=sp.attract*a.happy/100;
+  }
+  zooStats.coinsPerMin=attract*Z.coinPerAttractPerMin;
+  zooStats.visitors=Math.round(attract*Z.visitorPerAttract);
+  zoo.coins+=zooStats.coinsPerMin*min;
+  zoo.lastTick=Date.now();
+}
+function catchUp(){
+  const zoo=save.zoo, Z=ZC();
+  let m=Math.min(Z.offlineCapMinutes,Math.max(0,(Date.now()-(zoo.lastTick||Date.now()))/60000));
+  if(m<0.05){ simulate(0); return null; }
+  const c0=zoo.coins, f0=save.resources.feed||0, total=m;
+  while(m>0){ const s=Math.min(1,m); simulate(s); m-=s; }
+  return { minutes:Math.round(total), coins:Math.floor(zoo.coins-c0), feed:f0-(save.resources.feed||0) };
+}
+
+/* ---------- 進出園區 ---------- */
+function enterZoo(){
+  ensureZoo();
+  if(!zooBaseBuilt) buildZooBase();
+  rebuildZoo();
+  const away=catchUp();
+  zooActive=true; state='zoo'; zTool='select'; zSelUid=null; updateSelBox();
+  screenEl.hidden=true; $('hud').hidden=true; $('touch').hidden=true; $('touch').classList.remove('walk');
+  $('zooUI').hidden=false; $('zWalkExit').hidden=true; $('zMain').hidden=false; $('zPanel').hidden=true;
+  if(document.exitPointerLock) document.exitPointerLock();
+  renderZooTools(); updateZooHud();
+  if(away && away.minutes>=1) toast(`離開的 ${away.minutes} 分鐘裡：門票 +${away.coins} 金幣，吃掉飼料 ${away.feed}`);
+  else if(!save.zoo.animals.length) toast(Object.values(save.zoo.unplaced).some(n=>n>0)?'先蓋一座棲地，再把救回來的動物放進去':'先出發遠征，把動物救回來');
+  persist();
+}
+function leaveZooForExpedition(){
+  simulate(0); persist();
+  zooActive=false; $('zooUI').hidden=true; $('zPanel').hidden=true;
+  startExpedition();
+}
+
+/* ---------- 介面 ---------- */
+function updateZooHud(){
+  const z=save.zoo;
+  $('zRes').innerHTML=[['金幣',Math.floor(z.coins)],...DATA.items.map(i=>[i.name,Math.floor(save.resources[i.id]||0)]),['遊客',zooStats.visitors]]
+    .map(([n,v])=>`<span><i>${esc(n)}</i><b class="num">${v}</b></span>`).join('')
+    +(zooStats.heatOn?'':'<span class="warnchip">煤炭用完，暖爐停了</span>');
+  const avail=Object.values(z.unplaced).reduce((a,b)=>a+b,0);
+  $('zPool').textContent=avail?`待安置 ${avail}`:'';
+}
+function renderZooTools(){
+  const tools=[{id:'select',name:'選取',sub:'查看・放動物'},{id:'demolish',name:'拆除',sub:`退還 ${Math.round(ZC().demolishRefund*100)}%`}]
+    .concat(DATA.buildings.filter(b=>b.buildable!==false).map(b=>({id:b.id,name:b.name,sub:costText(b.cost),cost:b.cost})));
+  $('zTools').innerHTML=tools.map(t=>`<button type="button" class="ztool${zTool===t.id?' on':''}${t.cost&&!affordable(t.cost)?' poor':''}" data-tool="${t.id}"><b>${esc(t.name)}</b><span>${esc(t.sub)}</span></button>`).join('');
+  $('zTools').querySelectorAll('.ztool').forEach(el=>el.onclick=()=>{ zTool=el.dataset.tool; zGhost.visible=false; if(zTool!=='select'){ zSelUid=null; updateSelBox(); $('zPanel').hidden=true; } renderZooTools(); });
+}
+function openHabitatPanel(b){
+  const d=bdef(b.type), z=save.zoo, inside=z.animals.filter(a=>a.habitat===b.uid), T=habitatTemp(b), fed=habitatFed(b);
+  const cand=Object.entries(z.unplaced).filter(([id,n])=>n>0&&DATA.speciesById[id]&&d.accepts.includes(DATA.speciesById[id].category));
+  const full=inside.length>=d.capacity;
+  const bar=(v,cls='')=>`<span class="zbar ${cls}"><i style="width:${Math.round(v)}%"></i></span>`;
+  $('zPanel').innerHTML=`
+    <div class="zp-head"><div><b>${esc(d.name)}</b><span>${T}°C・${inside.length}/${d.capacity} 隻・${fed?'有飼料站':'<em>附近沒有飼料站</em>'}</span></div><button type="button" class="zclose" id="zpClose" aria-label="關閉">✕</button></div>
+    ${inside.length?inside.map(a=>{ const sp=DATA.speciesById[a.species], ok=T>=sp.tempRange[0]&&T<=sp.tempRange[1];
+      return `<div class="zp-row"><div class="zp-name"><b>${esc(sp.name)}</b><span>適溫 ${sp.tempRange[0]}～${sp.tempRange[1]}°C${ok?'':'・<em>溫度不合</em>'}・${esc(sp.social)}</span></div>
+        <div class="zp-bars"><label>幸福${bar(a.happy??60,(a.happy??60)<40?'low':'')}</label><label>飽足${bar(a.food??80,(a.food??80)<30?'low':'')}</label></div>
+        <button type="button" class="zmini" data-out="${a.id}">移出</button></div>`; }).join('')
+      :`<p class="zp-empty">這裡還沒有動物。</p>`}
+    <div class="zp-add">${cand.length&&!full?cand.map(([id,n])=>`<button type="button" class="zmini add" data-in="${id}">放入 ${esc(DATA.speciesById[id].name)}（${n}）</button>`).join('')
+      :`<span class="zp-empty">${full?'已經住滿了':`沒有可以放進${esc(d.name)}的${d.accepts.map(c=>DATA.config.categories[c].name).join('、')}生物`}</span>`}</div>`;
+  $('zPanel').hidden=false;
+  $('zpClose').onclick=()=>{ $('zPanel').hidden=true; zSelUid=null; updateSelBox(); };
+  $('zPanel').querySelectorAll('[data-in]').forEach(el=>el.onclick=()=>{
+    const id=el.dataset.in; z.unplaced[id]--;
+    z.animals.push({id:'a'+(z.nextUid++),species:id,habitat:b.uid,food:80,happy:60});
+    rebuildZooAnimals(); simulate(0); openHabitatPanel(b); updateZooHud(); persist();
+  });
+  $('zPanel').querySelectorAll('[data-out]').forEach(el=>el.onclick=()=>{
+    const i=z.animals.findIndex(a=>a.id===el.dataset.out); if(i<0) return;
+    const a=z.animals.splice(i,1)[0]; z.unplaced[a.species]=(z.unplaced[a.species]||0)+1;
+    rebuildZooAnimals(); simulate(0); openHabitatPanel(b); updateZooHud(); persist();
+  });
+}
+
+/* ---------- 點擊與鏡頭 ---------- */
+const zRay=new THREE.Raycaster(), zNdc=new THREE.Vector2(), zPlane=new THREE.Plane(new THREE.Vector3(0,1,0),0), zHit=new THREE.Vector3();
+function screenToTile(cx,cy){
+  const r=canvas.getBoundingClientRect();
+  zNdc.set((cx-r.left)/r.width*2-1,-(cy-r.top)/r.height*2+1);
+  zRay.setFromCamera(zNdc,zooCam);
+  if(!zRay.ray.intersectPlane(zPlane,zHit)) return null;
+  return { x:Math.floor(zHit.x/TS()+GN()/2), z:Math.floor(zHit.z/TS()+GN()/2) };
+}
+function placeOffset(d,t){ return { x:t.x-Math.floor((d.size[0]-1)/2), z:t.z-Math.floor((d.size[1]-1)/2) }; }
+function zooTap(cx,cy){
+  const t=screenToTile(cx,cy); if(!t) return;
+  const z=save.zoo, uid=occupancy().get(t.x+','+t.z);
+  if(zTool==='select'){
+    const b=uid&&findB(uid);
+    if(!b){ zSelUid=null; updateSelBox(); $('zPanel').hidden=true; return; }
+    zSelUid=b.uid; updateSelBox();
+    const d=bdef(b.type);
+    if(d.kind==='habitat') openHabitatPanel(b);
+    else { $('zPanel').hidden=true;
+      if(d.kind==='feeder') toast(`飼料站：半徑 ${d.radius} 格內的棲地會自動餵食（倉庫飼料 ${Math.floor(save.resources.feed||0)}）`);
+      else if(d.kind==='heater') toast(`暖爐：半徑 ${d.radius} 格內的棲地 +${d.heat}°C，會慢慢消耗煤炭`);
+      else toast(d.name); }
+    return;
+  }
+  if(zTool==='demolish'){
+    const b=uid&&findB(uid); if(!b) return;
+    const d=bdef(b.type);
+    if(d.buildable===false){ toast(`${d.name}不能拆除`); return; }
+    for(const a of z.animals.filter(a=>a.habitat===b.uid)) z.unplaced[a.species]=(z.unplaced[a.species]||0)+1;
+    z.animals=z.animals.filter(a=>a.habitat!==b.uid);
+    z.buildings=z.buildings.filter(x=>x.uid!==b.uid);
+    const refund={}; for(const [k,v] of Object.entries(d.cost)) refund[k]=Math.floor(v*ZC().demolishRefund);
+    pay(refund,1); rebuildZoo(); simulate(0); updateZooHud(); renderZooTools(); persist();
+    toast(`拆除${d.name}，退還 ${costText(refund)}`);
+    return;
+  }
+  const d=bdef(zTool); if(!d) return;
+  const p=placeOffset(d,t);
+  if(!canPlace(d,p.x,p.z)){ toast('這裡放不下'); return; }
+  if(!affordable(d.cost)){ toast(`不夠：需要 ${costText(d.cost)}`); return; }
+  pay(d.cost,-1);
+  const b={uid:z.nextUid++,type:d.id,x:p.x,z:p.z,rot:0};
+  z.buildings.push(b);
+  const g=makeBuildingMesh(b); zooRoot.add(g); zooBMeshes.set(b.uid,g);
+  simulate(0); updateZooHud(); renderZooTools(); persist();
+  if(d.kind==='habitat'){ zTool='select'; zSelUid=b.uid; updateSelBox(); renderZooTools(); openHabitatPanel(b); }
+}
+function updateGhost(cx,cy){
+  const d=bdef(zTool);
+  if(!d||state!=='zoo'){ zGhost.visible=false; return; }
+  const t=screenToTile(cx,cy); if(!t){ zGhost.visible=false; return; }
+  const p=placeOffset(d,t), ok=canPlace(d,p.x,p.z)&&affordable(d.cost);
+  zGhost.visible=true; zGhost.scale.set(d.size[0]*TS(),1,d.size[1]*TS());
+  zGhost.position.set((p.x+d.size[0]/2-GN()/2)*TS(),0.15,(p.z+d.size[1]/2-GN()/2)*TS());
+  zGhost.material.color.setHex(ok?0x7cc8e8:0xff5d5d);
+}
+const zPtrs=new Map(); let zDrag=0, zPinch=0;
+canvas.addEventListener('pointerdown',e=>{ if(state!=='zoo') return; zPtrs.set(e.pointerId,{x:e.clientX,y:e.clientY}); zDrag=0; if(zPtrs.size===2){ const [a,b]=[...zPtrs.values()]; zPinch=Math.hypot(a.x-b.x,a.y-b.y); } });
+canvas.addEventListener('pointermove',e=>{
+  if(state!=='zoo') return;
+  const p=zPtrs.get(e.pointerId);
+  if(!p){ if(e.pointerType==='mouse') updateGhost(e.clientX,e.clientY); return; }
+  const dx=e.clientX-p.x, dy=e.clientY-p.y; p.x=e.clientX; p.y=e.clientY;
+  if(zPtrs.size===1){
+    zDrag+=Math.abs(dx)+Math.abs(dy);
+    if(zDrag>6){ const k=zooCamT.d*0.0022; zooCamT.x-=dx*k; zooCamT.z-=dy*k; const lim=GN()*TS()/2; zooCamT.x=Math.max(-lim,Math.min(lim,zooCamT.x)); zooCamT.z=Math.max(-lim,Math.min(lim+6,zooCamT.z)); }
+    if(e.pointerType==='mouse') updateGhost(e.clientX,e.clientY);
+  } else if(zPtrs.size===2){
+    const [a,b]=[...zPtrs.values()], dd=Math.hypot(a.x-b.x,a.y-b.y);
+    if(zPinch) zooCamT.d=Math.max(14,Math.min(80,zooCamT.d*zPinch/dd)); zPinch=dd; zDrag=99;
+  }
+});
+const zUp=e=>{ if(!zPtrs.has(e.pointerId)) return; const single=zPtrs.size===1; zPtrs.delete(e.pointerId); if(state==='zoo'&&single&&zDrag<=6) zooTap(e.clientX,e.clientY); if(zPtrs.size<2) zPinch=0; };
+canvas.addEventListener('pointerup',zUp); canvas.addEventListener('pointercancel',e=>zPtrs.delete(e.pointerId));
+canvas.addEventListener('wheel',e=>{ if(state!=='zoo') return; e.preventDefault(); zooCamT.d=Math.max(14,Math.min(80,zooCamT.d*(1+Math.sign(e.deltaY)*0.1))); },{passive:false});
+
+/* ---------- 第一人稱逛園 ---------- */
+function startZooWalk(){
+  state='zoowalk'; $('zMain').hidden=true; $('zPanel').hidden=true; $('zWalkExit').hidden=false; zGhost.visible=false; zSelBox.visible=false;
+  const g=save.zoo.buildings.find(b=>b.type==='gate'), c=g?tileCenter(g):{x:0,z:GN()*TS()/2-2};
+  player.pos.set(c.x,0,c.z-1.5); player.yaw=0; player.pitch=-0.05;
+  if(isTouch){ $('touch').hidden=false; $('touch').classList.add('walk'); } else tryLock();
+}
+function endZooWalk(){
+  state='zoo'; $('zMain').hidden=false; $('zWalkExit').hidden=true; $('touch').hidden=true; $('touch').classList.remove('walk');
+  if(document.exitPointerLock) document.exitPointerLock(); updateSelBox();
+}
+
+/* ---------- 每幀 ---------- */
+function zooUpdate(dt){
+  if(toastT>0){ toastT-=dt; if(toastT<=0) $('toast').style.opacity=0; }
+  zooAcc+=dt; if(zooAcc>=0.5){ simulate(zooAcc/60); zooAcc=0; }
+  zSaveT+=dt; if(zSaveT>=ZC().autosaveSeconds){ zSaveT=0; persist(); }
+  zHudT+=dt; if(zHudT>=0.5){ zHudT=0; updateZooHud(); }
+  for(const g of zooBMeshes.values()) if(g.userData.glow) g.userData.glow.material.opacity=heatersOn()?0.55+Math.sin(clock.elapsedTime*3)*0.15:0;
+  for(const z of zooAnimals){
+    const m=z.mesh;
+    if(z.wait>0){ z.wait-=dt; m.position.y=0.1; continue; }
+    const dx=z.tx-m.position.x, dz=z.tz-m.position.z, d=Math.hypot(dx,dz);
+    if(d<0.2){ z.tx=z.c.x+(Math.random()*2-1)*z.hw; z.tz=z.c.z+(Math.random()*2-1)*z.hd; z.wait=1+Math.random()*4; continue; }
+    const s=Math.min(d,dt*1.4); m.position.x+=dx/d*s; m.position.z+=dz/d*s; m.rotation.y=Math.atan2(dx,dz);
+    z.hop+=dt*10; m.position.y=0.1+Math.abs(Math.sin(z.hop))*0.12;
+  }
+  if(state==='zoowalk'){
+    let ix=(keys.KeyD?1:0)-(keys.KeyA?1:0)+joy.x, iz=(keys.KeyS?1:0)-(keys.KeyW?1:0)+joy.y;
+    const il=Math.hypot(ix,iz); if(il>1){ix/=il;iz/=il;}
+    const sp=sprint?6.5:3.6, sy=Math.sin(player.yaw), cy=Math.cos(player.yaw);
+    player.pos.x+=(ix*cy+iz*sy)*sp*dt; player.pos.z+=(-ix*sy+iz*cy)*sp*dt;
+    const lim=GN()*TS()/2-0.6; player.pos.x=Math.max(-lim,Math.min(lim,player.pos.x)); player.pos.z=Math.max(-lim,Math.min(lim+4,player.pos.z));
+    if(il>0.1) player.bob+=dt*8;
+    camera.position.set(player.pos.x,1.65+(il>0.1?Math.sin(player.bob)*0.05:0),player.pos.z); camera.rotation.set(player.pitch,player.yaw,0);
+  } else {
+    zooCam.position.set(zooCamT.x,zooCamT.d*0.82,zooCamT.z+zooCamT.d*0.58); zooCam.lookAt(zooCamT.x,0,zooCamT.z);
+  }
+}
+
+$('zWalk').onclick=()=>startZooWalk();
+$('zWalkExit').onclick=()=>endZooWalk();
+$('zDex').onclick=()=>{ $('zooUI').hidden=true; showDex(); };
+$('zGo').onclick=()=>leaveZooForExpedition();
 
 /* =========================================================
    8. 主迴圈
@@ -716,6 +1142,7 @@ function collide(p,r){
   const d=Math.hypot(p.x,p.z); if(d>185){ p.x*=185/d; p.z*=185/d; }
 }
 function update(dt){
+  if(zooActive){ zooUpdate(dt); return; }
   const t=clock.elapsedTime;
   if(world) world.traverse(o=>{ if(o.userData.spin){ o.rotation.y+=dt*2; o.position.y+=Math.sin(t*3)*0.003; } });
   for(const s of smoke){ s.userData.t=(s.userData.t+dt*0.18)%1; const k=s.userData.t; s.position.set(Math.sin(k*5)*0.6,5+k*9,33.6-k*7); const sc=0.8+k*4; s.scale.set(sc,sc,1); s.material.opacity=0.55*(1-k); }
@@ -793,7 +1220,7 @@ function update(dt){
   if(player.temp<=0) collapse();
   if(state==='play') hud(inHeat);
 }
-function loop(){ requestAnimationFrame(loop); const dt=Math.min(clock.getDelta(),0.05); update(dt); renderer.render(scene,camera); }
+function loop(){ requestAnimationFrame(loop); const dt=Math.min(clock.getDelta(),0.05); update(dt); if(zooActive) renderer.render(zooScene,state==='zoowalk'?camera:zooCam); else renderer.render(scene,camera); }
 
 /* =========================================================
    9. 啟動
@@ -806,7 +1233,7 @@ loop();
   catch(e){ screenEl.innerHTML='<div class="card"><h2>遊戲資料讀取失敗</h2><p>設定表沒有載入成功，請重新整理頁面再試一次。</p></div>'; return; }
   buildStation('ruins',12345);
   await initSave();
-  showHub();
+  enterZoo();
 })();
 })();
 

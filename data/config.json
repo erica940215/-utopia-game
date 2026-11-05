@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "expedition": {
     "runSeconds": 300,
     "stormWarnSeconds": 60,
@@ -37,14 +37,54 @@
     "touchDrainPerSec": 16
   },
   "rarity": {
-    "common":     { "name": "普通", "color": "#9fb7c6", "weight": 10, "minDist": 38 },
-    "rare":       { "name": "稀有", "color": "#7cc8e8", "weight": 4,  "minDist": 60 },
-    "endangered": { "name": "瀕危", "color": "#ff9a3c", "weight": 2,  "minDist": 85 },
-    "legendary":  { "name": "傳說", "color": "#e9c46a", "weight": 1,  "minDist": 110 }
+    "common": {
+      "name": "普通",
+      "color": "#9fb7c6",
+      "weight": 10,
+      "minDist": 38
+    },
+    "rare": {
+      "name": "稀有",
+      "color": "#7cc8e8",
+      "weight": 4,
+      "minDist": 60
+    },
+    "endangered": {
+      "name": "瀕危",
+      "color": "#ff9a3c",
+      "weight": 2,
+      "minDist": 85
+    },
+    "legendary": {
+      "name": "傳說",
+      "color": "#e9c46a",
+      "weight": 1,
+      "minDist": 110
+    }
   },
   "categories": {
-    "land":    { "name": "陸生" },
-    "aquatic": { "name": "水生" },
-    "insect":  { "name": "昆蟲" }
+    "land": {
+      "name": "陸生"
+    },
+    "aquatic": {
+      "name": "水生"
+    },
+    "insect": {
+      "name": "昆蟲"
+    }
+  },
+  "zoo": {
+    "gridSize": 28,
+    "tile": 2,
+    "startCoins": 100,
+    "offlineCapMinutes": 480,
+    "foodDecayPerMin": 1.5,
+    "feedRefillAt": 70,
+    "feedRefillAmount": 30,
+    "happinessPerMin": 20,
+    "coinPerAttractPerMin": 0.5,
+    "visitorPerAttract": 3,
+    "demolishRefund": 0.5,
+    "autosaveSeconds": 30
   }
 }

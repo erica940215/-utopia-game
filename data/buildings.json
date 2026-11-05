@@ -1,0 +1,10 @@
+[
+  { "id": "path",              "name": "步道",     "kind": "path",    "size": [1, 1], "cost": { "coins": 5 },               "color": "#9aa3ab" },
+  { "id": "habitat_cold",      "name": "寒帶棲地", "kind": "habitat", "size": [4, 4], "cost": { "scrap": 10, "coins": 40 }, "baseTemp": -10, "accepts": ["land"],    "capacity": 3, "ground": "#e3eef6", "fence": "#6b7a86" },
+  { "id": "habitat_temperate", "name": "溫帶棲地", "kind": "habitat", "size": [4, 4], "cost": { "scrap": 14, "coins": 60 }, "baseTemp": 8,   "accepts": ["land"],    "capacity": 3, "ground": "#6f8f5a", "fence": "#5a4434" },
+  { "id": "pond",              "name": "水池",     "kind": "habitat", "size": [3, 3], "cost": { "scrap": 12, "coins": 50 }, "baseTemp": 2,   "accepts": ["aquatic"], "capacity": 4, "ground": "#3f86b0", "fence": "#8a949c", "water": true },
+  { "id": "insect_house",      "name": "昆蟲館",   "kind": "habitat", "size": [3, 3], "cost": { "scrap": 16, "coins": 70 }, "baseTemp": 22,  "accepts": ["insect"],  "capacity": 6, "ground": "#4d6b4a", "fence": "#c9d6dd", "house": true },
+  { "id": "feeder",            "name": "飼料站",   "kind": "feeder",  "size": [1, 1], "cost": { "scrap": 4, "coins": 15 },  "radius": 6, "color": "#8c7a42" },
+  { "id": "heater",            "name": "暖爐",     "kind": "heater",  "size": [1, 1], "cost": { "scrap": 6, "coins": 20 },  "radius": 5, "heat": 12, "fuelPerMin": 0.1, "color": "#3a2e2a" },
+  { "id": "gate",              "name": "入口",     "kind": "gate",    "size": [2, 1], "cost": {}, "buildable": false, "color": "#5b4a3a" }
+]
