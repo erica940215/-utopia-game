@@ -13,7 +13,9 @@
   "social": "獨居",
   "attract": 5,
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ],
   "zone": "冰原原生"
  },
@@ -31,7 +33,9 @@
   "social": "小群",
   "attract": 3,
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ],
   "zone": "冰原原生"
  },
@@ -49,7 +53,9 @@
   "social": "群居",
   "attract": 7,
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ],
   "zone": "冰原原生"
  },
@@ -67,7 +73,9 @@
   "social": "群居",
   "attract": 8,
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ],
   "zone": "冰原原生",
   "body": {
@@ -93,7 +101,9 @@
   "social": "獨居",
   "attract": 12,
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ],
   "zone": "冰原原生",
   "body": {
@@ -118,7 +128,9 @@
   "diet": "魚",
   "social": "群居",
   "attract": 7,
-  "spawn": [],
+  "spawn": [
+   "lake"
+  ],
   "zone": "冰原原生"
  },
  {
@@ -134,7 +146,9 @@
   "diet": "浮游生物",
   "social": "魚群",
   "attract": 2,
-  "spawn": [],
+  "spawn": [
+   "lake"
+  ],
   "zone": "冰原原生"
  },
  {
@@ -150,7 +164,9 @@
   "diet": "貝類",
   "social": "群居",
   "attract": 9,
-  "spawn": [],
+  "spawn": [
+   "lake"
+  ],
   "zone": "冰原原生"
  },
  {
@@ -166,7 +182,9 @@
   "diet": "藻類",
   "social": "群聚",
   "attract": 3,
-  "spawn": [],
+  "spawn": [
+   "greenhouse"
+  ],
   "zone": "冰原原生"
  },
  {
@@ -182,7 +200,9 @@
   "diet": "腐植質",
   "social": "群聚",
   "attract": 1,
-  "spawn": [],
+  "spawn": [
+   "greenhouse"
+  ],
   "zone": "冰原原生"
  },
  {
@@ -198,7 +218,9 @@
   "diet": "花蜜",
   "social": "群聚",
   "attract": 6,
-  "spawn": [],
+  "spawn": [
+   "greenhouse"
+  ],
   "zone": "冰原原生"
  },
  {
@@ -221,7 +243,9 @@
   "social": "群居",
   "attract": 3,
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -246,7 +270,9 @@
   "social": "群居",
   "attract": 3,
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -270,7 +296,8 @@
   "social": "群居",
   "attract": 2,
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -296,7 +323,9 @@
   "social": "獨居",
   "attract": 15,
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -321,7 +350,9 @@
   "social": "群居",
   "attract": 6,
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -345,7 +376,8 @@
   "social": "群居",
   "attract": 6,
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -369,7 +401,8 @@
   "social": "獨居",
   "attract": 4,
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -394,7 +427,8 @@
   "social": "獨居",
   "attract": 8,
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -417,7 +451,8 @@
   "social": "群聚",
   "attract": 6,
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -440,7 +475,8 @@
   "social": "群聚",
   "attract": 4,
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -464,7 +500,9 @@
   "diet": "樹液",
   "social": "群聚",
   "attract": 4,
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "stick_insect",
@@ -487,7 +525,9 @@
   "diet": "樹葉",
   "social": "群聚",
   "attract": 3,
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "purple_emperor",
@@ -510,7 +550,9 @@
   "diet": "樹液",
   "social": "群聚",
   "attract": 7,
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "golden_birdwing",
@@ -533,7 +575,9 @@
   "diet": "花蜜",
   "social": "群聚",
   "attract": 8,
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "broad_tailed_swallowtail",
@@ -556,7 +600,9 @@
   "diet": "花蜜",
   "social": "群聚",
   "attract": 12,
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "atlas_moth",
@@ -579,7 +625,9 @@
   "diet": "不進食",
   "social": "獨居",
   "attract": 9,
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "orchid_mantis",
@@ -602,7 +650,9 @@
   "diet": "昆蟲",
   "social": "獨居",
   "attract": 9,
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "long_armed_beetle",
@@ -625,7 +675,9 @@
   "diet": "樹液",
   "social": "獨居",
   "attract": 10,
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "giant_panda",
@@ -654,7 +706,9 @@
   "attract": 20,
   "fact": "成熊身長約為120-180公分，體重約80-120公斤，幼熊出生時體長約10公分，體重約僅有150~200公克。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -680,7 +734,8 @@
   "attract": 6,
   "fact": "國王企鵝是全世界體型第二大的企鵝(僅次於帝王企鵝)，嘴喙長、耳羽顏色偏橘，有一圈黑邊框，圖案類似水滴形。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -707,7 +762,8 @@
   "attract": 8,
   "fact": "黑腳企鵝的臉頰是黑色，眉毛到頭部的白色部分寬闊，眼睛前部是紅色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -737,7 +793,9 @@
   "attract": 9,
   "fact": "身體為米色到淡灰色，腹部、臀部及四肢的顏色較淡，眼睛下方及兩眼之間有明顯的白色斑紋，前額有一叢濃密又整齊的棕色瀏海。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -767,7 +825,9 @@
   "attract": 8,
   "fact": "非洲野驢背部鬃毛直立，頭、背及體側覆蓋著介於淺灰及淺黃色的短毛，吻端、腹部、腳則為白色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -798,7 +858,9 @@
   "attract": 16,
   "fact": "體毛短，但頭頂、頸、喉、臀及尾部的毛頗長，四肢比雙峰駱駝細長且行走速度較快。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -829,7 +891,9 @@
   "attract": 9,
   "fact": "成年駱駝的駝峰重約30公斤，內儲藏脂肪提供身體所需能量。剛出生的小駱駝駝峰扁塌，要等到開始吃食物後會累積脂肪，慢慢形成圓錐形的駝峰。如果駝峰…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -858,7 +922,9 @@
   "attract": 14,
   "fact": "全身披有紅褐色的毛髮，而粗糙、稀疏的毛髮顏色會隨著年齡改變，從幼年鮮明的橘色到成年動物的紅褐色，有些還會轉變成深巧克力色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -887,7 +953,9 @@
   "attract": 12,
   "fact": "體型最大的一種長臂猿，全身佈滿長而濃密的黑色體毛，而在雄性生殖部位長有約15公分長的毛髮；體重約10~12公斤，體長約71~90公分，雙臂伸…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -916,7 +984,8 @@
   "attract": 9,
   "fact": "黃色的嘴巨大而彎曲，鳥喙及頭盔的內部都是中空的、由如同蜂窩般狀的骨質先為所構成。中空、質地輕，不妨礙飛行。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -947,7 +1016,9 @@
   "attract": 16,
   "fact": "身軀龐大，頭大，四肢粗壯，體色暗灰。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -977,7 +1048,9 @@
   "attract": 12,
   "fact": "馬來虎是體型小的老虎亞種之一。平均體重：雄虎為129公斤，雌虎為100公斤； 頭尾體長： 雄虎約273公分，雌虎約200公分。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -1007,7 +1080,9 @@
   "attract": 12,
   "fact": "黃褐色的身體上有許多黑色空心的斑塊；腹面白色，雜有黑色斑點，所有的花豹臉上都有斑點，而每隻花豹臉上的斑點圖案都不同，就如同我們的指紋。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -1036,7 +1111,9 @@
   "attract": 9,
   "fact": "熊科動物中體型最小。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -1066,7 +1143,9 @@
   "attract": 9,
   "fact": "黑白相間，全身中後段為白色體毛，其餘為黑色；耳朵豎立，耳緣末端為白色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -1094,7 +1173,8 @@
   "attract": 4,
   "fact": "是唯一羽色為黑色的天鵝。羽翼伸展開來其初級及次級飛羽為白色。喙部呈現亮紅色，足部則是灰黑色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -1123,7 +1203,9 @@
   "attract": 7,
   "fact": "毛短而密，非常柔軟，口鼻部為黑色無毛；眼睛周圍、耳朵、喉部、頸部側面為白色；頭頂為深灰黑色，比松鼠猴的頭部黑，背部為棕色，四肢為紅棕色或黃色…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -1152,7 +1234,9 @@
   "attract": 12,
   "fact": "深黑色毛髮較粗糙，頭部小鬍鬚顯著，臉部皮膚為黑色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -1180,7 +1264,8 @@
   "attract": 4,
   "fact": "所屬的科中體型最大的一種，頭及胸圍的羽毛為米色或白色，翅膀則為棕黑色，翅膀外側有淺藍色的斑紋，頭上有棕色條帶由鳥喙向上延伸到頭頂及穿過眼睛延…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -1209,7 +1294,9 @@
   "attract": 12,
   "fact": "雙臂比腿還長且更有力，尾巴能夠靈巧捲住樹枝，像是第五隻手一般。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -1238,7 +1325,9 @@
   "attract": 8,
   "fact": "水豚是世界上最大的囓齒動物，體重甚至可以高達70公斤。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -1268,7 +1357,9 @@
   "attract": 9,
   "fact": "體長約180至200公分，體重能達到30~60公斤。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -1298,7 +1389,9 @@
   "attract": 6,
   "fact": "體長30至80公分，尾長40至70公分。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -1327,7 +1420,9 @@
   "attract": 6,
   "fact": "面部、喉部及胸部為白色，其餘部份為黑色，身體及尾巴部分毛髮濃密。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -1356,7 +1451,9 @@
   "attract": 16,
   "fact": "身體的毛色從淺棕色道深色都有，大多數個體額頭上都有白色的三角形。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -1385,7 +1482,9 @@
   "attract": 6,
   "fact": "口鼻尖，身軀細長，軀幹中央部份略膨大，從頭部兩側到肩部有明顯的白色條紋。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -1413,7 +1512,8 @@
   "attract": 10,
   "fact": "紅藍吸蜜鸚鵡的喙比一般鸚鵡的長，細長舌頭上有刷狀的毛，方便深入花朵中取得花粉和花蜜。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -1442,7 +1542,8 @@
   "attract": 7,
   "fact": "頭部和四肢皮膚為黑色，頭頂、眼睛和耳朵周圍有黃色的斑點。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -1472,7 +1573,9 @@
   "attract": 6,
   "fact": "前肢形成二個彎曲的勾爪，後肢有三個勾爪，可懸掛身體於樹枝。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -1501,7 +1604,9 @@
   "attract": 16,
   "fact": "臉部無毛，裸露的皮膚為黑色；頭頂有濃密的白毛，背部及尾巴為黑色，腹側為白色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -1530,7 +1635,9 @@
   "attract": 6,
   "fact": "阿氏夜猴有雙漂亮的大眼睛，常在黃昏或夜間活動，極佳的夜視能力，能在漆黑的樹林中精準的獵捕到正在飛行的昆蟲。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -1559,7 +1666,9 @@
   "attract": 12,
   "fact": "形態與懶猴相似。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -1588,7 +1697,9 @@
   "attract": 9,
   "fact": "粗尾侏儒狐猴是小型哺乳動物，身體長度連尾巴約40到50公分，尾巴就占了20到27公分。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -1616,7 +1727,8 @@
   "attract": 4,
   "fact": "金色箭毒蛙從薄荷綠、黃色、橙色個體都有，有時甚至會發現是白色的個體，但黃色和深黃色個體最為常見而得名。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -1644,7 +1756,8 @@
   "attract": 4,
   "fact": "黃帶箭毒蛙具有獨特黃底黑色條帶而得名。身上黑色條帶會隨著個體年齡的增加斷裂成斑點。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -1672,7 +1785,8 @@
   "attract": 4,
   "fact": "迷彩箭毒蛙具有綠色或淺藍色體色，身上布滿著黑色的帶狀或斑點。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -1700,7 +1814,8 @@
   "attract": 4,
   "fact": "鈷藍箭毒蛙具有藍色體色，身上布滿著黑色的斑點。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -1727,7 +1842,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "象魚是南美洲亞馬遜河流域最大的淡水魚。",
-  "spawn": []
+  "spawn": [
+   "lake"
+  ]
  },
  {
   "id": "pink_tailed_chalceus",
@@ -1753,7 +1870,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "體長可達24.5公分。",
-  "spawn": []
+  "spawn": [
+   "lake"
+  ]
  },
  {
   "id": "red_belied_pacu",
@@ -1779,7 +1898,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "身體呈深色，腹部、下巴、胸鰭呈紅色，少部分腹鰭也是紅色。",
-  "spawn": []
+  "spawn": [
+   "lake"
+  ]
  },
  {
   "id": "silver_arowana",
@@ -1805,7 +1926,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "身體呈帶狀。口裂下斜、蓋住上頜的下頜具有類似育兒袋來口孵仔魚。",
-  "spawn": []
+  "spawn": [
+   "lake"
+  ]
  },
  {
   "id": "jullien_s_golden_carp",
@@ -1831,7 +1954,9 @@
   "social": "小群",
   "attract": 14,
   "fact": "長達1.5米及重70公斤",
-  "spawn": []
+  "spawn": [
+   "lake"
+  ]
  },
  {
   "id": "pearl_stingray",
@@ -1858,7 +1983,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "胸鰭跟身體連接成一個盤子的形狀，中幼魚時背部色彩較淺，體長直徑達20~30公分後顏色逐漸轉黑",
-  "spawn": []
+  "spawn": [
+   "lake"
+  ]
  },
  {
   "id": "threadfin_acara",
@@ -1884,7 +2011,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "體型略呈側扁，吻端相對尖銳",
-  "spawn": []
+  "spawn": [
+   "lake"
+  ]
  },
  {
   "id": "yellow_peacock_bass",
@@ -1910,7 +2039,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "外表跟大口黑鱸相似",
-  "spawn": []
+  "spawn": [
+   "lake"
+  ]
  },
  {
   "id": "pearl_cichlid",
@@ -1936,7 +2067,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "體呈橢圓形，側扁，尾柄略短。頭較大，尾柄相對較窄，上側位。",
-  "spawn": []
+  "spawn": [
+   "lake"
+  ]
  },
  {
   "id": "blue_tailed_bee_eater",
@@ -1963,7 +2096,8 @@
   "attract": 4,
   "fact": "批著翠綠色外衣、拖著藍色尾羽、喉部還點綴著栗紅色的「栗喉蜂虎」，由其吸引人們的眼光，牠們亮麗的身影及響亮的鳴叫聲，是金門夏天空中最美麗的象徵…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -1992,7 +2126,8 @@
   "attract": 4,
   "fact": "具有一身鮮紅色的羽毛。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -2021,7 +2156,8 @@
   "attract": 7,
   "fact": "雄鳥體長約200公分，體重約2公斤，雌鳥體長約75公分，體重約1.6公斤。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -2051,7 +2187,9 @@
   "attract": 12,
   "fact": "指猴尾巴長而濃密，體毛雜亂而粗糙，成年毛色為深棕色或黑色，分散的白色毛。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -2080,7 +2218,8 @@
   "attract": 4,
   "fact": "頭部黃色，頭背面有黑斑，背甲圓而高聳，為暗褐色或黑色，上有黃色或橙色的輻射條紋，腹甲為黃色，外側有大形的三角形黑斑，四肢粗壯有爪，佈滿鱗片。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2109,7 +2248,8 @@
   "attract": 7,
   "fact": "深色背甲，甲殼通常是一個細長的橢圓形，兩側平行，但雄性的兩側會內彎。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2138,7 +2278,9 @@
   "attract": 12,
   "fact": "淡奶油白色或棕褐色二種色型。一圈白毛圍繞著黑色無毛的臉，手與腳多為白色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -2167,7 +2309,8 @@
   "attract": 12,
   "fact": "屬大型鱷魚，特徵是長而狹窄的口鼻部，嘴上長有76-84尖銳的尖齒。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2197,7 +2340,9 @@
   "attract": 9,
   "fact": "是全世界體型最小的水獺，頭軀幹長呈流線型，四肢短，各趾間有蹼膜，毛短而密。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -2227,7 +2372,9 @@
   "attract": 6,
   "fact": "成年雄獸肩高約90-100公分，體長約200公分，重70-90公斤。外型像綿羊頸部較長。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -2257,7 +2404,9 @@
   "attract": 5,
   "fact": "上半身為褐色或灰色，腹部白色。細長的尾巴大約32~69公分，棕黑色並有一圈圈黃色環，具有平衡的功能。腳爪和前肢十分強壯，便於爬樹和挖掘朽木下…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -2287,7 +2436,9 @@
   "attract": 3,
   "fact": "體型比斑馬小，頭部較大耳朵較長，背部毛色一般為灰色，夏季會比較偏紅，腹部為白色，背部有時會有一條較深的條紋，豎立的鬃毛長而細，尾巴末端蓬鬆，…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -2317,7 +2468,9 @@
   "attract": 6,
   "fact": "迷你馬其實就是所謂的小型馬，體型比一般馬矮小，肩高約100至150公分，肩高矮於86公分。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -2345,7 +2498,9 @@
   "attract": 12,
   "fact": "進食時，牠們會用臀部坐著，且以手拿食物。雖然生活環境中的水很少，但草葉上的露水就足夠牠們生活了。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -2374,7 +2529,9 @@
   "attract": 6,
   "fact": "體長約25-35公分，有著細長的尾巴，眼眶有黑色斑塊，像是自備太陽眼鏡，耳朵小且圓，在挖沙時能閉起來避免耳道進沙，及長且彎曲的爪子，利於挖掘…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -2403,7 +2560,9 @@
   "attract": 6,
   "fact": "蘭嶼豬的成熟個體體重平均不超過80公斤。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -2432,7 +2591,9 @@
   "attract": 6,
   "fact": "全身毛色為灰黑色，尾巴有5-10圈黑色環紋，臉上也有像面罩一樣的黑色斑紋。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -2461,7 +2622,9 @@
   "attract": 6,
   "fact": "重量：1.84~4.6公斤 頭身長：41~57公分，尾長跟體長相似。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -2489,7 +2652,8 @@
   "attract": 4,
   "fact": "臺北赤蛙屬於小型蛙種，體型纖細瘦長，體長3-5公分。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2517,7 +2681,8 @@
   "attract": 4,
   "fact": "體型修長扁平，背側褶不明顯，皮膚光滑，體側有明顯的疣狀顆粒",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2545,7 +2710,8 @@
   "attract": 4,
   "fact": "腹斑蛙體型短胖，體色褐色，背中央有一條不明顯的背中線。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2573,7 +2739,8 @@
   "attract": 4,
   "fact": "黑眶蟾蜍皮膚粗糙，眼周圍至吻端的黑色花紋為其主要特徵。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2602,7 +2769,8 @@
   "attract": 10,
   "fact": "頭頂圓滑，背甲卵圓形，中央有一列不明顯的稜脊。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2631,7 +2799,8 @@
   "attract": 7,
   "fact": "眼鏡蛇頸背具有U字型白色環紋。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2659,7 +2828,8 @@
   "attract": 7,
   "fact": "犀牛鬣蜥體型壯碩，體色呈灰藍色，以額頭上突起的鱗角狀似犀牛而得名。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2687,7 +2857,8 @@
   "attract": 4,
   "fact": "頭部寬大，體長約25公分左右",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2715,7 +2886,8 @@
   "attract": 4,
   "fact": "韃靼沙蚺體型嬌小，身體短粗，吻鱗發達，眼極小。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2744,7 +2916,8 @@
   "attract": 14,
   "fact": "安南龜體色與背甲呈深褐色，臉部有黃色橫紋。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2772,7 +2945,8 @@
   "attract": 10,
   "fact": "中國鱷蜥是蜥蜴的一種，身體呈圓柱狀，尾部側扁如鱷魚。一般體長在32-36㎝，最長可達40㎝。雌蜥體色偏黃棕色，雄蜥體色偏紅棕色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2800,7 +2974,8 @@
   "attract": 4,
   "fact": "體型粗壯扁平，頭部大呈三角形，外耳孔明顯，頭部後面、頸部背面和喉部有大型棘刺狀鱗片，體側有一列規則排列的圓錐狀的棘刺狀突起。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2829,7 +3004,8 @@
   "attract": 4,
   "fact": "體長1-1、5 m，體型細長，鱗片光滑，體色花紋變化大，由黑色或棕褐色的暗帶與白色或黃色的明帶成環狀相間，有些個體成縱帶相間，腹部為白色上有…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2858,7 +3034,8 @@
   "attract": 7,
   "fact": "體型小型，背甲高聳呈圓頂狀，腹甲大，胸盾和腹盾有韌帶構造，使龜甲的前、後開口在遇外敵時可以完全閉合。背甲為深褐色，上有黃色或橙色放射狀條紋和…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2887,7 +3064,8 @@
   "attract": 7,
   "fact": "體型短橢圓形，背甲黃色，盾片上有大塊黑色同心斑紋。腹甲土黃色，盾片上有大塊黑色斑紋。四肢粗壯，趾均具4爪。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2915,7 +3093,8 @@
   "attract": 4,
   "fact": "體色為黑色帶黃色斑點。牠的身體上方表面是黃棕色而腹部通常是黑褐色，下巴和喉頭為黃色或淡黃色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2944,7 +3123,8 @@
   "attract": 7,
   "fact": "殼具放射狀花紋分布，盾片形成高聳的圓拱形、具星形圖案，尾盾板不分裂。底色為黑褐色，斑點、條紋、腹面為黃色。棒狀四肢。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -2973,7 +3153,8 @@
   "attract": 4,
   "fact": "中大型蛇類，體型粗胖，體長約0.8-1.6公尺。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3002,7 +3183,8 @@
   "attract": 4,
   "fact": "體長：40-90 cm，體型粗短，吻端尖短上翹，尾巴很短，身體鱗片粗糙具有稜脊。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3031,7 +3213,8 @@
   "attract": 14,
   "fact": "亞洲最大的陸龜，背甲寬而扁平，背甲前後緣盾呈鋸齒狀，前腳前面及後腳後面有大型鱗片，尤其後腳鱗片特別發達而突出，所以又有六腳龜之稱。背甲為黃褐…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3060,7 +3243,8 @@
   "attract": 10,
   "fact": "亞達伯拉象龜是世界上最大型的陸龜之一，雄龜體型大於雌龜，背甲平均約達90-130公分，體重約230-300公斤左右，雌龜較小背甲平均約90公…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3088,7 +3272,8 @@
   "attract": 4,
   "fact": "體型粗壯，頭部寬大呈三角形，眼睛小，瞳孔垂直，身體鱗片平滑具有光澤。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3117,7 +3302,8 @@
   "attract": 10,
   "fact": "食蛇龜體型渾圓，背甲高聳呈圓拱狀，中央有一列明顯的稜脊，胸盾與腹盾以韌帶連接，使得龜殼得以閉合。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3145,7 +3331,8 @@
   "attract": 4,
   "fact": "體型側扁，頭頂有像頭盔的高冠狀凸起，雄性的冠比雌性為高，背部中央和腹部中線有明顯鋸齒狀的隆起脊鱗。體色主要為綠色雜以白色、黃色、藍色和褐色的…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3173,7 +3360,8 @@
   "attract": 4,
   "fact": "中大型蛇類，體型粗壯有力，頭部尖細，與頸部區分容易，唇鱗具有感熱的唇窩。全身鱗片光滑，具有虹彩般的光澤，身體背部為褐色、橘褐色或橘紅色，上有…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3202,7 +3390,8 @@
   "attract": 7,
   "fact": "體長約0.8-1.4公尺。蛇蜥類有外耳孔和可閉合的眼瞼，蛇類不具有。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3231,7 +3420,8 @@
   "attract": 5,
   "fact": "體型粗短，頭部小而細長，尾巴短小，全身鱗片細小平滑有光澤。身體背部為黑色，上有不規則的淺褐色斑紋。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3259,7 +3449,8 @@
   "attract": 7,
   "fact": "中小型蜥蜴，體型細長略成圓筒形，四肢短，均具有五趾，尾巴約為身長的一半。頭部扁平，吻端尖扁，具有眼瞼，全身鱗片為圓鱗，光滑具有光澤。身體背部…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3288,7 +3479,8 @@
   "attract": 10,
   "fact": "體型中型，幼體背甲上有三列隆起稜脊，成體背甲兩側的稜脊變不明顯。頭、頸部兩側和四肢有黃綠色相間的條紋，背甲為黑褐色或深橄欖綠色，盾片上有淺棕…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3316,7 +3508,8 @@
   "attract": 4,
   "fact": "臺灣特有種體型最大者，背部以褐色為主，口腔外緣呈白色或乳白色，頸背有突起的脊鱗，雄性的下顎有明顯的白斑，有明顯之鬣鱗與喉垂，體側有明顯黃綠色…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3344,7 +3537,8 @@
   "attract": 7,
   "fact": "身體粗壯，世界上最大的石龍子，頭部很大略成三角形，吻端鈍圓，上、下顎強而有力，四肢有長而利的爪子，尾長強壯可捲曲纏繞。身體為橄欖綠色或褐色，…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3372,7 +3566,8 @@
   "attract": 7,
   "fact": "鈍尾毒蜥體型粗胖，頭部寬大，吻端圓鈍，眼睛小，身體圓胖，尾巴粗短，身體背部和四肢覆滿圓珠狀鱗片。吻部到嘴角和四肢為黑色，頭頂、身體和尾巴為粉…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3400,7 +3595,8 @@
   "attract": 7,
   "fact": "體型粗壯，尾巴細長側扁，由頸部到尾部的背面中央有一排刺狀脊鱗。身體為橄欖綠色或黃綠色，喉部和下唇的大型鱗片為白色，尾部有數個深黑褐色環帶。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3428,7 +3624,8 @@
   "attract": 4,
   "fact": "體型粗壯，尾部長而側扁，下顎兩側有一大形圓鱗，外耳孔明顯，喉褶可收縮，頸背部延伸至尾部有一列梳齒狀鱗片，四肢強壯有力。全身為綠色，在體側和尾…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3456,7 +3653,8 @@
   "attract": 7,
   "fact": "體型修長，眼前後皮褶明顯，背部皮膚略粗糙有細顆粒突起，趾末端吸盤發達。眼前後皮褶和虹彩為金黃色，體色為翠綠色或黃綠色，體側由吻端到股間有一條…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3485,7 +3683,8 @@
   "attract": 7,
   "fact": "體型粗長強壯，尾巴細長，眼到嘴角上方有一條黑色縱紋，全身為黃褐色或橄欖褐色，頸部至背部中段有四列黑色菱形斑紋，逐漸連成黑褐色縱帶至尾端，後段…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3514,7 +3713,8 @@
   "attract": 7,
   "fact": "體型粗壯，頭部細長呈三角形，全身鱗片平滑有光澤，尾巴短。頭頂有箭頭狀的黑褐色斑紋，身體背部為黃褐色或灰棕色，上有許多不規則大型的黑褐色鞍狀斑…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3543,7 +3743,8 @@
   "attract": 14,
   "fact": "緬甸星龜的背甲呈現白色花紋的放射狀圖案，成年體長腹甲長在22-30公分，成年的體型雌性個體大於雄性個體。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3572,7 +3773,8 @@
   "attract": 10,
   "fact": "體型扁平，頭部短小，眼睛大而凸，吻部呈管狀，狀似豬鼻，背甲無盾板，由軟質皮膚包覆，四肢蹼發達呈槳狀且具有爪。頭部與背甲為灰綠色或橄欖綠色，腹…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3600,7 +3802,8 @@
   "attract": 4,
   "fact": "體型略側扁，尾巴很長，成體雄蜥的頭部、背部與尾中央有冠狀突起，雌蜥則無此冠狀突起。眼睛虹彩為橙黃色，身體為翠綠色或藍綠色，上有許多淺藍色或黃…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3629,7 +3832,8 @@
   "attract": 7,
   "fact": "北美洲最大的淡水龜，頭大，嘴如鷹喙，尾巴長，背上有三列發達的鋸齒狀脊稜。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3658,7 +3862,8 @@
   "attract": 4,
   "fact": "體型細長，是世界上最大型蛇類之一，上唇鱗有凹陷的唇窩。頭部有三條黑細紋，一條在頭部正中，另兩條由兩眼延伸到嘴角，身體背部為灰褐色或黃褐色，有…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3687,7 +3892,8 @@
   "attract": 7,
   "fact": "體型壯碩，是世界上體型第三大的陸龜，背甲寬廣而高，前、後緣為鋸齒狀，前肢鱗片大而重疊，後腿有明顯的二或三個刺狀突起。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3716,7 +3922,8 @@
   "attract": 14,
   "fact": "揚子鱷是一種相對較小的鱷魚，最大長度約為2 公尺，是世界上少數分布在溫帶的鱷魚種類。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3745,7 +3952,8 @@
   "attract": 10,
   "fact": "頭部為乳黃色或黃綠色，背甲為黃褐色或橄欖綠色，上有不規則的黑色斑塊或斑點，背甲高聳呈長橢圓形，前腳有大型突起的鱗片。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -3772,7 +3980,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "體長可達5公分，體色深褐色；體型扁平形似枯葉，前腳特化成鐮刀狀，腹部末端有一細長的呼吸管，可伸出水面呼吸。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "chinese_red_headed_centipede",
@@ -3798,7 +4008,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "體長可達20公分，頭胸部、腹部第一節和腳均呈紅色；每一體節有1對步足，身體第一體節的一對附肢特化為巨大鉤狀的顎肢，顎肢內具有毒腺，為夜行肉食…",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "emperor_scorpion",
@@ -3824,7 +4036,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "世界上體型最大的蠍子之一，全長約20公分。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "mexican_red_knee_tarantula",
@@ -3850,7 +4064,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "具有4對步足，1對螯肢螯肢特化成毒牙。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "dragonfly_nymphs_aeshnidae",
@@ -3877,7 +4093,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "體色一般是暗褐色或暗綠色，腳和觸角比蜻蜓長一些。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "water_bug",
@@ -3903,7 +4121,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "體長1.4-1.7cm，體型扁橢圓；前足為鐮刀狀捕捉足，後足為具細毛之游泳足",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "six_spotted_cockroach",
@@ -3929,7 +4149,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "成蟲體長可達6公分，雌蟲型較雄蟲大，身形也較寬厚。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "diving_beetle",
@@ -3955,7 +4177,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "常見的水棲甲蟲，翅鞘表面光滑，或僅有不顯著的點刻列，翅鞘兩側有橙黃色的條紋，體長不到3cm。雄蟲的前足跗節膨大為吸盤，可藉以與雌蟲區別",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "stag_beetle",
@@ -3982,7 +4206,9 @@
   "social": "獨居",
   "attract": 4,
   "fact": "大型鍬形蟲，長角大鍬形蟲大顎為大鍬形蟲屬中最修長者。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "pachyrhynchus_weevil",
@@ -4008,7 +4234,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "全身布滿水青色的圓形或橢圓形斑點，翅鞘上的斑點橫跨左右兩翅鞘。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "firefly",
@@ -4034,7 +4262,9 @@
   "social": "小群",
   "attract": 14,
   "fact": "雄蟲體長7.6～8.8公釐；體壁布滿細毛；頭部黑色，觸角黑色，絲狀；前胸背板橙黃色；前翅黑色，表面佈滿微小圓形點刻與黃色細毛，翅緣有黃色細紋…",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "malaysian_stick_insect",
@@ -4061,7 +4291,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "大型竹節蟲，雌蟲體型較為寬扁，身上具有許多小刺，在遭遇危險時會將具有棘刺的後腿舉高夾擊騷擾者，並且露出具有警戒色的後翅，同時發出警戒聲。雌蟲…",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "eurycanths_calcarata",
@@ -4088,7 +4320,9 @@
   "social": "群居",
   "attract": 4,
   "fact": "雄蟲後腿較雌蟲粗壯許多，腿上棘刺也較大，除了禦敵外也可以幫助雄蟲彼此競爭雌蟲。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "phaenopharos_khaoyaiensis",
@@ -4115,7 +4349,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "成蟲具有短小的翅膀，遇驚擾時會打開紅色的翅膀，驚嚇敵人，休息時身軀及肢體伸直像樹枝。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "giant_walking_stick",
@@ -4142,7 +4378,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "大型竹節蟲，足部有尖刺。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "phylium_giganteum",
@@ -4169,7 +4407,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "目發現最大型的葉脩，外型與植物葉片非常相似，加上夜晚活動的習性，難以被掠食者發現",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "trachychorax_sexpunctatus",
@@ -4196,7 +4436,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "胸部背面有許多黑點，若蟲時胸部黃色，成蟲時則轉為紅色或褐色。雌雄都有翅膀，具良好飛行能力。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "trachyaretaon_brueckneri",
@@ -4223,7 +4465,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "剛孵出的若蟲，很像根乾柴。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "phasmotaenia_lanyuhensis",
@@ -4250,7 +4494,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "雌蟲體型較雄蟲大，且中胸肥澎大。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "tsuda_phasmid",
@@ -4277,7 +4523,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "雌蟲全身呈油綠色，胸部背板具許多顆粒狀小突起；尾毛粗短。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "entoria_sp",
@@ -4304,7 +4552,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "體型細長，體色從棕黃到黑色，變異很大。雄蟲體長較短，觸角較雌蟲長。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "lan_hsu_giant_katydid",
@@ -4330,7 +4580,9 @@
   "social": "小群",
   "attract": 7,
   "fact": "體色綠色；前胸背板佈滿極細的顆粒狀突起；體背發達拱起，外緣呈菱形外突，並有較明顯的顆粒瘤突，雌蟲產卵管長刀狀。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "field_cricket",
@@ -4356,7 +4608,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "成蟲體長可達3公分；體色黑色；翅棕色至黑色，翅基部具黃斑。頭圓形，稍短，比前胸背板稍窄或等寬。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "long_winged_katydid",
@@ -4382,7 +4636,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "體色綠色或褐色；最大的特徵是頭部後方兩側有大塊黑斑。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "lime_butterfly",
@@ -4409,7 +4665,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "中型鳳蝶。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "chinese_peacock",
@@ -4436,7 +4694,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "卵為底部扁平的白色球形，具光澤。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "paris_pescock",
@@ -4463,7 +4723,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "中型鳳蝶。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "great_mormon",
@@ -4490,7 +4752,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "卵為淺黃色球形。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "common_rose_swallowtail",
@@ -4517,7 +4781,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "卵為橙紅色球形。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "paper_kite_butterfly",
@@ -4544,7 +4810,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "大型斑蝶。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "orange_edged_whites",
@@ -4571,7 +4839,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "大型粉蝶。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "liuchiou_blue_spotted_milkweed_butterfly",
@@ -4598,7 +4868,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "中型斑蝶。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "yellow_emperor",
@@ -4625,7 +4897,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "中型蛺蝶。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "plain_tiger",
@@ -4652,7 +4926,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "雌雄斑紋相似。軀體頭、胸 呈黑褐色，上有白色斑點與線紋。 腹部背側橙色，腹側白色。雄蝶前 足被毛，雌蝶則否。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "yellow_coster",
@@ -4679,7 +4955,9 @@
   "social": "小群",
   "attract": 14,
   "fact": "中型蛺蝶。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "staff_sergeant",
@@ -4706,7 +4984,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "中型蛺蝶。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "common_tiger",
@@ -4733,7 +5013,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "中型斑蝶。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "blue_tiger",
@@ -4760,7 +5042,9 @@
   "social": "小群",
   "attract": 14,
   "fact": "中型斑蝶。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "dead_leaf_butterfly",
@@ -4787,7 +5071,9 @@
   "social": "群聚",
   "attract": 6,
   "fact": "卵為暗綠色球形， 1齡幼蟲為黑褐色，其他齡為黑色，各側腹背線有細長棘刺，棘刺基部為紅色。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "camponotus_habereri",
@@ -4813,7 +5099,9 @@
   "social": "獨居",
   "attract": 4,
   "fact": "大型螞蟻，職蟻多態型，小工蟻體長7.0– 7.6 mm，大工蟻12.1 –12.5 mm。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "camponotus_irritans",
@@ -4839,7 +5127,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "海岸林的朽木中。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "pheidole_sp",
@@ -4865,7 +5155,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "草地、農地、都市綠地等。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "sp_14dc1140",
@@ -4891,7 +5183,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "大型螞蟻，職蟻單態型，工蟻體長12.5–15.0mm。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "pristomyrmex_punctatus",
@@ -4917,7 +5211,9 @@
   "social": "小群",
   "attract": 4,
   "fact": "中小型螞蟻，職蟻單態型，工蟻體長3.1–3.2mm。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "common_emperor",
@@ -4944,7 +5240,9 @@
   "social": "小群",
   "attract": 14,
   "fact": "腹長63-68 mm，後翅長50-53 mm。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "oriental_scarlet",
@@ -4971,7 +5269,9 @@
   "social": "小群",
   "attract": 14,
   "fact": "腹長27-33 mm，後翅長32-37mm。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "red_percher",
@@ -4998,7 +5298,9 @@
   "social": "小群",
   "attract": 14,
   "fact": "善變蜻蜓成蟲體長約3.4~4.2 公分。",
-  "spawn": []
+  "spawn": [
+   "greenhouse"
+  ]
  },
  {
   "id": "barbary_sheep_aoudad",
@@ -5027,7 +5329,9 @@
   "attract": 9,
   "fact": "毛色為黃褐色偏紅色，耳內、臉頰、腹側及四肢內側為白色，雄羊脖子下面由喉部一直到前腿有長而柔軟的鬃毛，雌雄均有角，雄性的角先向外長，再向內偏轉…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -5057,7 +5361,9 @@
   "attract": 14,
   "fact": "體色由黃棕色到灰色，耳朵邊緣與尾巴有剛毛，其餘部分則無毛，上唇為方形。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -5086,7 +5392,9 @@
   "attract": 16,
   "fact": "皮毛長而柔軟，兩耳由長而濃密的白色毛髮遮蓋，毛的顏色變化很大，以黑色為主，四肢、背部及頭部有白色的斑紋，因而名為\"白頸\"。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -5116,7 +5424,9 @@
   "attract": 7,
   "fact": "雄、雌個體差異大，雌羚體色棕褐色帶有垂直白色條紋的外衣，喉部肉垂不明顯；雄羚羊額頭上有一叢深色毛，體色較深帶藍灰色調，年齡越大顏色越灰暗，白…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -5145,7 +5455,9 @@
   "attract": 7,
   "fact": "毛色為橄欖色，臉部黑色無毛，雄性的頸部及肩膀的毛較長，也比較強壯，口鼻部延長，有點像狗，尾巴成倒U形。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -5174,7 +5486,9 @@
   "attract": 16,
   "fact": "臉部沒有毛鬚。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -5206,7 +5520,9 @@
   "attract": 16,
   "fact": "頭大脖子短，身軀龐大，四肢長呈圓柱狀，腳短而平，腳底有用來支撐身軀重量的彈性組織，尾巴末端有蓬鬆的毛。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -5236,7 +5552,9 @@
   "attract": 9,
   "fact": "公獅體型比母獅大。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -5266,7 +5584,9 @@
   "attract": 9,
   "fact": "全身都是黑白相間的條紋，但是變異較大，有些黑色條紋較粗，也有些白色條紋較粗，較粗的白色條紋中會有淺色像陰影般的條紋，耳朵較短。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -5295,7 +5615,9 @@
   "attract": 6,
   "fact": "雌猴體型只有雄猴的一半。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -5325,7 +5647,9 @@
   "attract": 9,
   "fact": "短毛，由肩部到臀部有豎立的鬃毛，長而蓬鬆的尾巴。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -5354,7 +5678,9 @@
   "attract": 6,
   "fact": "身形像大型的鬥牛犬，口鼻處大而黑。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -5383,7 +5709,9 @@
   "attract": 12,
   "fact": "雌性體型較雄性略小，臉部為黑色無毛鬚，眉脊隆起。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -5414,7 +5742,9 @@
   "attract": 14,
   "fact": "在淡黃的底色上，有棕色的大小形狀不同的斑塊，每一個種或亞種都有不同形狀的斑紋，腹部或小腿的顏色比較淡，沒有斑紋，尾巴蓬鬆，頭部有1對角，舌長…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -5443,7 +5773,9 @@
   "attract": 9,
   "fact": "背側的毛色為棕灰色，腹側則是灰白色，尾巴的顏色比較深，臉部略黑，眼睛的上方有較淡的斑紋，臉部周圍均有毛鬚。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -5472,7 +5804,8 @@
   "attract": 4,
   "fact": "大形走禽。頭部、頸部上三分之二無毛，身體兩側及大腿裸露。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -5502,7 +5835,9 @@
   "attract": 9,
   "fact": "以其醒目的黑白相間長尾聞名，背部的毛色為灰至棕色，腹部為白色，白色的臉部有深棕色三角形區塊於眼睛及白耳，公狐猴在腕處有類似鳥類距的指甲。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -5532,7 +5867,9 @@
   "attract": 11,
   "fact": "寬吻，大嘴，身體呈短筒狀，腿短而粗，鼻孔在吻部上端，且可以關閉除了嘴唇及尾巴有少許的剛毛之外，全身無毛，體色為灰黑色，略帶綠色，腹部為灰白色…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -5562,7 +5899,9 @@
   "attract": 7,
   "fact": "體色為灰棕底色，腹部白色，臀部、腿部黑色，身上有明顯的棕色或黑色斑紋；雌雄頭上都長角(雌羚羊角較細)，角長而直由眼後筆直長出。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -5592,7 +5931,9 @@
   "attract": 12,
   "fact": "寬吻，大嘴，身體呈短筒狀，腿短而粗，前後隻均為四趾，鼻孔在吻部上端，且可以關閉。體表毛短而稀疏，膚色為灰棕色，腹部略帶粉紅色，眼睛突出，耳朵…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -5620,7 +5961,8 @@
   "attract": 14,
   "fact": "體長33公分。成鳥整體羽色白色。耳羽鮮黃色。翼下飛羽及尾羽有濃黃色調。黃色窄羽冠向前彎曲。裸露的眼圈乳白色。嘴灰黑色。雄鳥瞳孔暗褐色，雌鳥淺…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -5648,7 +5990,8 @@
   "attract": 4,
   "fact": "體長約50公分，體重約500公克，翼展寬約100公分。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -5676,7 +6019,8 @@
   "attract": 9,
   "fact": "大型猛禽，全身為黑褐色；頭頂有黑色的羽冠，其上有白色的斑紋；眼部、喙的基部及腳均為黃色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -5706,7 +6050,8 @@
   "attract": 9,
   "fact": "大紅鶴是最大型的紅鶴。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -5734,7 +6079,8 @@
   "attract": 4,
   "fact": "是最大型的巨嘴鳥，身體的羽色主要為黑色，頸胸部及尾上覆羽白色，尾下覆羽紅色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -5763,7 +6109,8 @@
   "attract": 7,
   "fact": "雄鳥體長78-92公分，體重3600-4800公克。羽冠非常明顯。嘴上的顯著黃色瘤狀物及羽冠，使得本種的雄鳥可以與黑寶冠鳥(Crax alb…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -5793,7 +6140,8 @@
   "attract": 12,
   "fact": "全身雪白，只有次級飛羽內側和三級飛羽是黑色，翅膀收起來時覆蓋在短而白色的尾羽上，所以常被誤認為尾羽是黑色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -5821,7 +6169,8 @@
   "attract": 4,
   "fact": "體長45~59公分，體重450~1000公克。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -5849,7 +6198,8 @@
   "attract": 7,
   "fact": "體長25公分。身體幾乎是黑色，具有明顯的羽冠。嘴黃色。肛門處及尾端白色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -5879,7 +6229,8 @@
   "attract": 7,
   "fact": "身體石板灰色有白喉，明顯的垂直白色條紋，從頭冠向下至頸背。瞳孔橘紅色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -5907,7 +6258,8 @@
   "attract": 10,
   "fact": "體長約46公分。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -5937,7 +6289,8 @@
   "attract": 7,
   "fact": "身體灰色，頭除了在眼上的前額有紅色的皮膚外白色。瞳孔橘紅至紅色。類似白枕鶴，但體型較小，頸部全白。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -5965,7 +6318,8 @@
   "attract": 6,
   "fact": "長嘴，腿粉紅色，飛羽從下面看全黑。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -5993,7 +6347,8 @@
   "attract": 4,
   "fact": "體長31-36公分，重330公克。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6022,7 +6377,8 @@
   "attract": 4,
   "fact": "雄鳥體長70~80公分,體重790~1136公克。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6052,7 +6408,8 @@
   "attract": 10,
   "fact": "瞳孔淺灰至淺藍色。與黑頸冠鶴同有黃色羽冠，不同處在頸淺灰色及紅色喉部肉垂較大，白色頰斑僅在頂部才紅色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6082,7 +6439,8 @@
   "attract": 4,
   "fact": "身體石板灰色，有黑色初級飛羽，頭暗色有白色條紋從眼後延伸至後頸。頭冠有紅色皮膚斑。瞳孔黃至橘紅色。類似黑頸鶴，但頭上有白色的羽毛延伸。幼鳥的…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6111,7 +6469,8 @@
   "attract": 4,
   "fact": "體長31公分。200-342公克。頭部的圖案明顯。雌鳥通常沒有距。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6139,7 +6498,8 @@
   "attract": 4,
   "fact": "雌鳥為鮮紅色的羽色，雄鳥則為亮眼的綠色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6169,7 +6529,8 @@
   "attract": 4,
   "fact": "體長可達150公分，體重約7公斤。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6199,7 +6560,8 @@
   "attract": 7,
   "fact": "是所有會飛行的鳥類中身高最高的，幾乎和成人一樣高。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6227,7 +6589,8 @@
   "attract": 4,
   "fact": "體長33-35公分。體重165-274公克。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6256,7 +6619,8 @@
   "attract": 4,
   "fact": "雌鳥與銀雞的不同在於腿黃色、眼窩皮膚相對於羽色有金色調、尾羽較尖。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6286,7 +6650,8 @@
   "attract": 4,
   "fact": "全身羽毛呈黑色，嘴紅色，嘴先端為黃色，腳為黃綠色，體側有一列白斑。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6314,7 +6679,8 @@
   "attract": 4,
   "fact": "後頸有一黑色頸環，尾深色末梢白色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6342,7 +6708,8 @@
   "attract": 4,
   "fact": "體長37公分~43公分，體重95~143公克。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6372,7 +6739,8 @@
   "attract": 4,
   "fact": "最外側的3根初級飛羽黑色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6400,7 +6768,8 @@
   "attract": 4,
   "fact": "體長47-54公分，重450公克。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6428,7 +6797,8 @@
   "attract": 4,
   "fact": "體長71-73公分，重1500-2250公克。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6458,7 +6828,8 @@
   "attract": 4,
   "fact": "次級飛羽的羽端為黑色。有很特別的嘴型，又長又黑，又彎又鉤是本屬鳥類中嘴巴最厚的一種。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6486,7 +6857,8 @@
   "attract": 4,
   "fact": "頭、頸及上胸黑色，身體葡萄褐色，眼後有一裸露的黃色皮膚。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6515,7 +6887,8 @@
   "attract": 4,
   "fact": "色淺灰色，在背上帶有淺粉紅色。腿的顏色有相當的變化，從灰色至黃色到橘紅色都有。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6543,7 +6916,8 @@
   "attract": 4,
   "fact": "體長約35公分，體重約300公克。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6573,7 +6947,8 @@
   "attract": 7,
   "fact": "淺黃灰色的腿帶有明顯的紅色「關節」及足。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6601,7 +6976,8 @@
   "attract": 4,
   "fact": "體長55-60公分；體重550-1000公克。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6629,7 +7005,8 @@
   "attract": 4,
   "fact": "體長50公分。身體深紫黑色，但頭及頸緋紅色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6657,7 +7034,8 @@
   "attract": 4,
   "fact": "體長48~55公分，體重1500~2450公克。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6685,7 +7063,8 @@
   "attract": 4,
   "fact": "體長86公分。成鳥前額及前冠綠色，身體上面其餘部份及尾上鮮藍色。裸露的眼及頰奶油白色。頰上有淺綠黑色的羽毛線狀交錯。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6713,7 +7092,8 @@
   "attract": 10,
   "fact": "體長約35公分，重約400公克，整體綠色，身體下部偏淺黃色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6741,7 +7121,8 @@
   "attract": 10,
   "fact": "體長約35公分，體重約500公克。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6770,7 +7151,8 @@
   "attract": 7,
   "fact": "雄鳥非常獨特，在翼上及尾上覆羽有各種不同的白斑。下背及腰深黑色。 雌鳥類似黑頸長尾雉的雌鳥，但羽色較暗且白及淺黑色的斑較明顯。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6799,7 +7181,8 @@
   "attract": 11,
   "fact": "體長約70公分。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6827,7 +7210,8 @@
   "attract": 4,
   "fact": "全身白色帶有些許黃色調，除了初級飛羽、初級覆羽、外側次級飛羽及尾羽為黑色外。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6855,7 +7239,8 @@
   "attract": 4,
   "fact": "體型最小的天鵝，102~104公分，體重3600～6700公克。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6885,7 +7270,8 @@
   "attract": 7,
   "fact": "瞳孔淺灰至淺藍色。與灰頸冠鶴的不同在頸部較暗色、肉垂較小及頰斑的下半部紅色。幼鳥整體灰色，有褐色的頭冠及頸背，身體灰至褐色，瞳孔褐色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6913,7 +7299,8 @@
   "attract": 6,
   "fact": "全身羽毛為白色或淡粉紅色，頰、喉部、尾巴及翅膀的內側為黃色；頭冠為黃色，羽毛向前彎曲；喙為灰色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6941,7 +7328,8 @@
   "attract": 4,
   "fact": "體長67-86公分，重1800-3500公克，翼展寬130-165公分。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6970,7 +7358,8 @@
   "attract": 4,
   "fact": "雄鳥體長65~75公分，體重672~1450公克，雌鳥體長40~46公分，體重485~1050公克。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -6998,7 +7387,8 @@
   "attract": 4,
   "fact": "成鳥的頭、直立的羽冠、頸、胸及頸背草綠色。下背、腰及尾暗淺黑色帶有紫藍色金屬光澤。腹部及尾下覆羽暗黑色。眼先有白斑，眼下有細黑線。眼褐色有紅…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -7026,7 +7416,8 @@
   "attract": 7,
   "fact": "體型粗壯及暗色，在頸部有獨特似雞類的下垂簑羽，身體上部為發亮的暗綠或青銅綠色。身體下面暗綠或暗藍色。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -7056,7 +7447,8 @@
   "attract": 4,
   "fact": "體長35-48公分，體重135-250公克。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -7084,7 +7476,8 @@
   "attract": 4,
   "fact": "體長50-65公分，重750-1575公克。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -7112,7 +7505,8 @@
   "attract": 4,
   "fact": "體長70公分。成鳥整體羽色綠色，在背及翼上稍帶橄欖色。頭較身體淺綠。後頸有不明顯的淺藍色調。前額及裸露的眼先紅色。裸露的臉部區白色有粉紅肉色…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -7140,7 +7534,8 @@
   "attract": 7,
   "fact": "體長66-74公分，重2384公克。有2個亞種。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -7168,7 +7563,8 @@
   "attract": 4,
   "fact": "有9個亞種。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -7196,7 +7592,8 @@
   "attract": 4,
   "fact": "臺灣擬啄木舊名五色鳥，為臺灣特有的鳥類。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -7225,7 +7622,8 @@
   "attract": 10,
   "fact": "是臺灣特有種鳥類。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -7253,7 +7651,8 @@
   "attract": 4,
   "fact": "背面由額、頭、背至局部為深赤褐色，肩羽上有淡色橫斑，腰部、尾上覆羽及尾羽褐色",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -7281,7 +7680,8 @@
   "attract": 4,
   "fact": "體長31-36公分；150-250公克。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -7311,7 +7711,8 @@
   "attract": 4,
   "fact": "體長90公分，重2000-3000公克，翼展寬150-170公分。最小型的鶴。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -7339,7 +7740,8 @@
   "attract": 5,
   "fact": "鴛鴦比起林鴛鴦毛色偏綠、飛羽較沒有藍色光澤及眼周的白斑較小，此外嘴型也不同。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -7368,7 +7770,8 @@
   "attract": 4,
   "fact": "雄鳥：頭頸部為暗綠色；頭頂為藍褐色；頸部由側面到背面有明顯的白色環帶；背部為暗紅褐色，其上有黑色縱斑；胸部為紅褐色，有鱗狀斑紋；尾羽長，為灰…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -7397,7 +7800,8 @@
   "attract": 4,
   "fact": "雄鳥體長約200公分，體重約5公斤，雌鳥體長約100公分，體重約3公斤。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -7425,7 +7829,8 @@
   "attract": 7,
   "fact": "體長66-75公分。1800-2400公克。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -7454,7 +7859,8 @@
   "attract": 9,
   "fact": "為臺灣特有種鳥類。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -7482,7 +7888,8 @@
   "attract": 4,
   "fact": "體長38-42公分。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -7511,7 +7918,9 @@
   "attract": 14,
   "fact": "體重:由北到南遞增，生長在南方的體型較大，昆士蘭雄性無尾熊平均體重約6、5公斤(4.2-9.1)，雌熊則為5、1公斤(4.1-7.3)，維多…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -7540,7 +7949,9 @@
   "attract": 8,
   "fact": "體長約50-64公分，尾長28-59公分，體重3.7-6.2公斤。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -7569,7 +7980,9 @@
   "attract": 12,
   "fact": "雄性體重53- 100公斤、雌性體重29- 64公斤。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -7597,7 +8010,9 @@
   "attract": 6,
   "fact": "體種13-32公斤，體長74-90公分、尾長20-35公分。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -7627,7 +8042,9 @@
   "attract": 6,
   "fact": "灰狼是健壯的動物，頭寬、四肢有力，腳大、胸深而窄，視覺、嗅覺、聽覺都非常好，彈跳功夫一流、可立定垂直跳起2.5公尺。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -7656,7 +8073,9 @@
   "attract": 9,
   "fact": "體長130-190公分，體重65-150公斤；剛出生的黑熊體重約250-400克。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -7685,7 +8104,9 @@
   "attract": 6,
   "fact": "體長約170-280公分，體重則因不同區域、季節與糧食供應而有所不同。成年雄獸約130-780公斤，雌獸約80-250公斤。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -7714,7 +8135,8 @@
   "attract": 4,
   "fact": "綠色皮膚上綴有黃色斑紋，在16個亞種變化很大。（ex：密西西比紅耳龜肋盾上有黃色條紋，眼部後方亦有明顯的黃色大斑點，腹甲亦呈黃色，並具黑色斑…",
   "spawn": [
-   "ruins"
+   "ruins",
+   "greenhouse"
   ]
  },
  {
@@ -7745,7 +8167,9 @@
   "attract": 10,
   "fact": "體重：450~1350㎏；體長：210~350㎝；尾長：50~60㎝；肩高：260~280㎝。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -7775,7 +8199,9 @@
   "attract": 11,
   "fact": "體長約210公分、尾長約90公分，體重約200-300公斤。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -7804,7 +8230,9 @@
   "attract": 6,
   "fact": "體長85-105公分，尾長20-31公分，重約20-30公斤，通常雄獸體型比雌獸大一些。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -7833,7 +8261,9 @@
   "attract": 9,
   "fact": "體型與家貓雷同。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -7862,7 +8292,9 @@
   "attract": 6,
   "fact": "體色為灰褐色，從頭頂到鼻中線由一條白線貫穿，被稱為「白鼻心」，眼下及眼上廷至耳下部份各有一塊白斑。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -7893,7 +8325,9 @@
   "attract": 16,
   "fact": "全世界共8種穿山甲，台灣穿山甲是中華穿山甲三種亞種之一，是台灣唯一鱗甲目動物，屬於特有亞種。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -7923,7 +8357,9 @@
   "attract": 6,
   "fact": "是臺灣三種鹿科動物中體型中等的。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -7953,7 +8389,9 @@
   "attract": 16,
   "fact": "顎銳利，犬齒發達。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -7982,7 +8420,9 @@
   "attract": 6,
   "fact": "身體毛色為深褐色，背頸中央一帶為黑色，腮、喉部和上頸為淺黃褐色。尾短。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -8011,7 +8451,9 @@
   "attract": 4,
   "fact": "體長93-180公分，成體為黑灰色，身體遍佈剛毛，頸背部及腰部的毛較長；體型圓胖成水桶狀。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -8040,7 +8482,9 @@
   "attract": 11,
   "fact": "臺灣最大型的陸生哺乳動物。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -8068,7 +8512,9 @@
   "attract": 6,
   "fact": "頭圓臉平，具有頰囊，耳朵小。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -8096,7 +8542,8 @@
   "attract": 10,
   "fact": "眼睛為橙紅色，有一對豎立如耳朵的角羽，",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -8126,7 +8573,9 @@
   "attract": 9,
   "fact": "體背為栗褐色，流線型的身體，頭軀幹長，四肢短，各趾間有蹼膜，毛短而密。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -8155,7 +8604,9 @@
   "attract": 6,
   "fact": "四肢短，腳寬大，爪長而強壯利於挖掘。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -8184,7 +8635,9 @@
   "attract": 9,
   "fact": "皮毛黃褐，在背部有黑褐色縱帶，尾有黑褐色環帶，頗為醒目。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -8214,7 +8667,9 @@
   "attract": 6,
   "fact": "小型鹿科動物，全身黃褐色，有黑色雜毛。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -8244,7 +8699,9 @@
   "attract": 6,
   "fact": "台灣最大型的草食野生動物。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -8275,7 +8732,9 @@
   "attract": 8,
   "fact": "大灰袋鼠是袋鼠群中體型最高大、最擅長跳躍的。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake",
+   "greenhouse"
   ]
  },
  {
@@ -8305,7 +8764,8 @@
   "attract": 10,
   "fact": "大形走禽，頭頸部無毛，皮膚為紫藍色，頭部有角質的冠",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  },
  {
@@ -8334,7 +8794,8 @@
   "attract": 4,
   "fact": "頭部及頸部上端的羽毛為黑色，裸露的皮膚則略帶藍色，成鳥全身覆著灰棕色雜毛。",
   "spawn": [
-   "ruins"
+   "ruins",
+   "lake"
   ]
  }
 ]

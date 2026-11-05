@@ -1,0 +1,199 @@
+[
+ {
+  "id": "utopia",
+  "name": "烏托邦站",
+  "type": "home",
+  "tier": 0,
+  "x": 50,
+  "y": 88,
+  "links": [
+   "north_forest",
+   "old_town",
+   "frozen_lake"
+  ]
+ },
+ {
+  "id": "north_forest",
+  "name": "北境森林",
+  "type": "ruins",
+  "tier": 1,
+  "x": 22,
+  "y": 72,
+  "zones": [
+   "臺灣動物區",
+   "冰原原生"
+  ],
+  "links": [
+   "utopia",
+   "greenhouse_ruins",
+   "bird_reserve"
+  ]
+ },
+ {
+  "id": "old_town",
+  "name": "舊城廢墟",
+  "type": "ruins",
+  "tier": 1,
+  "x": 50,
+  "y": 70,
+  "zones": [
+   "兒童動物區",
+   "溫帶動物區",
+   "冰原原生"
+  ],
+  "links": [
+   "utopia",
+   "settlement",
+   "savanna"
+  ]
+ },
+ {
+  "id": "frozen_lake",
+  "name": "結冰湖泊",
+  "type": "lake",
+  "tier": 1,
+  "x": 78,
+  "y": 72,
+  "zones": [
+   "冰原原生",
+   "熱帶雨林室內館",
+   "企鵝館"
+  ],
+  "links": [
+   "utopia",
+   "settlement",
+   "south_port"
+  ]
+ },
+ {
+  "id": "greenhouse_ruins",
+  "name": "溫室遺跡",
+  "type": "greenhouse",
+  "tier": 2,
+  "x": 14,
+  "y": 50,
+  "zones": [
+   "昆蟲館",
+   "冰原原生"
+  ],
+  "links": [
+   "north_forest",
+   "rainforest_domes"
+  ]
+ },
+ {
+  "id": "bird_reserve",
+  "name": "候鳥保護區",
+  "type": "ruins",
+  "tier": 2,
+  "x": 34,
+  "y": 52,
+  "zones": [
+   "鳥園"
+  ],
+  "links": [
+   "north_forest",
+   "rainforest_domes",
+   "settlement"
+  ]
+ },
+ {
+  "id": "settlement",
+  "name": "倖存者聚落",
+  "type": "settlement",
+  "tier": 2,
+  "x": 58,
+  "y": 52,
+  "links": [
+   "old_town",
+   "frozen_lake",
+   "bird_reserve",
+   "savanna"
+  ]
+ },
+ {
+  "id": "savanna",
+  "name": "南方莽原",
+  "type": "ruins",
+  "tier": 2,
+  "x": 80,
+  "y": 48,
+  "zones": [
+   "非洲動物區",
+   "沙漠動物區"
+  ],
+  "links": [
+   "old_town",
+   "settlement",
+   "south_port",
+   "deep_lake"
+  ]
+ },
+ {
+  "id": "rainforest_domes",
+  "name": "雨林溫室群",
+  "type": "greenhouse",
+  "tier": 3,
+  "x": 22,
+  "y": 28,
+  "zones": [
+   "熱帶雨林區",
+   "熱帶雨林室內館",
+   "兩棲爬蟲動物館",
+   "昆蟲館"
+  ],
+  "links": [
+   "greenhouse_ruins",
+   "bird_reserve",
+   "polar_core"
+  ]
+ },
+ {
+  "id": "south_port",
+  "name": "南十字港",
+  "type": "ruins",
+  "tier": 3,
+  "x": 88,
+  "y": 26,
+  "zones": [
+   "澳洲動物區",
+   "無尾熊館",
+   "企鵝館"
+  ],
+  "links": [
+   "frozen_lake",
+   "savanna",
+   "polar_core"
+  ]
+ },
+ {
+  "id": "deep_lake",
+  "name": "深冰湖",
+  "type": "lake",
+  "tier": 3,
+  "x": 62,
+  "y": 30,
+  "zones": [
+   "熱帶雨林室內館",
+   "冰原原生"
+  ],
+  "links": [
+   "savanna",
+   "polar_core"
+  ]
+ },
+ {
+  "id": "polar_core",
+  "name": "極地深處",
+  "type": "ruins",
+  "tier": 4,
+  "x": 50,
+  "y": 10,
+  "zones": [],
+  "links": [
+   "rainforest_domes",
+   "south_port",
+   "deep_lake"
+  ]
+ }
+]

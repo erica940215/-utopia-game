@@ -29,6 +29,7 @@ ALIAS = {  # 官方名稱 → 遊戲裡原本的名稱
 
 CLASS = {'哺乳綱': 'mammal', '鳥綱': 'bird', '爬蟲綱': 'reptile', '兩棲綱': 'reptile', '硬骨魚綱': 'aquatic', '軟骨魚綱': 'aquatic',
          '昆蟲綱': 'insect', '蛛形綱': 'insect', '唇足綱': 'insect'}
+SPAWN = {'mammal': ['ruins', 'lake', 'greenhouse'], 'bird': ['ruins', 'lake'], 'reptile': ['ruins', 'greenhouse'], 'aquatic': ['lake'], 'insect': ['greenhouse']}
 ZONE_TEMP = [('企鵝', [-10, 12]), ('溫帶', [-20, 25]), ('沙漠', [10, 42]), ('穿山甲', [20, 34]), ('雨林', [20, 34]), ('非洲', [10, 38]),
              ('澳洲', [10, 35]), ('無尾熊', [12, 32]), ('大貓熊', [-5, 24]), ('臺灣', [5, 30]), ('鳥園', [8, 32]), ('兒童', [0, 32]),
              ('兩棲爬蟲', [22, 34]), ('昆蟲', [18, 30])]
@@ -183,7 +184,7 @@ for name, r in merged.items():
         'social': old['social'] if old else social(text),
         'attract': old['attract'] if old else ATTR[rar] + (2 if cls == 'mammal' else 0),
         'fact': short(r['A_Feature'] or r['A_Summary'] or r['A_Habitat']),
-        'spawn': ['ruins'] if cls in ('mammal', 'bird', 'reptile') else [],
+        'spawn': SPAWN[cls],
     }
     if old: matched.add(old['id'])
     while s['id'] in used_ids: s['id'] += '_b'
@@ -191,7 +192,7 @@ for name, r in merged.items():
     out.append(s)
 
 # 遊戲原有、但官方名單沒有的物種（冰原原生、雲豹等）保留
-kept = [s for s in existing if s['id'] not in matched and s['id'] not in used_ids]
+kept = [dict(s, spawn=SPAWN[s['category']] if s['category'] in SPAWN else s.get('spawn', [])) for s in existing if s['id'] not in matched and s['id'] not in used_ids]
 out = kept + out
 json.dump(out, open(OUT, 'w', encoding='utf-8'), ensure_ascii=False, indent=1)
 from collections import Counter

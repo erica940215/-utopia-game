@@ -1,3 +1,88 @@
 [
-  { "id": "ruins", "name": "城鎮廢墟", "ruins": 14, "looseCrates": 8, "trees": 70, "animals": 5, "cratesPerRuin": [1, 2] }
+ {
+  "id": "ruins",
+  "name": "城鎮廢墟",
+  "ruins": 14,
+  "looseCrates": 8,
+  "trees": 70,
+  "cratesPerRuin": [
+   1,
+   2
+  ],
+  "ice": {
+   "count": 7,
+   "categories": [
+    "mammal",
+    "bird",
+    "reptile"
+   ]
+  }
+ },
+ {
+  "id": "lake",
+  "name": "結冰湖泊",
+  "ruins": 5,
+  "looseCrates": 5,
+  "trees": 45,
+  "cratesPerRuin": [
+   1,
+   1
+  ],
+  "lake": {
+   "x": 55,
+   "z": 10,
+   "radius": 38
+  },
+  "ice": {
+   "count": 3,
+   "categories": [
+    "bird",
+    "mammal"
+   ]
+  },
+  "catch": {
+   "kind": "hole",
+   "name": "冰洞",
+   "count": 9,
+   "seconds": 3.0,
+   "categories": [
+    "aquatic"
+   ]
+  }
+ },
+ {
+  "id": "greenhouse",
+  "name": "溫室遺跡",
+  "ruins": 4,
+  "looseCrates": 6,
+  "trees": 35,
+  "cratesPerRuin": [
+   1,
+   2
+  ],
+  "greenhouses": 7,
+  "warmRadius": 6,
+  "warmDrainMult": 0.25,
+  "ice": {
+   "count": 3,
+   "categories": [
+    "reptile",
+    "mammal"
+   ]
+  },
+  "catch": {
+   "kind": "bug",
+   "name": "昆蟲",
+   "count": 10,
+   "seconds": 1.4,
+   "categories": [
+    "insect"
+   ]
+  }
+ },
+ {
+  "id": "settlement",
+  "name": "倖存者聚落",
+  "trade": true
+ }
 ]

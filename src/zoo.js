@@ -193,10 +193,10 @@ function enterZoo(){
   else if(!save.zoo.animals.length) toast(Object.values(save.zoo.unplaced).some(n=>n>0)?'先蓋一座棲地，再把救回來的動物放進去':'先出發遠征，把動物救回來');
   persist();
 }
-function leaveZooForExpedition(){
+function leaveZooForExpedition(node){
   simulate(0); persist();
   zooActive=false; $('zooUI').hidden=true; $('zPanel').hidden=true;
-  startExpedition();
+  startExpedition(node);
 }
 
 /* ---------- 介面 ---------- */
@@ -362,4 +362,4 @@ function zooUpdate(dt){
 $('zWalk').onclick=()=>startZooWalk();
 $('zWalkExit').onclick=()=>endZooWalk();
 $('zDex').onclick=()=>{ $('zooUI').hidden=true; showDex(); };
-$('zGo').onclick=()=>leaveZooForExpedition();
+$('zGo').onclick=()=>showMap();

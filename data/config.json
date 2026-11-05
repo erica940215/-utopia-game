@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "expedition": {
     "runSeconds": 300,
     "stormWarnSeconds": 60,
@@ -7,7 +7,8 @@
     "followCapacity": 2,
     "heatRadius": 11,
     "walkSpeed": 4.8,
-    "sprintSpeed": 8.2
+    "sprintSpeed": 8.2,
+    "containerCapacity": 4
   },
   "temperature": {
     "max": 100,
@@ -92,5 +93,94 @@
     "visitorPerAttract": 3,
     "demolishRefund": 0.5,
     "autosaveSeconds": 30
-  }
+  },
+  "tiers": {
+    "1": {
+      "name": "近郊",
+      "fuel": 0,
+      "rarityWeight": {
+        "common": 20,
+        "rare": 3,
+        "endangered": 0.6,
+        "legendary": 0.05
+      },
+      "wraithMult": 1.0
+    },
+    "2": {
+      "name": "中段",
+      "fuel": 2,
+      "rarityWeight": {
+        "common": 12,
+        "rare": 6,
+        "endangered": 2,
+        "legendary": 0.3
+      },
+      "wraithMult": 1.2
+    },
+    "3": {
+      "name": "遠方",
+      "fuel": 3,
+      "rarityWeight": {
+        "common": 8,
+        "rare": 7,
+        "endangered": 4,
+        "legendary": 1
+      },
+      "wraithMult": 1.4
+    },
+    "4": {
+      "name": "極地",
+      "fuel": 5,
+      "rarityWeight": {
+        "common": 4,
+        "rare": 6,
+        "endangered": 6,
+        "legendary": 3
+      },
+      "wraithMult": 1.7
+    }
+  },
+  "undiscoveredBonus": 1.6,
+  "trades": [
+    {
+      "id": "rare_animal",
+      "name": "用廢鐵換一隻稀有物種",
+      "give": {
+        "scrap": 12
+      },
+      "get": {
+        "species": "rare"
+      }
+    },
+    {
+      "id": "buy_fuel",
+      "name": "買煤炭",
+      "give": {
+        "coins": 60
+      },
+      "get": {
+        "fuel": 5
+      }
+    },
+    {
+      "id": "sell_feed",
+      "name": "賣飼料",
+      "give": {
+        "feed": 8
+      },
+      "get": {
+        "coins": 40
+      }
+    },
+    {
+      "id": "buy_feed",
+      "name": "用廢鐵換飼料",
+      "give": {
+        "scrap": 5
+      },
+      "get": {
+        "feed": 6
+      }
+    }
+  ]
 }
