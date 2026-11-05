@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "expedition": {
     "runSeconds": 300,
     "stormWarnSeconds": 60,
@@ -192,5 +192,58 @@
     "pack": "背包",
     "tool": "採集工具",
     "feet": "鞋子"
+  },
+  "breeding": {
+    "adultMinutes": 120,
+    "gestationMinutes": 45,
+    "chancePerMin": 0.04,
+    "minHappy": 70,
+    "cooldownMinutes": 90,
+    "starUpChance": 0.25,
+    "starDownChance": 0.1,
+    "inbreedPenalty": 1,
+    "maxStars": 5,
+    "rescueStars": {
+      "common": [
+        1,
+        2
+      ],
+      "rare": [
+        2,
+        3
+      ],
+      "endangered": [
+        2,
+        4
+      ],
+      "legendary": [
+        3,
+        5
+      ]
+    },
+    "litter": {
+      "mammal": [
+        1,
+        1
+      ],
+      "bird": [
+        1,
+        2
+      ],
+      "reptile": [
+        1,
+        3
+      ],
+      "aquatic": [
+        2,
+        3
+      ],
+      "insect": [
+        2,
+        4
+      ]
+    },
+    "releaseResearch": 3,
+    "releaseCoins": 15
   }
 }

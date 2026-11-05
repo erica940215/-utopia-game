@@ -224,3 +224,10 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
 #ctrlPanel label{display:flex;justify-content:space-between;align-items:center;gap:10px}
 #ctrlPanel input{flex:1;max-width:180px;accent-color:var(--ember)}
 #ctrlPanel .btn{padding:9px 12px;font-size:14px}
+
+/* 繁殖 */
+.zp-note{font-size:12px;line-height:1.6;color:var(--frost-dim);border-left:2px solid var(--ember);padding-left:8px}
+.zp-btns{grid-column:2;grid-row:1 / span 2;display:flex;flex-direction:column;gap:4px;align-self:center}
+.zp-btns .zmini{padding:4px 8px;font-size:11px}
+.sx{font-weight:900}.sx.m{color:var(--ice)}.sx.f{color:#e8a0c0}
+.stars{font-size:11px;color:#e9c46a;letter-spacing:.05em;font-weight:400}
