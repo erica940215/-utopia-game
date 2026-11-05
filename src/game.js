@@ -244,6 +244,9 @@ function bodyModel(g,b){
     if(b.pincers) for(const sx of [-1,1]){ const p=box(0.03,0.03,0.18,A); p.position.set(sx*0.05,0.26,0.25); p.rotation.y=-sx*0.4; g.add(p); }
     if(b.mantis||b.longArms) for(const sx of [-1,1]){ const p=box(0.03,0.03,b.longArms?0.35:0.2,A); p.position.set(sx*0.08,0.28,0.25); g.add(p); }
     for(const sx of [-1,1]) for(const z of [-0.1,0,0.1]){ const l=box(0.2,0.02,0.02,0x1d1c1e); l.position.set(sx*0.12,0.18,z); g.add(l); }
+  } else if(t==='fish'){
+    if(b.ray){ const bd=sph(0.4,C); bd.scale.set(1.2,0.15,1); bd.position.y=0.15; g.add(bd); const tl=box(0.04,0.04,0.7,A); tl.position.set(0,0.15,-0.7); g.add(tl); }
+    else { const bd=sph(0.25,C); bd.scale.set(0.6,0.8,1.5); bd.position.y=0.3; g.add(bd); const tl=new THREE.Mesh(new THREE.ConeGeometry(0.18,0.3,4),M(A)); tl.rotation.x=Math.PI/2; tl.position.set(0,0.3,-0.45); g.add(tl); const fin=box(0.03,0.18,0.2,A); fin.position.set(0,0.52,0); g.add(fin); eyes(g,0.35,0.3,0.1); }
   } else if(t==='hare'){ MODELS.hare(g); g.children.forEach(m=>{ if(m.material&&m.material.color&&m.material.color.getHex()===0xf6f7f9) m.material=M(C); }); }
   else if(t==='penguin'){ MODELS.penguin(g); }
   else MODELS.hare(g);
@@ -557,14 +560,12 @@ function showDex(){
   state='dex';
   const cats=DATA.config.categories, rar=DATA.config.rarity;
   const found=DATA.species.filter(s=>save.collection[s.id]).length;
-  const dexHtml=Object.keys(cats).map(c=>{
-    const list=DATA.species.filter(s=>s.category===c);
-    const got=list.filter(s=>save.collection[s.id]).length;
-    return `<div class="sec"><div class="sec-title"><span>${esc(cats[c].name)}</span><b>${got}/${list.length}</b></div>
-      <div class="dex">${list.map(s=>{ const n=save.collection[s.id], r=rar[s.rarity];
-        return n?`<div style="--rc:${r.color}" title="${esc(s.zone||'')}"><b>${esc(s.name)}</b><span>${esc(r.name)}・${n} 隻</span></div>`
-                :`<div class="unk" style="--rc:${r.color}"><b>？？？</b><span>${esc(r.name)}${s.spawn.length?'':'・尚未開放'}</span></div>`; }).join('')}</div></div>`;
-  }).join('');
+  const dexHtml=`<div class="dextabs" role="tablist">${Object.keys(cats).map(c=>{ const list=DATA.species.filter(s=>s.category===c), got=list.filter(s=>save.collection[s.id]).length;
+      return `<button type="button" role="tab" class="dextab${dexCat===c?' on':''}" data-cat="${c}" aria-selected="${dexCat===c}">${esc(cats[c].name)} <b class="num">${got}/${list.length}</b></button>`; }).join('')}</div>
+    <div class="dexinfo" id="dexInfo">點一下已發現的物種，看牠的資料。</div>
+    <div class="dex">${DATA.species.filter(s=>s.category===dexCat).sort((a,b)=>(save.collection[b.id]?1:0)-(save.collection[a.id]?1:0)||(a.zone||'').localeCompare(b.zone||'')).map(s=>{ const n=save.collection[s.id], r=rar[s.rarity];
+      return n?`<button type="button" class="dexcell" data-sp="${s.id}" style="--rc:${r.color}"><b>${esc(s.name)}</b><span>${esc(r.name)}・${n} 隻</span></button>`
+              :`<div class="unk" style="--rc:${r.color}"><b>？？？</b><span>${esc(r.name)}・${esc(s.zone||'')}${s.spawn.length?'':'・尚未開放'}</span></div>`; }).join('')}</div>`;
   screenEl.hidden=false;
   screenEl.innerHTML=`<div class="hub">
     <div class="hub-head">
@@ -585,7 +586,13 @@ function showDex(){
   $('goExp').onclick=()=>leaveZooForExpedition();
   $('backZoo').onclick=()=>{ screenEl.hidden=true; state='zoo'; $('zooUI').hidden=false; };
   if(sb) wireAuth();
+  screenEl.querySelectorAll('.dextab').forEach(el=>el.onclick=()=>{ dexCat=el.dataset.cat; showDex(); });
+  screenEl.querySelectorAll('.dexcell').forEach(el=>el.onclick=()=>{
+    const sp=DATA.speciesById[el.dataset.sp], r=DATA.config.rarity[sp.rarity];
+    $('dexInfo').innerHTML=`<b>${esc(sp.name)}</b> <i>${esc(sp.latin||'')}</i><span>${esc(sp.zone||'')}・${esc(r.name)}${sp.conservation?'・'+esc(sp.conservation):''}・適溫 ${sp.tempRange[0]}～${sp.tempRange[1]}°C・${esc(sp.diet)}・${esc(sp.social)}</span>${sp.fact?`<p>${esc(sp.fact)}</p>`:''}`;
+  });
 }
+let dexCat='mammal';
 if(sb) sb.auth.onAuthStateChange(async (ev)=>{ if(ev==='SIGNED_IN' && !sbUser && (state==='dex'||state==='zoo')){ await initSave(); enterZoo(); } });
 function authHtml(){
   if(sbUser) return `<div class="sec"><div class="auth"><span class="auth-note">已登入 ${esc(sbUser.email||'')}，進度會同步到雲端</span><button class="btn ghost" id="logout" type="button">登出</button></div></div>`;

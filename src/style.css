@@ -158,3 +158,17 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
 .zp-empty{font-size:12px;color:var(--frost-dim);margin:0}
 #zWalkExit{margin-left:auto}
 @media (orientation:landscape) and (max-height:520px){.zpanel{max-height:62vh;bottom:calc(env(safe-area-inset-bottom,0px) + 60px)}.zres b{font-size:15px}}
+
+.dextabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none}
+.dextab{flex:0 0 auto;appearance:none;border:1px solid var(--line);background:transparent;color:var(--frost-dim);font:700 13px var(--font-ui);border-radius:999px;padding:6px 12px;cursor:pointer}
+.dextab b{font-family:var(--font-num);font-weight:500;margin-left:2px}
+.dextab.on{color:var(--frost);border-color:var(--ember)}
+.dexinfo{font-size:13px;color:var(--frost-dim);border:1px solid var(--line);border-radius:6px;padding:10px 12px;line-height:1.6}
+.dexinfo b{color:var(--frost);font-size:15px}
+.dexinfo i{font-size:12px}
+.dexinfo span{display:block;font-size:12px}
+.dexinfo p{margin:4px 0 0;color:var(--frost)}
+.dexcell{appearance:none;background:transparent;color:var(--frost);text-align:left;cursor:pointer;font-family:var(--font-ui);border:1px solid var(--line);border-left:3px solid var(--rc,var(--line));border-radius:6px;padding:7px 8px;min-width:0}
+.dexcell b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dexcell span{font-size:11px;color:var(--frost-dim)}
+.dexcell:focus-visible,.dextab:focus-visible{outline:2px solid var(--ice);outline-offset:2px}

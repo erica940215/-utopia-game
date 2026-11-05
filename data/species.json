@@ -1,23 +1,5 @@
 [
  {
-  "id": "penguin",
-  "name": "國王企鵝",
-  "category": "bird",
-  "rarity": "common",
-  "model": "penguin",
-  "tempRange": [
-   -30,
-   5
-  ],
-  "diet": "魚",
-  "social": "群居",
-  "attract": 6,
-  "spawn": [
-   "ruins"
-  ],
-  "zone": "企鵝館"
- },
- {
   "id": "arctic_fox",
   "name": "北極狐",
   "category": "mammal",
@@ -52,24 +34,6 @@
    "ruins"
   ],
   "zone": "冰原原生"
- },
- {
-  "id": "red_panda",
-  "name": "小貓熊",
-  "category": "mammal",
-  "rarity": "rare",
-  "model": "redpanda",
-  "tempRange": [
-   -10,
-   20
-  ],
-  "diet": "竹",
-  "social": "獨居",
-  "attract": 8,
-  "spawn": [
-   "ruins"
-  ],
-  "zone": "溫帶動物區"
  },
  {
   "id": "snow_monkey",
@@ -238,286 +202,6 @@
   "zone": "冰原原生"
  },
  {
-  "id": "clouded_leopard",
-  "name": "臺灣雲豹",
-  "category": "mammal",
-  "zone": "臺灣動物區",
-  "rarity": "legendary",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.1,
-   "color": "#b59a6a",
-   "accent": "#4a3a2a",
-   "tail": true
-  },
-  "tempRange": [
-   10,
-   30
-  ],
-  "diet": "肉",
-  "social": "獨居",
-  "attract": 14,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "eurasian_otter",
-  "name": "歐亞水獺",
-  "category": "mammal",
-  "zone": "臺灣動物區",
-  "rarity": "endangered",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 0.6,
-   "color": "#6b4a32",
-   "accent": "#6b4a32",
-   "long": true,
-   "tail": true
-  },
-  "tempRange": [
-   0,
-   28
-  ],
-  "diet": "魚",
-  "social": "小群",
-  "attract": 9,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "formosan_black_bear",
-  "name": "臺灣黑熊",
-  "category": "mammal",
-  "zone": "臺灣動物區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.4,
-   "color": "#1d1c1e",
-   "accent": "#f2efe6",
-   "bulky": true
-  },
-  "tempRange": [
-   -5,
-   28
-  ],
-  "diet": "雜食",
-  "social": "獨居",
-  "attract": 11,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "formosan_macaque",
-  "name": "臺灣獼猴",
-  "category": "mammal",
-  "zone": "臺灣動物區",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "primate",
-   "size": 0.8,
-   "color": "#7a6a58",
-   "accent": "#d99b86"
-  },
-  "tempRange": [
-   0,
-   32
-  ],
-  "diet": "雜食",
-  "social": "群居",
-  "attract": 6,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "sika_deer",
-  "name": "臺灣梅花鹿",
-  "category": "mammal",
-  "zone": "臺灣動物區",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.2,
-   "color": "#a8673a",
-   "accent": "#f2efe6",
-   "antlers": true,
-   "longLegs": true
-  },
-  "tempRange": [
-   0,
-   30
-  ],
-  "diet": "草",
-  "social": "群居",
-  "attract": 6,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "leopard_cat",
-  "name": "石虎",
-  "category": "mammal",
-  "zone": "臺灣動物區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 0.6,
-   "color": "#b8935a",
-   "accent": "#3a2c22",
-   "tail": true
-  },
-  "tempRange": [
-   5,
-   30
-  ],
-  "diet": "肉",
-  "social": "獨居",
-  "attract": 9,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "taiwan_serow",
-  "name": "臺灣野山羊",
-  "category": "mammal",
-  "zone": "臺灣動物區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.0,
-   "color": "#4a3f36",
-   "accent": "#4a3f36",
-   "horns": true
-  },
-  "tempRange": [
-   -5,
-   25
-  ],
-  "diet": "草",
-  "social": "獨居",
-  "attract": 6,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "formosan_pangolin",
-  "name": "穿山甲",
-  "category": "mammal",
-  "zone": "臺灣動物區",
-  "rarity": "endangered",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 0.7,
-   "color": "#8a6a4a",
-   "accent": "#8a6a4a",
-   "long": true,
-   "tail": true,
-   "scales": true
-  },
-  "tempRange": [
-   18,
-   30
-  ],
-  "diet": "螞蟻",
-  "social": "獨居",
-  "attract": 10,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "wild_boar",
-  "name": "臺灣野豬",
-  "category": "mammal",
-  "zone": "臺灣動物區",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.0,
-   "color": "#3d3530",
-   "accent": "#3d3530",
-   "bulky": true
-  },
-  "tempRange": [
-   -5,
-   32
-  ],
-  "diet": "雜食",
-  "social": "小群",
-  "attract": 4,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "alpaca",
-  "name": "羊駝",
-  "category": "mammal",
-  "zone": "兒童動物區",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.1,
-   "color": "#efe6d6",
-   "accent": "#efe6d6",
-   "neck": 0.6,
-   "longLegs": true
-  },
-  "tempRange": [
-   -10,
-   25
-  ],
-  "diet": "草",
-  "social": "群居",
-  "attract": 6,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "donkey",
-  "name": "驢",
-  "category": "mammal",
-  "zone": "兒童動物區",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.2,
-   "color": "#8a8580",
-   "accent": "#e8e4dc",
-   "ears": true,
-   "longLegs": true
-  },
-  "tempRange": [
-   -5,
-   32
-  ],
-  "diet": "草",
-  "social": "小群",
-  "attract": 3,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
   "id": "rabbit",
   "name": "兔",
   "category": "mammal",
@@ -566,83 +250,6 @@
   ]
  },
  {
-  "id": "meerkat",
-  "name": "狐獴",
-  "category": "mammal",
-  "zone": "兒童動物區",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "primate",
-   "size": 0.45,
-   "color": "#c9a878",
-   "accent": "#3a2c22",
-   "upright": true
-  },
-  "tempRange": [
-   15,
-   38
-  ],
-  "diet": "昆蟲",
-  "social": "群居",
-  "attract": 7,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "raccoon",
-  "name": "浣熊",
-  "category": "mammal",
-  "zone": "兒童動物區",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 0.6,
-   "color": "#7d7a78",
-   "accent": "#1d1c1e",
-   "tail": true,
-   "mask": true
-  },
-  "tempRange": [
-   -10,
-   30
-  ],
-  "diet": "雜食",
-  "social": "獨居",
-  "attract": 5,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "coati",
-  "name": "南美浣熊",
-  "category": "mammal",
-  "zone": "兒童動物區",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 0.6,
-   "color": "#8a5a32",
-   "accent": "#3a2c22",
-   "tail": true,
-   "long": true
-  },
-  "tempRange": [
-   10,
-   32
-  ],
-  "diet": "雜食",
-  "social": "群居",
-  "attract": 5,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
   "id": "chicken",
   "name": "雞",
   "category": "bird",
@@ -662,59 +269,6 @@
   "diet": "穀物",
   "social": "群居",
   "attract": 2,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "asian_elephant",
-  "name": "亞洲象",
-  "category": "mammal",
-  "zone": "熱帶雨林區",
-  "rarity": "endangered",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 2.6,
-   "color": "#7d7a7a",
-   "accent": "#7d7a7a",
-   "trunk": true,
-   "bulky": true,
-   "ears": true
-  },
-  "tempRange": [
-   15,
-   35
-  ],
-  "diet": "草",
-  "social": "群居",
-  "attract": 16,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "small_clawed_otter",
-  "name": "小爪水獺",
-  "category": "mammal",
-  "zone": "熱帶雨林區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 0.5,
-   "color": "#7a5a3e",
-   "accent": "#7a5a3e",
-   "long": true,
-   "tail": true
-  },
-  "tempRange": [
-   18,
-   32
-  ],
-  "diet": "魚",
-  "social": "群居",
-  "attract": 9,
   "spawn": [
    "ruins"
   ]
@@ -746,523 +300,6 @@
   ]
  },
  {
-  "id": "bornean_orangutan",
-  "name": "婆羅洲紅毛猩猩",
-  "category": "mammal",
-  "zone": "熱帶雨林區",
-  "rarity": "endangered",
-  "model": null,
-  "body": {
-   "type": "primate",
-   "size": 1.4,
-   "color": "#b05a28",
-   "accent": "#d9a07a",
-   "big": true
-  },
-  "tempRange": [
-   20,
-   34
-  ],
-  "diet": "果實",
-  "social": "獨居",
-  "attract": 14,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "great_hornbill",
-  "name": "雙角犀鳥",
-  "category": "bird",
-  "zone": "熱帶雨林區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "bird",
-   "size": 1.0,
-   "color": "#1d1c1e",
-   "accent": "#f2c230",
-   "casque": true
-  },
-  "tempRange": [
-   20,
-   34
-  ],
-  "diet": "果實",
-  "social": "小群",
-  "attract": 9,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "leopard",
-  "name": "花豹",
-  "category": "mammal",
-  "zone": "熱帶雨林區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.3,
-   "color": "#d9a85a",
-   "accent": "#3a2c22",
-   "spots": true,
-   "tail": true
-  },
-  "tempRange": [
-   5,
-   35
-  ],
-  "diet": "肉",
-  "social": "獨居",
-  "attract": 12,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "malayan_tapir",
-  "name": "馬來貘",
-  "category": "mammal",
-  "zone": "熱帶雨林區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.4,
-   "color": "#1d1c1e",
-   "accent": "#f2efe6",
-   "saddle": true,
-   "bulky": true
-  },
-  "tempRange": [
-   20,
-   34
-  ],
-  "diet": "草",
-  "social": "獨居",
-  "attract": 9,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "siamang",
-  "name": "合趾猿",
-  "category": "mammal",
-  "zone": "熱帶雨林區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "primate",
-   "size": 0.9,
-   "color": "#1d1c1e",
-   "accent": "#2a2828",
-   "longArms": true
-  },
-  "tempRange": [
-   20,
-   34
-  ],
-  "diet": "果實",
-  "social": "小群",
-  "attract": 8,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "squirrel_monkey",
-  "name": "黑帽松鼠猴",
-  "category": "mammal",
-  "zone": "熱帶雨林區",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "primate",
-   "size": 0.45,
-   "color": "#e0a030",
-   "accent": "#f2efe6",
-   "tail": true
-  },
-  "tempRange": [
-   20,
-   34
-  ],
-  "diet": "昆蟲",
-  "social": "群居",
-  "attract": 7,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "capybara",
-  "name": "水豚",
-  "category": "mammal",
-  "zone": "熱帶雨林區",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.0,
-   "color": "#8a6a48",
-   "accent": "#8a6a48",
-   "bulky": true
-  },
-  "tempRange": [
-   15,
-   35
-  ],
-  "diet": "草",
-  "social": "群居",
-  "attract": 8,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "giant_anteater",
-  "name": "大食蟻獸",
-  "category": "mammal",
-  "zone": "熱帶雨林區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.3,
-   "color": "#5a4a3e",
-   "accent": "#1d1c1e",
-   "snout": true,
-   "tail": true
-  },
-  "tempRange": [
-   18,
-   33
-  ],
-  "diet": "螞蟻",
-  "social": "獨居",
-  "attract": 9,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "aye_aye",
-  "name": "指猴",
-  "category": "mammal",
-  "zone": "穿山甲館",
-  "rarity": "legendary",
-  "model": null,
-  "body": {
-   "type": "primate",
-   "size": 0.5,
-   "color": "#2a2624",
-   "accent": "#e0a030",
-   "tail": true,
-   "ears": true
-  },
-  "tempRange": [
-   20,
-   32
-  ],
-  "diet": "昆蟲",
-  "social": "獨居",
-  "attract": 12,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "giant_panda",
-  "name": "大貓熊",
-  "category": "mammal",
-  "zone": "大貓熊館",
-  "rarity": "legendary",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.4,
-   "color": "#f2efe6",
-   "accent": "#1d1c1e",
-   "bulky": true,
-   "panda": true
-  },
-  "tempRange": [
-   -5,
-   24
-  ],
-  "diet": "竹",
-  "social": "獨居",
-  "attract": 20,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "addax",
-  "name": "弓角羚羊",
-  "category": "mammal",
-  "zone": "沙漠動物區",
-  "rarity": "endangered",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.2,
-   "color": "#e8dcc4",
-   "accent": "#8a6a48",
-   "horns": true,
-   "longLegs": true
-  },
-  "tempRange": [
-   15,
-   42
-  ],
-  "diet": "草",
-  "social": "群居",
-  "attract": 9,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "african_wild_ass",
-  "name": "非洲野驢",
-  "category": "mammal",
-  "zone": "沙漠動物區",
-  "rarity": "endangered",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.2,
-   "color": "#b8aea2",
-   "accent": "#3a3430",
-   "ears": true,
-   "longLegs": true
-  },
-  "tempRange": [
-   10,
-   42
-  ],
-  "diet": "草",
-  "social": "小群",
-  "attract": 8,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "bactrian_camel",
-  "name": "雙峰駱駝",
-  "category": "mammal",
-  "zone": "沙漠動物區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.7,
-   "color": "#b08a5a",
-   "accent": "#b08a5a",
-   "neck": 0.6,
-   "longLegs": true,
-   "humps": 2
-  },
-  "tempRange": [
-   -20,
-   40
-  ],
-  "diet": "草",
-  "social": "群居",
-  "attract": 9,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "koala",
-  "name": "無尾熊",
-  "category": "mammal",
-  "zone": "澳洲動物區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "primate",
-   "size": 0.6,
-   "color": "#9a9a98",
-   "accent": "#f2efe6",
-   "ears": true
-  },
-  "tempRange": [
-   12,
-   32
-  ],
-  "diet": "尤加利",
-  "social": "獨居",
-  "attract": 14,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "grey_kangaroo",
-  "name": "東部灰袋鼠",
-  "category": "mammal",
-  "zone": "澳洲動物區",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "primate",
-   "size": 1.1,
-   "color": "#9a8a7a",
-   "accent": "#e8e0d4",
-   "upright": true,
-   "tail": true,
-   "ears": true
-  },
-  "tempRange": [
-   5,
-   38
-  ],
-  "diet": "草",
-  "social": "群居",
-  "attract": 8,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "emu",
-  "name": "鴯鶓",
-  "category": "bird",
-  "zone": "澳洲動物區",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "bird",
-   "size": 1.8,
-   "color": "#5a4a3e",
-   "accent": "#3a3430",
-   "ratite": true
-  },
-  "tempRange": [
-   0,
-   40
-  ],
-  "diet": "雜食",
-  "social": "小群",
-  "attract": 6,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "southern_cassowary",
-  "name": "南方食火雞",
-  "category": "bird",
-  "zone": "澳洲動物區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "bird",
-   "size": 1.8,
-   "color": "#1d1c1e",
-   "accent": "#2a7ad8",
-   "ratite": true,
-   "casque": true
-  },
-  "tempRange": [
-   18,
-   34
-  ],
-  "diet": "果實",
-  "social": "獨居",
-  "attract": 10,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "african_elephant",
-  "name": "非洲象",
-  "category": "mammal",
-  "zone": "非洲動物區",
-  "rarity": "endangered",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 2.9,
-   "color": "#8a8584",
-   "accent": "#8a8584",
-   "trunk": true,
-   "bulky": true,
-   "ears": true,
-   "tusks": true
-  },
-  "tempRange": [
-   10,
-   40
-  ],
-  "diet": "草",
-  "social": "群居",
-  "attract": 16,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "chapman_zebra",
-  "name": "查普曼斑馬",
-  "category": "mammal",
-  "zone": "非洲動物區",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.3,
-   "color": "#f2efe6",
-   "accent": "#1d1c1e",
-   "stripes": true,
-   "longLegs": true
-  },
-  "tempRange": [
-   5,
-   40
-  ],
-  "diet": "草",
-  "social": "群居",
-  "attract": 9,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "gemsbok",
-  "name": "南非劍羚",
-  "category": "mammal",
-  "zone": "非洲動物區",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.3,
-   "color": "#b8aea2",
-   "accent": "#1d1c1e",
-   "horns": true,
-   "longLegs": true
-  },
-  "tempRange": [
-   5,
-   42
-  ],
-  "diet": "草",
-  "social": "群居",
-  "attract": 7,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
   "id": "wildebeest",
   "name": "牛羚",
   "category": "mammal",
@@ -1288,439 +325,6 @@
   ]
  },
  {
-  "id": "common_eland",
-  "name": "伊蘭羚羊",
-  "category": "mammal",
-  "zone": "非洲動物區",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.6,
-   "color": "#c4a27a",
-   "accent": "#c4a27a",
-   "horns": true,
-   "bulky": true
-  },
-  "tempRange": [
-   5,
-   40
-  ],
-  "diet": "草",
-  "social": "群居",
-  "attract": 7,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "giraffe",
-  "name": "長頸鹿",
-  "category": "mammal",
-  "zone": "非洲動物區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.6,
-   "color": "#e0a85a",
-   "accent": "#7a4a28",
-   "neck": 2.2,
-   "longLegs": true,
-   "spots": true
-  },
-  "tempRange": [
-   10,
-   40
-  ],
-  "diet": "樹葉",
-  "social": "群居",
-  "attract": 14,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "bongo",
-  "name": "山羚",
-  "category": "mammal",
-  "zone": "非洲動物區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.3,
-   "color": "#a8452a",
-   "accent": "#f2efe6",
-   "horns": true,
-   "stripes": true
-  },
-  "tempRange": [
-   15,
-   32
-  ],
-  "diet": "樹葉",
-  "social": "小群",
-  "attract": 8,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "hippo",
-  "name": "河馬",
-  "category": "mammal",
-  "zone": "非洲動物區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 2.0,
-   "color": "#7a6a6e",
-   "accent": "#7a6a6e",
-   "bulky": true,
-   "short": true
-  },
-  "tempRange": [
-   15,
-   35
-  ],
-  "diet": "草",
-  "social": "群居",
-  "attract": 12,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "lion",
-  "name": "獅子",
-  "category": "mammal",
-  "zone": "非洲動物區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.6,
-   "color": "#d9a85a",
-   "accent": "#6a4022",
-   "mane": true,
-   "tail": true
-  },
-  "tempRange": [
-   5,
-   40
-  ],
-  "diet": "肉",
-  "social": "群居",
-  "attract": 15,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "spotted_hyena",
-  "name": "斑鬣狗",
-  "category": "mammal",
-  "zone": "非洲動物區",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.1,
-   "color": "#b8a07a",
-   "accent": "#3a2c22",
-   "spots": true
-  },
-  "tempRange": [
-   5,
-   40
-  ],
-  "diet": "肉",
-  "social": "群居",
-  "attract": 6,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "olive_baboon",
-  "name": "東非狒狒",
-  "category": "mammal",
-  "zone": "非洲動物區",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "primate",
-   "size": 0.9,
-   "color": "#7a7458",
-   "accent": "#d9726a",
-   "tail": true
-  },
-  "tempRange": [
-   5,
-   38
-  ],
-  "diet": "雜食",
-  "social": "群居",
-  "attract": 7,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "ring_tailed_lemur",
-  "name": "環尾狐猴",
-  "category": "mammal",
-  "zone": "非洲動物區",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "primate",
-   "size": 0.5,
-   "color": "#a8a4a0",
-   "accent": "#1d1c1e",
-   "tail": true,
-   "ringTail": true
-  },
-  "tempRange": [
-   12,
-   35
-  ],
-  "diet": "果實",
-  "social": "群居",
-  "attract": 9,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "pygmy_hippo",
-  "name": "侏儒河馬",
-  "category": "mammal",
-  "zone": "非洲動物區",
-  "rarity": "endangered",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.1,
-   "color": "#5a4a4e",
-   "accent": "#5a4a4e",
-   "bulky": true,
-   "short": true
-  },
-  "tempRange": [
-   20,
-   34
-  ],
-  "diet": "草",
-  "social": "獨居",
-  "attract": 11,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "lowland_gorilla",
-  "name": "西部低地大猩猩",
-  "category": "mammal",
-  "zone": "非洲動物區",
-  "rarity": "endangered",
-  "model": null,
-  "body": {
-   "type": "primate",
-   "size": 1.6,
-   "color": "#2a2828",
-   "accent": "#4a4848",
-   "big": true
-  },
-  "tempRange": [
-   18,
-   32
-  ],
-  "diet": "草",
-  "social": "群居",
-  "attract": 16,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "white_rhino",
-  "name": "白犀牛",
-  "category": "mammal",
-  "zone": "非洲動物區",
-  "rarity": "endangered",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 2.2,
-   "color": "#9a9694",
-   "accent": "#9a9694",
-   "bulky": true,
-   "horn": true
-  },
-  "tempRange": [
-   10,
-   38
-  ],
-  "diet": "草",
-  "social": "小群",
-  "attract": 14,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "black_faced_spoonbill",
-  "name": "黑面琵鷺",
-  "category": "bird",
-  "zone": "鳥園",
-  "rarity": "endangered",
-  "model": null,
-  "body": {
-   "type": "bird",
-   "size": 0.9,
-   "color": "#f2efe6",
-   "accent": "#1d1c1e",
-   "longLegs": true
-  },
-  "tempRange": [
-   5,
-   34
-  ],
-  "diet": "魚",
-  "social": "群居",
-  "attract": 11,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "cockatoo",
-  "name": "葵花鳳頭鸚鵡",
-  "category": "bird",
-  "zone": "鳥園",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "bird",
-   "size": 0.6,
-   "color": "#f2efe6",
-   "accent": "#f2d030"
-  },
-  "tempRange": [
-   10,
-   35
-  ],
-  "diet": "種子",
-  "social": "群居",
-  "attract": 6,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "taiwan_blue_magpie",
-  "name": "臺灣藍鵲",
-  "category": "bird",
-  "zone": "鳥園",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "bird",
-   "size": 0.7,
-   "color": "#2a5ad8",
-   "accent": "#d83a2a",
-   "longTail": true
-  },
-  "tempRange": [
-   0,
-   30
-  ],
-  "diet": "雜食",
-  "social": "群居",
-  "attract": 10,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "flamingo",
-  "name": "大紅鶴",
-  "category": "bird",
-  "zone": "鳥園",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "bird",
-   "size": 1.0,
-   "color": "#f2a0a8",
-   "accent": "#1d1c1e",
-   "longLegs": true,
-   "neck": true
-  },
-  "tempRange": [
-   5,
-   38
-  ],
-  "diet": "藻類",
-  "social": "群居",
-  "attract": 9,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "pelican",
-  "name": "鵜鶘",
-  "category": "bird",
-  "zone": "鳥園",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "bird",
-   "size": 1.2,
-   "color": "#f2efe6",
-   "accent": "#f2c230"
-  },
-  "tempRange": [
-   0,
-   35
-  ],
-  "diet": "魚",
-  "social": "群居",
-  "attract": 6,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "swinhoe_pheasant",
-  "name": "藍腹鷴",
-  "category": "bird",
-  "zone": "鳥園",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "bird",
-   "size": 0.8,
-   "color": "#1d2a5a",
-   "accent": "#d83a2a",
-   "longTail": true
-  },
-  "tempRange": [
-   0,
-   28
-  ],
-  "diet": "雜食",
-  "social": "小群",
-  "attract": 9,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
   "id": "nicobar_pigeon",
   "name": "尼柯巴鳩",
   "category": "bird",
@@ -1740,178 +344,6 @@
   "diet": "種子",
   "social": "群居",
   "attract": 6,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "red_crowned_crane",
-  "name": "丹頂鶴",
-  "category": "bird",
-  "zone": "鳥園",
-  "rarity": "endangered",
-  "model": null,
-  "body": {
-   "type": "bird",
-   "size": 1.2,
-   "color": "#f2efe6",
-   "accent": "#d83a2a",
-   "longLegs": true,
-   "neck": true
-  },
-  "tempRange": [
-   -20,
-   30
-  ],
-  "diet": "雜食",
-  "social": "小群",
-  "attract": 12,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "scarlet_ibis",
-  "name": "美洲紅鹮",
-  "category": "bird",
-  "zone": "鳥園",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "bird",
-   "size": 0.8,
-   "color": "#e0402a",
-   "accent": "#1d1c1e",
-   "longLegs": true
-  },
-  "tempRange": [
-   18,
-   35
-  ],
-  "diet": "甲殼類",
-  "social": "群居",
-  "attract": 7,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "mandarin_duck",
-  "name": "鴛鴦",
-  "category": "bird",
-  "zone": "鳥園",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "bird",
-   "size": 0.5,
-   "color": "#c86a2a",
-   "accent": "#2a6a5a"
-  },
-  "tempRange": [
-   -5,
-   30
-  ],
-  "diet": "雜食",
-  "social": "群居",
-  "attract": 5,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "crested_serpent_eagle",
-  "name": "大冠鷲",
-  "category": "bird",
-  "zone": "鳥園",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "bird",
-   "size": 0.9,
-   "color": "#5a4a3e",
-   "accent": "#f2c230"
-  },
-  "tempRange": [
-   5,
-   32
-  ],
-  "diet": "蛇",
-  "social": "獨居",
-  "attract": 9,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "african_penguin",
-  "name": "非洲企鵝",
-  "category": "bird",
-  "zone": "溫帶動物區",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "penguin",
-   "size": 0.8,
-   "color": "#1b1f27"
-  },
-  "tempRange": [
-   5,
-   25
-  ],
-  "diet": "魚",
-  "social": "群居",
-  "attract": 8,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "aldabra_tortoise",
-  "name": "亞達伯拉象龜",
-  "category": "reptile",
-  "zone": "兩棲爬蟲動物館",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "reptile",
-   "size": 1.5,
-   "color": "#5a5448",
-   "accent": "#3a3430",
-   "shell": true
-  },
-  "tempRange": [
-   20,
-   35
-  ],
-  "diet": "草",
-  "social": "獨居",
-  "attract": 10,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "ball_python",
-  "name": "球蟒",
-  "category": "reptile",
-  "zone": "兩棲爬蟲動物館",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "reptile",
-   "size": 0.9,
-   "color": "#5a4022",
-   "accent": "#c9a878",
-   "snake": true
-  },
-  "tempRange": [
-   24,
-   34
-  ],
-  "diet": "鼠",
-  "social": "獨居",
-  "attract": 5,
   "spawn": [
    "ruins"
   ]
@@ -1966,31 +398,6 @@
   ]
  },
  {
-  "id": "star_tortoise",
-  "name": "印度星龜",
-  "category": "reptile",
-  "zone": "兩棲爬蟲動物館",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "reptile",
-   "size": 0.6,
-   "color": "#3a3024",
-   "accent": "#e0c040",
-   "shell": true
-  },
-  "tempRange": [
-   22,
-   35
-  ],
-  "diet": "草",
-  "social": "獨居",
-  "attract": 7,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
   "id": "taipei_tree_frog",
   "name": "臺北樹蛙",
   "category": "reptile",
@@ -2037,160 +444,6 @@
   ]
  },
  {
-  "id": "false_gharial",
-  "name": "馬來長吻鱷",
-  "category": "reptile",
-  "zone": "溫帶動物區",
-  "rarity": "endangered",
-  "model": null,
-  "body": {
-   "type": "reptile",
-   "size": 2.2,
-   "color": "#4a4a3a",
-   "accent": "#2a2a22",
-   "croc": true
-  },
-  "tempRange": [
-   24,
-   34
-  ],
-  "diet": "魚",
-  "social": "獨居",
-  "attract": 12,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "american_bison",
-  "name": "美洲野牛",
-  "category": "mammal",
-  "zone": "溫帶動物區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.9,
-   "color": "#4a3424",
-   "accent": "#2a2018",
-   "bulky": true,
-   "hump": true,
-   "horns": true
-  },
-  "tempRange": [
-   -30,
-   30
-  ],
-  "diet": "草",
-  "social": "群居",
-  "attract": 10,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "brown_bear",
-  "name": "棕熊",
-  "category": "mammal",
-  "zone": "溫帶動物區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.7,
-   "color": "#6a4a2e",
-   "accent": "#6a4a2e",
-   "bulky": true
-  },
-  "tempRange": [
-   -30,
-   25
-  ],
-  "diet": "雜食",
-  "social": "獨居",
-  "attract": 13,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "gray_wolf",
-  "name": "灰狼",
-  "category": "mammal",
-  "zone": "溫帶動物區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.1,
-   "color": "#8a8580",
-   "accent": "#f2efe6",
-   "tail": true,
-   "ears": true
-  },
-  "tempRange": [
-   -40,
-   25
-  ],
-  "diet": "肉",
-  "social": "群居",
-  "attract": 11,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "przewalski_horse",
-  "name": "普氏野馬",
-  "category": "mammal",
-  "zone": "溫帶動物區",
-  "rarity": "endangered",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.4,
-   "color": "#c4a06a",
-   "accent": "#3a2c22",
-   "longLegs": true,
-   "mane": true
-  },
-  "tempRange": [
-   -30,
-   35
-  ],
-  "diet": "草",
-  "social": "群居",
-  "attract": 11,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
-  "id": "puma",
-  "name": "美洲獅",
-  "category": "mammal",
-  "zone": "溫帶動物區",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "quad",
-   "size": 1.3,
-   "color": "#c49a6a",
-   "accent": "#c49a6a",
-   "tail": true
-  },
-  "tempRange": [
-   -15,
-   35
-  ],
-  "diet": "肉",
-  "social": "獨居",
-  "attract": 12,
-  "spawn": [
-   "ruins"
-  ]
- },
- {
   "id": "rhinoceros_beetle",
   "name": "獨角仙",
   "category": "insect",
@@ -2210,29 +463,6 @@
   ],
   "diet": "樹液",
   "social": "群聚",
-  "attract": 4,
-  "spawn": []
- },
- {
-  "id": "stag_beetle",
-  "name": "鍬形蟲",
-  "category": "insect",
-  "zone": "昆蟲館",
-  "rarity": "common",
-  "model": null,
-  "body": {
-   "type": "insect",
-   "size": 0.45,
-   "color": "#2a1a10",
-   "accent": "#5a3a22",
-   "pincers": true
-  },
-  "tempRange": [
-   16,
-   30
-  ],
-  "diet": "樹液",
-  "social": "獨居",
   "attract": 4,
   "spawn": []
  },
@@ -2257,29 +487,6 @@
   "diet": "樹葉",
   "social": "群聚",
   "attract": 3,
-  "spawn": []
- },
- {
-  "id": "dead_leaf_butterfly",
-  "name": "枯葉蝶",
-  "category": "insect",
-  "zone": "昆蟲館",
-  "rarity": "rare",
-  "model": null,
-  "body": {
-   "type": "insect",
-   "size": 0.5,
-   "color": "#8a6a3a",
-   "accent": "#2a5ad8",
-   "wings": true
-  },
-  "tempRange": [
-   18,
-   32
-  ],
-  "diet": "樹液",
-  "social": "群聚",
-  "attract": 6,
   "spawn": []
  },
  {
@@ -2419,5 +626,7715 @@
   "social": "獨居",
   "attract": 10,
   "spawn": []
+ },
+ {
+  "id": "giant_panda",
+  "name": "大貓熊",
+  "nameEn": "Giant Panda",
+  "latin": "Ailuropoda melanoleuca",
+  "category": "mammal",
+  "zone": "新光特展館",
+  "rarity": "rare",
+  "conservation": "易危(VU)",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.4,
+   "color": "#f2efe6",
+   "accent": "#1d1c1e",
+   "bulky": true,
+   "panda": true
+  },
+  "tempRange": [
+   -5,
+   24
+  ],
+  "diet": "竹",
+  "social": "獨居",
+  "attract": 20,
+  "fact": "成熊身長約為120-180公分，體重約80-120公斤，幼熊出生時體長約10公分，體重約僅有150~200公克。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "penguin",
+  "name": "國王企鵝",
+  "nameEn": "King Penguin",
+  "latin": "Aptenodytes patagonicus",
+  "category": "bird",
+  "zone": "企鵝館",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": "penguin",
+  "body": {
+   "type": "penguin",
+   "size": 0.9
+  },
+  "tempRange": [
+   -30,
+   5
+  ],
+  "diet": "魚",
+  "social": "群居",
+  "attract": 6,
+  "fact": "國王企鵝是全世界體型第二大的企鵝(僅次於帝王企鵝)，嘴喙長、耳羽顏色偏橘，有一圈黑邊框，圖案類似水滴形。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "african_penguin",
+  "name": "黑腳企鵝",
+  "nameEn": "Jackass penguin",
+  "latin": "Spheniscus demersu",
+  "category": "bird",
+  "zone": "企鵝館",
+  "rarity": "endangered",
+  "conservation": "瀕危EN",
+  "model": null,
+  "body": {
+   "type": "penguin",
+   "size": 0.8,
+   "color": "#1b1f27"
+  },
+  "tempRange": [
+   5,
+   25
+  ],
+  "diet": "魚",
+  "social": "群居",
+  "attract": 8,
+  "fact": "黑腳企鵝的臉頰是黑色，眉毛到頭部的白色部分寬闊，眼睛前部是紅色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "addax",
+  "name": "弓角羚羊",
+  "nameEn": "Addax",
+  "latin": "Addax nasomaculatus",
+  "category": "mammal",
+  "zone": "沙漠動物區",
+  "rarity": "legendary",
+  "conservation": "極危 CR",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.2,
+   "color": "#e8dcc4",
+   "accent": "#8a6a48",
+   "horns": true,
+   "longLegs": true
+  },
+  "tempRange": [
+   15,
+   42
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 9,
+  "fact": "身體為米色到淡灰色，腹部、臀部及四肢的顏色較淡，眼睛下方及兩眼之間有明顯的白色斑紋，前額有一叢濃密又整齊的棕色瀏海。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "african_wild_ass",
+  "name": "非洲野驢",
+  "nameEn": "African wild ass",
+  "latin": "Equus africanus somaliensis",
+  "category": "mammal",
+  "zone": "沙漠動物區",
+  "rarity": "legendary",
+  "conservation": "極危 CR",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.2,
+   "color": "#b8aea2",
+   "accent": "#3a3430",
+   "ears": true,
+   "longLegs": true
+  },
+  "tempRange": [
+   10,
+   42
+  ],
+  "diet": "草",
+  "social": "小群",
+  "attract": 8,
+  "fact": "非洲野驢背部鬃毛直立，頭、背及體側覆蓋著介於淺灰及淺黃色的短毛，吻端、腹部、腳則為白色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "dromedary_camel_one_humped_camel",
+  "name": "單峰駱駝",
+  "nameEn": "Dromedary Camel或One-humped Camel",
+  "latin": "Camelus dromedarius",
+  "category": "mammal",
+  "zone": "沙漠動物區",
+  "rarity": "legendary",
+  "conservation": "極危 CR",
+  "model": null,
+  "body": {
+   "color": "#8a6a4a",
+   "accent": "#8a6a4a",
+   "type": "quad",
+   "neck": 0.6,
+   "longLegs": true,
+   "humps": 1,
+   "size": 1.0
+  },
+  "tempRange": [
+   10,
+   42
+  ],
+  "diet": "草",
+  "social": "小群",
+  "attract": 16,
+  "fact": "體毛短，但頭頂、頸、喉、臀及尾部的毛頗長，四肢比雙峰駱駝細長且行走速度較快。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "bactrian_camel",
+  "name": "雙峰駱駝",
+  "nameEn": "Bactrian Camel或Two-humped Came",
+  "latin": "Camelus bactrianus",
+  "category": "mammal",
+  "zone": "沙漠動物區",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.7,
+   "color": "#b08a5a",
+   "accent": "#b08a5a",
+   "neck": 0.6,
+   "longLegs": true,
+   "humps": 2
+  },
+  "tempRange": [
+   -20,
+   40
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 9,
+  "fact": "成年駱駝的駝峰重約30公斤，內儲藏脂肪提供身體所需能量。剛出生的小駱駝駝峰扁塌，要等到開始吃食物後會累積脂肪，慢慢形成圓錐形的駝峰。如果駝峰…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "bornean_orangutan",
+  "name": "婆羅洲人猿",
+  "nameEn": "Bornean Orangutan",
+  "latin": "Pongo pygmaeus",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "legendary",
+  "conservation": "極危 CR",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 1.4,
+   "color": "#b05a28",
+   "accent": "#d9a07a",
+   "big": true
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "果實",
+  "social": "獨居",
+  "attract": 14,
+  "fact": "全身披有紅褐色的毛髮，而粗糙、稀疏的毛髮顏色會隨著年齡改變，從幼年鮮明的橘色到成年動物的紅褐色，有些還會轉變成深巧克力色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "siamang",
+  "name": "大長臂猿",
+  "nameEn": "Siamang",
+  "latin": "Symphalangus syndactylus",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "endangered",
+  "conservation": "瀕危EN",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#8a8a88",
+   "type": "primate",
+   "longArms": true,
+   "size": 0.9
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 12,
+  "fact": "體型最大的一種長臂猿，全身佈滿長而濃密的黑色體毛，而在雄性生殖部位長有約15公分長的毛髮；體重約10~12公斤，體長約71~90公分，雙臂伸…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "great_hornbill",
+  "name": "雙角犀鳥",
+  "nameEn": "Great Indian Horbill",
+  "latin": "Buceros bicornis",
+  "category": "bird",
+  "zone": "熱帶雨林區",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 1.0,
+   "color": "#1d1c1e",
+   "accent": "#f2c230",
+   "casque": true
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 9,
+  "fact": "黃色的嘴巨大而彎曲，鳥喙及頭盔的內部都是中空的、由如同蜂窩般狀的骨質先為所構成。中空、質地輕，不妨礙飛行。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "asian_elephant",
+  "name": "亞洲象",
+  "nameEn": "Asian Elephant",
+  "latin": "Elephas maximus",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 2.6,
+   "color": "#7d7a7a",
+   "accent": "#7d7a7a",
+   "trunk": true,
+   "bulky": true,
+   "ears": true
+  },
+  "tempRange": [
+   15,
+   35
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 16,
+  "fact": "身軀龐大，頭大，四肢粗壯，體色暗灰。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "malayan_tiger",
+  "name": "馬來虎",
+  "nameEn": "Malayan Tiger",
+  "latin": "Panthera tigris jacksoni",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "color": "#8a6a4a",
+   "accent": "#8a6a4a",
+   "type": "quad",
+   "tail": true,
+   "stripes": true,
+   "size": 1.4
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "肉",
+  "social": "獨居",
+  "attract": 12,
+  "fact": "馬來虎是體型小的老虎亞種之一。平均體重：雄虎為129公斤，雌虎為100公斤； 頭尾體長： 雄虎約273公分，雌虎約200公分。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "leopard",
+  "name": "花豹",
+  "nameEn": "Leopard",
+  "latin": "Panthera pardus",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.3,
+   "color": "#d9a85a",
+   "accent": "#3a2c22",
+   "spots": true,
+   "tail": true
+  },
+  "tempRange": [
+   5,
+   35
+  ],
+  "diet": "肉",
+  "social": "獨居",
+  "attract": 12,
+  "fact": "黃褐色的身體上有許多黑色空心的斑塊；腹面白色，雜有黑色斑點，所有的花豹臉上都有斑點，而每隻花豹臉上的斑點圖案都不同，就如同我們的指紋。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "malayan_sun_bear",
+  "name": "馬來熊",
+  "nameEn": "Malayan Sun Bear",
+  "latin": "Helarctos malayanus",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#f2efe6",
+   "type": "quad",
+   "bulky": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "螞蟻",
+  "social": "小群",
+  "attract": 9,
+  "fact": "熊科動物中體型最小。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "malayan_tapir",
+  "name": "馬來貘",
+  "nameEn": "Malayan Tapir",
+  "latin": "Tapirus indicus",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.4,
+   "color": "#1d1c1e",
+   "accent": "#f2efe6",
+   "saddle": true,
+   "bulky": true
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "草",
+  "social": "獨居",
+  "attract": 9,
+  "fact": "黑白相間，全身中後段為白色體毛，其餘為黑色；耳朵豎立，耳緣末端為白色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "black_swan",
+  "name": "黑天鵝",
+  "nameEn": "Black Swan",
+  "latin": "Cygnus atratus",
+  "category": "bird",
+  "zone": "熱帶雨林區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#f2efe6",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "草",
+  "social": "小群",
+  "attract": 4,
+  "fact": "是唯一羽色為黑色的天鵝。羽翼伸展開來其初級及次級飛羽為白色。喙部呈現亮紅色，足部則是灰黑色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "squirrel_monkey",
+  "name": "黑冠松鼠猴",
+  "nameEn": "black-capped squirrel monkey",
+  "latin": "Saimiri boliviensis",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 0.45,
+   "color": "#e0a030",
+   "accent": "#f2efe6",
+   "tail": true
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "昆蟲",
+  "social": "群居",
+  "attract": 7,
+  "fact": "毛短而密，非常柔軟，口鼻部為黑色無毛；眼睛周圍、耳朵、喉部、頸部側面為白色；頭頂為深灰黑色，比松鼠猴的頭部黑，背部為棕色，四肢為紅棕色或黃色…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "brown_headed_spider_monkey",
+  "name": "棕頭蜘蛛猴",
+  "nameEn": "Brown-headed Spider Monkey",
+  "latin": "Ateles fusciceps",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#1d1c1e",
+   "type": "primate",
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "昆蟲",
+  "social": "群居",
+  "attract": 12,
+  "fact": "深黑色毛髮較粗糙，頭部小鬍鬚顯著，臉部皮膚為黑色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "laughing_kookaburra",
+  "name": "笑翠鳥",
+  "nameEn": "Laughing Kookaburra",
+  "latin": "Dacelo novaeguineae",
+  "category": "bird",
+  "zone": "熱帶雨林區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#7a5a3e",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "魚",
+  "social": "群居",
+  "attract": 4,
+  "fact": "所屬的科中體型最大的一種，頭及胸圍的羽毛為米色或白色，翅膀則為棕黑色，翅膀外側有淺藍色的斑紋，頭上有棕色條帶由鳥喙向上延伸到頭頂及穿過眼睛延…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "geoffroy_s_spider_monkey",
+  "name": "黑掌蜘蛛猴",
+  "nameEn": "Geoffroy's Spider Monkey",
+  "latin": "Ateles geoffroyi",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "color": "#8a6a4a",
+   "accent": "#8a6a4a",
+   "type": "primate",
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 12,
+  "fact": "雙臂比腿還長且更有力，尾巴能夠靈巧捲住樹枝，像是第五隻手一般。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "capybara",
+  "name": "水豚",
+  "nameEn": "Capybara",
+  "latin": "Hydrochoerus hydrochaeris",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.0,
+   "color": "#8a6a48",
+   "accent": "#8a6a48",
+   "bulky": true
+  },
+  "tempRange": [
+   15,
+   35
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 8,
+  "fact": "水豚是世界上最大的囓齒動物，體重甚至可以高達70公斤。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "giant_anteater",
+  "name": "大食蟻獸",
+  "nameEn": "Giant anteater",
+  "latin": "Myrmecophaga tridactyla",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.3,
+   "color": "#5a4a3e",
+   "accent": "#1d1c1e",
+   "snout": true,
+   "tail": true
+  },
+  "tempRange": [
+   18,
+   33
+  ],
+  "diet": "螞蟻",
+  "social": "獨居",
+  "attract": 9,
+  "fact": "體長約180至200公分，體重能達到30~60公斤。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "southern_tamandua",
+  "name": "南美小食蟻獸",
+  "nameEn": "Southern Tamandua",
+  "latin": "Tamandua tetradactyla",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#7a5a3e",
+   "type": "quad",
+   "snout": true,
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "螞蟻",
+  "social": "小群",
+  "attract": 6,
+  "fact": "體長30至80公分，尾長40至70公分。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "white_fronted_capuchin",
+  "name": "白面捲尾猴",
+  "nameEn": "White-fronted capuchin",
+  "latin": "Cebus capucinus",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#1d1c1e",
+   "type": "primate",
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 6,
+  "fact": "面部、喉部及胸部為白色，其餘部份為黑色，身體及尾巴部分毛髮濃密。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "brown_spider_monkey",
+  "name": "棕蜘蛛猴",
+  "nameEn": "Brown spider monkey",
+  "latin": "Ateles hybridus",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "legendary",
+  "conservation": "極危 CR",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#f2efe6",
+   "type": "primate",
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "螞蟻",
+  "social": "群居",
+  "attract": 16,
+  "fact": "身體的毛色從淺棕色道深色都有，大多數個體額頭上都有白色的三角形。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "crab_eating_mongoose",
+  "name": "食蟹",
+  "nameEn": "Crab-eating Mongoose",
+  "latin": "Herpestes urva",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#7a5a3e",
+   "type": "quad",
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 6,
+  "fact": "口鼻尖，身軀細長，軀幹中央部份略膨大，從頭部兩側到肩部有明顯的白色條紋。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "red_and_blue_lory",
+  "name": "紅藍吸蜜鸚鵡",
+  "nameEn": "Red-and-blue Lory",
+  "latin": "Eos histrio",
+  "category": "bird",
+  "zone": "熱帶雨林室內館",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "color": "#c8402a",
+   "accent": "#2a5ad8",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "花蜜",
+  "social": "小群",
+  "attract": 10,
+  "fact": "紅藍吸蜜鸚鵡的喙比一般鸚鵡的長，細長舌頭上有刷狀的毛，方便深入花朵中取得花粉和花蜜。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "yellow_footed_tortoise",
+  "name": "黃腿象龜",
+  "nameEn": "Yellow-footed Tortoise",
+  "latin": "Chelonoidis denticulata",
+  "category": "reptile",
+  "zone": "熱帶雨林室內館",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#e8c040",
+   "type": "reptile",
+   "shell": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 7,
+  "fact": "頭部和四肢皮膚為黑色，頭頂、眼睛和耳朵周圍有黃色的斑點。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "linnaeus_s_two_toed_sloth",
+  "name": "二趾樹獺",
+  "nameEn": "Linnaeus's Two-toed Sloth",
+  "latin": "Choloepus didactylus",
+  "category": "mammal",
+  "zone": "熱帶雨林室內館",
+  "rarity": "common",
+  "conservation": "無危 LC",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#3a8a4a",
+   "type": "quad",
+   "snout": true,
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 6,
+  "fact": "前肢形成二個彎曲的勾爪，後肢有三個勾爪，可懸掛身體於樹枝。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "cotton_top_tamarin",
+  "name": "棉頭絹猴",
+  "nameEn": "Cotton-top Tamarin",
+  "latin": "Saguinus oedipus",
+  "category": "mammal",
+  "zone": "熱帶雨林室內館",
+  "rarity": "legendary",
+  "conservation": "極危 CR",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#f2efe6",
+   "type": "primate",
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "昆蟲",
+  "social": "群居",
+  "attract": 16,
+  "fact": "臉部無毛，裸露的皮膚為黑色；頭頂有濃密的白毛，背部及尾巴為黑色，腹側為白色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "azara_s_night_monkey",
+  "name": "阿氏夜猴",
+  "nameEn": "Azara’s Night Monkey",
+  "latin": "Aotus azarae",
+  "category": "mammal",
+  "zone": "熱帶雨林室內館",
+  "rarity": "common",
+  "conservation": "無危 LC",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#1d1c1e",
+   "type": "primate",
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 6,
+  "fact": "阿氏夜猴有雙漂亮的大眼睛，常在黃昏或夜間活動，極佳的夜視能力，能在漆黑的樹林中精準的獵捕到正在飛行的昆蟲。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "lesser_slow_loris",
+  "name": "小懶猴",
+  "nameEn": "Lesser Slow Loris",
+  "latin": "Nycticebus pygmaeus",
+  "category": "mammal",
+  "zone": "熱帶雨林室內館",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#c8402a",
+   "type": "primate",
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 12,
+  "fact": "形態與懶猴相似。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "fat_tailed_dwarf_lemur",
+  "name": "粗尾侏儒狐猴",
+  "nameEn": "Fat-tailed Dwarf Lemur",
+  "latin": "Cheirogaleus medius",
+  "category": "mammal",
+  "zone": "熱帶雨林室內館",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#1d1c1e",
+   "type": "primate",
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 9,
+  "fact": "粗尾侏儒狐猴是小型哺乳動物，身體長度連尾巴約40到50公分，尾巴就占了20到27公分。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "golden_poison_frog",
+  "name": "金色箭毒蛙",
+  "nameEn": "Golden Poison Frog",
+  "latin": "Phyllobates terribilis",
+  "category": "reptile",
+  "zone": "熱帶雨林室內館",
+  "rarity": "common",
+  "conservation": "無危 LC",
+  "model": null,
+  "body": {
+   "color": "#d9a840",
+   "accent": "#3a8a4a",
+   "type": "frog",
+   "size": 0.5
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 4,
+  "fact": "金色箭毒蛙從薄荷綠、黃色、橙色個體都有，有時甚至會發現是白色的個體，但黃色和深黃色個體最為常見而得名。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "yellow_banded_poison_dart_frog",
+  "name": "黃帶箭毒蛙",
+  "nameEn": "Yellow-banded Poison Dart Frog",
+  "latin": "Dendrobates leucomelas",
+  "category": "reptile",
+  "zone": "熱帶雨林室內館",
+  "rarity": "common",
+  "conservation": "無危 LC",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#1d1c1e",
+   "type": "frog",
+   "size": 0.5
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 4,
+  "fact": "黃帶箭毒蛙具有獨特黃底黑色條帶而得名。身上黑色條帶會隨著個體年齡的增加斷裂成斑點。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "black_and_green_poison_dart_frog",
+  "name": "迷彩箭毒蛙",
+  "nameEn": "Black-and-green poison-dart frog",
+  "latin": "Dendrobates auratus",
+  "category": "reptile",
+  "zone": "熱帶雨林室內館",
+  "rarity": "common",
+  "conservation": "無危 LC",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#2a5ad8",
+   "type": "frog",
+   "size": 0.5
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 4,
+  "fact": "迷彩箭毒蛙具有綠色或淺藍色體色，身上布滿著黑色的帶狀或斑點。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "blue_poison_dart_frog",
+  "name": "鈷藍箭毒蛙",
+  "nameEn": "Blue Poison Dart Frog",
+  "latin": "Dendrobates azureus",
+  "category": "reptile",
+  "zone": "熱帶雨林室內館",
+  "rarity": "common",
+  "conservation": "無危 LC",
+  "model": null,
+  "body": {
+   "color": "#2a5ad8",
+   "accent": "#1d1c1e",
+   "type": "frog",
+   "size": 0.5
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 4,
+  "fact": "鈷藍箭毒蛙具有藍色體色，身上布滿著黑色的斑點。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "arapaima",
+  "name": "象魚",
+  "nameEn": "Arapaima",
+  "latin": "Arapaima gigas",
+  "category": "aquatic",
+  "zone": "熱帶雨林室內館",
+  "rarity": "common",
+  "conservation": "資料不足 DD",
+  "model": null,
+  "body": {
+   "color": "#5a8aa8",
+   "accent": "#5a8aa8",
+   "type": "fish",
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 4,
+  "fact": "象魚是南美洲亞馬遜河流域最大的淡水魚。",
+  "spawn": []
+ },
+ {
+  "id": "pink_tailed_chalceus",
+  "name": "大鱗脂鯉",
+  "nameEn": "Pink Tailed Chalceus",
+  "latin": "Chalceus macrolepidotus",
+  "category": "aquatic",
+  "zone": "熱帶雨林室內館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#e8a0a8",
+   "accent": "#c8402a",
+   "type": "fish",
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "肉",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長可達24.5公分。",
+  "spawn": []
+ },
+ {
+  "id": "red_belied_pacu",
+  "name": "短蓋肥脂鯉",
+  "nameEn": "Red-belied pacu",
+  "latin": "Piaractus brachypomus",
+  "category": "aquatic",
+  "zone": "熱帶雨林室內館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#c8402a",
+   "accent": "#c8402a",
+   "type": "fish",
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 4,
+  "fact": "身體呈深色，腹部、下巴、胸鰭呈紅色，少部分腹鰭也是紅色。",
+  "spawn": []
+ },
+ {
+  "id": "silver_arowana",
+  "name": "雙鬚骨舌魚",
+  "nameEn": "Silver arowana",
+  "latin": "Osteoglossum bicirrhosum",
+  "category": "aquatic",
+  "zone": "熱帶雨林室內館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#e8a0a8",
+   "accent": "#e0802a",
+   "type": "fish",
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 4,
+  "fact": "身體呈帶狀。口裂下斜、蓋住上頜的下頜具有類似育兒袋來口孵仔魚。",
+  "spawn": []
+ },
+ {
+  "id": "jullien_s_golden_carp",
+  "name": "穗鬚原鯉",
+  "nameEn": "Jullien's Golden Carp",
+  "latin": "Probarbus jullieni",
+  "category": "aquatic",
+  "zone": "熱帶雨林室內館",
+  "rarity": "legendary",
+  "conservation": "極危 CR",
+  "model": null,
+  "body": {
+   "color": "#5a8aa8",
+   "accent": "#5a8aa8",
+   "type": "fish",
+   "size": 1.28
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 14,
+  "fact": "長達1.5米及重70公斤",
+  "spawn": []
+ },
+ {
+  "id": "pearl_stingray",
+  "name": "黑帝王魟",
+  "nameEn": "Pearl Stingray",
+  "latin": "Potamotrygon sp",
+  "category": "aquatic",
+  "zone": "熱帶雨林室內館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#d9a840",
+   "type": "fish",
+   "ray": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 4,
+  "fact": "胸鰭跟身體連接成一個盤子的形狀，中幼魚時背部色彩較淺，體長直徑達20~30公分後顏色逐漸轉黑",
+  "spawn": []
+ },
+ {
+  "id": "threadfin_acara",
+  "name": "赫氏萎鰓麗魚",
+  "nameEn": "Threadfin Acara",
+  "latin": "Acarichthys heckelii",
+  "category": "aquatic",
+  "zone": "熱帶雨林室內館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#d9a840",
+   "accent": "#d9a840",
+   "type": "fish",
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體型略呈側扁，吻端相對尖銳",
+  "spawn": []
+ },
+ {
+  "id": "yellow_peacock_bass",
+  "name": "巴西亞金三間",
+  "nameEn": "Yellow Peacock Bass",
+  "latin": "Cichla kelberi",
+  "category": "aquatic",
+  "zone": "熱帶雨林室內館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#1d1c1e",
+   "type": "fish",
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "肉",
+  "social": "小群",
+  "attract": 4,
+  "fact": "外表跟大口黑鱸相似",
+  "spawn": []
+ },
+ {
+  "id": "pearl_cichlid",
+  "name": "西德藍寶石",
+  "nameEn": "Pearl cichlid",
+  "latin": "Geophagus brasiliensis",
+  "category": "aquatic",
+  "zone": "熱帶雨林室內館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#3a8a4a",
+   "type": "fish",
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體呈橢圓形，側扁，尾柄略短。頭較大，尾柄相對較窄，上側位。",
+  "spawn": []
+ },
+ {
+  "id": "blue_tailed_bee_eater",
+  "name": "栗喉蜂虎",
+  "nameEn": "Blue-tailed bee-eater",
+  "latin": "Merops philippinus",
+  "category": "bird",
+  "zone": "熱帶雨林室內館",
+  "rarity": "common",
+  "conservation": "無危 LC",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#2a5ad8",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 4,
+  "fact": "批著翠綠色外衣、拖著藍色尾羽、喉部還點綴著栗紅色的「栗喉蜂虎」，由其吸引人們的眼光，牠們亮麗的身影及響亮的鳴叫聲，是金門夏天空中最美麗的象徵…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "scarlet_ibis",
+  "name": "美洲紅",
+  "nameEn": "Scarlet Ibis",
+  "latin": "Eudocimus ruber",
+  "category": "bird",
+  "zone": "熱帶雨林室內館",
+  "rarity": "common",
+  "conservation": "無危 LC",
+  "model": null,
+  "body": {
+   "color": "#c8402a",
+   "accent": "#c8402a",
+   "type": "bird",
+   "longLegs": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "魚",
+  "social": "群居",
+  "attract": 4,
+  "fact": "具有一身鮮紅色的羽毛。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "great_argus",
+  "name": "青鸞",
+  "nameEn": "Great Argus",
+  "latin": "Argusianus argus",
+  "category": "bird",
+  "zone": "熱帶雨林室內館",
+  "rarity": "rare",
+  "conservation": "近危NT",
+  "model": null,
+  "body": {
+   "color": "#2a5ad8",
+   "accent": "#2a5ad8",
+   "type": "bird",
+   "longTail": true,
+   "size": 0.59
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "果實",
+  "social": "獨居",
+  "attract": 7,
+  "fact": "雄鳥體長約200公分，體重約2公斤，雌鳥體長約75公分，體重約1.6公斤。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "aye_aye",
+  "name": "指猴",
+  "nameEn": "Aye-Aye",
+  "latin": "Daubentonia madagascariensis",
+  "category": "mammal",
+  "zone": "熱帶雨林室內館",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 0.5,
+   "color": "#2a2624",
+   "accent": "#e0a030",
+   "tail": true,
+   "ears": true
+  },
+  "tempRange": [
+   20,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "獨居",
+  "attract": 12,
+  "fact": "指猴尾巴長而濃密，體毛雜亂而粗糙，成年毛色為深棕色或黑色，分散的白色毛。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "radiated_tortoise",
+  "name": "射紋陸龜",
+  "nameEn": "Radiated tortoise",
+  "latin": "Astrochelys radiata",
+  "category": "reptile",
+  "zone": "熱帶雨林室內館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#1d1c1e",
+   "type": "reptile",
+   "shell": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "頭部黃色，頭背面有黑斑，背甲圓而高聳，為暗褐色或黑色，上有黃色或橙色的輻射條紋，腹甲為黃色，外側有大形的三角形黑斑，四肢粗壯有爪，佈滿鱗片。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "red_footed_tortoise",
+  "name": "紅腿象龜",
+  "nameEn": "Red-footed Tortoise",
+  "latin": "Chelonoidis carbonarius",
+  "category": "reptile",
+  "zone": "熱帶雨林室內館",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "color": "#c8402a",
+   "accent": "#c8402a",
+   "type": "reptile",
+   "shell": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 7,
+  "fact": "深色背甲，甲殼通常是一個細長的橢圓形，兩側平行，但雄性的兩側會內彎。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "white_handed_gibbon",
+  "name": "白手長臂猿",
+  "nameEn": "White-handed Gibbon",
+  "latin": "Hylobates lar",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#7a5a3e",
+   "type": "primate",
+   "longArms": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 12,
+  "fact": "淡奶油白色或棕褐色二種色型。一圈白毛圍繞著黑色無毛的臉，手與腳多為白色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "false_gharial",
+  "name": "馬來長吻鱷",
+  "nameEn": "Tomistoma",
+  "latin": "Tomistoma schlegelii",
+  "category": "reptile",
+  "zone": "熱帶雨林區",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "type": "reptile",
+   "size": 2.2,
+   "color": "#4a4a3a",
+   "accent": "#2a2a22",
+   "croc": true
+  },
+  "tempRange": [
+   24,
+   34
+  ],
+  "diet": "魚",
+  "social": "獨居",
+  "attract": 12,
+  "fact": "屬大型鱷魚，特徵是長而狹窄的口鼻部，嘴上長有76-84尖銳的尖齒。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "small_clawed_otter",
+  "name": "小爪水獺",
+  "nameEn": "Asian Small-Clawed Otter",
+  "latin": "Aonyx cinereus",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 0.5,
+   "color": "#7a5a3e",
+   "accent": "#7a5a3e",
+   "long": true,
+   "tail": true
+  },
+  "tempRange": [
+   18,
+   32
+  ],
+  "diet": "魚",
+  "social": "群居",
+  "attract": 9,
+  "fact": "是全世界體型最小的水獺，頭軀幹長呈流線型，四肢短，各趾間有蹼膜，毛短而密。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "alpaca",
+  "name": "羊駝",
+  "nameEn": "Alpaca",
+  "latin": "Vicugna pacos",
+  "category": "mammal",
+  "zone": "兒童動物區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.1,
+   "color": "#efe6d6",
+   "accent": "#efe6d6",
+   "neck": 0.6,
+   "longLegs": true
+  },
+  "tempRange": [
+   -10,
+   25
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 6,
+  "fact": "成年雄獸肩高約90-100公分，體長約200公分，重70-90公斤。外型像綿羊頸部較長。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "coati",
+  "name": "長鼻浣熊",
+  "nameEn": "South American Coati",
+  "latin": "Nasua nasua",
+  "category": "mammal",
+  "zone": "兒童動物區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 0.6,
+   "color": "#8a5a32",
+   "accent": "#3a2c22",
+   "tail": true,
+   "long": true
+  },
+  "tempRange": [
+   10,
+   32
+  ],
+  "diet": "雜食",
+  "social": "群居",
+  "attract": 5,
+  "fact": "上半身為褐色或灰色，腹部白色。細長的尾巴大約32~69公分，棕黑色並有一圈圈黃色環，具有平衡的功能。腳爪和前肢十分強壯，便於爬樹和挖掘朽木下…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "donkey",
+  "name": "家驢",
+  "nameEn": "Domestic Ass，Donkey",
+  "latin": "Equus asinus",
+  "category": "mammal",
+  "zone": "兒童動物區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.2,
+   "color": "#8a8580",
+   "accent": "#e8e4dc",
+   "ears": true,
+   "longLegs": true
+  },
+  "tempRange": [
+   -5,
+   32
+  ],
+  "diet": "草",
+  "social": "小群",
+  "attract": 3,
+  "fact": "體型比斑馬小，頭部較大耳朵較長，背部毛色一般為灰色，夏季會比較偏紅，腹部為白色，背部有時會有一條較深的條紋，豎立的鬃毛長而細，尾巴末端蓬鬆，…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "pony",
+  "name": "迷你馬",
+  "nameEn": "Pony",
+  "latin": "Equus pony_mule",
+  "category": "mammal",
+  "zone": "兒童動物區",
+  "rarity": "common",
+  "conservation": "未評估 NE",
+  "model": null,
+  "body": {
+   "color": "#8a6a4a",
+   "accent": "#8a6a4a",
+   "type": "quad",
+   "longLegs": true,
+   "mane": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   0,
+   32
+  ],
+  "diet": "樹葉",
+  "social": "小群",
+  "attract": 6,
+  "fact": "迷你馬其實就是所謂的小型馬，體型比一般馬矮小，肩高約100至150公分，肩高矮於86公分。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "chinchilla",
+  "name": "絨鼠",
+  "nameEn": "Chinchilla",
+  "latin": "Chinchilla laniger",
+  "category": "mammal",
+  "zone": "兒童動物區",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "color": "#8a6a4a",
+   "accent": "#8a6a4a",
+   "type": "quad",
+   "size": 1.0
+  },
+  "tempRange": [
+   0,
+   32
+  ],
+  "diet": "果實",
+  "social": "群居",
+  "attract": 12,
+  "fact": "進食時，牠們會用臀部坐著，且以手拿食物。雖然生活環境中的水很少，但草葉上的露水就足夠牠們生活了。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "meerkat",
+  "name": "狐",
+  "nameEn": "meerkat",
+  "latin": "Suricata suricatta",
+  "category": "mammal",
+  "zone": "兒童動物區",
+  "rarity": "common",
+  "conservation": "未評估 NE",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#1d1c1e",
+   "type": "quad",
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   0,
+   32
+  ],
+  "diet": "肉",
+  "social": "群居",
+  "attract": 6,
+  "fact": "體長約25-35公分，有著細長的尾巴，眼眶有黑色斑塊，像是自備太陽眼鏡，耳朵小且圓，在挖沙時能閉起來避免耳道進沙，及長且彎曲的爪子，利於挖掘…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "lanyu_pig",
+  "name": "蘭嶼豬",
+  "nameEn": "Lanyu pig",
+  "latin": "Sus scrofa domestic",
+  "category": "mammal",
+  "zone": "兒童動物區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#1d1c1e",
+   "type": "quad",
+   "bulky": true,
+   "size": 1.31
+  },
+  "tempRange": [
+   0,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 6,
+  "fact": "蘭嶼豬的成熟個體體重平均不超過80公斤。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "raccoon",
+  "name": "北美浣熊",
+  "nameEn": "Raccoon",
+  "latin": "Procyon lotor",
+  "category": "mammal",
+  "zone": "兒童動物區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#8a8a88",
+   "accent": "#1d1c1e",
+   "type": "quad",
+   "bulky": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   0,
+   32
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 6,
+  "fact": "全身毛色為灰黑色，尾巴有5-10圈黑色環紋，臉上也有像面罩一樣的黑色斑紋。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "kinkajou",
+  "name": "蜜熊",
+  "nameEn": "Kinkajou",
+  "latin": "Potos flavus",
+  "category": "mammal",
+  "zone": "兒童動物區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#8a6a4a",
+   "accent": "#8a6a4a",
+   "type": "quad",
+   "bulky": true,
+   "size": 0.57
+  },
+  "tempRange": [
+   0,
+   32
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 6,
+  "fact": "重量：1.84~4.6公斤 頭身長：41~57公分，尾長跟體長相似。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "taipei_grass_frog",
+  "name": "臺北赤蛙",
+  "nameEn": "Taipei Grass Frog",
+  "latin": "Rana taipehensis",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "conservation": "無危LC",
+  "model": null,
+  "body": {
+   "color": "#d9a840",
+   "accent": "#e8c040",
+   "type": "frog",
+   "size": 0.5
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "臺北赤蛙屬於小型蛙種，體型纖細瘦長，體長3-5公分。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "swinhoe_s_frog",
+  "name": "斯文豪氏赤蛙",
+  "nameEn": "Swinhoe's frog",
+  "latin": "Rana swinhoana",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "conservation": "無危LC",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#f2efe6",
+   "type": "frog",
+   "size": 0.5
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體型修長扁平，背側褶不明顯，皮膚光滑，體側有明顯的疣狀顆粒",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "olive_frog",
+  "name": "腹斑蛙",
+  "nameEn": "Olive frog",
+  "latin": "Rana adenopleura",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "conservation": "一般類野生動物",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#7a5a3e",
+   "type": "frog",
+   "size": 0.5
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "腹斑蛙體型短胖，體色褐色，背中央有一條不明顯的背中線。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "asian_spined_toad",
+  "name": "黑眶蟾蜍",
+  "nameEn": "Asian spined toad",
+  "latin": "Bufo melanostictus",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "conservation": "無危LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#1d1c1e",
+   "type": "frog",
+   "size": 0.5
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "黑眶蟾蜍皮膚粗糙，眼周圍至吻端的黑色花紋為其主要特徵。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "yellow_pond_turtle",
+  "name": "柴棺龜",
+  "nameEn": "Yellow pond turtle",
+  "latin": "Mauremys mutica",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "endangered",
+  "conservation": "瀕危EN",
+  "model": null,
+  "body": {
+   "color": "#8a8a88",
+   "accent": "#e8c040",
+   "type": "reptile",
+   "shell": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 10,
+  "fact": "頭頂圓滑，背甲卵圓形，中央有一列不明顯的稜脊。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "chinese_cobra",
+  "name": "眼鏡蛇",
+  "nameEn": "Chinese Cobra",
+  "latin": "Naja atra",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "conservation": "易危VU",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#f2efe6",
+   "type": "reptile",
+   "snake": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 7,
+  "fact": "眼鏡蛇頸背具有U字型白色環紋。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "rhinoceros_iguana",
+  "name": "犀牛圓尾鬣蜥",
+  "nameEn": "Rhinoceros Iguana",
+  "latin": "Cyclura cornuta",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "conservation": "易危VU",
+  "model": null,
+  "body": {
+   "color": "#8a8a88",
+   "accent": "#2a5ad8",
+   "type": "reptile",
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 7,
+  "fact": "犀牛鬣蜥體型壯碩，體色呈灰藍色，以額頭上突起的鱗角狀似犀牛而得名。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "tokay_gecko",
+  "name": "大壁虎",
+  "nameEn": "Tokay gecko",
+  "latin": "Gekko gecko",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "conservation": "無危LC",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#2a5ad8",
+   "type": "reptile",
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "頭部寬大，體長約25公分左右",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "tartari_sand_boa",
+  "name": "韃靼沙蚺",
+  "nameEn": "Tartari sand boa",
+  "latin": "Eryx tataricus",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "conservation": "無危LC",
+  "model": null,
+  "body": {
+   "color": "#5a6a3a",
+   "accent": "#5a6a3a",
+   "type": "reptile",
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "韃靼沙蚺體型嬌小，身體短粗，吻鱗發達，眼極小。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "vietnamese_pond_turtle",
+  "name": "安南龜",
+  "nameEn": "Vietnamese Pond Turtle",
+  "latin": "Mauremys annamensis",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "legendary",
+  "conservation": "極危CR",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#e8c040",
+   "type": "reptile",
+   "shell": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 14,
+  "fact": "安南龜體色與背甲呈深褐色，臉部有黃色橫紋。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "chinese_crocodile_lizard",
+  "name": "中國鱷蜥",
+  "nameEn": "Chinese crocodile lizard",
+  "latin": "Shinisaurus crocodilurus",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "endangered",
+  "conservation": "瀕危EN",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#7a5a3e",
+   "type": "reptile",
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 10,
+  "fact": "中國鱷蜥是蜥蜴的一種，身體呈圓柱狀，尾部側扁如鱷魚。一般體長在32-36㎝，最長可達40㎝。雌蜥體色偏黃棕色，雄蜥體色偏紅棕色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "central_bearded_dragon",
+  "name": "中部鬍鬚蜥",
+  "nameEn": "Central bearded dragon",
+  "latin": "Pogona vitticeps",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "conservation": "無危LC",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#7a5a3e",
+   "type": "reptile",
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體型粗壯扁平，頭部大呈三角形，外耳孔明顯，頭部後面、頸部背面和喉部有大型棘刺狀鱗片，體側有一列規則排列的圓錐狀的棘刺狀突起。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "california_king_snake",
+  "name": "加州王蛇",
+  "nameEn": "California king snake",
+  "latin": "Lampropeltis getula californiae",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "conservation": "一般類野生動物",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#7a5a3e",
+   "type": "reptile",
+   "snake": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長1-1、5 m，體型細長，鱗片光滑，體色花紋變化大，由黑色或棕褐色的暗帶與白色或黃色的明帶成環狀相間，有些個體成縱帶相間，腹部為白色上有…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "common_box_turtle",
+  "name": "卡羅萊納箱龜",
+  "nameEn": "Common box turtle",
+  "latin": "Terrapene carolina",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "conservation": "易危VU",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#e8c040",
+   "type": "reptile",
+   "shell": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 7,
+  "fact": "體型小型，背甲高聳呈圓頂狀，腹甲大，胸盾和腹盾有韌帶構造，使龜甲的前、後開口在遇外敵時可以完全閉合。背甲為深褐色，上有黃色或橙色放射狀條紋和…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "central_asian_tortoise",
+  "name": "四爪陸龜",
+  "nameEn": "Central Asian tortoise",
+  "latin": "Testudo horsfieldi",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "conservation": "易危VU",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#1d1c1e",
+   "type": "reptile",
+   "shell": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 7,
+  "fact": "體型短橢圓形，背甲黃色，盾片上有大塊黑色同心斑紋。腹甲土黃色，盾片上有大塊黑色斑紋。四肢粗壯，趾均具4爪。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "rough_scaled_plated_lizard",
+  "name": "巨板蜥",
+  "nameEn": "Rough-scaled plated lizard",
+  "latin": "Gerrhosaurus major",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "conservation": "一般類野生動物",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#e8c040",
+   "type": "reptile",
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體色為黑色帶黃色斑點。牠的身體上方表面是黃棕色而腹部通常是黑褐色，下巴和喉頭為黃色或淡黃色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "star_tortoise",
+  "name": "印度星龜",
+  "nameEn": "Indian star tortoise",
+  "latin": "Geochelone elegans",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "conservation": "易危VU",
+  "model": null,
+  "body": {
+   "type": "reptile",
+   "size": 0.6,
+   "color": "#3a3024",
+   "accent": "#e0c040",
+   "shell": true
+  },
+  "tempRange": [
+   22,
+   35
+  ],
+  "diet": "草",
+  "social": "獨居",
+  "attract": 7,
+  "fact": "殼具放射狀花紋分布，盾片形成高聳的圓拱形、具星形圖案，尾盾板不分裂。底色為黑褐色，斑點、條紋、腹面為黃色。棒狀四肢。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "hundred_pace_viper_chinese_moccasin",
+  "name": "百步蛇",
+  "nameEn": "Hundred-pace Viper(Chinese Moccasin)",
+  "latin": "Deinagkistrodon acutus",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "conservation": "未評估NE",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#7a5a3e",
+   "type": "reptile",
+   "snake": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "中大型蛇類，體型粗胖，體長約0.8-1.6公尺。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "western_hognose_snake",
+  "name": "西部豬鼻蛇",
+  "nameEn": "Western hognose snake",
+  "latin": "Heterodon nasicus",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "conservation": "無危LC",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#e8c040",
+   "type": "reptile",
+   "snake": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長：40-90 cm，體型粗短，吻端尖短上翹，尾巴很短，身體鱗片粗糙具有稜脊。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "asian_forest_tortoise",
+  "name": "亞洲棕龜",
+  "nameEn": "Asian forest tortoise",
+  "latin": "Manouria emys",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "legendary",
+  "conservation": "極危CR",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#7a5a3e",
+   "type": "reptile",
+   "shell": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 14,
+  "fact": "亞洲最大的陸龜，背甲寬而扁平，背甲前後緣盾呈鋸齒狀，前腳前面及後腳後面有大型鱗片，尤其後腳鱗片特別發達而突出，所以又有六腳龜之稱。背甲為黃褐…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "aldabra_tortoise",
+  "name": "亞達伯拉象龜",
+  "nameEn": "Aldabra Giant Tortoise",
+  "latin": "Geochelone gigantea",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "conservation": "易危VU",
+  "model": null,
+  "body": {
+   "type": "reptile",
+   "size": 1.5,
+   "color": "#5a5448",
+   "accent": "#3a3430",
+   "shell": true
+  },
+  "tempRange": [
+   20,
+   35
+  ],
+  "diet": "草",
+  "social": "獨居",
+  "attract": 10,
+  "fact": "亞達伯拉象龜是世界上最大型的陸龜之一，雄龜體型大於雌龜，背甲平均約達90-130公分，體重約230-300公斤左右，雌龜較小背甲平均約90公…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "common_boa_constrictor",
+  "name": "紅尾蚺",
+  "nameEn": "Common boa constrictor",
+  "latin": "Boa constrictor",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "conservation": "未評估NE",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#7a5a3e",
+   "type": "reptile",
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體型粗壯，頭部寬大呈三角形，眼睛小，瞳孔垂直，身體鱗片平滑具有光澤。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "yellow_margined_box_turtle",
+  "name": "食蛇龜",
+  "nameEn": "Yellow-margined box turtle",
+  "latin": "Cuora flavomarginata",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "endangered",
+  "conservation": "瀕危EN",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#1d1c1e",
+   "type": "reptile",
+   "shell": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   5,
+   30
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 10,
+  "fact": "食蛇龜體型渾圓，背甲高聳呈圓拱狀，中央有一列明顯的稜脊，胸盾與腹盾以韌帶連接，使得龜殼得以閉合。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "veiled_chameleon",
+  "name": "高冠變色龍",
+  "nameEn": "Veiled chameleon",
+  "latin": "Chamaeleo calyptratus",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "conservation": "無危LC",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#f2efe6",
+   "type": "reptile",
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體型側扁，頭頂有像頭盔的高冠狀凸起，雄性的冠比雌性為高，背部中央和腹部中線有明顯鋸齒狀的隆起脊鱗。體色主要為綠色雜以白色、黃色、藍色和褐色的…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "rainbow_boa",
+  "name": "彩虹蚺",
+  "nameEn": "Rainbow boa",
+  "latin": "Epicrates cenchria",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "conservation": "未評估NE",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#e0802a",
+   "type": "reptile",
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "中大型蛇類，體型粗壯有力，頭部尖細，與頸部區分容易，唇鱗具有感熱的唇窩。全身鱗片光滑，具有虹彩般的光澤，身體背部為褐色、橘褐色或橘紅色，上有…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "european_glass_lizard",
+  "name": "歐洲蛇蜥",
+  "nameEn": "European glass lizard",
+  "latin": "Ophisaurus apodus",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "conservation": "易危VU",
+  "model": null,
+  "body": {
+   "color": "#5a6a3a",
+   "accent": "#5a6a3a",
+   "type": "reptile",
+   "snake": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "肉",
+  "social": "小群",
+  "attract": 7,
+  "fact": "體長約0.8-1.4公尺。蛇蜥類有外耳孔和可閉合的眼瞼，蛇類不具有。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "ball_python",
+  "name": "球蟒",
+  "nameEn": "Ball python",
+  "latin": "Python regius",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "conservation": "無危LC",
+  "model": null,
+  "body": {
+   "type": "reptile",
+   "size": 0.9,
+   "color": "#5a4022",
+   "accent": "#c9a878",
+   "snake": true
+  },
+  "tempRange": [
+   24,
+   34
+  ],
+  "diet": "鼠",
+  "social": "獨居",
+  "attract": 5,
+  "fact": "體型粗短，頭部小而細長，尾巴短小，全身鱗片細小平滑有光澤。身體背部為黑色，上有不規則的淺褐色斑紋。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "ocellated_skink",
+  "name": "眼斑銅蜥",
+  "nameEn": "Ocellated skink",
+  "latin": "Chaicides ocellatus",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "conservation": "近危NT",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#1d1c1e",
+   "type": "reptile",
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 7,
+  "fact": "中小型蜥蜴，體型細長略成圓筒形，四肢短，均具有五趾，尾巴約為身長的一半。頭部扁平，吻端尖扁，具有眼瞼，全身鱗片為圓鱗，光滑具有光澤。身體背部…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "chinese_striped_neck_turtle",
+  "name": "斑龜",
+  "nameEn": "Chinese striped-neck turtle",
+  "latin": "Mauremys sinensis",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "endangered",
+  "conservation": "瀕危EN",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#3a8a4a",
+   "type": "reptile",
+   "shell": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 10,
+  "fact": "體型中型，幼體背甲上有三列隆起稜脊，成體背甲兩側的稜脊變不明顯。頭、頸部兩側和四肢有黃綠色相間的條紋，背甲為黑褐色或深橄欖綠色，盾片上有淺棕…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "swinhoe_s_tree_lizard",
+  "name": "斯文豪氏攀蜥",
+  "nameEn": "Swinhoe’s tree lizard",
+  "latin": "Japalura swinhonis",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "conservation": "一般類野生動物",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#f2efe6",
+   "type": "reptile",
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "臺灣特有種體型最大者，背部以褐色為主，口腔外緣呈白色或乳白色，頸背有突起的脊鱗，雄性的下顎有明顯的白斑，有明顯之鬣鱗與喉垂，體側有明顯黃綠色…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "monkey_tailed_skink",
+  "name": "猴尾蜥",
+  "nameEn": "Monkey-tailed skink",
+  "latin": "Corucia zebrata",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "conservation": "易危VU",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#7a5a3e",
+   "type": "reptile",
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 7,
+  "fact": "身體粗壯，世界上最大的石龍子，頭部很大略成三角形，吻端鈍圓，上、下顎強而有力，四肢有長而利的爪子，尾長強壯可捲曲纏繞。身體為橄欖綠色或褐色，…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "gila_monster",
+  "name": "鈍尾毒蜥",
+  "nameEn": "Gila monster",
+  "latin": "Heloderma suspectum",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "conservation": "近危NT",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#e8a0a8",
+   "type": "reptile",
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 7,
+  "fact": "鈍尾毒蜥體型粗胖，頭部寬大，吻端圓鈍，眼睛小，身體圓胖，尾巴粗短，身體背部和四肢覆滿圓珠狀鱗片。吻部到嘴角和四肢為黑色，頭頂、身體和尾巴為粉…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "chinese_water_dragon",
+  "name": "綠長鬣蜥",
+  "nameEn": "Chinese Water Dragon",
+  "latin": "Physignathus cocincinus",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "conservation": "易危VU",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#e8c040",
+   "type": "reptile",
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 7,
+  "fact": "體型粗壯，尾巴細長側扁，由頸部到尾部的背面中央有一排刺狀脊鱗。身體為橄欖綠色或黃綠色，喉部和下唇的大型鱗片為白色，尾部有數個深黑褐色環帶。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "green_iguana",
+  "name": "綠鬣蜥",
+  "nameEn": "Green iguana",
+  "latin": "Iguana iguana",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "conservation": "無危LC",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#1d1c1e",
+   "type": "reptile",
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "草",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體型粗壯，尾部長而側扁，下顎兩側有一大形圓鱗，外耳孔明顯，喉褶可收縮，頸背部延伸至尾部有一列梳齒狀鱗片，四肢強壯有力。全身為綠色，在體側和尾…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "emerald_green_treefrog",
+  "name": "翡翠樹蛙",
+  "nameEn": "Emerald green treefrog",
+  "latin": "Rhacophorus prasinatus",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "conservation": "近危NT",
+  "model": null,
+  "body": {
+   "color": "#d9a840",
+   "accent": "#e8c040",
+   "type": "frog",
+   "size": 0.5
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 7,
+  "fact": "體型修長，眼前後皮褶明顯，背部皮膚略粗糙有細顆粒突起，趾末端吸盤發達。眼前後皮褶和虹彩為金黃色，體色為翠綠色或黃綠色，體側由吻端到股間有一條…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "taiwan_beauty_snake",
+  "name": "臺灣錦蛇",
+  "nameEn": "Taiwan beauty snake",
+  "latin": "Elaphe taeniura friesei",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "conservation": "近危NT",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#e8c040",
+   "type": "reptile",
+   "snake": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 7,
+  "fact": "體型粗長強壯，尾巴細長，眼到嘴角上方有一條黑色縱紋，全身為黃褐色或橄欖褐色，頸部至背部中段有四列黑色菱形斑紋，逐漸連成黑褐色縱帶至尾端，後段…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "burmese_python",
+  "name": "緬甸岩蟒",
+  "nameEn": "Burmese python",
+  "latin": "Python bivittatus",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "conservation": "易危VU",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#7a5a3e",
+   "type": "reptile",
+   "snake": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 7,
+  "fact": "體型粗壯，頭部細長呈三角形，全身鱗片平滑有光澤，尾巴短。頭頂有箭頭狀的黑褐色斑紋，身體背部為黃褐色或灰棕色，上有許多不規則大型的黑褐色鞍狀斑…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "burmese_star_tortoise",
+  "name": "緬甸星龜",
+  "nameEn": "Burmese star tortoise",
+  "latin": "Geochelone platynota",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "legendary",
+  "conservation": "極危CR",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#f2efe6",
+   "type": "reptile",
+   "shell": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 14,
+  "fact": "緬甸星龜的背甲呈現白色花紋的放射狀圖案，成年體長腹甲長在22-30公分，成年的體型雌性個體大於雄性個體。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "pig_nosed_turtle",
+  "name": "豬鼻龜",
+  "nameEn": "Pig-nosed turtle",
+  "latin": "Carettochelys insculpta",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "endangered",
+  "conservation": "瀕危EN",
+  "model": null,
+  "body": {
+   "color": "#8a8a88",
+   "accent": "#3a8a4a",
+   "type": "reptile",
+   "shell": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 10,
+  "fact": "體型扁平，頭部短小，眼睛大而凸，吻部呈管狀，狀似豬鼻，背甲無盾板，由軟質皮膚包覆，四肢蹼發達呈槳狀且具有爪。頭部與背甲為灰綠色或橄欖綠色，腹…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "green_basilisk",
+  "name": "雙脊冠蜥",
+  "nameEn": "Green Basilisk",
+  "latin": "Basiliscus plumifrons",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "conservation": "無危LC",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#3a8a4a",
+   "type": "reptile",
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體型略側扁，尾巴很長，成體雄蜥的頭部、背部與尾中央有冠狀突起，雌蜥則無此冠狀突起。眼睛虹彩為橙黃色，身體為翠綠色或藍綠色，上有許多淺藍色或黃…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "alligator_snapping_turtle",
+  "name": "鱷龜",
+  "nameEn": "Alligator snapping turtle",
+  "latin": "Macroclemys temminckii",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "conservation": "易危VU",
+  "model": null,
+  "body": {
+   "color": "#5a6a3a",
+   "accent": "#5a6a3a",
+   "type": "reptile",
+   "shell": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 7,
+  "fact": "北美洲最大的淡水龜，頭大，嘴如鷹喙，尾巴長，背上有三列發達的鋸齒狀脊稜。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "reticulated_python",
+  "name": "網紋蟒",
+  "nameEn": "Reticulated python",
+  "latin": "Python reticulatus",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "conservation": "無危LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#8a8a88",
+   "type": "reptile",
+   "snake": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體型細長，是世界上最大型蛇類之一，上唇鱗有凹陷的唇窩。頭部有三條黑細紋，一條在頭部正中，另兩條由兩眼延伸到嘴角，身體背部為灰褐色或黃褐色，有…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "african_spurred_tortoise",
+  "name": "蘇卡達象龜",
+  "nameEn": "African spurred tortoise",
+  "latin": "Geochelone sulcata",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "conservation": "易危VU",
+  "model": null,
+  "body": {
+   "color": "#5a6a3a",
+   "accent": "#5a6a3a",
+   "type": "reptile",
+   "shell": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   10,
+   38
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 7,
+  "fact": "體型壯碩，是世界上體型第三大的陸龜，背甲寬廣而高，前、後緣為鋸齒狀，前肢鱗片大而重疊，後腿有明顯的二或三個刺狀突起。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "chinese_alligator",
+  "name": "揚子鱷",
+  "nameEn": "Chinese alligator",
+  "latin": "Alligator sinensus",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "legendary",
+  "conservation": "極危CR",
+  "model": null,
+  "body": {
+   "color": "#5a6a3a",
+   "accent": "#5a6a3a",
+   "type": "reptile",
+   "croc": true,
+   "size": 1.6
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 14,
+  "fact": "揚子鱷是一種相對較小的鱷魚，最大長度約為2 公尺，是世界上少數分布在溫帶的鱷魚種類。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "elongate_tortoise",
+  "name": "黃頭陸龜",
+  "nameEn": "Elongate tortoise",
+  "latin": "Indotestudo elongata",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "endangered",
+  "conservation": "瀕危EN",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#3a8a4a",
+   "type": "reptile",
+   "shell": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   22,
+   34
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 10,
+  "fact": "頭部為乳黃色或黃綠色，背甲為黃褐色或橄欖綠色，上有不規則的黑色斑塊或斑點，背甲高聳呈長橢圓形，前腳有大型突起的鱗片。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "water_scorpion",
+  "name": "大紅娘華",
+  "nameEn": "Water scorpion",
+  "latin": "Laccotrephes pfeiferiae",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "未評估 NE",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#7a5a3e",
+   "type": "insect",
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長可達5公分，體色深褐色；體型扁平形似枯葉，前腳特化成鐮刀狀，腹部末端有一細長的呼吸管，可伸出水面呼吸。",
+  "spawn": []
+ },
+ {
+  "id": "chinese_red_headed_centipede",
+  "name": "少棘蜈蚣",
+  "nameEn": "Chinese Red-Headed Centipede",
+  "latin": "Scolopendra subspinipes mutilans",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#c8402a",
+   "accent": "#c8402a",
+   "type": "insect",
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "肉",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長可達20公分，頭胸部、腹部第一節和腳均呈紅色；每一體節有1對步足，身體第一體節的一對附肢特化為巨大鉤狀的顎肢，顎肢內具有毒腺，為夜行肉食…",
+  "spawn": []
+ },
+ {
+  "id": "emperor_scorpion",
+  "name": "帝王蠍",
+  "nameEn": "Emperor Scorpion",
+  "latin": "Pandinus imperator",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#c8402a",
+   "type": "insect",
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "肉",
+  "social": "小群",
+  "attract": 4,
+  "fact": "世界上體型最大的蠍子之一，全長約20公分。",
+  "spawn": []
+ },
+ {
+  "id": "mexican_red_knee_tarantula",
+  "name": "墨西哥紅膝頭蜘蛛",
+  "nameEn": "Mexican Red Knee Tarantula",
+  "latin": "Brachypelma smithi",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#7a5a3e",
+   "type": "insect",
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "肉",
+  "social": "小群",
+  "attract": 4,
+  "fact": "具有4對步足，1對螯肢螯肢特化成毒牙。",
+  "spawn": []
+ },
+ {
+  "id": "dragonfly_nymphs_aeshnidae",
+  "name": "晏蜓水蠆",
+  "nameEn": "Dragonfly Nymphs Aeshnidae",
+  "latin": "Aeshnidae",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#3a8a4a",
+   "type": "insect",
+   "wings": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體色一般是暗褐色或暗綠色，腳和觸角比蜻蜓長一些。",
+  "spawn": []
+ },
+ {
+  "id": "water_bug",
+  "name": "褐負",
+  "nameEn": "Water Bug",
+  "latin": "Diplonychus rusticus",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#5a4a3a",
+   "accent": "#5a4a3a",
+   "type": "insect",
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "肉",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長1.4-1.7cm，體型扁橢圓；前足為鐮刀狀捕捉足，後足為具細毛之游泳足",
+  "spawn": []
+ },
+ {
+  "id": "six_spotted_cockroach",
+  "name": "六點金翼蟑螂",
+  "nameEn": "Six Spotted Cockroach",
+  "latin": "Eublaberus distanti",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#d9a840",
+   "accent": "#e8c040",
+   "type": "insect",
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "成蟲體長可達6公分，雌蟲型較雄蟲大，身形也較寬厚。",
+  "spawn": []
+ },
+ {
+  "id": "diving_beetle",
+  "name": "點刻三線大龍蝨",
+  "nameEn": "Diving beetle",
+  "latin": "Cybister tripunctatus",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#e8c040",
+   "type": "insect",
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "肉",
+  "social": "小群",
+  "attract": 4,
+  "fact": "常見的水棲甲蟲，翅鞘表面光滑，或僅有不顯著的點刻列，翅鞘兩側有橙黃色的條紋，體長不到3cm。雄蟲的前足跗節膨大為吸盤，可藉以與雌蟲區別",
+  "spawn": []
+ },
+ {
+  "id": "stag_beetle",
+  "name": "長角大鍬形蟲",
+  "nameEn": "Formosan Long-fanged Stag Beetle",
+  "latin": "Dorcus Schenkingi",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "type": "insect",
+   "size": 0.45,
+   "color": "#2a1a10",
+   "accent": "#5a3a22",
+   "pincers": true
+  },
+  "tempRange": [
+   16,
+   30
+  ],
+  "diet": "樹液",
+  "social": "獨居",
+  "attract": 4,
+  "fact": "大型鍬形蟲，長角大鍬形蟲大顎為大鍬形蟲屬中最修長者。",
+  "spawn": []
+ },
+ {
+  "id": "pachyrhynchus_weevil",
+  "name": "大圓斑球背象鼻蟲",
+  "nameEn": "Pachyrhynchus weevil",
+  "latin": "Pachyrhynchus sarcitis kotoensis",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#2a5ad8",
+   "type": "insect",
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "全身布滿水青色的圓形或橢圓形斑點，翅鞘上的斑點橫跨左右兩翅鞘。",
+  "spawn": []
+ },
+ {
+  "id": "firefly",
+  "name": "黃緣螢",
+  "nameEn": "Firefly",
+  "latin": "Aquatica ficta",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "legendary",
+  "conservation": "極危 CR",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#e8c040",
+   "type": "insect",
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "肉",
+  "social": "小群",
+  "attract": 14,
+  "fact": "雄蟲體長7.6～8.8公釐；體壁布滿細毛；頭部黑色，觸角黑色，絲狀；前胸背板橙黃色；前翅黑色，表面佈滿微小圓形點刻與黃色細毛，翅緣有黃色細紋…",
+  "spawn": []
+ },
+ {
+  "id": "malaysian_stick_insect",
+  "name": "扁竹節蟲",
+  "nameEn": "Malaysian stick insect",
+  "latin": "Heteropteryx dilatata",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#5a4a3a",
+   "accent": "#5a4a3a",
+   "type": "insect",
+   "stick": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "大型竹節蟲，雌蟲體型較為寬扁，身上具有許多小刺，在遭遇危險時會將具有棘刺的後腿舉高夾擊騷擾者，並且露出具有警戒色的後翅，同時發出警戒聲。雌蟲…",
+  "spawn": []
+ },
+ {
+  "id": "eurycanths_calcarata",
+  "name": "巨棘竹節蟲",
+  "nameEn": "",
+  "latin": "Eurycanths Calcarata",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#5a4a3a",
+   "accent": "#5a4a3a",
+   "type": "insect",
+   "stick": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "雜食",
+  "social": "群居",
+  "attract": 4,
+  "fact": "雄蟲後腿較雌蟲粗壯許多，腿上棘刺也較大，除了禦敵外也可以幫助雄蟲彼此競爭雌蟲。",
+  "spawn": []
+ },
+ {
+  "id": "phaenopharos_khaoyaiensis",
+  "name": "泰國小紅翅竹節蟲",
+  "nameEn": "",
+  "latin": "Phaenopharos Khaoyaiensis",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#c8402a",
+   "accent": "#c8402a",
+   "type": "insect",
+   "stick": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "成蟲具有短小的翅膀，遇驚擾時會打開紅色的翅膀，驚嚇敵人，休息時身軀及肢體伸直像樹枝。",
+  "spawn": []
+ },
+ {
+  "id": "giant_walking_stick",
+  "name": "尖刺足刺竹節蟲",
+  "nameEn": "Giant Walking Stick",
+  "latin": "Phobaeticus serratipes",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#5a4a3a",
+   "accent": "#5a4a3a",
+   "type": "insect",
+   "stick": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 4,
+  "fact": "大型竹節蟲，足部有尖刺。",
+  "spawn": []
+ },
+ {
+  "id": "phylium_giganteum",
+  "name": "巨人葉脩",
+  "nameEn": "",
+  "latin": "Phylium giganteum",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#5a4a3a",
+   "accent": "#5a4a3a",
+   "type": "insect",
+   "stick": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "目發現最大型的葉脩，外型與植物葉片非常相似，加上夜晚活動的習性，難以被掠食者發現",
+  "spawn": []
+ },
+ {
+  "id": "trachychorax_sexpunctatus",
+  "name": "六點瘤胸竹節蟲",
+  "nameEn": "",
+  "latin": "Trachychorax Sexpunctatus",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#e8c040",
+   "type": "insect",
+   "stick": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "胸部背面有許多黑點，若蟲時胸部黃色，成蟲時則轉為紅色或褐色。雌雄都有翅膀，具良好飛行能力。",
+  "spawn": []
+ },
+ {
+  "id": "trachyaretaon_brueckneri",
+  "name": "小扁竹節蟲",
+  "nameEn": "",
+  "latin": "Trachyaretaon brueckneri",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#7a5a3e",
+   "type": "insect",
+   "stick": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 4,
+  "fact": "剛孵出的若蟲，很像根乾柴。",
+  "spawn": []
+ },
+ {
+  "id": "phasmotaenia_lanyuhensis",
+  "name": "蘭嶼筒胸竹節蟲",
+  "nameEn": "",
+  "latin": "Phasmotaenia lanyuhensis",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#5a4a3a",
+   "accent": "#5a4a3a",
+   "type": "insect",
+   "stick": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "雌蟲體型較雄蟲大，且中胸肥澎大。",
+  "spawn": []
+ },
+ {
+  "id": "tsuda_phasmid",
+  "name": "津田氏大頭竹節蟲",
+  "nameEn": "Tsuda Phasmid",
+  "latin": "Megacrania tsudai",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#f2efe6",
+   "type": "insect",
+   "stick": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "雌蟲全身呈油綠色，胸部背板具許多顆粒狀小突起；尾毛粗短。",
+  "spawn": []
+ },
+ {
+  "id": "entoria_sp",
+  "name": "長肛竹節蟲",
+  "nameEn": "",
+  "latin": "Entoria Sp.",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#e8c040",
+   "type": "insect",
+   "stick": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體型細長，體色從棕黃到黑色，變異很大。雄蟲體長較短，觸角較雌蟲長。",
+  "spawn": []
+ },
+ {
+  "id": "lan_hsu_giant_katydid",
+  "name": "蘭嶼大葉螽斯",
+  "nameEn": "Lan-hsu giant katydid",
+  "latin": "Phyllophorina kotoshoensis",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "rare",
+  "conservation": "保育類",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#3a8a4a",
+   "type": "insect",
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "樹葉",
+  "social": "小群",
+  "attract": 7,
+  "fact": "體色綠色；前胸背板佈滿極細的顆粒狀突起；體背發達拱起，外緣呈菱形外突，並有較明顯的顆粒瘤突，雌蟲產卵管長刀狀。",
+  "spawn": []
+ },
+ {
+  "id": "field_cricket",
+  "name": "黃斑黑蟋蟀",
+  "nameEn": "Field cricket",
+  "latin": "Gryllus bimaculatus",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "未評估 NE",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#7a5a3e",
+   "type": "insect",
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "成蟲體長可達3公分；體色黑色；翅棕色至黑色，翅基部具黃斑。頭圓形，稍短，比前胸背板稍窄或等寬。",
+  "spawn": []
+ },
+ {
+  "id": "long_winged_katydid",
+  "name": "臺灣騷斯",
+  "nameEn": "Long-winged Katydid",
+  "latin": "Mecopoda elongata",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "未評估 NE",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#7a5a3e",
+   "type": "insect",
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "樹葉",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體色綠色或褐色；最大的特徵是頭部後方兩側有大塊黑斑。",
+  "spawn": []
+ },
+ {
+  "id": "lime_butterfly",
+  "name": "無尾鳳蝶",
+  "nameEn": "Lime Butterfly",
+  "latin": "Papilio demoleus",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#7a5a3e",
+   "type": "insect",
+   "wings": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "中型鳳蝶。",
+  "spawn": []
+ },
+ {
+  "id": "chinese_peacock",
+  "name": "烏鴉鳳蝶",
+  "nameEn": "Chinese Peacock",
+  "latin": "Papilio bianor takasago",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#e8c040",
+   "type": "insect",
+   "wings": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "樹葉",
+  "social": "小群",
+  "attract": 4,
+  "fact": "卵為底部扁平的白色球形，具光澤。",
+  "spawn": []
+ },
+ {
+  "id": "paris_pescock",
+  "name": "大琉璃紋鳳蝶",
+  "nameEn": "Paris Pescock",
+  "latin": "Papilio Paris Nakaharai",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#7a5a3e",
+   "type": "insect",
+   "wings": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "樹葉",
+  "social": "小群",
+  "attract": 4,
+  "fact": "中型鳳蝶。",
+  "spawn": []
+ },
+ {
+  "id": "great_mormon",
+  "name": "大鳳蝶",
+  "nameEn": "Great Mormon",
+  "latin": "Papilio memnon heronus",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#7a5a3e",
+   "type": "insect",
+   "wings": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "卵為淺黃色球形。",
+  "spawn": []
+ },
+ {
+  "id": "common_rose_swallowtail",
+  "name": "紅紋鳳蝶",
+  "nameEn": "Common Rose Swallowtail",
+  "latin": "Pachlioptera aristolochiae interpositus",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#c8402a",
+   "accent": "#e8c040",
+   "type": "insect",
+   "wings": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "樹葉",
+  "social": "小群",
+  "attract": 4,
+  "fact": "卵為橙紅色球形。",
+  "spawn": []
+ },
+ {
+  "id": "paper_kite_butterfly",
+  "name": "黑點大白斑蝶",
+  "nameEn": "Paper Kite Butterfly",
+  "latin": "Idea Leuconoe",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#1d1c1e",
+   "type": "insect",
+   "wings": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "竹",
+  "social": "小群",
+  "attract": 4,
+  "fact": "大型斑蝶。",
+  "spawn": []
+ },
+ {
+  "id": "orange_edged_whites",
+  "name": "端紅蝶",
+  "nameEn": "Orange-edged Whites",
+  "latin": "Hebomoia glaucippe formosana",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "未評估 NE",
+  "model": null,
+  "body": {
+   "color": "#e8a0a8",
+   "accent": "#1d1c1e",
+   "type": "insect",
+   "wings": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 4,
+  "fact": "大型粉蝶。",
+  "spawn": []
+ },
+ {
+  "id": "liuchiou_blue_spotted_milkweed_butterfly",
+  "name": "琉球青斑蝶",
+  "nameEn": "Liuchiou Blue Spotted Milkweed Butterfly",
+  "latin": "Ideopsis similis",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#7a5a3e",
+   "type": "insect",
+   "wings": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "中型斑蝶。",
+  "spawn": []
+ },
+ {
+  "id": "yellow_emperor",
+  "name": "台灣小紫蛺蝶",
+  "nameEn": "Yellow Emperor",
+  "latin": "Chitoria Chrysolora",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#7a5a3e",
+   "type": "insect",
+   "wings": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 4,
+  "fact": "中型蛺蝶。",
+  "spawn": []
+ },
+ {
+  "id": "plain_tiger",
+  "name": "樺斑蝶",
+  "nameEn": "Plain Tiger",
+  "latin": "Danaus Chrysippus",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#7a5a3e",
+   "type": "insect",
+   "wings": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "竹",
+  "social": "小群",
+  "attract": 4,
+  "fact": "雌雄斑紋相似。軀體頭、胸 呈黑褐色，上有白色斑點與線紋。 腹部背側橙色，腹側白色。雄蝶前 足被毛，雌蝶則否。",
+  "spawn": []
+ },
+ {
+  "id": "yellow_coster",
+  "name": "苧麻珍蝶(細蝶)",
+  "nameEn": "Yellow Coster",
+  "latin": "Acraea issoria formosana",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "legendary",
+  "conservation": "極危 CR",
+  "model": null,
+  "body": {
+   "color": "#c8402a",
+   "accent": "#1d1c1e",
+   "type": "insect",
+   "wings": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 14,
+  "fact": "中型蛺蝶。",
+  "spawn": []
+ },
+ {
+  "id": "staff_sergeant",
+  "name": "小單帶蛺蝶",
+  "nameEn": "Staff Sergeant",
+  "latin": "Athyma selenophora laela",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#7a5a3e",
+   "type": "insect",
+   "wings": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "樹葉",
+  "social": "小群",
+  "attract": 4,
+  "fact": "中型蛺蝶。",
+  "spawn": []
+ },
+ {
+  "id": "common_tiger",
+  "name": "黑脈樺斑蝶",
+  "nameEn": "Common Tiger",
+  "latin": "Danaus Genutia",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#7a5a3e",
+   "type": "insect",
+   "wings": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "竹",
+  "social": "小群",
+  "attract": 4,
+  "fact": "中型斑蝶。",
+  "spawn": []
+ },
+ {
+  "id": "blue_tiger",
+  "name": "淡小紋青斑蝶",
+  "nameEn": "Blue Tiger",
+  "latin": "Tirumala limniace limniace",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "legendary",
+  "conservation": "極危 CR",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#7a5a3e",
+   "type": "insect",
+   "wings": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "竹",
+  "social": "小群",
+  "attract": 14,
+  "fact": "中型斑蝶。",
+  "spawn": []
+ },
+ {
+  "id": "dead_leaf_butterfly",
+  "name": "枯葉蝶",
+  "nameEn": "Orange Oak Leaf",
+  "latin": "Kallima inachis formosana",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "type": "insect",
+   "size": 0.5,
+   "color": "#8a6a3a",
+   "accent": "#2a5ad8",
+   "wings": true
+  },
+  "tempRange": [
+   18,
+   32
+  ],
+  "diet": "樹液",
+  "social": "群聚",
+  "attract": 6,
+  "fact": "卵為暗綠色球形， 1齡幼蟲為黑褐色，其他齡為黑色，各側腹背線有細長棘刺，棘刺基部為紅色。",
+  "spawn": []
+ },
+ {
+  "id": "camponotus_habereri",
+  "name": "臭巨山蟻",
+  "nameEn": "",
+  "latin": "Camponotus habereri",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#c8402a",
+   "accent": "#1d1c1e",
+   "type": "insect",
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "花蜜",
+  "social": "獨居",
+  "attract": 4,
+  "fact": "大型螞蟻，職蟻多態型，小工蟻體長7.0– 7.6 mm，大工蟻12.1 –12.5 mm。",
+  "spawn": []
+ },
+ {
+  "id": "camponotus_irritans",
+  "name": "高雄巨山蟻",
+  "nameEn": "",
+  "latin": "Camponotus Irritans",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#5a4a3a",
+   "accent": "#5a4a3a",
+   "type": "insect",
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "海岸林的朽木中。",
+  "spawn": []
+ },
+ {
+  "id": "pheidole_sp",
+  "name": "大頭家蟻",
+  "nameEn": "",
+  "latin": "Pheidole Sp.",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#5a4a3a",
+   "accent": "#5a4a3a",
+   "type": "insect",
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "草地、農地、都市綠地等。",
+  "spawn": []
+ },
+ {
+  "id": "sp_14dc1140",
+  "name": "高山巨針蟻",
+  "nameEn": "",
+  "latin": "",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#7a5a3e",
+   "type": "insect",
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "螞蟻",
+  "social": "小群",
+  "attract": 4,
+  "fact": "大型螞蟻，職蟻單態型，工蟻體長12.5–15.0mm。",
+  "spawn": []
+ },
+ {
+  "id": "pristomyrmex_punctatus",
+  "name": "堅硬雙針家蟻",
+  "nameEn": "",
+  "latin": "Pristomyrmex punctatus",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "conservation": "",
+  "model": null,
+  "body": {
+   "color": "#8a8a88",
+   "accent": "#7a5a3e",
+   "type": "insect",
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "螞蟻",
+  "social": "小群",
+  "attract": 4,
+  "fact": "中小型螞蟻，職蟻單態型，工蟻體長3.1–3.2mm。",
+  "spawn": []
+ },
+ {
+  "id": "common_emperor",
+  "name": "麻斑晏蜓",
+  "nameEn": "Common Emperor",
+  "latin": "Anax panybeus",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "legendary",
+  "conservation": "極危 CR",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#1d1c1e",
+   "type": "insect",
+   "wings": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 14,
+  "fact": "腹長63-68 mm，後翅長50-53 mm。",
+  "spawn": []
+ },
+ {
+  "id": "oriental_scarlet",
+  "name": "猩紅蜻蜓",
+  "nameEn": "Oriental Scarlet",
+  "latin": "Crocothemis servilla servilla",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "legendary",
+  "conservation": "極危 CR",
+  "model": null,
+  "body": {
+   "color": "#c8402a",
+   "accent": "#1d1c1e",
+   "type": "insect",
+   "wings": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 14,
+  "fact": "腹長27-33 mm，後翅長32-37mm。",
+  "spawn": []
+ },
+ {
+  "id": "red_percher",
+  "name": "善變蜻蜓",
+  "nameEn": "Red Percher",
+  "latin": "Neurothemis ramburii ramburii",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "legendary",
+  "conservation": "極危 CR",
+  "model": null,
+  "body": {
+   "color": "#c8402a",
+   "accent": "#7a5a3e",
+   "type": "insect",
+   "wings": true,
+   "size": 0.5
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 14,
+  "fact": "善變蜻蜓成蟲體長約3.4~4.2 公分。",
+  "spawn": []
+ },
+ {
+  "id": "barbary_sheep_aoudad",
+  "name": "北非髯羊",
+  "nameEn": "Barbary Sheep / Aoudad",
+  "latin": "Ammotragus lervia",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#7a5a3e",
+   "type": "quad",
+   "horns": true,
+   "longLegs": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   10,
+   38
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 9,
+  "fact": "毛色為黃褐色偏紅色，耳內、臉頰、腹側及四肢內側為白色，雄羊脖子下面由喉部一直到前腿有長而柔軟的鬃毛，雌雄均有角，雄性的角先向外長，再向內偏轉…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "white_rhino",
+  "name": "白犀牛",
+  "nameEn": "White Rhinoceros,Square-Lipped Rhinoceros",
+  "latin": "Ceratotherium simum",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "rare",
+  "conservation": "接近受威脅 NT",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 2.2,
+   "color": "#9a9694",
+   "accent": "#9a9694",
+   "bulky": true,
+   "horn": true
+  },
+  "tempRange": [
+   10,
+   38
+  ],
+  "diet": "草",
+  "social": "小群",
+  "attract": 14,
+  "fact": "體色由黃棕色到灰色，耳朵邊緣與尾巴有剛毛，其餘部分則無毛，上唇為方形。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "black_and_white_ruffed_lemur_variegated_lemur",
+  "name": "白頸狐猴",
+  "nameEn": "Black-and-white ruffed Lemur,Variegated Lemur",
+  "latin": "Varecia variegata",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "legendary",
+  "conservation": "極危 CR",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#1d1c1e",
+   "type": "primate",
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   10,
+   38
+  ],
+  "diet": "果實",
+  "social": "群居",
+  "attract": 16,
+  "fact": "皮毛長而柔軟，兩耳由長而濃密的白色毛髮遮蓋，毛的顏色變化很大，以黑色為主，四肢、背部及頭部有白色的斑紋，因而名為\"白頸\"。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "common_eland",
+  "name": "伊蘭羚羊",
+  "nameEn": "Common Eland",
+  "latin": "Taurotragus oryx",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.6,
+   "color": "#c4a27a",
+   "accent": "#c4a27a",
+   "horns": true,
+   "bulky": true
+  },
+  "tempRange": [
+   5,
+   40
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 7,
+  "fact": "雄、雌個體差異大，雌羚體色棕褐色帶有垂直白色條紋的外衣，喉部肉垂不明顯；雄羚羊額頭上有一叢深色毛，體色較深帶藍灰色調，年齡越大顏色越灰暗，白…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "olive_baboon",
+  "name": "東非狒狒",
+  "nameEn": "Olive Baboon",
+  "latin": "Papio anubis",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 0.9,
+   "color": "#7a7458",
+   "accent": "#d9726a",
+   "tail": true
+  },
+  "tempRange": [
+   5,
+   38
+  ],
+  "diet": "雜食",
+  "social": "群居",
+  "attract": 7,
+  "fact": "毛色為橄欖色，臉部黑色無毛，雄性的頸部及肩膀的毛較長，也比較強壯，口鼻部延長，有點像狗，尾巴成倒U形。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "lowland_gorilla",
+  "name": "西部低地大猩猩",
+  "nameEn": "Gorilla",
+  "latin": "Gorilla gorilla",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "legendary",
+  "conservation": "極危 CR",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 1.6,
+   "color": "#2a2828",
+   "accent": "#4a4848",
+   "big": true
+  },
+  "tempRange": [
+   18,
+   32
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 16,
+  "fact": "臉部沒有毛鬚。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "african_elephant",
+  "name": "非洲象",
+  "nameEn": "African Elephant",
+  "latin": "Loxodonta africana",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 2.9,
+   "color": "#8a8584",
+   "accent": "#8a8584",
+   "trunk": true,
+   "bulky": true,
+   "ears": true,
+   "tusks": true
+  },
+  "tempRange": [
+   10,
+   40
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 16,
+  "fact": "頭大脖子短，身軀龐大，四肢長呈圓柱狀，腳短而平，腳底有用來支撐身軀重量的彈性組織，尾巴末端有蓬鬆的毛。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "lion",
+  "name": "非洲獅",
+  "nameEn": "Lion",
+  "latin": "Panthera leo",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#7a5a3e",
+   "type": "quad",
+   "tail": true,
+   "mane": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   10,
+   38
+  ],
+  "diet": "肉",
+  "social": "獨居",
+  "attract": 9,
+  "fact": "公獅體型比母獅大。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "chapman_zebra",
+  "name": "查普曼斑馬",
+  "nameEn": "Chapman's zebra",
+  "latin": "Equus burchelli antiquorum",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "rare",
+  "conservation": "接近受威脅 NT",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.3,
+   "color": "#f2efe6",
+   "accent": "#1d1c1e",
+   "stripes": true,
+   "longLegs": true
+  },
+  "tempRange": [
+   5,
+   40
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 9,
+  "fact": "全身都是黑白相間的條紋，但是變異較大，有些黑色條紋較粗，也有些白色條紋較粗，較粗的白色條紋中會有淺色像陰影般的條紋，耳朵較短。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "patas_monkey",
+  "name": "紅猴",
+  "nameEn": "Patas Monkey",
+  "latin": "Erythrocebus patas",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#c8402a",
+   "accent": "#7a5a3e",
+   "type": "primate",
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   10,
+   38
+  ],
+  "diet": "螞蟻",
+  "social": "群居",
+  "attract": 6,
+  "fact": "雌猴體型只有雄猴的一半。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "bongo",
+  "name": "山地斑哥條紋羚",
+  "nameEn": "Bongo",
+  "latin": "Tragelaphus eurycerus",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "rare",
+  "conservation": "接近受威脅 NT",
+  "model": null,
+  "body": {
+   "color": "#c8402a",
+   "accent": "#1d1c1e",
+   "type": "quad",
+   "horns": true,
+   "longLegs": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   10,
+   38
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 9,
+  "fact": "短毛，由肩部到臀部有豎立的鬃毛，長而蓬鬆的尾巴。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "spotted_hyena",
+  "name": "斑點鬣狗",
+  "nameEn": "Spotted Hyena",
+  "latin": "Crocuta crocuta",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#7a5a3e",
+   "type": "quad",
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   10,
+   38
+  ],
+  "diet": "肉",
+  "social": "群居",
+  "attract": 6,
+  "fact": "身形像大型的鬥牛犬，口鼻處大而黑。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "chimpanzee",
+  "name": "黑猩猩",
+  "nameEn": "Chimpanzee",
+  "latin": "Pan troglodytes",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#7a5a3e",
+   "type": "primate",
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   10,
+   38
+  ],
+  "diet": "螞蟻",
+  "social": "群居",
+  "attract": 12,
+  "fact": "雌性體型較雄性略小，臉部為黑色無毛鬚，眉脊隆起。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "giraffe",
+  "name": "網紋長頸鹿",
+  "nameEn": "Giraffe,Somali giraffe",
+  "latin": "Giraffa camelopardalis reticulata",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.6,
+   "color": "#e0a85a",
+   "accent": "#7a4a28",
+   "neck": 2.2,
+   "longLegs": true,
+   "spots": true
+  },
+  "tempRange": [
+   10,
+   40
+  ],
+  "diet": "樹葉",
+  "social": "群居",
+  "attract": 14,
+  "fact": "在淡黃的底色上，有棕色的大小形狀不同的斑塊，每一個種或亞種都有不同形狀的斑紋，腹部或小腿的顏色比較淡，沒有斑紋，尾巴蓬鬆，頭部有1對角，舌長…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "brown_lemur",
+  "name": "褐狐猴",
+  "nameEn": "Brown Lemur",
+  "latin": "Eulemur fulvus",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "rare",
+  "conservation": "接近受威脅 NT",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#8a8a88",
+   "type": "primate",
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   10,
+   38
+  ],
+  "diet": "昆蟲",
+  "social": "群居",
+  "attract": 9,
+  "fact": "背側的毛色為棕灰色，腹側則是灰白色，尾巴的顏色比較深，臉部略黑，眼睛的上方有較淡的斑紋，臉部周圍均有毛鬚。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "ostrich",
+  "name": "鴕鳥",
+  "nameEn": "Ostrich",
+  "latin": "Struthio camelus",
+  "category": "bird",
+  "zone": "非洲動物區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#e8a0a8",
+   "accent": "#c8402a",
+   "type": "bird",
+   "ratite": true,
+   "size": 1.6
+  },
+  "tempRange": [
+   10,
+   38
+  ],
+  "diet": "種子",
+  "social": "獨居",
+  "attract": 4,
+  "fact": "大形走禽。頭部、頸部上三分之二無毛，身體兩側及大腿裸露。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "ring_tailed_lemur",
+  "name": "環尾狐猴",
+  "nameEn": "Ring-tailed Lemur",
+  "latin": "Lemur catta",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 0.5,
+   "color": "#a8a4a0",
+   "accent": "#1d1c1e",
+   "tail": true,
+   "ringTail": true
+  },
+  "tempRange": [
+   12,
+   35
+  ],
+  "diet": "果實",
+  "social": "群居",
+  "attract": 9,
+  "fact": "以其醒目的黑白相間長尾聞名，背部的毛色為灰至棕色，腹部為白色，白色的臉部有深棕色三角形區塊於眼睛及白耳，公狐猴在腕處有類似鳥類距的指甲。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "pygmy_hippo",
+  "name": "侏儒河馬",
+  "nameEn": "Pygmy Hippopotamus",
+  "latin": "Choeropsis liberiensis",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.1,
+   "color": "#5a4a4e",
+   "accent": "#5a4a4e",
+   "bulky": true,
+   "short": true
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "草",
+  "social": "獨居",
+  "attract": 11,
+  "fact": "寬吻，大嘴，身體呈短筒狀，腿短而粗，鼻孔在吻部上端，且可以關閉除了嘴唇及尾巴有少許的剛毛之外，全身無毛，體色為灰黑色，略帶綠色，腹部為灰白色…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "gemsbok",
+  "name": "東非劍羚",
+  "nameEn": "East African Oryx",
+  "latin": "Oryx beisa",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "rare",
+  "conservation": "接近受威脅 NT",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.3,
+   "color": "#b8aea2",
+   "accent": "#1d1c1e",
+   "horns": true,
+   "longLegs": true
+  },
+  "tempRange": [
+   5,
+   42
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 7,
+  "fact": "體色為灰棕底色，腹部白色，臀部、腿部黑色，身上有明顯的棕色或黑色斑紋；雌雄頭上都長角(雌羚羊角較細)，角長而直由眼後筆直長出。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "hippo",
+  "name": "河馬",
+  "nameEn": "Hippopotamus",
+  "latin": "Hippopotamus amphibius",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 2.0,
+   "color": "#7a6a6e",
+   "accent": "#7a6a6e",
+   "bulky": true,
+   "short": true
+  },
+  "tempRange": [
+   15,
+   35
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 12,
+  "fact": "寬吻，大嘴，身體呈短筒狀，腿短而粗，前後隻均為四趾，鼻孔在吻部上端，且可以關閉。體表毛短而稀疏，膚色為灰棕色，腹部略帶粉紅色，眼睛突出，耳朵…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "yellow_crested_cockatoo",
+  "name": "小葵花鳳頭鸚鵡",
+  "nameEn": "Yellow-crested Cockatoo",
+  "latin": "Cacatua sulphurea",
+  "category": "bird",
+  "zone": "熱帶雨林室內館",
+  "rarity": "legendary",
+  "conservation": "極危CR",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#e8c040",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 14,
+  "fact": "體長33公分。成鳥整體羽色白色。耳羽鮮黃色。翼下飛羽及尾羽有濃黃色調。黃色窄羽冠向前彎曲。裸露的眼圈乳白色。嘴灰黑色。雄鳥瞳孔暗褐色，雌鳥淺…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "brahminy_kite",
+  "name": "栗鳶",
+  "nameEn": "Brahminy Kite",
+  "latin": "Haliastur indus",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#1d1c1e",
+   "type": "bird",
+   "size": 0.45
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長約50公分，體重約500公克，翼展寬約100公分。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "crested_serpent_eagle",
+  "name": "大冠鷲",
+  "nameEn": "Crested Serpent Eagle",
+  "latin": "Spilornis cheela",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 0.9,
+   "color": "#5a4a3e",
+   "accent": "#f2c230"
+  },
+  "tempRange": [
+   5,
+   32
+  ],
+  "diet": "蛇",
+  "social": "獨居",
+  "attract": 9,
+  "fact": "大型猛禽，全身為黑褐色；頭頂有黑色的羽冠，其上有白色的斑紋；眼部、喙的基部及腳均為黃色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "flamingo",
+  "name": "大紅鶴",
+  "nameEn": "Greater flamingo",
+  "latin": "Phoenicopterus roseus",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 1.0,
+   "color": "#f2a0a8",
+   "accent": "#1d1c1e",
+   "longLegs": true,
+   "neck": true
+  },
+  "tempRange": [
+   5,
+   38
+  ],
+  "diet": "藻類",
+  "social": "群居",
+  "attract": 9,
+  "fact": "大紅鶴是最大型的紅鶴。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "toco_toucan",
+  "name": "大巨嘴鳥",
+  "nameEn": "Toco Toucan",
+  "latin": "Ramphastos toco",
+  "category": "bird",
+  "zone": "熱帶雨林室內館",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#f2efe6",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "螞蟻",
+  "social": "小群",
+  "attract": 4,
+  "fact": "是最大型的巨嘴鳥，身體的羽色主要為黑色，頸胸部及尾上覆羽白色，尾下覆羽紅色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "great_curassow",
+  "name": "大寶冠鳥",
+  "nameEn": "Great Curassow",
+  "latin": "Crax rubra",
+  "category": "bird",
+  "zone": "熱帶雨林室內館",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#1d1c1e",
+   "type": "bird",
+   "longTail": true,
+   "size": 0.7
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 7,
+  "fact": "雄鳥體長78-92公分，體重3600-4800公克。羽冠非常明顯。嘴上的顯著黃色瘤狀物及羽冠，使得本種的雄鳥可以與黑寶冠鳥(Crax alb…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "red_crowned_crane",
+  "name": "丹頂鶴",
+  "nameEn": "Red-crowned crane",
+  "latin": "Grus japonensis",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 1.2,
+   "color": "#f2efe6",
+   "accent": "#d83a2a",
+   "longLegs": true,
+   "neck": true
+  },
+  "tempRange": [
+   -20,
+   30
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 12,
+  "fact": "全身雪白，只有次級飛羽內側和三級飛羽是黑色，翅膀收起來時覆蓋在短而白色的尾羽上，所以常被誤認為尾羽是黑色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "jungle_crow",
+  "name": "巨嘴鴉",
+  "nameEn": "Jungle Crow",
+  "latin": "Corvus macrorhynchos",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#7a5a3e",
+   "type": "bird",
+   "size": 0.45
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "獨居",
+  "attract": 4,
+  "fact": "體長45~59公分，體重450~1000公克。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "white_vented_myna",
+  "name": "白尾八哥",
+  "nameEn": "White-vented Myna",
+  "latin": "Acridotheres javanicus",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#e8c040",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 7,
+  "fact": "體長25公分。身體幾乎是黑色，具有明顯的羽冠。嘴黃色。肛門處及尾端白色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "white_naped_crane",
+  "name": "白枕鶴",
+  "nameEn": "White-naped Crane",
+  "latin": "Grus vipio",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "color": "#8a8a88",
+   "accent": "#f2efe6",
+   "type": "bird",
+   "longLegs": true,
+   "neck": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 7,
+  "fact": "身體石板灰色有白喉，明顯的垂直白色條紋，從頭冠向下至頸背。瞳孔橘紅色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "white_cockatoo",
+  "name": "白鳳頭鸚鵡",
+  "nameEn": "White Cockatoo",
+  "latin": "Cacatua alba",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#e8c040",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "群居",
+  "attract": 10,
+  "fact": "體長約46公分。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "hooded_crane",
+  "name": "白頭鶴",
+  "nameEn": "Hooded Crane",
+  "latin": "Grus monacha",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "color": "#8a8a88",
+   "accent": "#c8402a",
+   "type": "bird",
+   "longLegs": true,
+   "neck": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "群居",
+  "attract": 7,
+  "fact": "身體灰色，頭除了在眼上的前額有紅色的皮膚外白色。瞳孔橘紅至紅色。類似白枕鶴，但體型較小，頸部全白。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "pelican",
+  "name": "白鵜鶘",
+  "nameEn": "Great White Pelican",
+  "latin": "Pelecanus onocrotalus",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 1.2,
+   "color": "#f2efe6",
+   "accent": "#f2c230"
+  },
+  "tempRange": [
+   0,
+   35
+  ],
+  "diet": "魚",
+  "social": "群居",
+  "attract": 6,
+  "fact": "長嘴，腿粉紅色，飛羽從下面看全黑。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "ashy_wood_pigeon",
+  "name": "灰林鴿",
+  "nameEn": "Ashy Wood Pigeon",
+  "latin": "Columba pulchricollis",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#8a8a88",
+   "accent": "#1d1c1e",
+   "type": "bird",
+   "size": 0.45
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "果實",
+  "social": "群居",
+  "attract": 4,
+  "fact": "體長31-36公分，重330公克。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "gray_jungle_fowl",
+  "name": "灰野雞",
+  "nameEn": "Gray jungle fowl",
+  "latin": "Gallus sonneratii",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#6a7a8a",
+   "accent": "#6a7a8a",
+   "type": "bird",
+   "longTail": true,
+   "size": 0.45
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "竹",
+  "social": "小群",
+  "attract": 4,
+  "fact": "雄鳥體長70~80公分,體重790~1136公克。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "grey_crowned_crane",
+  "name": "灰頸冠鶴",
+  "nameEn": "Grey crowned crane",
+  "latin": "Balearica regulorum",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "color": "#8a8a88",
+   "accent": "#2a5ad8",
+   "type": "bird",
+   "longLegs": true,
+   "neck": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 10,
+  "fact": "瞳孔淺灰至淺藍色。與黑頸冠鶴同有黃色羽冠，不同處在頸淺灰色及紅色喉部肉垂較大，白色頰斑僅在頂部才紅色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "common_crane",
+  "name": "灰鶴",
+  "nameEn": "Common Crane",
+  "latin": "Grus grus",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#8a8a88",
+   "accent": "#1d1c1e",
+   "type": "bird",
+   "longLegs": true,
+   "neck": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 4,
+  "fact": "身體石板灰色，有黑色初級飛羽，頭暗色有白色條紋從眼後延伸至後頸。頭冠有紅色皮膚斑。瞳孔黃至橘紅色。類似黑頸鶴，但頭上有白色的羽毛延伸。幼鳥的…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "bamboo_partridge",
+  "name": "竹雞",
+  "nameEn": "Bamboo Partridge",
+  "latin": "Bambusicola thoracica",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#7a5a3e",
+   "type": "bird",
+   "longTail": true,
+   "size": 0.45
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長31公分。200-342公克。頭部的圖案明顯。雌鳥通常沒有距。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "eclectus_parrot",
+  "name": "折衷鸚鵡",
+  "nameEn": "Eclectus Parrot",
+  "latin": "Eclectus roratus",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#c8402a",
+   "accent": "#3a8a4a",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 4,
+  "fact": "雌鳥為鮮紅色的羽色，雄鳥則為亮眼的綠色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "leptotilos_crumeniferus",
+  "name": "禿鸛",
+  "nameEn": "",
+  "latin": "Leptotilos crumeniferus",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#e8a0a8",
+   "accent": "#c8402a",
+   "type": "bird",
+   "longLegs": true,
+   "neck": true,
+   "size": 0.83
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長可達150公分，體重約7公斤。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "sarus_crane",
+  "name": "赤頸鶴",
+  "nameEn": "Sarus Crane",
+  "latin": "Grus antigone",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "color": "#c8402a",
+   "accent": "#8a8a88",
+   "type": "bird",
+   "longLegs": true,
+   "neck": true,
+   "size": 0.66
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 7,
+  "fact": "是所有會飛行的鳥類中身高最高的，幾乎和成人一樣高。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "oriental_turtle_dove",
+  "name": "金背鳩",
+  "nameEn": "Oriental Turtle-dove",
+  "latin": "Steptopelia orientalis orii",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#f2efe6",
+   "type": "bird",
+   "size": 0.45
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "竹",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長33-35公分。體重165-274公克。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "golden_pheasant",
+  "name": "金雞",
+  "nameEn": "Golden Pheasant",
+  "latin": "Chrysolophus pictus",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#b8bcc0",
+   "accent": "#e8c040",
+   "type": "bird",
+   "longTail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "竹",
+  "social": "小群",
+  "attract": 4,
+  "fact": "雌鳥與銀雞的不同在於腿黃色、眼窩皮膚相對於羽色有金色調、尾羽較尖。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "moorhen",
+  "name": "紅冠水雞",
+  "nameEn": "Moorhen",
+  "latin": "Gallinula chloropus",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#c8402a",
+   "type": "bird",
+   "longLegs": true,
+   "neck": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 4,
+  "fact": "全身羽毛呈黑色，嘴紅色，嘴先端為黃色，腳為黃綠色，體側有一列白斑。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "red_turtle_dove",
+  "name": "紅鳩",
+  "nameEn": "Red Turtle Dove",
+  "latin": "Streptopelia tranquebarica",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#f2efe6",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "種子",
+  "social": "小群",
+  "attract": 4,
+  "fact": "後頸有一黑色頸環，尾深色末梢白色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "rose_ringed_parakeet",
+  "name": "紅領綠鸚鵡",
+  "nameEn": "Rose-ringed Parakeet",
+  "latin": "Psittacula krameri",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#6a7a8a",
+   "accent": "#6a7a8a",
+   "type": "bird",
+   "size": 0.45
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長37公分~43公分，體重95~143公克。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "scarlet_ibis_b",
+  "name": "紅",
+  "nameEn": "Scarlet Ibis",
+  "latin": "Eudocimus ruber",
+  "category": "bird",
+  "zone": "熱帶雨林室內館",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#e8a0a8",
+   "type": "bird",
+   "longLegs": true,
+   "neck": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 4,
+  "fact": "最外側的3根初級飛羽黑色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "american_wood_duck",
+  "name": "美洲木鴨",
+  "nameEn": "American Wood Duck",
+  "latin": "Aix sponsa",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#7a5a3e",
+   "type": "bird",
+   "size": 0.45
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長47-54公分，重450公克。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "egyptian_goose",
+  "name": "埃及雁",
+  "nameEn": "Egyptian Goose",
+  "latin": "Alopochen aegyptiacus",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#3a8a4a",
+   "type": "bird",
+   "size": 0.53
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長71-73公分，重1500-2250公克。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "sacred_ibis",
+  "name": "埃及聖",
+  "nameEn": "Sacred Ibis",
+  "latin": "Threskiornis aethiopicus",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#f2efe6",
+   "type": "bird",
+   "longLegs": true,
+   "neck": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   10,
+   38
+  ],
+  "diet": "魚",
+  "social": "群居",
+  "attract": 4,
+  "fact": "次級飛羽的羽端為黑色。有很特別的嘴型，又長又黑，又彎又鉤是本屬鳥類中嘴巴最厚的一種。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "common_myna",
+  "name": "家八哥",
+  "nameEn": "Common Myna",
+  "latin": "Acridotheres tristis",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#7a5a3e",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 4,
+  "fact": "頭、頸及上胸黑色，身體葡萄褐色，眼後有一裸露的黃色皮膚。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "pink_backed_pelican",
+  "name": "粉紅背鵜鶘",
+  "nameEn": "Pink-backed Pelican",
+  "latin": "Pelecanus rufescens",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#8a8a88",
+   "accent": "#e8a0a8",
+   "type": "bird",
+   "longLegs": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 4,
+  "fact": "色淺灰色，在背上帶有淺粉紅色。腿的顏色有相當的變化，從灰色至黃色到橘紅色都有。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "eolophus_roseicapilla",
+  "name": "粉紅鳳頭鸚鵡",
+  "nameEn": "",
+  "latin": "Eolophus roseicapilla",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#c8402a",
+   "type": "bird",
+   "size": 0.45
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "群居",
+  "attract": 4,
+  "fact": "體長約35公分，體重約300公克。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "chilean_flamingo",
+  "name": "智利紅鶴",
+  "nameEn": "Chilean Flamingo",
+  "latin": "Phoenicopterus chilensis",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "rare",
+  "conservation": "接近受威脅 NT",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#8a8a88",
+   "type": "bird",
+   "longLegs": true,
+   "neck": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 7,
+  "fact": "淺黃灰色的腿帶有明顯的紅色「關節」及足。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "palm_cockatoo",
+  "name": "棕櫚鳳頭鸚鵡",
+  "nameEn": "Palm Cockatoo",
+  "latin": "Probosciger aterrimus",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#c8402a",
+   "type": "bird",
+   "size": 0.45
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長55-60公分；體重550-1000公克。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "violet_turaco",
+  "name": "紫蕉鵑",
+  "nameEn": "Violet Turaco",
+  "latin": "Musophaga violacea",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#6a3a9a",
+   "accent": "#1d1c1e",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長50公分。身體深紫黑色，但頭及頸緋紅色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "tawny_fish_owl",
+  "name": "黃魚鴞",
+  "nameEn": "Tawny fish owl",
+  "latin": "Ketupa flavipes",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#7a5a3e",
+   "type": "bird",
+   "size": 0.53
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長48~55公分，體重1500~2450公克。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "blue_and_yellow_macaw",
+  "name": "黃腹藍琉璃金剛鸚鵡",
+  "nameEn": "Blue-and-Yellow Macaw",
+  "latin": "Ara ararauna",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#2a5ad8",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長86公分。成鳥前額及前冠綠色，身體上面其餘部份及尾上鮮藍色。裸露的眼及頰奶油白色。頰上有淺綠黑色的羽毛線狀交錯。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "yellow_headed_amazon",
+  "name": "黃頭亞馬遜鸚鵡",
+  "nameEn": "Yellow-headed Amazon",
+  "latin": "Amazona oratrix",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#e8c040",
+   "type": "bird",
+   "size": 0.45
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 10,
+  "fact": "體長約35公分，重約400公克，整體綠色，身體下部偏淺黃色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "sp_208d1c49",
+  "name": "黃頸亞馬遜鸚鵡",
+  "nameEn": "",
+  "latin": "",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "color": "#6a7a8a",
+   "accent": "#6a7a8a",
+   "type": "bird",
+   "size": 0.45
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 10,
+  "fact": "體長約35公分，體重約500公克。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "mikado_pheasant",
+  "name": "黑長尾雉",
+  "nameEn": "Mikado Pheasant",
+  "latin": "Syrmaticus Mikado",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "rare",
+  "conservation": "接近受威脅 NT",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#1d1c1e",
+   "type": "bird",
+   "longTail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 7,
+  "fact": "雄鳥非常獨特，在翼上及尾上覆羽有各種不同的白斑。下背及腰深黑色。 雌鳥類似黑頸長尾雉的雌鳥，但羽色較暗且白及淺黑色的斑較明顯。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "black_faced_spoonbill",
+  "name": "黑面琵鷺",
+  "nameEn": "Black-faced Spoonbill",
+  "latin": "Platalea minor",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 0.9,
+   "color": "#f2efe6",
+   "accent": "#1d1c1e",
+   "longLegs": true
+  },
+  "tempRange": [
+   5,
+   34
+  ],
+  "diet": "魚",
+  "social": "群居",
+  "attract": 11,
+  "fact": "體長約70公分。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "pied_imperial_pigeon",
+  "name": "黑袖鴿",
+  "nameEn": "Pied Imperial Pigeon",
+  "latin": "Ducula bicolor",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#e8c040",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "果實",
+  "social": "群居",
+  "attract": 4,
+  "fact": "全身白色帶有些許黃色調，除了初級飛羽、初級覆羽、外側次級飛羽及尾羽為黑色外。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "black_necked_swan",
+  "name": "黑頸天鵝",
+  "nameEn": "Black-necked Swan",
+  "latin": "Cygnus melanocoryphus",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#c8402a",
+   "type": "bird",
+   "size": 0.7
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體型最小的天鵝，102~104公分，體重3600～6700公克。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "black_crowned_crane",
+  "name": "黑頸冠鶴",
+  "nameEn": "Black Crowned Crane",
+  "latin": "Balearica pavonina",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "color": "#8a8a88",
+   "accent": "#2a5ad8",
+   "type": "bird",
+   "longLegs": true,
+   "neck": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 7,
+  "fact": "瞳孔淺灰至淺藍色。與灰頸冠鶴的不同在頸部較暗色、肉垂較小及頰斑的下半部紅色。幼鳥整體灰色，有褐色的頭冠及頸背，身體灰至褐色，瞳孔褐色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "cockatoo",
+  "name": "葵花鳳頭鸚鵡",
+  "nameEn": "Sulpher-crested Cockatoo",
+  "latin": "Cacatua galerita",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 0.6,
+   "color": "#f2efe6",
+   "accent": "#f2d030"
+  },
+  "tempRange": [
+   10,
+   35
+  ],
+  "diet": "種子",
+  "social": "群居",
+  "attract": 6,
+  "fact": "全身羽毛為白色或淡粉紅色，頰、喉部、尾巴及翅膀的內側為黃色；頭冠為黃色，羽毛向前彎曲；喙為灰色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "hodgson_s_hawk_eagle",
+  "name": "熊鷹",
+  "nameEn": "Hodgson's Hawk Eagle",
+  "latin": "Nisaetus nipalensis",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#f2efe6",
+   "type": "bird",
+   "size": 0.56
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "竹",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長67-86公分，重1800-3500公克，翼展寬130-165公分。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "green_junglefowl",
+  "name": "綠野雞",
+  "nameEn": "Green Junglefowl",
+  "latin": "Gallus varius",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#3a8a4a",
+   "type": "bird",
+   "longTail": true,
+   "size": 0.45
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 4,
+  "fact": "雄鳥體長65~75公分，體重672~1450公克，雌鳥體長40~46公分，體重485~1050公克。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "green_touraco",
+  "name": "綠絲冠僧帽鳥",
+  "nameEn": "Green Touraco",
+  "latin": "Tauraco persa",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#1d1c1e",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "螞蟻",
+  "social": "小群",
+  "attract": 4,
+  "fact": "成鳥的頭、直立的羽冠、頸、胸及頸背草綠色。下背、腰及尾暗淺黑色帶有紫藍色金屬光澤。腹部及尾下覆羽暗黑色。眼先有白斑，眼下有細黑線。眼褐色有紅…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "caloenas_nicobarica",
+  "name": "綠簑鴿",
+  "nameEn": "",
+  "latin": "Caloenas nicobarica",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "rare",
+  "conservation": "接近受威脅 NT",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#2a5ad8",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 7,
+  "fact": "體型粗壯及暗色，在頸部有獨特似雞類的下垂簑羽，身體上部為發亮的暗綠或青銅綠色。身體下面暗綠或暗藍色。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "striated_heron",
+  "name": "綠簑鷺",
+  "nameEn": "Striated Heron",
+  "latin": "Butorides striatus",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#3a8a4a",
+   "type": "bird",
+   "longLegs": true,
+   "neck": true,
+   "size": 0.45
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "魚",
+  "social": "獨居",
+  "attract": 4,
+  "fact": "體長35-48公分，體重135-250公克。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "mallard",
+  "name": "綠頭鴨",
+  "nameEn": "Mallard",
+  "latin": "Anas platyrhynchos",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#2a5ad8",
+   "type": "bird",
+   "size": 0.45
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "種子",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長50-65公分，重750-1575公克。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "military_macaw",
+  "name": "綠翼金剛鸚鵡",
+  "nameEn": "Military Macaw",
+  "latin": "Ara chloroptera",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#2a5ad8",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長70公分。成鳥整體羽色綠色，在背及翼上稍帶橄欖色。頭較身體淺綠。後頸有不明顯的淺藍色調。前額及裸露的眼先紅色。裸露的臉部區白色有粉紅肉色…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "victoria_crowned_pigeon",
+  "name": "維多利亞冠鴿",
+  "nameEn": "Victoria Crowned Pigeon",
+  "latin": "Goura victoria",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "rare",
+  "conservation": "接近受威脅 NT",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#8a8a88",
+   "type": "bird",
+   "size": 0.62
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 7,
+  "fact": "體長66-74公分，重2384公克。有2個亞種。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "emerald_dove",
+  "name": "翠翼鳩",
+  "nameEn": "Emerald Dove",
+  "latin": "Chacophalps indica",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#c8402a",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "螞蟻",
+  "social": "小群",
+  "attract": 4,
+  "fact": "有9個亞種。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "taiwan_barbet",
+  "name": "臺灣擬啄木",
+  "nameEn": "Taiwan Barbet",
+  "latin": "Megalaima nuchalis",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#6a7a8a",
+   "accent": "#6a7a8a",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 4,
+  "fact": "臺灣擬啄木舊名五色鳥，為臺灣特有的鳥類。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "taiwan_blue_magpie",
+  "name": "臺灣藍鵲",
+  "nameEn": "Taiwan Blue Magpie",
+  "latin": "Uroxissa caerulea",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 0.7,
+   "color": "#2a5ad8",
+   "accent": "#d83a2a",
+   "longTail": true
+  },
+  "tempRange": [
+   0,
+   30
+  ],
+  "diet": "雜食",
+  "social": "群居",
+  "attract": 10,
+  "fact": "是臺灣特有種鳥類。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "brown_wood_owl",
+  "name": "褐林鴞",
+  "nameEn": "Brown Wood Owl",
+  "latin": "Strix leptogrammica caligata",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#1d1c1e",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 4,
+  "fact": "背面由額、頭、背至局部為深赤褐色，肩羽上有淡色橫斑，腰部、尾上覆羽及尾羽褐色",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "crested_pigeon",
+  "name": "澳洲冠鳩",
+  "nameEn": "Crested Pigeon",
+  "latin": "Ocyphaps lophotes",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#8a8a88",
+   "accent": "#1d1c1e",
+   "type": "bird",
+   "size": 0.45
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長31-36公分；150-250公克。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "demoiselle_crane",
+  "name": "簑羽鶴",
+  "nameEn": "Demoiselle Crane",
+  "latin": "Anthropoides virgo",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#c8402a",
+   "accent": "#1d1c1e",
+   "type": "bird",
+   "longLegs": true,
+   "neck": true,
+   "size": 0.59
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長90公分，重2000-3000公克，翼展寬150-170公分。最小型的鶴。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "mandarin_duck",
+  "name": "鴛鴦",
+  "nameEn": "Mandarin Duck",
+  "latin": "Aix galericulata",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 0.5,
+   "color": "#c86a2a",
+   "accent": "#2a6a5a"
+  },
+  "tempRange": [
+   -5,
+   30
+  ],
+  "diet": "雜食",
+  "social": "群居",
+  "attract": 5,
+  "fact": "鴛鴦比起林鴛鴦毛色偏綠、飛羽較沒有藍色光澤及眼周的白斑較小，此外嘴型也不同。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "ring_necked_pheasant",
+  "name": "環頸雉",
+  "nameEn": "Ring-necked Pheasant",
+  "latin": "Phasianus colchicus",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#2a5ad8",
+   "type": "bird",
+   "longTail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 4,
+  "fact": "雄鳥：頭頸部為暗綠色；頭頂為藍褐色；頸部由側面到背面有明顯的白色環帶；背部為暗紅褐色，其上有黑色縱斑；胸部為紅褐色，有鱗狀斑紋；尾羽長，為灰…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "common_peafowl",
+  "name": "藍孔雀",
+  "nameEn": "Common Peafowl",
+  "latin": "Pavo cristatus",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#7a5a3e",
+   "type": "bird",
+   "longTail": true,
+   "size": 0.76
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "雄鳥體長約200公分，體重約5公斤，雌鳥體長約100公分，體重約3公斤。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "crowned_pigeon",
+  "name": "藍冠鴿",
+  "nameEn": "Crowned Pigeon",
+  "latin": "Goura cristata",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "color": "#8a8a88",
+   "accent": "#2a5ad8",
+   "type": "bird",
+   "size": 0.56
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 7,
+  "fact": "體長66-75公分。1800-2400公克。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "swinhoe_pheasant",
+  "name": "藍腹鷴",
+  "nameEn": "Swinhoe's Pheasant",
+  "latin": "Lophura swinhoii",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "rare",
+  "conservation": "接近受威脅 NT",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 0.8,
+   "color": "#1d2a5a",
+   "accent": "#d83a2a",
+   "longTail": true
+  },
+  "tempRange": [
+   0,
+   28
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 9,
+  "fact": "為臺灣特有種鳥類。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "blue_fronted_amazon",
+  "name": "藍額亞馬遜鸚鵡",
+  "nameEn": "Blue-fronted Amazon",
+  "latin": "Amazona aestiva",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#8a8a88",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   8,
+   32
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長38-42公分。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "koala",
+  "name": "無尾熊",
+  "nameEn": "Koala",
+  "latin": "Phascolarctos cinereus",
+  "category": "mammal",
+  "zone": "無尾熊館",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 0.6,
+   "color": "#9a9a98",
+   "accent": "#f2efe6",
+   "ears": true
+  },
+  "tempRange": [
+   12,
+   32
+  ],
+  "diet": "尤加利",
+  "social": "獨居",
+  "attract": 14,
+  "fact": "體重:由北到南遞增，生長在南方的體型較大，昆士蘭雄性無尾熊平均體重約6、5公斤(4.2-9.1)，雌熊則為5、1公斤(4.1-7.3)，維多…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "red_panda",
+  "name": "小貓熊",
+  "nameEn": "Red Panda;Lesser Panda",
+  "latin": "Ailurus fulgens",
+  "category": "mammal",
+  "zone": "溫帶動物區",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": "redpanda",
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#c8402a",
+   "type": "quad",
+   "bulky": true,
+   "size": 0.71
+  },
+  "tempRange": [
+   -10,
+   20
+  ],
+  "diet": "竹",
+  "social": "獨居",
+  "attract": 8,
+  "fact": "體長約50-64公分，尾長28-59公分，體重3.7-6.2公斤。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "puma",
+  "name": "山獅",
+  "nameEn": "Puma, Mountain Lion",
+  "latin": "Puma concolor",
+  "category": "mammal",
+  "zone": "溫帶動物區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.3,
+   "color": "#c49a6a",
+   "accent": "#c49a6a",
+   "tail": true
+  },
+  "tempRange": [
+   -15,
+   35
+  ],
+  "diet": "肉",
+  "social": "獨居",
+  "attract": 12,
+  "fact": "雄性體重53- 100公斤、雌性體重29- 64公斤。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "canadian_beaver_american_beaver",
+  "name": "加拿大河狸",
+  "nameEn": "Canadian Beaver, American Beaver",
+  "latin": "Castor canadensis",
+  "category": "mammal",
+  "zone": "溫帶動物區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#8a6a4a",
+   "accent": "#8a6a4a",
+   "type": "quad",
+   "size": 0.95
+  },
+  "tempRange": [
+   -20,
+   25
+  ],
+  "diet": "樹葉",
+  "social": "小群",
+  "attract": 6,
+  "fact": "體種13-32公斤，體長74-90公分、尾長20-35公分。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "gray_wolf",
+  "name": "北美灰狼",
+  "nameEn": "Gray Wolf",
+  "latin": "Canis lupus",
+  "category": "mammal",
+  "zone": "溫帶動物區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#8a8a88",
+   "accent": "#8a8a88",
+   "type": "quad",
+   "tail": true,
+   "ears": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   -20,
+   25
+  ],
+  "diet": "肉",
+  "social": "群居",
+  "attract": 6,
+  "fact": "灰狼是健壯的動物，頭寬、四肢有力，腳大、胸深而窄，視覺、嗅覺、聽覺都非常好，彈跳功夫一流、可立定垂直跳起2.5公尺。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "asiatic_black_bear",
+  "name": "亞洲黑熊",
+  "nameEn": "Asiatic Black Bear",
+  "latin": "Ursus thibetanus",
+  "category": "mammal",
+  "zone": "溫帶動物區",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#1d1c1e",
+   "type": "quad",
+   "bulky": true,
+   "size": 1.27
+  },
+  "tempRange": [
+   -20,
+   25
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 9,
+  "fact": "體長130-190公分，體重65-150公斤；剛出生的黑熊體重約250-400克。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "brown_bear",
+  "name": "阿拉斯加棕熊",
+  "nameEn": "Brown Bear",
+  "latin": "Ursus arctos",
+  "category": "mammal",
+  "zone": "溫帶動物區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#f2efe6",
+   "type": "quad",
+   "bulky": true,
+   "size": 1.4
+  },
+  "tempRange": [
+   -20,
+   25
+  ],
+  "diet": "魚",
+  "social": "獨居",
+  "attract": 6,
+  "fact": "體長約170-280公分，體重則因不同區域、季節與糧食供應而有所不同。成年雄獸約130-780公斤，雌獸約80-250公斤。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "red_eared_slider",
+  "name": "赤耳龜",
+  "nameEn": "Red-eared slider",
+  "latin": "Trachemys scripta elegans",
+  "category": "reptile",
+  "zone": "溫帶動物區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#3a8a4a",
+   "accent": "#e8c040",
+   "type": "reptile",
+   "shell": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   -20,
+   25
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 4,
+  "fact": "綠色皮膚上綴有黃色斑紋，在16個亞種變化很大。（ex：密西西比紅耳龜肋盾上有黃色條紋，眼部後方亦有明顯的黃色大斑點，腹甲亦呈黃色，並具黑色斑…",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "american_bison",
+  "name": "美洲野牛",
+  "nameEn": "American Bison",
+  "latin": "Bison bison",
+  "category": "mammal",
+  "zone": "溫帶動物區",
+  "rarity": "rare",
+  "conservation": "近危NT",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.9,
+   "color": "#4a3424",
+   "accent": "#2a2018",
+   "bulky": true,
+   "hump": true,
+   "horns": true
+  },
+  "tempRange": [
+   -30,
+   30
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 10,
+  "fact": "體重：450~1350㎏；體長：210~350㎝；尾長：50~60㎝；肩高：260~280㎝。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "przewalski_horse",
+  "name": "蒙古野馬",
+  "nameEn": "Przewalski's wild horse",
+  "latin": "Equus przewalskii",
+  "category": "mammal",
+  "zone": "溫帶動物區",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.4,
+   "color": "#c4a06a",
+   "accent": "#3a2c22",
+   "longLegs": true,
+   "mane": true
+  },
+  "tempRange": [
+   -30,
+   35
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 11,
+  "fact": "體長約210公分、尾長約90公分，體重約200-300公斤。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "eurasian_lynx",
+  "name": "歐亞大山貓",
+  "nameEn": "Eurasian lynx",
+  "latin": "Lynx lynx",
+  "category": "mammal",
+  "zone": "溫帶動物區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#8a8a88",
+   "type": "quad",
+   "tail": true,
+   "size": 1.04
+  },
+  "tempRange": [
+   -20,
+   25
+  ],
+  "diet": "肉",
+  "social": "小群",
+  "attract": 6,
+  "fact": "體長85-105公分，尾長20-31公分，重約20-30公斤，通常雄獸體型比雌獸大一些。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "leopard_cat",
+  "name": "石虎",
+  "nameEn": "Leopard Cat",
+  "latin": "Prionailurus bengalensis chinensis",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 0.6,
+   "color": "#b8935a",
+   "accent": "#3a2c22",
+   "tail": true
+  },
+  "tempRange": [
+   5,
+   30
+  ],
+  "diet": "肉",
+  "social": "獨居",
+  "attract": 9,
+  "fact": "體型與家貓雷同。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "formosan_gem_faced_civet",
+  "name": "白鼻心",
+  "nameEn": "Formosan Gem-faced Civet",
+  "latin": "Paguma larvata taivana",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "common",
+  "conservation": "暫無危機(LC)",
+  "model": null,
+  "body": {
+   "color": "#8a8a88",
+   "accent": "#7a5a3e",
+   "type": "quad",
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   5,
+   30
+  ],
+  "diet": "昆蟲",
+  "social": "獨居",
+  "attract": 6,
+  "fact": "體色為灰褐色，從頭頂到鼻中線由一條白線貫穿，被稱為「白鼻心」，眼下及眼上廷至耳下部份各有一塊白斑。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "formosan_pangolin",
+  "name": "臺灣穿山甲",
+  "nameEn": "Formosan Pangolin",
+  "latin": "Manis pentadactyla pentadactyla",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "legendary",
+  "conservation": "極危 CR",
+  "model": null,
+  "body": {
+   "color": "#8a8a88",
+   "accent": "#7a5a3e",
+   "type": "quad",
+   "long": true,
+   "tail": true,
+   "scales": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   5,
+   30
+  ],
+  "diet": "螞蟻",
+  "social": "小群",
+  "attract": 16,
+  "fact": "全世界共8種穿山甲，台灣穿山甲是中華穿山甲三種亞種之一，是台灣唯一鱗甲目動物，屬於特有亞種。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "sika_deer",
+  "name": "梅花鹿",
+  "nameEn": "Formosan Sika Deer",
+  "latin": "Cervus nippon taiouanus",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "common",
+  "conservation": "臺灣特有亞種",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.2,
+   "color": "#a8673a",
+   "accent": "#f2efe6",
+   "antlers": true,
+   "longLegs": true
+  },
+  "tempRange": [
+   0,
+   30
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 6,
+  "fact": "是臺灣三種鹿科動物中體型中等的。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "clouded_leopard",
+  "name": "雲豹",
+  "nameEn": "Clouded leopard",
+  "latin": "Neofelis nebulosa",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "legendary",
+  "conservation": "野外滅絕 EW",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#7a5a3e",
+   "type": "quad",
+   "tail": true,
+   "spots": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   5,
+   30
+  ],
+  "diet": "肉",
+  "social": "獨居",
+  "attract": 16,
+  "fact": "顎銳利，犬齒發達。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "taiwan_serow",
+  "name": "臺灣野山羊",
+  "nameEn": "Formosan serow",
+  "latin": "Capricornis swinhoei",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "rare",
+  "conservation": "(臺灣特有種)保育類野生動物",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.0,
+   "color": "#4a3f36",
+   "accent": "#4a3f36",
+   "horns": true
+  },
+  "tempRange": [
+   -5,
+   25
+  ],
+  "diet": "草",
+  "social": "獨居",
+  "attract": 6,
+  "fact": "身體毛色為深褐色，背頸中央一帶為黑色，腮、喉部和上頸為淺黃褐色。尾短。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "wild_boar",
+  "name": "臺灣野豬",
+  "nameEn": "Formosan Wild Boar",
+  "latin": "Sus scrofa taivanus",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "rare",
+  "conservation": "(臺灣特有種)保育類野生動物",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.0,
+   "color": "#3d3530",
+   "accent": "#3d3530",
+   "bulky": true
+  },
+  "tempRange": [
+   -5,
+   32
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "fact": "體長93-180公分，成體為黑灰色，身體遍佈剛毛，頸背部及腰部的毛較長；體型圓胖成水桶狀。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "formosan_black_bear",
+  "name": "臺灣黑熊",
+  "nameEn": "Formosan Black Bear",
+  "latin": "Ursus thibetanus formosanus",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "rare",
+  "conservation": "(臺灣特有亞種)易危 VU",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.4,
+   "color": "#1d1c1e",
+   "accent": "#f2efe6",
+   "bulky": true
+  },
+  "tempRange": [
+   -5,
+   28
+  ],
+  "diet": "雜食",
+  "social": "獨居",
+  "attract": 11,
+  "fact": "臺灣最大型的陸生哺乳動物。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "formosan_macaque",
+  "name": "臺灣獼猴",
+  "nameEn": "Formosan Macaque",
+  "latin": "Macaca cyclopis",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "common",
+  "conservation": "(臺灣特有種)暫無危機 LC",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 0.8,
+   "color": "#7a6a58",
+   "accent": "#d99b86"
+  },
+  "tempRange": [
+   0,
+   32
+  ],
+  "diet": "雜食",
+  "social": "群居",
+  "attract": 6,
+  "fact": "頭圓臉平，具有頰囊，耳朵小。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "collared_scops_owl",
+  "name": "領角鴞",
+  "nameEn": "Collared Scops Owl",
+  "latin": "Otus bakkamoena",
+  "category": "bird",
+  "zone": "臺灣動物區",
+  "rarity": "endangered",
+  "conservation": "瀕危 EN",
+  "model": null,
+  "body": {
+   "color": "#c8402a",
+   "accent": "#8a8a88",
+   "type": "bird",
+   "size": 1.0
+  },
+  "tempRange": [
+   5,
+   30
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 10,
+  "fact": "眼睛為橙紅色，有一對豎立如耳朵的角羽，",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "eurasian_otter",
+  "name": "歐亞水獺",
+  "nameEn": "European Otter",
+  "latin": "Lutra lutra",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "rare",
+  "conservation": "接近受威脅 NT",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 0.6,
+   "color": "#6b4a32",
+   "accent": "#6b4a32",
+   "long": true,
+   "tail": true
+  },
+  "tempRange": [
+   0,
+   28
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 9,
+  "fact": "體背為栗褐色，流線型的身體，頭軀幹長，四肢短，各趾間有蹼膜，毛短而密。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "formosan_ferret_badger",
+  "name": "鼬獾",
+  "nameEn": "Formosan Ferret-badger",
+  "latin": "Melogale moschata subaurantiaca",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "common",
+  "conservation": "(臺灣特有亞種)暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#f2efe6",
+   "accent": "#e8a0a8",
+   "type": "quad",
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   5,
+   30
+  ],
+  "diet": "昆蟲",
+  "social": "獨居",
+  "attract": 6,
+  "fact": "四肢短，腳寬大，爪長而強壯利於挖掘。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "small_chinese_civet_lesser_oriental_civet",
+  "name": "麝香貓",
+  "nameEn": "Small Chinese Civet, Lesser Oriental Civet",
+  "latin": "Viverricula indica pallida",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "rare",
+  "conservation": "(台灣特有種)珍貴稀有野生動物",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#7a5a3e",
+   "type": "quad",
+   "tail": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   5,
+   30
+  ],
+  "diet": "昆蟲",
+  "social": "獨居",
+  "attract": 9,
+  "fact": "皮毛黃褐，在背部有黑褐色縱帶，尾有黑褐色環帶，頗為醒目。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "formosan_reeve_s_muntjac",
+  "name": "臺灣山羌",
+  "nameEn": "Formosan Reeve's muntjac",
+  "latin": "Muntiacus reevesi micrurus",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "common",
+  "conservation": "(台灣特有亞種)非保護類野生動物",
+  "model": null,
+  "body": {
+   "color": "#e8c040",
+   "accent": "#7a5a3e",
+   "type": "quad",
+   "antlers": true,
+   "longLegs": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "樹葉",
+  "social": "小群",
+  "attract": 6,
+  "fact": "小型鹿科動物，全身黃褐色，有黑色雜毛。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "formosan_sambar",
+  "name": "水鹿",
+  "nameEn": "Formosan Sambar",
+  "latin": "Rusa unicolor swinhoii",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "common",
+  "conservation": "(台灣特有亞種)其他應予保育之野生動物",
+  "model": null,
+  "body": {
+   "color": "#7a5a3e",
+   "accent": "#7a5a3e",
+   "type": "quad",
+   "antlers": true,
+   "longLegs": true,
+   "size": 1.0
+  },
+  "tempRange": [
+   5,
+   30
+  ],
+  "diet": "竹",
+  "social": "獨居",
+  "attract": 6,
+  "fact": "台灣最大型的草食野生動物。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "grey_kangaroo",
+  "name": "灰袋鼠",
+  "nameEn": "Eastern Gray Kangaroo",
+  "latin": "Macropus giganteus",
+  "category": "mammal",
+  "zone": "澳洲動物區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 1.1,
+   "color": "#9a8a7a",
+   "accent": "#e8e0d4",
+   "upright": true,
+   "tail": true,
+   "ears": true
+  },
+  "tempRange": [
+   5,
+   38
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 8,
+  "fact": "大灰袋鼠是袋鼠群中體型最高大、最擅長跳躍的。",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "southern_cassowary",
+  "name": "南方食火雞",
+  "nameEn": "Southern Cassowary",
+  "latin": "Casuarius casuarius",
+  "category": "bird",
+  "zone": "澳洲動物區",
+  "rarity": "rare",
+  "conservation": "易危 VU",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 1.8,
+   "color": "#1d1c1e",
+   "accent": "#2a7ad8",
+   "ratite": true,
+   "casque": true
+  },
+  "tempRange": [
+   18,
+   34
+  ],
+  "diet": "果實",
+  "social": "獨居",
+  "attract": 10,
+  "fact": "大形走禽，頭頸部無毛，皮膚為紫藍色，頭部有角質的冠",
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "emu",
+  "name": "鴯",
+  "nameEn": "Emu",
+  "latin": "Dromaius novaehollandiae",
+  "category": "bird",
+  "zone": "澳洲動物區",
+  "rarity": "common",
+  "conservation": "暫無危機 LC",
+  "model": null,
+  "body": {
+   "color": "#1d1c1e",
+   "accent": "#2a5ad8",
+   "type": "bird",
+   "ratite": true,
+   "size": 1.6
+  },
+  "tempRange": [
+   10,
+   35
+  ],
+  "diet": "昆蟲",
+  "social": "小群",
+  "attract": 4,
+  "fact": "頭部及頸部上端的羽毛為黑色，裸露的皮膚則略帶藍色，成鳥全身覆著灰棕色雜毛。",
+  "spawn": [
+   "ruins"
+  ]
  }
 ]
