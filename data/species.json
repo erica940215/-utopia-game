@@ -1,15 +1,2423 @@
 [
-  { "id": "penguin",     "name": "企鵝",       "category": "land",    "rarity": "common",     "model": "penguin",  "tempRange": [-30, 5],  "diet": "魚",     "social": "群居", "attract": 6, "spawn": ["ruins"] },
-  { "id": "arctic_fox",  "name": "北極狐",     "category": "land",    "rarity": "common",     "model": "fox",      "tempRange": [-40, 10], "diet": "肉",     "social": "獨居", "attract": 5, "spawn": ["ruins"] },
-  { "id": "arctic_hare", "name": "北極兔",     "category": "land",    "rarity": "common",     "model": "hare",     "tempRange": [-40, 10], "diet": "草",     "social": "小群", "attract": 3, "spawn": ["ruins"] },
-  { "id": "red_panda",   "name": "小貓熊",     "category": "land",    "rarity": "rare",       "model": "redpanda", "tempRange": [-10, 20], "diet": "竹",     "social": "獨居", "attract": 8, "spawn": ["ruins"] },
-  { "id": "snow_monkey", "name": "日本雪猴",   "category": "land",    "rarity": "rare",       "model": "monkey",   "tempRange": [-15, 25], "diet": "雜食",   "social": "群居", "attract": 7, "spawn": ["ruins"] },
-  { "id": "musk_ox",     "name": "麝香牛",     "category": "land",    "rarity": "endangered", "model": null,       "tempRange": [-45, 5],  "diet": "草",     "social": "群居", "attract": 8, "spawn": [] },
-  { "id": "snow_leopard","name": "雪豹",       "category": "land",    "rarity": "legendary",  "model": null,       "tempRange": [-35, 15], "diet": "肉",     "social": "獨居", "attract": 12, "spawn": [] },
-  { "id": "harbor_seal", "name": "港海豹",     "category": "aquatic", "rarity": "common",     "model": null,       "tempRange": [-20, 10], "diet": "魚",     "social": "群居", "attract": 7, "spawn": [] },
-  { "id": "arctic_char", "name": "北極紅點鮭", "category": "aquatic", "rarity": "common",     "model": null,       "tempRange": [0, 12],   "diet": "浮游生物", "social": "魚群", "attract": 2, "spawn": [] },
-  { "id": "sea_otter",   "name": "海獺",       "category": "aquatic", "rarity": "rare",       "model": null,       "tempRange": [-5, 15],  "diet": "貝類",   "social": "群居", "attract": 9, "spawn": [] },
-  { "id": "ice_worm",    "name": "冰川冰蟲",   "category": "insect",  "rarity": "rare",       "model": null,       "tempRange": [-7, 0],   "diet": "藻類",   "social": "群聚", "attract": 3, "spawn": [] },
-  { "id": "snow_flea",   "name": "雪蚤",       "category": "insect",  "rarity": "common",     "model": null,       "tempRange": [-10, 5],  "diet": "腐植質", "social": "群聚", "attract": 1, "spawn": [] },
-  { "id": "monarch",     "name": "帝王斑蝶",   "category": "insect",  "rarity": "endangered", "model": null,       "tempRange": [12, 30],  "diet": "花蜜",   "social": "群聚", "attract": 6, "spawn": [] }
+ {
+  "id": "penguin",
+  "name": "國王企鵝",
+  "category": "bird",
+  "rarity": "common",
+  "model": "penguin",
+  "tempRange": [
+   -30,
+   5
+  ],
+  "diet": "魚",
+  "social": "群居",
+  "attract": 6,
+  "spawn": [
+   "ruins"
+  ],
+  "zone": "企鵝館"
+ },
+ {
+  "id": "arctic_fox",
+  "name": "北極狐",
+  "category": "mammal",
+  "rarity": "common",
+  "model": "fox",
+  "tempRange": [
+   -40,
+   10
+  ],
+  "diet": "肉",
+  "social": "獨居",
+  "attract": 5,
+  "spawn": [
+   "ruins"
+  ],
+  "zone": "冰原原生"
+ },
+ {
+  "id": "arctic_hare",
+  "name": "北極兔",
+  "category": "mammal",
+  "rarity": "common",
+  "model": "hare",
+  "tempRange": [
+   -40,
+   10
+  ],
+  "diet": "草",
+  "social": "小群",
+  "attract": 3,
+  "spawn": [
+   "ruins"
+  ],
+  "zone": "冰原原生"
+ },
+ {
+  "id": "red_panda",
+  "name": "小貓熊",
+  "category": "mammal",
+  "rarity": "rare",
+  "model": "redpanda",
+  "tempRange": [
+   -10,
+   20
+  ],
+  "diet": "竹",
+  "social": "獨居",
+  "attract": 8,
+  "spawn": [
+   "ruins"
+  ],
+  "zone": "溫帶動物區"
+ },
+ {
+  "id": "snow_monkey",
+  "name": "日本雪猴",
+  "category": "mammal",
+  "rarity": "rare",
+  "model": "monkey",
+  "tempRange": [
+   -15,
+   25
+  ],
+  "diet": "雜食",
+  "social": "群居",
+  "attract": 7,
+  "spawn": [
+   "ruins"
+  ],
+  "zone": "冰原原生"
+ },
+ {
+  "id": "musk_ox",
+  "name": "麝香牛",
+  "category": "mammal",
+  "rarity": "endangered",
+  "model": null,
+  "tempRange": [
+   -45,
+   5
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 8,
+  "spawn": [
+   "ruins"
+  ],
+  "zone": "冰原原生",
+  "body": {
+   "type": "quad",
+   "size": 1.6,
+   "color": "#3a2c22",
+   "accent": "#c4b8a6",
+   "bulky": true,
+   "horns": true
+  }
+ },
+ {
+  "id": "snow_leopard",
+  "name": "雪豹",
+  "category": "mammal",
+  "rarity": "legendary",
+  "model": null,
+  "tempRange": [
+   -35,
+   15
+  ],
+  "diet": "肉",
+  "social": "獨居",
+  "attract": 12,
+  "spawn": [
+   "ruins"
+  ],
+  "zone": "冰原原生",
+  "body": {
+   "type": "quad",
+   "size": 1.2,
+   "color": "#d8d4cc",
+   "accent": "#4a4a4a",
+   "spots": true,
+   "tail": true
+  }
+ },
+ {
+  "id": "harbor_seal",
+  "name": "港海豹",
+  "category": "aquatic",
+  "rarity": "common",
+  "model": null,
+  "tempRange": [
+   -20,
+   10
+  ],
+  "diet": "魚",
+  "social": "群居",
+  "attract": 7,
+  "spawn": [],
+  "zone": "冰原原生"
+ },
+ {
+  "id": "arctic_char",
+  "name": "北極紅點鮭",
+  "category": "aquatic",
+  "rarity": "common",
+  "model": null,
+  "tempRange": [
+   0,
+   12
+  ],
+  "diet": "浮游生物",
+  "social": "魚群",
+  "attract": 2,
+  "spawn": [],
+  "zone": "冰原原生"
+ },
+ {
+  "id": "sea_otter",
+  "name": "海獺",
+  "category": "aquatic",
+  "rarity": "rare",
+  "model": null,
+  "tempRange": [
+   -5,
+   15
+  ],
+  "diet": "貝類",
+  "social": "群居",
+  "attract": 9,
+  "spawn": [],
+  "zone": "冰原原生"
+ },
+ {
+  "id": "ice_worm",
+  "name": "冰川冰蟲",
+  "category": "insect",
+  "rarity": "rare",
+  "model": null,
+  "tempRange": [
+   -7,
+   0
+  ],
+  "diet": "藻類",
+  "social": "群聚",
+  "attract": 3,
+  "spawn": [],
+  "zone": "冰原原生"
+ },
+ {
+  "id": "snow_flea",
+  "name": "雪蚤",
+  "category": "insect",
+  "rarity": "common",
+  "model": null,
+  "tempRange": [
+   -10,
+   5
+  ],
+  "diet": "腐植質",
+  "social": "群聚",
+  "attract": 1,
+  "spawn": [],
+  "zone": "冰原原生"
+ },
+ {
+  "id": "monarch",
+  "name": "帝王斑蝶",
+  "category": "insect",
+  "rarity": "endangered",
+  "model": null,
+  "tempRange": [
+   12,
+   30
+  ],
+  "diet": "花蜜",
+  "social": "群聚",
+  "attract": 6,
+  "spawn": [],
+  "zone": "冰原原生"
+ },
+ {
+  "id": "clouded_leopard",
+  "name": "臺灣雲豹",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "legendary",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.1,
+   "color": "#b59a6a",
+   "accent": "#4a3a2a",
+   "tail": true
+  },
+  "tempRange": [
+   10,
+   30
+  ],
+  "diet": "肉",
+  "social": "獨居",
+  "attract": 14,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "eurasian_otter",
+  "name": "歐亞水獺",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "endangered",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 0.6,
+   "color": "#6b4a32",
+   "accent": "#6b4a32",
+   "long": true,
+   "tail": true
+  },
+  "tempRange": [
+   0,
+   28
+  ],
+  "diet": "魚",
+  "social": "小群",
+  "attract": 9,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "formosan_black_bear",
+  "name": "臺灣黑熊",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.4,
+   "color": "#1d1c1e",
+   "accent": "#f2efe6",
+   "bulky": true
+  },
+  "tempRange": [
+   -5,
+   28
+  ],
+  "diet": "雜食",
+  "social": "獨居",
+  "attract": 11,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "formosan_macaque",
+  "name": "臺灣獼猴",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 0.8,
+   "color": "#7a6a58",
+   "accent": "#d99b86"
+  },
+  "tempRange": [
+   0,
+   32
+  ],
+  "diet": "雜食",
+  "social": "群居",
+  "attract": 6,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "sika_deer",
+  "name": "臺灣梅花鹿",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.2,
+   "color": "#a8673a",
+   "accent": "#f2efe6",
+   "antlers": true,
+   "longLegs": true
+  },
+  "tempRange": [
+   0,
+   30
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 6,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "leopard_cat",
+  "name": "石虎",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 0.6,
+   "color": "#b8935a",
+   "accent": "#3a2c22",
+   "tail": true
+  },
+  "tempRange": [
+   5,
+   30
+  ],
+  "diet": "肉",
+  "social": "獨居",
+  "attract": 9,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "taiwan_serow",
+  "name": "臺灣野山羊",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.0,
+   "color": "#4a3f36",
+   "accent": "#4a3f36",
+   "horns": true
+  },
+  "tempRange": [
+   -5,
+   25
+  ],
+  "diet": "草",
+  "social": "獨居",
+  "attract": 6,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "formosan_pangolin",
+  "name": "穿山甲",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "endangered",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 0.7,
+   "color": "#8a6a4a",
+   "accent": "#8a6a4a",
+   "long": true,
+   "tail": true,
+   "scales": true
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "螞蟻",
+  "social": "獨居",
+  "attract": 10,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "wild_boar",
+  "name": "臺灣野豬",
+  "category": "mammal",
+  "zone": "臺灣動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.0,
+   "color": "#3d3530",
+   "accent": "#3d3530",
+   "bulky": true
+  },
+  "tempRange": [
+   -5,
+   32
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 4,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "alpaca",
+  "name": "羊駝",
+  "category": "mammal",
+  "zone": "兒童動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.1,
+   "color": "#efe6d6",
+   "accent": "#efe6d6",
+   "neck": 0.6,
+   "longLegs": true
+  },
+  "tempRange": [
+   -10,
+   25
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 6,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "donkey",
+  "name": "驢",
+  "category": "mammal",
+  "zone": "兒童動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.2,
+   "color": "#8a8580",
+   "accent": "#e8e4dc",
+   "ears": true,
+   "longLegs": true
+  },
+  "tempRange": [
+   -5,
+   32
+  ],
+  "diet": "草",
+  "social": "小群",
+  "attract": 3,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "rabbit",
+  "name": "兔",
+  "category": "mammal",
+  "zone": "兒童動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "hare",
+   "size": 0.8,
+   "color": "#d9cbb5"
+  },
+  "tempRange": [
+   -5,
+   28
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 3,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "domestic_pig",
+  "name": "豬",
+  "category": "mammal",
+  "zone": "兒童動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 0.9,
+   "color": "#e8b3a8",
+   "accent": "#e8b3a8",
+   "bulky": true
+  },
+  "tempRange": [
+   0,
+   30
+  ],
+  "diet": "雜食",
+  "social": "群居",
+  "attract": 3,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "meerkat",
+  "name": "狐獴",
+  "category": "mammal",
+  "zone": "兒童動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 0.45,
+   "color": "#c9a878",
+   "accent": "#3a2c22",
+   "upright": true
+  },
+  "tempRange": [
+   15,
+   38
+  ],
+  "diet": "昆蟲",
+  "social": "群居",
+  "attract": 7,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "raccoon",
+  "name": "浣熊",
+  "category": "mammal",
+  "zone": "兒童動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 0.6,
+   "color": "#7d7a78",
+   "accent": "#1d1c1e",
+   "tail": true,
+   "mask": true
+  },
+  "tempRange": [
+   -10,
+   30
+  ],
+  "diet": "雜食",
+  "social": "獨居",
+  "attract": 5,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "coati",
+  "name": "南美浣熊",
+  "category": "mammal",
+  "zone": "兒童動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 0.6,
+   "color": "#8a5a32",
+   "accent": "#3a2c22",
+   "tail": true,
+   "long": true
+  },
+  "tempRange": [
+   10,
+   32
+  ],
+  "diet": "雜食",
+  "social": "群居",
+  "attract": 5,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "chicken",
+  "name": "雞",
+  "category": "bird",
+  "zone": "兒童動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 0.6,
+   "color": "#f2efe6",
+   "accent": "#d83a2a"
+  },
+  "tempRange": [
+   0,
+   32
+  ],
+  "diet": "穀物",
+  "social": "群居",
+  "attract": 2,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "asian_elephant",
+  "name": "亞洲象",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "endangered",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 2.6,
+   "color": "#7d7a7a",
+   "accent": "#7d7a7a",
+   "trunk": true,
+   "bulky": true,
+   "ears": true
+  },
+  "tempRange": [
+   15,
+   35
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 16,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "small_clawed_otter",
+  "name": "小爪水獺",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 0.5,
+   "color": "#7a5a3e",
+   "accent": "#7a5a3e",
+   "long": true,
+   "tail": true
+  },
+  "tempRange": [
+   18,
+   32
+  ],
+  "diet": "魚",
+  "social": "群居",
+  "attract": 9,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "bengal_tiger",
+  "name": "孟加拉虎",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "endangered",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.6,
+   "color": "#e08a2e",
+   "accent": "#1d1c1e",
+   "stripes": true,
+   "tail": true
+  },
+  "tempRange": [
+   5,
+   35
+  ],
+  "diet": "肉",
+  "social": "獨居",
+  "attract": 15,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "bornean_orangutan",
+  "name": "婆羅洲紅毛猩猩",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "endangered",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 1.4,
+   "color": "#b05a28",
+   "accent": "#d9a07a",
+   "big": true
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "果實",
+  "social": "獨居",
+  "attract": 14,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "great_hornbill",
+  "name": "雙角犀鳥",
+  "category": "bird",
+  "zone": "熱帶雨林區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 1.0,
+   "color": "#1d1c1e",
+   "accent": "#f2c230",
+   "casque": true
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 9,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "leopard",
+  "name": "花豹",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.3,
+   "color": "#d9a85a",
+   "accent": "#3a2c22",
+   "spots": true,
+   "tail": true
+  },
+  "tempRange": [
+   5,
+   35
+  ],
+  "diet": "肉",
+  "social": "獨居",
+  "attract": 12,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "malayan_tapir",
+  "name": "馬來貘",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.4,
+   "color": "#1d1c1e",
+   "accent": "#f2efe6",
+   "saddle": true,
+   "bulky": true
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "草",
+  "social": "獨居",
+  "attract": 9,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "siamang",
+  "name": "合趾猿",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 0.9,
+   "color": "#1d1c1e",
+   "accent": "#2a2828",
+   "longArms": true
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "果實",
+  "social": "小群",
+  "attract": 8,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "squirrel_monkey",
+  "name": "黑帽松鼠猴",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 0.45,
+   "color": "#e0a030",
+   "accent": "#f2efe6",
+   "tail": true
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "昆蟲",
+  "social": "群居",
+  "attract": 7,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "capybara",
+  "name": "水豚",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.0,
+   "color": "#8a6a48",
+   "accent": "#8a6a48",
+   "bulky": true
+  },
+  "tempRange": [
+   15,
+   35
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 8,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "giant_anteater",
+  "name": "大食蟻獸",
+  "category": "mammal",
+  "zone": "熱帶雨林區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.3,
+   "color": "#5a4a3e",
+   "accent": "#1d1c1e",
+   "snout": true,
+   "tail": true
+  },
+  "tempRange": [
+   18,
+   33
+  ],
+  "diet": "螞蟻",
+  "social": "獨居",
+  "attract": 9,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "aye_aye",
+  "name": "指猴",
+  "category": "mammal",
+  "zone": "穿山甲館",
+  "rarity": "legendary",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 0.5,
+   "color": "#2a2624",
+   "accent": "#e0a030",
+   "tail": true,
+   "ears": true
+  },
+  "tempRange": [
+   20,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "獨居",
+  "attract": 12,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "giant_panda",
+  "name": "大貓熊",
+  "category": "mammal",
+  "zone": "大貓熊館",
+  "rarity": "legendary",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.4,
+   "color": "#f2efe6",
+   "accent": "#1d1c1e",
+   "bulky": true,
+   "panda": true
+  },
+  "tempRange": [
+   -5,
+   24
+  ],
+  "diet": "竹",
+  "social": "獨居",
+  "attract": 20,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "addax",
+  "name": "弓角羚羊",
+  "category": "mammal",
+  "zone": "沙漠動物區",
+  "rarity": "endangered",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.2,
+   "color": "#e8dcc4",
+   "accent": "#8a6a48",
+   "horns": true,
+   "longLegs": true
+  },
+  "tempRange": [
+   15,
+   42
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 9,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "african_wild_ass",
+  "name": "非洲野驢",
+  "category": "mammal",
+  "zone": "沙漠動物區",
+  "rarity": "endangered",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.2,
+   "color": "#b8aea2",
+   "accent": "#3a3430",
+   "ears": true,
+   "longLegs": true
+  },
+  "tempRange": [
+   10,
+   42
+  ],
+  "diet": "草",
+  "social": "小群",
+  "attract": 8,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "bactrian_camel",
+  "name": "雙峰駱駝",
+  "category": "mammal",
+  "zone": "沙漠動物區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.7,
+   "color": "#b08a5a",
+   "accent": "#b08a5a",
+   "neck": 0.6,
+   "longLegs": true,
+   "humps": 2
+  },
+  "tempRange": [
+   -20,
+   40
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 9,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "koala",
+  "name": "無尾熊",
+  "category": "mammal",
+  "zone": "澳洲動物區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 0.6,
+   "color": "#9a9a98",
+   "accent": "#f2efe6",
+   "ears": true
+  },
+  "tempRange": [
+   12,
+   32
+  ],
+  "diet": "尤加利",
+  "social": "獨居",
+  "attract": 14,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "grey_kangaroo",
+  "name": "東部灰袋鼠",
+  "category": "mammal",
+  "zone": "澳洲動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 1.1,
+   "color": "#9a8a7a",
+   "accent": "#e8e0d4",
+   "upright": true,
+   "tail": true,
+   "ears": true
+  },
+  "tempRange": [
+   5,
+   38
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 8,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "emu",
+  "name": "鴯鶓",
+  "category": "bird",
+  "zone": "澳洲動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 1.8,
+   "color": "#5a4a3e",
+   "accent": "#3a3430",
+   "ratite": true
+  },
+  "tempRange": [
+   0,
+   40
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 6,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "southern_cassowary",
+  "name": "南方食火雞",
+  "category": "bird",
+  "zone": "澳洲動物區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 1.8,
+   "color": "#1d1c1e",
+   "accent": "#2a7ad8",
+   "ratite": true,
+   "casque": true
+  },
+  "tempRange": [
+   18,
+   34
+  ],
+  "diet": "果實",
+  "social": "獨居",
+  "attract": 10,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "african_elephant",
+  "name": "非洲象",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "endangered",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 2.9,
+   "color": "#8a8584",
+   "accent": "#8a8584",
+   "trunk": true,
+   "bulky": true,
+   "ears": true,
+   "tusks": true
+  },
+  "tempRange": [
+   10,
+   40
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 16,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "chapman_zebra",
+  "name": "查普曼斑馬",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.3,
+   "color": "#f2efe6",
+   "accent": "#1d1c1e",
+   "stripes": true,
+   "longLegs": true
+  },
+  "tempRange": [
+   5,
+   40
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 9,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "gemsbok",
+  "name": "南非劍羚",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.3,
+   "color": "#b8aea2",
+   "accent": "#1d1c1e",
+   "horns": true,
+   "longLegs": true
+  },
+  "tempRange": [
+   5,
+   42
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 7,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "wildebeest",
+  "name": "牛羚",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.3,
+   "color": "#5a5658",
+   "accent": "#2a2828",
+   "horns": true
+  },
+  "tempRange": [
+   5,
+   40
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 6,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "common_eland",
+  "name": "伊蘭羚羊",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.6,
+   "color": "#c4a27a",
+   "accent": "#c4a27a",
+   "horns": true,
+   "bulky": true
+  },
+  "tempRange": [
+   5,
+   40
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 7,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "giraffe",
+  "name": "長頸鹿",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.6,
+   "color": "#e0a85a",
+   "accent": "#7a4a28",
+   "neck": 2.2,
+   "longLegs": true,
+   "spots": true
+  },
+  "tempRange": [
+   10,
+   40
+  ],
+  "diet": "樹葉",
+  "social": "群居",
+  "attract": 14,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "bongo",
+  "name": "山羚",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.3,
+   "color": "#a8452a",
+   "accent": "#f2efe6",
+   "horns": true,
+   "stripes": true
+  },
+  "tempRange": [
+   15,
+   32
+  ],
+  "diet": "樹葉",
+  "social": "小群",
+  "attract": 8,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "hippo",
+  "name": "河馬",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 2.0,
+   "color": "#7a6a6e",
+   "accent": "#7a6a6e",
+   "bulky": true,
+   "short": true
+  },
+  "tempRange": [
+   15,
+   35
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 12,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "lion",
+  "name": "獅子",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.6,
+   "color": "#d9a85a",
+   "accent": "#6a4022",
+   "mane": true,
+   "tail": true
+  },
+  "tempRange": [
+   5,
+   40
+  ],
+  "diet": "肉",
+  "social": "群居",
+  "attract": 15,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "spotted_hyena",
+  "name": "斑鬣狗",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.1,
+   "color": "#b8a07a",
+   "accent": "#3a2c22",
+   "spots": true
+  },
+  "tempRange": [
+   5,
+   40
+  ],
+  "diet": "肉",
+  "social": "群居",
+  "attract": 6,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "olive_baboon",
+  "name": "東非狒狒",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 0.9,
+   "color": "#7a7458",
+   "accent": "#d9726a",
+   "tail": true
+  },
+  "tempRange": [
+   5,
+   38
+  ],
+  "diet": "雜食",
+  "social": "群居",
+  "attract": 7,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "ring_tailed_lemur",
+  "name": "環尾狐猴",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 0.5,
+   "color": "#a8a4a0",
+   "accent": "#1d1c1e",
+   "tail": true,
+   "ringTail": true
+  },
+  "tempRange": [
+   12,
+   35
+  ],
+  "diet": "果實",
+  "social": "群居",
+  "attract": 9,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "pygmy_hippo",
+  "name": "侏儒河馬",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "endangered",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.1,
+   "color": "#5a4a4e",
+   "accent": "#5a4a4e",
+   "bulky": true,
+   "short": true
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "草",
+  "social": "獨居",
+  "attract": 11,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "lowland_gorilla",
+  "name": "西部低地大猩猩",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "endangered",
+  "model": null,
+  "body": {
+   "type": "primate",
+   "size": 1.6,
+   "color": "#2a2828",
+   "accent": "#4a4848",
+   "big": true
+  },
+  "tempRange": [
+   18,
+   32
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 16,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "white_rhino",
+  "name": "白犀牛",
+  "category": "mammal",
+  "zone": "非洲動物區",
+  "rarity": "endangered",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 2.2,
+   "color": "#9a9694",
+   "accent": "#9a9694",
+   "bulky": true,
+   "horn": true
+  },
+  "tempRange": [
+   10,
+   38
+  ],
+  "diet": "草",
+  "social": "小群",
+  "attract": 14,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "black_faced_spoonbill",
+  "name": "黑面琵鷺",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "endangered",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 0.9,
+   "color": "#f2efe6",
+   "accent": "#1d1c1e",
+   "longLegs": true
+  },
+  "tempRange": [
+   5,
+   34
+  ],
+  "diet": "魚",
+  "social": "群居",
+  "attract": 11,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "cockatoo",
+  "name": "葵花鳳頭鸚鵡",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 0.6,
+   "color": "#f2efe6",
+   "accent": "#f2d030"
+  },
+  "tempRange": [
+   10,
+   35
+  ],
+  "diet": "種子",
+  "social": "群居",
+  "attract": 6,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "taiwan_blue_magpie",
+  "name": "臺灣藍鵲",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 0.7,
+   "color": "#2a5ad8",
+   "accent": "#d83a2a",
+   "longTail": true
+  },
+  "tempRange": [
+   0,
+   30
+  ],
+  "diet": "雜食",
+  "social": "群居",
+  "attract": 10,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "flamingo",
+  "name": "大紅鶴",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 1.0,
+   "color": "#f2a0a8",
+   "accent": "#1d1c1e",
+   "longLegs": true,
+   "neck": true
+  },
+  "tempRange": [
+   5,
+   38
+  ],
+  "diet": "藻類",
+  "social": "群居",
+  "attract": 9,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "pelican",
+  "name": "鵜鶘",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 1.2,
+   "color": "#f2efe6",
+   "accent": "#f2c230"
+  },
+  "tempRange": [
+   0,
+   35
+  ],
+  "diet": "魚",
+  "social": "群居",
+  "attract": 6,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "swinhoe_pheasant",
+  "name": "藍腹鷴",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 0.8,
+   "color": "#1d2a5a",
+   "accent": "#d83a2a",
+   "longTail": true
+  },
+  "tempRange": [
+   0,
+   28
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 9,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "nicobar_pigeon",
+  "name": "尼柯巴鳩",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 0.55,
+   "color": "#2a6a5a",
+   "accent": "#f2efe6"
+  },
+  "tempRange": [
+   18,
+   34
+  ],
+  "diet": "種子",
+  "social": "群居",
+  "attract": 6,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "red_crowned_crane",
+  "name": "丹頂鶴",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "endangered",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 1.2,
+   "color": "#f2efe6",
+   "accent": "#d83a2a",
+   "longLegs": true,
+   "neck": true
+  },
+  "tempRange": [
+   -20,
+   30
+  ],
+  "diet": "雜食",
+  "social": "小群",
+  "attract": 12,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "scarlet_ibis",
+  "name": "美洲紅鹮",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 0.8,
+   "color": "#e0402a",
+   "accent": "#1d1c1e",
+   "longLegs": true
+  },
+  "tempRange": [
+   18,
+   35
+  ],
+  "diet": "甲殼類",
+  "social": "群居",
+  "attract": 7,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "mandarin_duck",
+  "name": "鴛鴦",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 0.5,
+   "color": "#c86a2a",
+   "accent": "#2a6a5a"
+  },
+  "tempRange": [
+   -5,
+   30
+  ],
+  "diet": "雜食",
+  "social": "群居",
+  "attract": 5,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "crested_serpent_eagle",
+  "name": "大冠鷲",
+  "category": "bird",
+  "zone": "鳥園",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "bird",
+   "size": 0.9,
+   "color": "#5a4a3e",
+   "accent": "#f2c230"
+  },
+  "tempRange": [
+   5,
+   32
+  ],
+  "diet": "蛇",
+  "social": "獨居",
+  "attract": 9,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "african_penguin",
+  "name": "非洲企鵝",
+  "category": "bird",
+  "zone": "溫帶動物區",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "penguin",
+   "size": 0.8,
+   "color": "#1b1f27"
+  },
+  "tempRange": [
+   5,
+   25
+  ],
+  "diet": "魚",
+  "social": "群居",
+  "attract": 8,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "aldabra_tortoise",
+  "name": "亞達伯拉象龜",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "reptile",
+   "size": 1.5,
+   "color": "#5a5448",
+   "accent": "#3a3430",
+   "shell": true
+  },
+  "tempRange": [
+   20,
+   35
+  ],
+  "diet": "草",
+  "social": "獨居",
+  "attract": 10,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "ball_python",
+  "name": "球蟒",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "reptile",
+   "size": 0.9,
+   "color": "#5a4022",
+   "accent": "#c9a878",
+   "snake": true
+  },
+  "tempRange": [
+   24,
+   34
+  ],
+  "diet": "鼠",
+  "social": "獨居",
+  "attract": 5,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "blue_tongued_skink",
+  "name": "藍舌石龍子",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "reptile",
+   "size": 0.6,
+   "color": "#9a8a6a",
+   "accent": "#5a5448"
+  },
+  "tempRange": [
+   22,
+   35
+  ],
+  "diet": "雜食",
+  "social": "獨居",
+  "attract": 4,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "green_tree_python",
+  "name": "綠樹蟒",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "reptile",
+   "size": 0.9,
+   "color": "#2aa84a",
+   "accent": "#f2efe6",
+   "snake": true
+  },
+  "tempRange": [
+   24,
+   32
+  ],
+  "diet": "鼠",
+  "social": "獨居",
+  "attract": 8,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "star_tortoise",
+  "name": "印度星龜",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "reptile",
+   "size": 0.6,
+   "color": "#3a3024",
+   "accent": "#e0c040",
+   "shell": true
+  },
+  "tempRange": [
+   22,
+   35
+  ],
+  "diet": "草",
+  "social": "獨居",
+  "attract": 7,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "taipei_tree_frog",
+  "name": "臺北樹蛙",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "frog",
+   "size": 0.5,
+   "color": "#3aa84a"
+  },
+  "tempRange": [
+   10,
+   28
+  ],
+  "diet": "昆蟲",
+  "social": "群聚",
+  "attract": 6,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "moltrecht_tree_frog",
+  "name": "莫氏樹蛙",
+  "category": "reptile",
+  "zone": "兩棲爬蟲動物館",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "frog",
+   "size": 0.5,
+   "color": "#4a8a3a"
+  },
+  "tempRange": [
+   8,
+   28
+  ],
+  "diet": "昆蟲",
+  "social": "群聚",
+  "attract": 4,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "false_gharial",
+  "name": "馬來長吻鱷",
+  "category": "reptile",
+  "zone": "溫帶動物區",
+  "rarity": "endangered",
+  "model": null,
+  "body": {
+   "type": "reptile",
+   "size": 2.2,
+   "color": "#4a4a3a",
+   "accent": "#2a2a22",
+   "croc": true
+  },
+  "tempRange": [
+   24,
+   34
+  ],
+  "diet": "魚",
+  "social": "獨居",
+  "attract": 12,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "american_bison",
+  "name": "美洲野牛",
+  "category": "mammal",
+  "zone": "溫帶動物區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.9,
+   "color": "#4a3424",
+   "accent": "#2a2018",
+   "bulky": true,
+   "hump": true,
+   "horns": true
+  },
+  "tempRange": [
+   -30,
+   30
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 10,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "brown_bear",
+  "name": "棕熊",
+  "category": "mammal",
+  "zone": "溫帶動物區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.7,
+   "color": "#6a4a2e",
+   "accent": "#6a4a2e",
+   "bulky": true
+  },
+  "tempRange": [
+   -30,
+   25
+  ],
+  "diet": "雜食",
+  "social": "獨居",
+  "attract": 13,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "gray_wolf",
+  "name": "灰狼",
+  "category": "mammal",
+  "zone": "溫帶動物區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.1,
+   "color": "#8a8580",
+   "accent": "#f2efe6",
+   "tail": true,
+   "ears": true
+  },
+  "tempRange": [
+   -40,
+   25
+  ],
+  "diet": "肉",
+  "social": "群居",
+  "attract": 11,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "przewalski_horse",
+  "name": "普氏野馬",
+  "category": "mammal",
+  "zone": "溫帶動物區",
+  "rarity": "endangered",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.4,
+   "color": "#c4a06a",
+   "accent": "#3a2c22",
+   "longLegs": true,
+   "mane": true
+  },
+  "tempRange": [
+   -30,
+   35
+  ],
+  "diet": "草",
+  "social": "群居",
+  "attract": 11,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "puma",
+  "name": "美洲獅",
+  "category": "mammal",
+  "zone": "溫帶動物區",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "quad",
+   "size": 1.3,
+   "color": "#c49a6a",
+   "accent": "#c49a6a",
+   "tail": true
+  },
+  "tempRange": [
+   -15,
+   35
+  ],
+  "diet": "肉",
+  "social": "獨居",
+  "attract": 12,
+  "spawn": [
+   "ruins"
+  ]
+ },
+ {
+  "id": "rhinoceros_beetle",
+  "name": "獨角仙",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "insect",
+   "size": 0.5,
+   "color": "#4a2a1a",
+   "accent": "#2a1a10",
+   "horn": true
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "樹液",
+  "social": "群聚",
+  "attract": 4,
+  "spawn": []
+ },
+ {
+  "id": "stag_beetle",
+  "name": "鍬形蟲",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "insect",
+   "size": 0.45,
+   "color": "#2a1a10",
+   "accent": "#5a3a22",
+   "pincers": true
+  },
+  "tempRange": [
+   16,
+   30
+  ],
+  "diet": "樹液",
+  "social": "獨居",
+  "attract": 4,
+  "spawn": []
+ },
+ {
+  "id": "stick_insect",
+  "name": "竹節蟲",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "common",
+  "model": null,
+  "body": {
+   "type": "insect",
+   "size": 0.6,
+   "color": "#6a8a3a",
+   "accent": "#4a6a2a",
+   "stick": true
+  },
+  "tempRange": [
+   18,
+   30
+  ],
+  "diet": "樹葉",
+  "social": "群聚",
+  "attract": 3,
+  "spawn": []
+ },
+ {
+  "id": "dead_leaf_butterfly",
+  "name": "枯葉蝶",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "insect",
+   "size": 0.5,
+   "color": "#8a6a3a",
+   "accent": "#2a5ad8",
+   "wings": true
+  },
+  "tempRange": [
+   18,
+   32
+  ],
+  "diet": "樹液",
+  "social": "群聚",
+  "attract": 6,
+  "spawn": []
+ },
+ {
+  "id": "purple_emperor",
+  "name": "大紫蛺蝶",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "insect",
+   "size": 0.5,
+   "color": "#5a2a8a",
+   "accent": "#f2efe6",
+   "wings": true
+  },
+  "tempRange": [
+   16,
+   30
+  ],
+  "diet": "樹液",
+  "social": "群聚",
+  "attract": 7,
+  "spawn": []
+ },
+ {
+  "id": "golden_birdwing",
+  "name": "黃裳鳳蝶",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "insect",
+   "size": 0.6,
+   "color": "#1d1c1e",
+   "accent": "#f2c230",
+   "wings": true
+  },
+  "tempRange": [
+   20,
+   34
+  ],
+  "diet": "花蜜",
+  "social": "群聚",
+  "attract": 8,
+  "spawn": []
+ },
+ {
+  "id": "broad_tailed_swallowtail",
+  "name": "寬尾鳳蝶",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "legendary",
+  "model": null,
+  "body": {
+   "type": "insect",
+   "size": 0.6,
+   "color": "#1d1c1e",
+   "accent": "#f2efe6",
+   "wings": true
+  },
+  "tempRange": [
+   12,
+   26
+  ],
+  "diet": "花蜜",
+  "social": "群聚",
+  "attract": 12,
+  "spawn": []
+ },
+ {
+  "id": "atlas_moth",
+  "name": "皇蛾",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "insect",
+   "size": 0.8,
+   "color": "#a8452a",
+   "accent": "#e8d0a0",
+   "wings": true
+  },
+  "tempRange": [
+   20,
+   32
+  ],
+  "diet": "不進食",
+  "social": "獨居",
+  "attract": 9,
+  "spawn": []
+ },
+ {
+  "id": "orchid_mantis",
+  "name": "蘭花螳螂",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "rare",
+  "model": null,
+  "body": {
+   "type": "insect",
+   "size": 0.45,
+   "color": "#f2d6e6",
+   "accent": "#e8a8c8",
+   "mantis": true
+  },
+  "tempRange": [
+   22,
+   32
+  ],
+  "diet": "昆蟲",
+  "social": "獨居",
+  "attract": 9,
+  "spawn": []
+ },
+ {
+  "id": "long_armed_beetle",
+  "name": "臺灣長臂金龜",
+  "category": "insect",
+  "zone": "昆蟲館",
+  "rarity": "endangered",
+  "model": null,
+  "body": {
+   "type": "insect",
+   "size": 0.6,
+   "color": "#2a6a3a",
+   "accent": "#5a3a22",
+   "longArms": true
+  },
+  "tempRange": [
+   14,
+   28
+  ],
+  "diet": "樹液",
+  "social": "獨居",
+  "attract": 10,
+  "spawn": []
+ }
 ]

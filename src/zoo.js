@@ -118,7 +118,7 @@ function rebuildZooAnimals(){
   for(const a of save.zoo.animals){
     const hb=findB(a.habitat); if(!hb) continue;
     const sp=DATA.speciesById[a.species]; if(!sp) continue;
-    const m=makeModel(sp.model); const c=tileCenter(hb), d=bdef(hb.type);
+    const m=makeModel(sp); const c=tileCenter(hb), d=bdef(hb.type);
     const hw=d.size[0]*TS()/2-0.8, hd=d.size[1]*TS()/2-0.8;
     m.position.set(c.x+(Math.random()*2-1)*hw,0.1,c.z+(Math.random()*2-1)*hd); m.scale.setScalar(1.3);
     zooRoot.add(m);

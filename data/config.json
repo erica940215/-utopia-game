@@ -63,8 +63,14 @@
     }
   },
   "categories": {
-    "land": {
-      "name": "陸生"
+    "mammal": {
+      "name": "哺乳類"
+    },
+    "bird": {
+      "name": "鳥類"
+    },
+    "reptile": {
+      "name": "兩棲爬蟲"
     },
     "aquatic": {
       "name": "水生"

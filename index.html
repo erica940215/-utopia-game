@@ -417,7 +417,78 @@ const MODELS = {
   monkey(g){ const b=sph(0.3,0x9a9590); b.scale.y=1.2; b.position.y=0.45; g.add(b); const h=sph(0.22,0x9a9590); h.position.y=0.92; g.add(h); const f=sph(0.15,0xd9726a); f.scale.z=0.5; f.position.set(0,0.9,0.15); g.add(f); for(const s of [-1,1]){ const a=cyl(0.06,0.06,0.45,0x9a9590,6); a.position.set(s*0.3,0.42,0.08); a.rotation.z=s*0.3; g.add(a);} eyes(g,0.94,0.22,0.06); },
   hare(g){ const b=sph(0.26,0xf6f7f9); b.scale.set(1,0.9,1.3); b.position.y=0.3; g.add(b); const h=sph(0.17,0xf6f7f9); h.position.set(0,0.52,0.28); g.add(h); for(const s of [-1,1]){ const e=box(0.06,0.32,0.05,0xf6f7f9); e.position.set(s*0.07,0.8,0.24); g.add(e);} eyes(g,0.56,0.42,0.07); }
 };
-function makeModel(key){ const g=new THREE.Group(); (MODELS[key]||MODELS.hare)(g); return g; }
+
+/* 通用體型：species.json 的 body 欄位（type、size、color、accent 與特徵旗標）*/
+function bodyModel(g,b){
+  const C=hex(b.color||'#888888'), A=hex(b.accent||b.color||'#444444');
+  const leg=(x,z,h,w=0.1,c=C)=>{ const l=box(w,h,w,c); l.position.set(x,h/2,z); g.add(l); };
+  const t=b.type;
+  if(t==='quad'){
+    const L=b.long?1.15:0.9, H=b.bulky?0.55:0.42, W=b.bulky?0.55:0.4, lh=b.longLegs?0.6:(b.short?0.18:0.32), y=lh+H/2;
+    const body=box(W,H,L,C); body.position.y=y; g.add(body);
+    for(const [x,z] of [[-W/2+0.07,L/2-0.12],[W/2-0.07,L/2-0.12],[-W/2+0.07,-L/2+0.12],[W/2-0.07,-L/2+0.12]]) leg(x,z,lh,b.bulky?0.16:0.1);
+    let hx=0, hy=y+H*0.35, hz=L/2+0.12;
+    if(b.neck){ const n=box(0.16,b.neck,0.18,C); n.position.set(0,y+b.neck/2+H*0.2,L/2-0.05); g.add(n); hy=y+b.neck+H*0.2; hz=L/2; }
+    const head=box(0.3,0.28,0.34,C); head.position.set(hx,hy,hz); g.add(head);
+    if(b.snout){ const sn=box(0.1,0.1,0.45,C); sn.position.set(0,hy-0.08,hz+0.35); g.add(sn); }
+    if(b.trunk){ const tr=cyl(0.07,0.11,0.6,C,6); tr.position.set(0,hy-0.3,hz+0.18); g.add(tr); }
+    if(b.tusks) for(const sx of [-1,1]){ const k=new THREE.Mesh(new THREE.ConeGeometry(0.035,0.3,5),M(0xf2efe6)); k.rotation.x=Math.PI/2.4; k.position.set(sx*0.1,hy-0.12,hz+0.22); g.add(k); }
+    if(b.horn){ const h=new THREE.Mesh(new THREE.ConeGeometry(0.07,0.3,6),M(0xd9d4cc)); h.position.set(0,hy+0.05,hz+0.2); h.rotation.x=0.5; g.add(h); }
+    if(b.horns||b.antlers) for(const sx of [-1,1]){ const h=cyl(0.025,0.04,b.antlers?0.35:0.3,b.antlers?0x6a4a2a:A,5); h.position.set(sx*0.09,hy+0.28,hz-0.05); h.rotation.z=-sx*0.35; g.add(h); }
+    if(b.ears) for(const sx of [-1,1]){ const e=box(0.04,0.18,0.14,C); e.position.set(sx*0.2,hy+0.06,hz-0.05); g.add(e); }
+    if(b.mane){ const m=sph(0.26,A); m.scale.set(1.1,1.1,0.8); m.position.set(0,hy,hz-0.1); g.add(m); }
+    if(b.hump||b.humps){ for(let i=0;i<(b.humps||1);i++){ const h=sph(0.18,b.humps?C:A); h.position.set(0,y+H/2+0.05,(b.humps?(i-0.5)*0.35:L/2-0.25)); g.add(h); } }
+    if(b.stripes||b.spots||b.saddle||b.scales) for(let i=-2;i<=2;i++){ if(b.saddle&&i!==0) continue; const s=box(W+0.01,b.spots?0.08:H*0.9,b.saddle?L*0.4:0.06,A); s.position.set(0,b.spots?y+H/2:y,i*L*0.18+(b.spots?(i%2)*0.05:0)); g.add(s); }
+    if(b.panda){ for(const sx of [-1,1]){ const p=box(0.08,0.08,0.02,A); p.position.set(sx*0.08,hy+0.03,hz+0.17); g.add(p); } const s=box(W+0.01,H*0.45,L*0.3,A); s.position.set(0,y+H*0.2,L/2-0.2); g.add(s); }
+    if(b.mask){ const m=box(0.31,0.07,0.1,A); m.position.set(0,hy+0.03,hz+0.13); g.add(m); }
+    if(b.tail){ const tl=cyl(0.04,0.06,0.45,b.stripes?A:C,5); tl.rotation.x=-1.0; tl.position.set(0,y,-L/2-0.15); g.add(tl); }
+    eyes(g,hy+0.04,hz+0.17,0.08);
+  } else if(t==='bird'){
+    const lh=b.longLegs?0.55:(b.ratite?0.7:0.18), body=sph(b.ratite?0.32:0.24,C); body.scale.set(1,0.9,1.3); body.position.y=lh+0.2; g.add(body);
+    leg(-0.06,0,lh,0.03,A); leg(0.06,0,lh,0.03,A);
+    const nh=b.neck||b.ratite?0.45:0.12, n=cyl(0.05,0.06,nh,C,6); n.position.set(0,lh+0.3+nh/2,0.18); g.add(n);
+    const hd=sph(0.11,C); hd.position.set(0,lh+0.32+nh,0.22); g.add(hd);
+    const bk=new THREE.Mesh(new THREE.ConeGeometry(0.04,0.18,5),M(A)); bk.rotation.x=Math.PI/2; bk.position.set(0,lh+0.3+nh,0.36); g.add(bk);
+    if(b.casque){ const c=box(0.06,0.1,0.14,A); c.position.set(0,lh+0.42+nh,0.25); g.add(c); }
+    if(!b.ratite) for(const sx of [-1,1]){ const w=box(0.03,0.16,0.36,C); w.position.set(sx*0.24,lh+0.22,0); g.add(w); }
+    if(b.longTail){ const tl=box(0.06,0.03,0.6,A); tl.position.set(0,lh+0.2,-0.5); g.add(tl); }
+    eyes(g,lh+0.35+nh,0.3,0.06);
+  } else if(t==='primate'){
+    const s=b.big?1.3:1, bd=sph(0.3*s,C); bd.scale.y=1.2; bd.position.y=0.45*s; g.add(bd);
+    const hd=sph(0.2*s,C); hd.position.y=(b.upright?1.0:0.9)*s; g.add(hd);
+    const f=sph(0.13*s,A); f.scale.z=0.5; f.position.set(0,0.88*s,0.13*s); g.add(f);
+    for(const sx of [-1,1]){ const a=cyl(0.06*s,0.06*s,(b.longArms?0.75:0.45)*s,C,6); a.position.set(sx*0.3*s,0.42*s,0.05); a.rotation.z=sx*0.25; g.add(a); }
+    if(b.ears) for(const sx of [-1,1]){ const e=sph(0.08*s,C); e.position.set(sx*0.18*s,1.0*s,0); g.add(e); }
+    if(b.tail){ for(let i=0;i<5;i++){ const tl=sph(0.05*s,b.ringTail&&i%2?A:C); tl.position.set(0,0.3*s+i*0.06,-0.3*s-i*0.08); g.add(tl); } }
+    eyes(g,0.93*s,0.17*s,0.06*s);
+  } else if(t==='reptile'){
+    if(b.snake){ for(let i=0;i<9;i++){ const p=sph(0.08,i%2?A:C); p.position.set(Math.sin(i*0.9)*0.25,0.08,0.4-i*0.12); g.add(p); } eyes(g,0.12,0.47,0.04); }
+    else if(b.shell){ const sh=sph(0.35,C); sh.scale.set(1,0.6,1.2); sh.position.y=0.25; g.add(sh); const hd=sph(0.1,A); hd.position.set(0,0.2,0.45); g.add(hd); for(const [x,z] of [[-.22,.25],[.22,.25],[-.22,-.25],[.22,-.25]]) leg(x,z,0.14,0.1,A); eyes(g,0.24,0.53,0.05); }
+    else { const L=b.croc?1.4:0.6, bd=box(0.3,0.16,L,C); bd.position.y=0.14; g.add(bd); const hd=box(0.2,0.12,b.croc?0.6:0.2,A); hd.position.set(0,0.14,L/2+(b.croc?0.3:0.1)); g.add(hd); const tl=new THREE.Mesh(new THREE.ConeGeometry(0.1,L*0.7,5),M(C)); tl.rotation.x=-Math.PI/2; tl.position.set(0,0.12,-L/2-L*0.35); g.add(tl); for(const [x,z] of [[-.18,L/3],[.18,L/3],[-.18,-L/3],[.18,-L/3]]) leg(x,z,0.1,0.07); eyes(g,0.22,L/2+0.12,0.06); }
+  } else if(t==='frog'){
+    const bd=sph(0.2,C); bd.scale.set(1,0.7,1.1); bd.position.y=0.14; g.add(bd);
+    for(const sx of [-1,1]){ const e=sph(0.06,C); e.position.set(sx*0.1,0.27,0.12); g.add(e); const l=box(0.08,0.06,0.25,C); l.position.set(sx*0.17,0.04,-0.05); g.add(l); }
+    eyes(g,0.29,0.17,0.1);
+  } else if(t==='insect'){
+    const bd=box(0.12,0.1,b.stick?0.7:0.35,C); bd.position.y=0.25; g.add(bd);
+    if(b.wings) for(const sx of [-1,1]){ const w=box(0.4,0.02,0.32,A); w.position.set(sx*0.24,0.3,0); w.rotation.z=sx*0.3; g.add(w); }
+    if(b.horn){ const h=new THREE.Mesh(new THREE.ConeGeometry(0.03,0.2,4),M(A)); h.rotation.x=-0.6; h.position.set(0,0.33,0.24); g.add(h); }
+    if(b.pincers) for(const sx of [-1,1]){ const p=box(0.03,0.03,0.18,A); p.position.set(sx*0.05,0.26,0.25); p.rotation.y=-sx*0.4; g.add(p); }
+    if(b.mantis||b.longArms) for(const sx of [-1,1]){ const p=box(0.03,0.03,b.longArms?0.35:0.2,A); p.position.set(sx*0.08,0.28,0.25); g.add(p); }
+    for(const sx of [-1,1]) for(const z of [-0.1,0,0.1]){ const l=box(0.2,0.02,0.02,0x1d1c1e); l.position.set(sx*0.12,0.18,z); g.add(l); }
+  } else if(t==='hare'){ MODELS.hare(g); g.children.forEach(m=>{ if(m.material&&m.material.color&&m.material.color.getHex()===0xf6f7f9) m.material=M(C); }); }
+  else if(t==='penguin'){ MODELS.penguin(g); }
+  else MODELS.hare(g);
+  if(b.size) g.scale.setScalar(b.size);
+}
+function makeModel(sp){
+  const g=new THREE.Group();
+  if(typeof sp==='string') (MODELS[sp]||MODELS.hare)(g);
+  else if(sp.model&&MODELS[sp.model]) MODELS[sp.model](g);
+  else if(sp.body){ const inner=new THREE.Group(); bodyModel(inner,sp.body); g.add(inner); }
+  else MODELS.hare(g);
+  return g;
+}
 
 /* =========================================================
    5. 站點生成（依 stations.json）
@@ -473,7 +544,7 @@ function buildStation(stationId, seed){
     }
   }
   // 物種：只從 spawn 含此站點、且有模型的物種中抽，稀有度決定權重與最短距離
-  const pool=DATA.species.filter(s=>s.spawn.includes(stationId) && s.model && MODELS[s.model]);
+  const pool=DATA.species.filter(s=>s.spawn.includes(stationId) && ((s.model&&MODELS[s.model])||s.body));
   let placed=0; tries=0;
   while(pool.length && placed<st.animals && tries++<400){
     const sp=pickWeighted(pool, s=>DATA.config.rarity[s.rarity].weight);
@@ -487,8 +558,9 @@ function buildStation(stationId, seed){
 }
 function placeIce(sp,x,z,rot){
   const y=heightAt(x,z), g=new THREE.Group(); g.position.set(x,y,z);
-  const an=makeModel(sp.model); an.rotation.y=rot; g.add(an);
-  const ice=box(1.5,1.5,1.5,iceMat); ice.position.y=0.65; ice.rotation.y=rot*0.3; g.add(ice);
+  const an=makeModel(sp); an.rotation.y=rot; g.add(an);
+  const isz=Math.max(1,(sp.body&&sp.body.size)||1)*(sp.body&&sp.body.neck>1?1.6:1);
+  const ice=box(1.5*isz,1.5*isz,1.5*isz,iceMat); ice.position.y=0.65*isz; ice.rotation.y=rot*0.3; g.add(ice);
   const mk=addMarker(g,new THREE.MeshBasicMaterial({color:hex(DATA.config.rarity[sp.rarity].color)}),2.2);
   world.add(g);
   const it={type:'ice',pos:new THREE.Vector3(x,y,z),group:g,animal:an,ice,marker:mk,species:sp,thaw:0};
@@ -722,7 +794,7 @@ function showDex(){
     const got=list.filter(s=>save.collection[s.id]).length;
     return `<div class="sec"><div class="sec-title"><span>${esc(cats[c].name)}</span><b>${got}/${list.length}</b></div>
       <div class="dex">${list.map(s=>{ const n=save.collection[s.id], r=rar[s.rarity];
-        return n?`<div style="--rc:${r.color}"><b>${esc(s.name)}</b><span>${esc(r.name)}・${n} 隻</span></div>`
+        return n?`<div style="--rc:${r.color}" title="${esc(s.zone||'')}"><b>${esc(s.name)}</b><span>${esc(r.name)}・${n} 隻</span></div>`
                 :`<div class="unk" style="--rc:${r.color}"><b>？？？</b><span>${esc(r.name)}${s.spawn.length?'':'・尚未開放'}</span></div>`; }).join('')}</div></div>`;
   }).join('');
   screenEl.hidden=false;
@@ -884,7 +956,7 @@ function rebuildZooAnimals(){
   for(const a of save.zoo.animals){
     const hb=findB(a.habitat); if(!hb) continue;
     const sp=DATA.speciesById[a.species]; if(!sp) continue;
-    const m=makeModel(sp.model); const c=tileCenter(hb), d=bdef(hb.type);
+    const m=makeModel(sp); const c=tileCenter(hb), d=bdef(hb.type);
     const hw=d.size[0]*TS()/2-0.8, hd=d.size[1]*TS()/2-0.8;
     m.position.set(c.x+(Math.random()*2-1)*hw,0.1,c.z+(Math.random()*2-1)*hd); m.scale.setScalar(1.3);
     zooRoot.add(m);
