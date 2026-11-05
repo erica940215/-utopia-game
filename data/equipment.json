@@ -1,3 +1,147 @@
 [
-  { "id": "flare_gun", "name": "信號槍", "slot": "weapon", "ammo": 6, "damage": 1, "projectileSpeed": 42, "range": 1.6, "refillSeconds": 1.2 }
+ {
+  "id": "flare_gun",
+  "name": "信號槍",
+  "slot": "weapon",
+  "cost": {},
+  "requires": 0,
+  "ammo": 6,
+  "damage": 1,
+  "projectileSpeed": 42,
+  "range": 1.6,
+  "refillSeconds": 1.2,
+  "life": 1.6,
+  "cooldown": 0.25,
+  "text": "6 發・射程遠"
+ },
+ {
+  "id": "shotgun",
+  "name": "獵槍",
+  "slot": "weapon",
+  "cost": {
+   "scrap": 25,
+   "coins": 120
+  },
+  "requires": 1,
+  "ammo": 8,
+  "damage": 1,
+  "pellets": 5,
+  "spread": 0.08,
+  "projectileSpeed": 48,
+  "range": 1.4,
+  "refillSeconds": 1.0,
+  "life": 0.6,
+  "cooldown": 0.6,
+  "text": "8 發・一次 5 顆，近距離很強"
+ },
+ {
+  "id": "flamethrower",
+  "name": "火焰噴射器",
+  "slot": "weapon",
+  "cost": {
+   "scrap": 50,
+   "coins": 300,
+   "research": 40
+  },
+  "requires": 2,
+  "ammo": 60,
+  "damage": 0.35,
+  "spread": 0.07,
+  "projectileSpeed": 20,
+  "range": 1.8,
+  "refillSeconds": 0.12,
+  "life": 0.4,
+  "cooldown": 0.06,
+  "auto": true,
+  "text": "按住連發・射程短"
+ },
+ {
+  "id": "down_coat",
+  "name": "羽絨大衣",
+  "slot": "body",
+  "cost": {
+   "scrap": 8,
+   "coins": 60
+  },
+  "requires": 0,
+  "drainMult": 0.85,
+  "text": "體溫流失 -15%"
+ },
+ {
+  "id": "polar_suit",
+  "name": "極地防寒衣",
+  "slot": "body",
+  "cost": {
+   "scrap": 30,
+   "coins": 180,
+   "research": 20
+  },
+  "requires": 1,
+  "drainMult": 0.7,
+  "text": "體溫流失 -30%"
+ },
+ {
+  "id": "big_pack",
+  "name": "大背包",
+  "slot": "pack",
+  "cost": {
+   "scrap": 10,
+   "coins": 50
+  },
+  "requires": 0,
+  "bagBonus": 4,
+  "text": "背包 +4"
+ },
+ {
+  "id": "heater_pack",
+  "name": "暖爐背包",
+  "slot": "pack",
+  "cost": {
+   "scrap": 30,
+   "coins": 160,
+   "research": 20
+  },
+  "requires": 1,
+  "bagBonus": 6,
+  "drainMult": 0.9,
+  "text": "背包 +6・體溫流失 -10%"
+ },
+ {
+  "id": "field_kit",
+  "name": "捕網與釣竿",
+  "slot": "tool",
+  "cost": {
+   "scrap": 8,
+   "coins": 40
+  },
+  "requires": 0,
+  "catchSpeed": 1.5,
+  "text": "釣魚、捕蟲快 50%"
+ },
+ {
+  "id": "pro_kit",
+  "name": "專業採集組",
+  "slot": "tool",
+  "cost": {
+   "scrap": 25,
+   "coins": 150,
+   "research": 20
+  },
+  "requires": 1,
+  "catchSpeed": 2.2,
+  "text": "釣魚、捕蟲快 120%"
+ },
+ {
+  "id": "snow_boots",
+  "name": "雪地靴",
+  "slot": "feet",
+  "cost": {
+   "scrap": 10,
+   "coins": 60
+  },
+  "requires": 0,
+  "sprintSpeed": 9.6,
+  "walkSpeed": 5.4,
+  "text": "走路、奔跑更快"
+ }
 ]

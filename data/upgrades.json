@@ -1,0 +1,189 @@
+[
+ {
+  "id": "boiler",
+  "name": "鍋爐",
+  "desc": "熱區變大，也能前往更遠的路段",
+  "levels": [
+   {
+    "cost": {
+     "scrap": 20,
+     "coins": 80,
+     "research": 10
+    },
+    "effects": {
+     "heatRadius": 13,
+     "maxTier": 2
+    },
+    "text": "熱區 13 m・可去中段"
+   },
+   {
+    "cost": {
+     "scrap": 40,
+     "coins": 200,
+     "research": 40
+    },
+    "effects": {
+     "heatRadius": 15,
+     "maxTier": 3
+    },
+    "text": "熱區 15 m・可去遠方"
+   },
+   {
+    "cost": {
+     "scrap": 80,
+     "coins": 450,
+     "research": 120
+    },
+    "effects": {
+     "heatRadius": 17,
+     "maxTier": 4
+    },
+    "text": "熱區 17 m・可去極地"
+   }
+  ]
+ },
+ {
+  "id": "animal_car",
+  "name": "動物車廂",
+  "desc": "一次能帶更多陸生動物回來",
+  "levels": [
+   {
+    "cost": {
+     "scrap": 15,
+     "coins": 60,
+     "research": 5
+    },
+    "effects": {
+     "followCapacity": 3
+    },
+    "text": "跟隨 3 隻"
+   },
+   {
+    "cost": {
+     "scrap": 35,
+     "coins": 160,
+     "research": 25
+    },
+    "effects": {
+     "followCapacity": 4
+    },
+    "text": "跟隨 4 隻"
+   }
+  ]
+ },
+ {
+  "id": "tank_car",
+  "name": "水槽溫室車廂",
+  "desc": "容器變大，魚和昆蟲能多裝",
+  "levels": [
+   {
+    "cost": {
+     "scrap": 15,
+     "coins": 60,
+     "research": 5
+    },
+    "effects": {
+     "containerCapacity": 6
+    },
+    "text": "容器 6 隻"
+   },
+   {
+    "cost": {
+     "scrap": 35,
+     "coins": 160,
+     "research": 25
+    },
+    "effects": {
+     "containerCapacity": 9
+    },
+    "text": "容器 9 隻"
+   }
+  ]
+ },
+ {
+  "id": "cargo",
+  "name": "貨運車廂",
+  "desc": "背包基礎容量變大",
+  "levels": [
+   {
+    "cost": {
+     "scrap": 12,
+     "coins": 50
+    },
+    "effects": {
+     "bagCapacity": 16
+    },
+    "text": "背包 16"
+   },
+   {
+    "cost": {
+     "scrap": 30,
+     "coins": 140,
+     "research": 15
+    },
+    "effects": {
+     "bagCapacity": 22
+    },
+    "text": "背包 22"
+   }
+  ]
+ },
+ {
+  "id": "armor",
+  "name": "裝甲",
+  "desc": "霜影碰到你時，體溫掉得比較少",
+  "levels": [
+   {
+    "cost": {
+     "scrap": 20,
+     "coins": 90,
+     "research": 10
+    },
+    "effects": {
+     "wraithTouchMult": 0.75
+    },
+    "text": "霜影傷害 -25%"
+   },
+   {
+    "cost": {
+     "scrap": 45,
+     "coins": 220,
+     "research": 40
+    },
+    "effects": {
+     "wraithTouchMult": 0.5
+    },
+    "text": "霜影傷害 -50%"
+   }
+  ]
+ },
+ {
+  "id": "workshop",
+  "name": "工作台車廂",
+  "desc": "解鎖更好的武器與裝備",
+  "levels": [
+   {
+    "cost": {
+     "scrap": 20,
+     "coins": 100,
+     "research": 10
+    },
+    "effects": {
+     "workshop": 1
+    },
+    "text": "可做獵槍、防寒衣"
+   },
+   {
+    "cost": {
+     "scrap": 50,
+     "coins": 280,
+     "research": 50
+    },
+    "effects": {
+     "workshop": 2
+    },
+    "text": "可做火焰噴射器"
+   }
+  ]
+ }
+]

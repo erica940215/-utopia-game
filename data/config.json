@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "expedition": {
     "runSeconds": 300,
     "stormWarnSeconds": 60,
@@ -8,7 +8,8 @@
     "heatRadius": 11,
     "walkSpeed": 4.8,
     "sprintSpeed": 8.2,
-    "containerCapacity": 4
+    "containerCapacity": 4,
+    "maxTier": 1
   },
   "temperature": {
     "max": 100,
@@ -92,12 +93,13 @@
     "coinPerAttractPerMin": 0.5,
     "visitorPerAttract": 3,
     "demolishRefund": 0.5,
-    "autosaveSeconds": 30
+    "autosaveSeconds": 30,
+    "researchPerSpeciesPerMin": 0.05
   },
   "tiers": {
     "1": {
       "name": "近郊",
-      "fuel": 0,
+      "fuel": 1,
       "rarityWeight": {
         "common": 20,
         "rare": 3,
@@ -182,5 +184,13 @@
         "feed": 6
       }
     }
-  ]
+  ],
+  "researchPerNewSpecies": 3,
+  "gearSlots": {
+    "weapon": "武器",
+    "body": "衣服",
+    "pack": "背包",
+    "tool": "採集工具",
+    "feet": "鞋子"
+  }
 }

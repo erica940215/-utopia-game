@@ -29,7 +29,7 @@ ALIAS = {  # 官方名稱 → 遊戲裡原本的名稱
 
 CLASS = {'哺乳綱': 'mammal', '鳥綱': 'bird', '爬蟲綱': 'reptile', '兩棲綱': 'reptile', '硬骨魚綱': 'aquatic', '軟骨魚綱': 'aquatic',
          '昆蟲綱': 'insect', '蛛形綱': 'insect', '唇足綱': 'insect'}
-SPAWN = {'mammal': ['ruins', 'lake', 'greenhouse'], 'bird': ['ruins', 'lake'], 'reptile': ['ruins', 'greenhouse'], 'aquatic': ['lake'], 'insect': ['greenhouse']}
+SPAWN = {'mammal': ['ruins', 'lake', 'greenhouse', 'stall'], 'bird': ['ruins', 'lake', 'stall'], 'reptile': ['ruins', 'greenhouse', 'stall'], 'aquatic': ['lake'], 'insect': ['greenhouse']}
 ZONE_TEMP = [('企鵝', [-10, 12]), ('溫帶', [-20, 25]), ('沙漠', [10, 42]), ('穿山甲', [20, 34]), ('雨林', [20, 34]), ('非洲', [10, 38]),
              ('澳洲', [10, 35]), ('無尾熊', [12, 32]), ('大貓熊', [-5, 24]), ('臺灣', [5, 30]), ('鳥園', [8, 32]), ('兒童', [0, 32]),
              ('兩棲爬蟲', [22, 34]), ('昆蟲', [18, 30])]

@@ -46,17 +46,38 @@ function renderMapInfo(v,avail,fuel){
   if(n.type==='home'){ box.innerHTML=`<b>${esc(n.name)}</b><span>烏托邦的月台。從這裡出發，越往北越遠、越稀有。</span>`; return; }
   const locked=!avail.has(n.id)&&!v.has(n.id), tier=DATA.config.tiers[n.tier], cost=nodeFuel(n), prog=nodeProgress(n);
   if(locked){ box.innerHTML=`<b>？？？</b><span>${esc(tier.name)}・先抵達相鄰的站點才會解鎖。</span>`; return; }
-  const enough=fuel>=cost, zones=(n.zones&&n.zones.length)?n.zones.join('、'):'所有展區';
+  ensureProgress(); const maxTier=computeStats().maxTier||1;
+  const enough=fuel>=cost, tierOK=n.tier<=maxTier, zones=(n.zones&&n.zones.length)?n.zones.join('、'):'所有展區';
   const cats=[...new Set(speciesPool(n,nodeCats(n)).map(s=>s.category))].map(c=>DATA.config.categories[c].name).join('、');
+  const label=!tierOK?`需要鍋爐 Lv${n.tier-1}（到工坊升級）`:enough?(n.type==='settlement'?'前往交易':'出發'):`出發（煤炭只有 ${fuel}，會在半路停車）`;
   box.innerHTML=`<b>${esc(n.name)}</b>
     <span>${esc(STYPE[n.type])}・${esc(tier.name)}・路程煤炭 ${cost}${v.has(n.id)?'・去過':''}</span>
     ${n.type==='settlement'?`<span>倖存者會拿物資和你交易，也能換到稀有物種。</span>`
       :`<span>可能出現：${esc(zones)}（${esc(cats)}）</span>${prog?`<span>這裡的圖鑑 ${prog.got}/${prog.total}</span>`:''}`}
-    <button type="button" class="btn" id="mapGo" ${enough?'':'disabled'}>${enough?(n.type==='settlement'?'前往交易':'出發'):`煤炭不夠（需要 ${cost}）`}</button>`;
-  if(enough) $('mapGo').onclick=()=>{
+    ${tierOK&&!enough?`<span class="warnline">煤炭不夠時火車會停在半路的荒原，要下車找到煤炭才能繼續。</span>`:''}
+    <button type="button" class="btn" id="mapGo" ${tierOK?'':'disabled'}>${label}</button>`;
+  if(tierOK) $('mapGo').onclick=()=>{
+    if(!enough){
+      const need=cost-fuel; save.resources.fuel=0;
+      leaveZooForExpedition({id:'stall',name:'半路荒原',type:'stall',tier:Math.max(1,n.tier-1),zones:n.zones||[],links:[],dest:n.id,destName:n.name,need});
+      return;
+    }
     save.resources.fuel=(save.resources.fuel||0)-cost;
     if(n.type==='settlement'){ save.map.visited.includes(n.id)||save.map.visited.push(n.id); persist(); showTrade(n); }
     else leaveZooForExpedition(n);
+  };
+}
+function stallButtons(){
+  const fuel=Math.floor(save.resources.fuel||0), need=curNode.need||0;
+  return `<button class="btn" id="contBtn" type="button" ${fuel>=need?'':'disabled'}>${fuel>=need?`繼續前往${esc(curNode.destName)}（用掉煤炭 ${need}）`:`煤炭還差 ${need-fuel}，沒辦法繼續`}</button>`;
+}
+function wireStall(){
+  const b=$('contBtn'); if(!b||b.disabled) return;
+  const dest=DATA.mapById[curNode.dest], need=curNode.need||0;
+  b.onclick=()=>{
+    save.resources.fuel=(save.resources.fuel||0)-need;
+    if(dest.type==='settlement'){ save.map.visited.includes(dest.id)||save.map.visited.push(dest.id); persist(); showTrade(dest); }
+    else { persist(); startExpedition(dest); }
   };
 }
 function showTrade(n){

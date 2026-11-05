@@ -84,5 +84,29 @@
   "id": "settlement",
   "name": "倖存者聚落",
   "trade": true
+ },
+ {
+  "id": "stall",
+  "name": "半路荒原",
+  "ruins": 8,
+  "looseCrates": 12,
+  "trees": 60,
+  "cratesPerRuin": [
+   1,
+   2
+  ],
+  "lootWeights": {
+   "fuel": 70,
+   "scrap": 20,
+   "feed": 10
+  },
+  "ice": {
+   "count": 3,
+   "categories": [
+    "mammal",
+    "bird",
+    "reptile"
+   ]
+  }
  }
 ]

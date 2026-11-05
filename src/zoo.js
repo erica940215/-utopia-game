@@ -31,10 +31,10 @@ const tileDist=(a,b)=>{ const d1=bdef(a.type), d2=bdef(b.type); return Math.hypo
 const findB=uid=>save.zoo.buildings.find(b=>b.uid===uid);
 function occupancy(){ const m=new Map(); for(const b of save.zoo.buildings){ const d=bdef(b.type); for(let i=0;i<d.size[0];i++) for(let j=0;j<d.size[1];j++) m.set((b.x+i)+','+(b.z+j),b.uid); } return m; }
 function canPlace(d,x,z){ if(x<0||z<0||x+d.size[0]>GN()||z+d.size[1]>GN()) return false; const o=occupancy(); for(let i=0;i<d.size[0];i++) for(let j=0;j<d.size[1];j++) if(o.has((x+i)+','+(z+j))) return false; return true; }
-const resOf=k=>k==='coins'?save.zoo.coins:(save.resources[k]||0);
-const resName=k=>k==='coins'?'金幣':(DATA.itemsById[k]?DATA.itemsById[k].name:k);
+const resOf=k=>k==='coins'?save.zoo.coins:k==='research'?(save.zoo.research||0):(save.resources[k]||0);
+const resName=k=>k==='coins'?'金幣':k==='research'?'研究':(DATA.itemsById[k]?DATA.itemsById[k].name:k);
 const affordable=c=>Object.entries(c).every(([k,v])=>resOf(k)>=v);
-function pay(c,sign){ for(const [k,v] of Object.entries(c)){ if(k==='coins') save.zoo.coins+=sign*v; else save.resources[k]=(save.resources[k]||0)+sign*v; } }
+function pay(c,sign){ for(const [k,v] of Object.entries(c)){ if(k==='coins') save.zoo.coins+=sign*v; else if(k==='research') save.zoo.research=(save.zoo.research||0)+sign*v; else save.resources[k]=(save.resources[k]||0)+sign*v; } }
 const costText=c=>Object.entries(c).map(([k,v])=>`${resName(k)} ${v}`).join('・')||'免費';
 
 /* ---------- 場景 ---------- */
@@ -167,6 +167,8 @@ function simulate(min){
   zooStats.coinsPerMin=attract*Z.coinPerAttractPerMin;
   zooStats.visitors=Math.round(attract*Z.visitorPerAttract);
   zoo.coins+=zooStats.coinsPerMin*min;
+  const distinct=new Set(zoo.animals.map(a=>a.species)).size; zooStats.researchPerMin=distinct*(Z.researchPerSpeciesPerMin||0);
+  zoo.research=(zoo.research||0)+zooStats.researchPerMin*min;
   zoo.lastTick=Date.now();
 }
 function catchUp(){
@@ -202,7 +204,7 @@ function leaveZooForExpedition(node){
 /* ---------- 介面 ---------- */
 function updateZooHud(){
   const z=save.zoo;
-  $('zRes').innerHTML=[['金幣',Math.floor(z.coins)],...DATA.items.map(i=>[i.name,Math.floor(save.resources[i.id]||0)]),['遊客',zooStats.visitors]]
+  $('zRes').innerHTML=[['金幣',Math.floor(z.coins)],['研究',Math.floor(z.research||0)],...DATA.items.map(i=>[i.name,Math.floor(save.resources[i.id]||0)]),['遊客',zooStats.visitors]]
     .map(([n,v])=>`<span><i>${esc(n)}</i><b class="num">${v}</b></span>`).join('')
     +(zooStats.heatOn?'':'<span class="warnchip">煤炭用完，暖爐停了</span>');
   const avail=Object.values(z.unplaced).reduce((a,b)=>a+b,0);
@@ -363,3 +365,5 @@ $('zWalk').onclick=()=>startZooWalk();
 $('zWalkExit').onclick=()=>endZooWalk();
 $('zDex').onclick=()=>{ $('zooUI').hidden=true; showDex(); };
 $('zGo').onclick=()=>showMap();
+$('zShop').onclick=()=>{ $('zooUI').hidden=true; showWorkshop(); };
+$('zCtrl').hidden=!isTouch; $('zCtrl').onclick=()=>{ $('zooUI').hidden=true; startCtrlEdit(); };
