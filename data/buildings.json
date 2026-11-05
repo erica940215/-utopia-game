@@ -238,6 +238,72 @@
   "color": "#3a2e2a"
  },
  {
+  "id": "restaurant",
+  "name": "餐廳",
+  "kind": "facility",
+  "service": "food",
+  "serves": 40,
+  "spendPerVisitorMin": 0.03,
+  "size": [
+   3,
+   2
+  ],
+  "cost": {
+   "scrap": 12,
+   "coins": 80
+  },
+  "color": "#c86a3a"
+ },
+ {
+  "id": "shop",
+  "name": "紀念品店",
+  "kind": "facility",
+  "service": "shop",
+  "serves": 50,
+  "spendPerVisitorMin": 0.025,
+  "size": [
+   2,
+   2
+  ],
+  "cost": {
+   "scrap": 10,
+   "coins": 70
+  },
+  "color": "#3a7ac8"
+ },
+ {
+  "id": "restroom",
+  "name": "廁所",
+  "kind": "facility",
+  "service": "restroom",
+  "serves": 40,
+  "size": [
+   1,
+   1
+  ],
+  "cost": {
+   "scrap": 6,
+   "coins": 30
+  },
+  "color": "#8a9aa6"
+ },
+ {
+  "id": "rest_area",
+  "name": "休息區",
+  "kind": "facility",
+  "service": "rest",
+  "serves": 30,
+  "size": [
+   2,
+   2
+  ],
+  "cost": {
+   "scrap": 4,
+   "coins": 25
+  },
+  "color": "#6a8a4a"
+ },
+ {
   "id": "gate",
   "name": "入口",
   "kind": "gate",

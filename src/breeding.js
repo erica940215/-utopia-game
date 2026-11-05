@@ -48,7 +48,7 @@ function breedingStep(min){
       if(f.preg.inbred) st-=B.inbreedPenalty;
       st=Math.max(1,Math.min(B.maxStars,st));
       const baby=newIndividual(f.species,f.habitat,{stars:st,born:z.clock,parents:[father.id,f.id],gen:Math.max(f.gen,father.gen||0)+1,happy:80});
-      z.animals.push(baby); zooBirthLog.push(baby);
+      z.animals.push(baby); zooBirthLog.push(baby); z.births=(z.births||0)+1;
     }
     f.cooldownUntil=z.clock+B.cooldownMinutes; delete f.preg;
   }

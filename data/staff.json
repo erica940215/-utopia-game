@@ -1,0 +1,51 @@
+[
+ {
+  "id": "keeper",
+  "name": "飼育員",
+  "salaryPerMin": 0.6,
+  "hireCost": 30,
+  "desc": "餵食與照顧，每人可照顧 8 隻動物",
+  "capacity": 8
+ },
+ {
+  "id": "vet",
+  "name": "獸醫",
+  "salaryPerMin": 1.2,
+  "hireCost": 80,
+  "desc": "治療生病的動物，每人每分鐘可處理 0.5 隻",
+  "curePerMin": 0.5
+ },
+ {
+  "id": "mechanic",
+  "name": "技工",
+  "salaryPerMin": 0.8,
+  "hireCost": 40,
+  "desc": "維修設施，損壞的飼料站和暖爐會停止運作",
+  "repairPerMin": 4
+ },
+ {
+  "id": "janitor",
+  "name": "清潔人員",
+  "salaryPerMin": 0.5,
+  "hireCost": 20,
+  "desc": "清理遊客留下的垃圾，維持園區整潔",
+  "cleanPerMin": 1.6
+ },
+ {
+  "id": "security",
+  "name": "保全",
+  "salaryPerMin": 0.7,
+  "hireCost": 30,
+  "desc": "維持秩序，每人可照看 60 位遊客，人手不足會有偷竊損失",
+  "capacity": 60
+ },
+ {
+  "id": "educator",
+  "name": "教育人員",
+  "salaryPerMin": 0.9,
+  "hireCost": 50,
+  "desc": "導覽解說，提升遊客滿意度和研究速度",
+  "researchBonus": 0.25,
+  "satisfaction": 4
+ }
+]

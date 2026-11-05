@@ -11,6 +11,7 @@ const zooCam=new THREE.PerspectiveCamera(50,1,0.5,500);
 function zooResize(){ zooCam.aspect=innerWidth/innerHeight; zooCam.updateProjectionMatrix(); }
 addEventListener('resize',zooResize); zooResize();
 
+let zAchT=0;
 let zooActive=false, zooBaseBuilt=false, zooRoot=null, zTool='select', zSelUid=null, zooAcc=0, zSaveT=0, zHudT=0;
 const zooCamT={x:0,z:4,d:48};
 const zooBMeshes=new Map();   // uid → THREE.Group
@@ -102,6 +103,11 @@ function makeBuildingMesh(b){
     const pipe=cyl(0.12,0.12,0.9,0x15181d,6); pipe.position.y=1.6; g.add(pipe);
     const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:DOT,color:0xff9a3c,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending})); glow.scale.set(3.4,3.4,1); glow.position.y=0.8; g.add(glow); g.userData.glow=glow;
   }
+  else if(d.kind==='facility'){
+    const hgt=d.service==='restroom'?2.2:d.service==='rest'?0.3:2.8;
+    if(d.service==='rest'){ const pad=box(W-0.3,0.15,D-0.3,0xa8a098); pad.position.y=0.08; g.add(pad); for(const [x,z] of [[-0.5,0],[0.5,0]]){ const bn=box(1.2,0.45,0.4,0x6a4a32); bn.position.set(x*W/2,0.3,z); g.add(bn); } const tr=sph(0.8,0x3f6f3a); tr.position.set(0,2,-D/2+0.5); g.add(tr); const tk=cyl(0.1,0.12,1.6,0x5a4030,6); tk.position.set(0,0.8,-D/2+0.5); g.add(tk); }
+    else { const bd=box(W-0.4,hgt,D-0.4,0xe8e0d0); bd.position.y=hgt/2; g.add(bd); const rf=box(W,0.3,D,hex(d.color)); rf.position.y=hgt+0.15; g.add(rf); const sg=box(Math.min(1.6,W-0.6),0.4,0.06,hex(d.color)); sg.position.set(0,hgt-0.5,D/2-0.17); g.add(sg); const dr=box(0.7,1.4,0.05,0x3a2e2a); dr.position.set(0,0.7,D/2-0.18); g.add(dr); }
+  }
   else if(d.kind==='gate'){
     const pm=M(hex(d.color));
     for(const s of [-1,1]){ const p=box(0.6,3.4,0.6,pm); p.position.set(s*(W/2-0.3),1.7,0); g.add(p); }
@@ -140,10 +146,10 @@ function updateSelBox(){
 function heatersOn(){ return zooStats.heatOn; }
 function habitatTemp(b){
   const d=bdef(b.type); let t=d.baseTemp||0;
-  if(heatersOn()) for(const h of save.zoo.buildings){ const hd=bdef(h.type); if(hd.kind==='heater' && tileDist(h,b)<=hd.radius+Math.max(...d.size)/2) t+=hd.heat; }
+  if(heatersOn()) for(const h of save.zoo.buildings){ const hd=bdef(h.type); if(hd.kind==='heater' && isWorking(h) && tileDist(h,b)<=hd.radius+Math.max(...d.size)/2) t+=hd.heat; }
   return t;
 }
-function habitatFed(b){ const d=bdef(b.type); return save.zoo.buildings.some(f=>{ const fd=bdef(f.type); return fd.kind==='feeder' && tileDist(f,b)<=fd.radius+Math.max(...d.size)/2; }); }
+function habitatFed(b){ const d=bdef(b.type); return save.zoo.buildings.some(f=>{ const fd=bdef(f.type); return fd.kind==='feeder' && isWorking(f) && tileDist(f,b)<=fd.radius+Math.max(...d.size)/2; }); }
 function simulate(min){
   const Z=ZC(), zoo=save.zoo;
   // 暖爐耗煤
@@ -153,6 +159,7 @@ function simulate(min){
     while(zoo.fuelDebt>=1 && (save.resources.fuel||0)>0){ save.resources.fuel--; zoo.fuelDebt--; }
     zooStats.heatOn=(save.resources.fuel||0)>0 || zoo.fuelDebt<1;
   } else zooStats.heatOn=true;
+  ensureOps(); opsBeforeAnimals(min);
   const temps=new Map(), fed=new Map(), counts=new Map();
   for(const a of zoo.animals){ const k=a.habitat+'|'+a.species; counts.set(k,(counts.get(k)||0)+1); }
   let attract=0;
@@ -163,16 +170,12 @@ function simulate(min){
     while(a.food<Z.feedRefillAt && fed.get(b.uid) && (save.resources.feed||0)>=1){ save.resources.feed--; a.food=Math.min(100,a.food+Z.feedRefillAmount); }
     const T=temps.get(b.uid), tempOK=T>=sp.tempRange[0]&&T<=sp.tempRange[1];
     const socialOK=!SOCIAL_GROUP.includes(sp.social) || counts.get(b.uid+'|'+a.species)>=2;
-    const target=Math.min(40,a.food/30*40)+(tempOK?40:0)+(socialOK?20:5);
+    const target=Math.max(0,Math.min(40,a.food/30*40)+(tempOK?40:0)+(socialOK?20:5)-animalOpsPenalty(a,b));
     const h=a.happy??60, step=Z.happinessPerMin*min;
     a.happy=Math.abs(target-h)<=step?target:h+Math.sign(target-h)*step;
     attract+=sp.attract*a.happy/100*(0.8+0.1*(a.stars||2))*(isAdult(a)?1:1.25);
   }
-  zooStats.coinsPerMin=attract*Z.coinPerAttractPerMin;
-  zooStats.visitors=Math.round(attract*Z.visitorPerAttract);
-  zoo.coins+=zooStats.coinsPerMin*min;
-  const distinct=new Set(zoo.animals.map(a=>a.species)).size; zooStats.researchPerMin=distinct*(Z.researchPerSpeciesPerMin||0);
-  zoo.research=(zoo.research||0)+zooStats.researchPerMin*min;
+  opsEconomy(attract,min); computeRating();
   breedingStep(min);
   zoo.lastTick=Date.now();
 }
@@ -210,9 +213,9 @@ function leaveZooForExpedition(node){
 /* ---------- 介面 ---------- */
 function updateZooHud(){
   const z=save.zoo;
-  $('zRes').innerHTML=[['金幣',Math.floor(z.coins)],['研究',Math.floor(z.research||0)],...DATA.items.map(i=>[i.name,Math.floor(save.resources[i.id]||0)]),['遊客',zooStats.visitors]]
+  $('zRes').innerHTML=`<span class="zstar"><i>評價</i><b>${'★'.repeat(opsStats.rating)}</b></span>`+[['金幣',Math.floor(z.coins)],['研究',Math.floor(z.research||0)],...DATA.items.map(i=>[i.name,Math.floor(save.resources[i.id]||0)]),['遊客',zooStats.visitors]]
     .map(([n,v])=>`<span><i>${esc(n)}</i><b class="num">${v}</b></span>`).join('')
-    +(zooStats.heatOn?'':'<span class="warnchip">煤炭用完，暖爐停了</span>');
+    +(zooStats.heatOn?'':'<span class="warnchip">煤炭用完，暖爐停了</span>')+(opsStats.unpaid?'<span class="warnchip">金幣不夠發薪水</span>':'')+(opsStats.coverage<0.8?'<span class="warnchip">飼育員不足</span>':'');
   const avail=Object.values(z.unplaced).reduce((a,b)=>a+b,0);
   $('zPool').textContent=avail?`待安置 ${avail}`:'';
 }
@@ -294,6 +297,7 @@ function zooTap(cx,cy){
     else { $('zPanel').hidden=true;
       if(d.kind==='feeder') toast(`飼料站：半徑 ${d.radius} 格內的棲地會自動餵食（倉庫飼料 ${Math.floor(save.resources.feed||0)}）`);
       else if(d.kind==='heater') toast(`暖爐：半徑 ${d.radius} 格內的棲地 +${d.heat}°C，會慢慢消耗煤炭`);
+      else if(d.kind==='facility') toast(`${d.name}：可服務 ${d.serves} 位遊客・狀況 ${Math.round(b.cond??100)}%${isWorking(b)?'':'（損壞中，需要技工）'}`);
       else toast(d.name); }
     return;
   }
@@ -374,6 +378,8 @@ function zooUpdate(dt){
     if(zooBirthLog.length){ const names=[...new Set(zooBirthLog.map(a=>DATA.speciesById[a.species].name))]; toast(`出生了：${names.join('、')}寶寶 ×${zooBirthLog.length}`); zooBirthLog=[]; rebuildZooAnimals(); persist(); const b=zSelUid&&findB(zSelUid); if(b&&!$('zPanel').hidden&&bdef(b.type).kind==='habitat') openHabitatPanel(b); } }
   zSaveT+=dt; if(zSaveT>=ZC().autosaveSeconds){ zSaveT=0; persist(); }
   zHudT+=dt; if(zHudT>=0.5){ zHudT=0; updateZooHud(); }
+  zAchT=(zAchT||0)+dt; if(zAchT>=5){ zAchT=0; checkAchievements(); }
+  updatePeople(dt);
   if(zBrushing&&state==='zoo'){ applyBrush(zBrushing.x,zBrushing.z,zBrushing.tool,dt); refreshTerrain(); }
   if(state==='zoo'){ const px=(keys.KeyD||keys.ArrowRight?1:0)-(keys.KeyA||keys.ArrowLeft?1:0), pz=(keys.KeyS||keys.ArrowDown?1:0)-(keys.KeyW||keys.ArrowUp?1:0);
     if(px||pz){ const lim=GN()*TS()/2; zooCamT.x=Math.max(-lim,Math.min(lim,zooCamT.x+px*zooCamT.d*0.6*dt)); zooCamT.z=Math.max(-lim,Math.min(lim+6,zooCamT.z+pz*zooCamT.d*0.6*dt)); } }
@@ -405,5 +411,6 @@ $('zWalk').onclick=()=>startZooWalk();
 $('zWalkExit').onclick=()=>endZooWalk();
 $('zDex').onclick=()=>{ $('zooUI').hidden=true; showDex(); };
 $('zGo').onclick=()=>showMap();
+$('zOps').onclick=()=>{ $('zooUI').hidden=true; showOps(); };
 $('zShop').onclick=()=>{ $('zooUI').hidden=true; showWorkshop(); };
 $('zCtrl').hidden=!isTouch; $('zCtrl').onclick=()=>{ $('zooUI').hidden=true; startCtrlEdit(); };

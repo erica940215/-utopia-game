@@ -260,6 +260,16 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
 .credits summary{cursor:pointer;color:var(--frost);font-size:13px}
 .credits a{color:var(--ice)}
 .credits p{margin:6px 0 0}
+
+/* 營運 */
+.zres .zstar b{color:#e9c46a;font-size:14px;letter-spacing:.05em}
+.opsgrid{display:flex;flex-direction:column;gap:8px}
+.opsgrid label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--frost-dim)}
+.opsgrid .zbar{height:7px}
+.zopt.ticket{align-self:flex-start}
+.rating{display:flex;align-items:baseline;gap:12px}
+.bigstars{font-size:30px;color:#e9c46a;letter-spacing:.06em}
+.statline em{font-style:normal;color:var(--danger)}
 </style></head>
 <body>
 <canvas id="c"></canvas>
@@ -308,6 +318,7 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
     <div class="zacts" id="zMain">
       <span class="zpool num" id="zPool"></span>
       <button type="button" class="zbtn" id="zWalk">逛園</button>
+      <button type="button" class="zbtn" id="zOps">營運</button>
       <button type="button" class="zbtn" id="zShop">工坊</button>
       <button type="button" class="zbtn" id="zDex">圖鑑・倉庫</button>
       <button type="button" class="zbtn" id="zCtrl">操作設定</button>
@@ -337,13 +348,14 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
    ========================================================= */
 const DATA = {};
 async function loadData(){
-  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets'];
+  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets','staff','achievements'];
   const res = await Promise.all(names.map(n => fetch(`data/${n}.json`).then(r => { if(!r.ok) throw new Error(n); return r.json(); })));
   names.forEach((n,i) => DATA[n] = res[i]);
   DATA.speciesById = Object.fromEntries(DATA.species.map(s => [s.id, s]));
   DATA.itemsById = Object.fromEntries(DATA.items.map(s => [s.id, s]));
   DATA.equipById = Object.fromEntries(DATA.equipment.map(s => [s.id, s]));
   DATA.stationById = Object.fromEntries(DATA.stations.map(s => [s.id, s]));
+  DATA.staffById = Object.fromEntries(DATA.staff.map(s => [s.id, s]));
   DATA.propById = Object.fromEntries(DATA.props.map(s => [s.id, s]));
   DATA.upgradeById = Object.fromEntries(DATA.upgrades.map(s => [s.id, s]));
   DATA.mapById = Object.fromEntries(DATA.map.map(s => [s.id, s]));
@@ -1044,6 +1056,7 @@ const zooCam=new THREE.PerspectiveCamera(50,1,0.5,500);
 function zooResize(){ zooCam.aspect=innerWidth/innerHeight; zooCam.updateProjectionMatrix(); }
 addEventListener('resize',zooResize); zooResize();
 
+let zAchT=0;
 let zooActive=false, zooBaseBuilt=false, zooRoot=null, zTool='select', zSelUid=null, zooAcc=0, zSaveT=0, zHudT=0;
 const zooCamT={x:0,z:4,d:48};
 const zooBMeshes=new Map();   // uid → THREE.Group
@@ -1135,6 +1148,11 @@ function makeBuildingMesh(b){
     const pipe=cyl(0.12,0.12,0.9,0x15181d,6); pipe.position.y=1.6; g.add(pipe);
     const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:DOT,color:0xff9a3c,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending})); glow.scale.set(3.4,3.4,1); glow.position.y=0.8; g.add(glow); g.userData.glow=glow;
   }
+  else if(d.kind==='facility'){
+    const hgt=d.service==='restroom'?2.2:d.service==='rest'?0.3:2.8;
+    if(d.service==='rest'){ const pad=box(W-0.3,0.15,D-0.3,0xa8a098); pad.position.y=0.08; g.add(pad); for(const [x,z] of [[-0.5,0],[0.5,0]]){ const bn=box(1.2,0.45,0.4,0x6a4a32); bn.position.set(x*W/2,0.3,z); g.add(bn); } const tr=sph(0.8,0x3f6f3a); tr.position.set(0,2,-D/2+0.5); g.add(tr); const tk=cyl(0.1,0.12,1.6,0x5a4030,6); tk.position.set(0,0.8,-D/2+0.5); g.add(tk); }
+    else { const bd=box(W-0.4,hgt,D-0.4,0xe8e0d0); bd.position.y=hgt/2; g.add(bd); const rf=box(W,0.3,D,hex(d.color)); rf.position.y=hgt+0.15; g.add(rf); const sg=box(Math.min(1.6,W-0.6),0.4,0.06,hex(d.color)); sg.position.set(0,hgt-0.5,D/2-0.17); g.add(sg); const dr=box(0.7,1.4,0.05,0x3a2e2a); dr.position.set(0,0.7,D/2-0.18); g.add(dr); }
+  }
   else if(d.kind==='gate'){
     const pm=M(hex(d.color));
     for(const s of [-1,1]){ const p=box(0.6,3.4,0.6,pm); p.position.set(s*(W/2-0.3),1.7,0); g.add(p); }
@@ -1173,10 +1191,10 @@ function updateSelBox(){
 function heatersOn(){ return zooStats.heatOn; }
 function habitatTemp(b){
   const d=bdef(b.type); let t=d.baseTemp||0;
-  if(heatersOn()) for(const h of save.zoo.buildings){ const hd=bdef(h.type); if(hd.kind==='heater' && tileDist(h,b)<=hd.radius+Math.max(...d.size)/2) t+=hd.heat; }
+  if(heatersOn()) for(const h of save.zoo.buildings){ const hd=bdef(h.type); if(hd.kind==='heater' && isWorking(h) && tileDist(h,b)<=hd.radius+Math.max(...d.size)/2) t+=hd.heat; }
   return t;
 }
-function habitatFed(b){ const d=bdef(b.type); return save.zoo.buildings.some(f=>{ const fd=bdef(f.type); return fd.kind==='feeder' && tileDist(f,b)<=fd.radius+Math.max(...d.size)/2; }); }
+function habitatFed(b){ const d=bdef(b.type); return save.zoo.buildings.some(f=>{ const fd=bdef(f.type); return fd.kind==='feeder' && isWorking(f) && tileDist(f,b)<=fd.radius+Math.max(...d.size)/2; }); }
 function simulate(min){
   const Z=ZC(), zoo=save.zoo;
   // 暖爐耗煤
@@ -1186,6 +1204,7 @@ function simulate(min){
     while(zoo.fuelDebt>=1 && (save.resources.fuel||0)>0){ save.resources.fuel--; zoo.fuelDebt--; }
     zooStats.heatOn=(save.resources.fuel||0)>0 || zoo.fuelDebt<1;
   } else zooStats.heatOn=true;
+  ensureOps(); opsBeforeAnimals(min);
   const temps=new Map(), fed=new Map(), counts=new Map();
   for(const a of zoo.animals){ const k=a.habitat+'|'+a.species; counts.set(k,(counts.get(k)||0)+1); }
   let attract=0;
@@ -1196,16 +1215,12 @@ function simulate(min){
     while(a.food<Z.feedRefillAt && fed.get(b.uid) && (save.resources.feed||0)>=1){ save.resources.feed--; a.food=Math.min(100,a.food+Z.feedRefillAmount); }
     const T=temps.get(b.uid), tempOK=T>=sp.tempRange[0]&&T<=sp.tempRange[1];
     const socialOK=!SOCIAL_GROUP.includes(sp.social) || counts.get(b.uid+'|'+a.species)>=2;
-    const target=Math.min(40,a.food/30*40)+(tempOK?40:0)+(socialOK?20:5);
+    const target=Math.max(0,Math.min(40,a.food/30*40)+(tempOK?40:0)+(socialOK?20:5)-animalOpsPenalty(a,b));
     const h=a.happy??60, step=Z.happinessPerMin*min;
     a.happy=Math.abs(target-h)<=step?target:h+Math.sign(target-h)*step;
     attract+=sp.attract*a.happy/100*(0.8+0.1*(a.stars||2))*(isAdult(a)?1:1.25);
   }
-  zooStats.coinsPerMin=attract*Z.coinPerAttractPerMin;
-  zooStats.visitors=Math.round(attract*Z.visitorPerAttract);
-  zoo.coins+=zooStats.coinsPerMin*min;
-  const distinct=new Set(zoo.animals.map(a=>a.species)).size; zooStats.researchPerMin=distinct*(Z.researchPerSpeciesPerMin||0);
-  zoo.research=(zoo.research||0)+zooStats.researchPerMin*min;
+  opsEconomy(attract,min); computeRating();
   breedingStep(min);
   zoo.lastTick=Date.now();
 }
@@ -1243,9 +1258,9 @@ function leaveZooForExpedition(node){
 /* ---------- 介面 ---------- */
 function updateZooHud(){
   const z=save.zoo;
-  $('zRes').innerHTML=[['金幣',Math.floor(z.coins)],['研究',Math.floor(z.research||0)],...DATA.items.map(i=>[i.name,Math.floor(save.resources[i.id]||0)]),['遊客',zooStats.visitors]]
+  $('zRes').innerHTML=`<span class="zstar"><i>評價</i><b>${'★'.repeat(opsStats.rating)}</b></span>`+[['金幣',Math.floor(z.coins)],['研究',Math.floor(z.research||0)],...DATA.items.map(i=>[i.name,Math.floor(save.resources[i.id]||0)]),['遊客',zooStats.visitors]]
     .map(([n,v])=>`<span><i>${esc(n)}</i><b class="num">${v}</b></span>`).join('')
-    +(zooStats.heatOn?'':'<span class="warnchip">煤炭用完，暖爐停了</span>');
+    +(zooStats.heatOn?'':'<span class="warnchip">煤炭用完，暖爐停了</span>')+(opsStats.unpaid?'<span class="warnchip">金幣不夠發薪水</span>':'')+(opsStats.coverage<0.8?'<span class="warnchip">飼育員不足</span>':'');
   const avail=Object.values(z.unplaced).reduce((a,b)=>a+b,0);
   $('zPool').textContent=avail?`待安置 ${avail}`:'';
 }
@@ -1327,6 +1342,7 @@ function zooTap(cx,cy){
     else { $('zPanel').hidden=true;
       if(d.kind==='feeder') toast(`飼料站：半徑 ${d.radius} 格內的棲地會自動餵食（倉庫飼料 ${Math.floor(save.resources.feed||0)}）`);
       else if(d.kind==='heater') toast(`暖爐：半徑 ${d.radius} 格內的棲地 +${d.heat}°C，會慢慢消耗煤炭`);
+      else if(d.kind==='facility') toast(`${d.name}：可服務 ${d.serves} 位遊客・狀況 ${Math.round(b.cond??100)}%${isWorking(b)?'':'（損壞中，需要技工）'}`);
       else toast(d.name); }
     return;
   }
@@ -1407,6 +1423,8 @@ function zooUpdate(dt){
     if(zooBirthLog.length){ const names=[...new Set(zooBirthLog.map(a=>DATA.speciesById[a.species].name))]; toast(`出生了：${names.join('、')}寶寶 ×${zooBirthLog.length}`); zooBirthLog=[]; rebuildZooAnimals(); persist(); const b=zSelUid&&findB(zSelUid); if(b&&!$('zPanel').hidden&&bdef(b.type).kind==='habitat') openHabitatPanel(b); } }
   zSaveT+=dt; if(zSaveT>=ZC().autosaveSeconds){ zSaveT=0; persist(); }
   zHudT+=dt; if(zHudT>=0.5){ zHudT=0; updateZooHud(); }
+  zAchT=(zAchT||0)+dt; if(zAchT>=5){ zAchT=0; checkAchievements(); }
+  updatePeople(dt);
   if(zBrushing&&state==='zoo'){ applyBrush(zBrushing.x,zBrushing.z,zBrushing.tool,dt); refreshTerrain(); }
   if(state==='zoo'){ const px=(keys.KeyD||keys.ArrowRight?1:0)-(keys.KeyA||keys.ArrowLeft?1:0), pz=(keys.KeyS||keys.ArrowDown?1:0)-(keys.KeyW||keys.ArrowUp?1:0);
     if(px||pz){ const lim=GN()*TS()/2; zooCamT.x=Math.max(-lim,Math.min(lim,zooCamT.x+px*zooCamT.d*0.6*dt)); zooCamT.z=Math.max(-lim,Math.min(lim+6,zooCamT.z+pz*zooCamT.d*0.6*dt)); } }
@@ -1438,6 +1456,7 @@ $('zWalk').onclick=()=>startZooWalk();
 $('zWalkExit').onclick=()=>endZooWalk();
 $('zDex').onclick=()=>{ $('zooUI').hidden=true; showDex(); };
 $('zGo').onclick=()=>showMap();
+$('zOps').onclick=()=>{ $('zooUI').hidden=true; showOps(); };
 $('zShop').onclick=()=>{ $('zooUI').hidden=true; showWorkshop(); };
 $('zCtrl').hidden=!isTouch; $('zCtrl').onclick=()=>{ $('zooUI').hidden=true; startCtrlEdit(); };
 
@@ -1685,7 +1704,7 @@ function breedingStep(min){
       if(f.preg.inbred) st-=B.inbreedPenalty;
       st=Math.max(1,Math.min(B.maxStars,st));
       const baby=newIndividual(f.species,f.habitat,{stars:st,born:z.clock,parents:[father.id,f.id],gen:Math.max(f.gen,father.gen||0)+1,happy:80});
-      z.animals.push(baby); zooBirthLog.push(baby);
+      z.animals.push(baby); zooBirthLog.push(baby); z.births=(z.births||0)+1;
     }
     f.cooldownUntil=z.clock+B.cooldownMinutes; delete f.preg;
   }
@@ -2082,6 +2101,201 @@ function upgradeTrain(){
 
 /* 測試用：讓自動測試檢查場景與已載入的素材 */
 try{ window.__utopiaDebug={assetCache,loadZad,get zooScene(){ return zooScene; },get scene(){ return scene; }}; }catch(e){}
+
+/* =========================================================
+   園區營運：員工、遊客、園區評價、成就
+   員工在 data/staff.json，成就在 data/achievements.json，數值在 config.ops
+   ========================================================= */
+const OPS=()=>DATA.config.ops;
+const opsStats={coverage:1,satisfaction:60,rating:1,score:0,parts:{},unpaid:false,theft:false,needs:{},salary:0,income:{ticket:0,spend:0}};
+const staffCount=id=>((save.zoo&&save.zoo.staff)||{})[id]||0;
+const totalStaff=()=>Object.values(save.zoo.staff||{}).reduce((a,b)=>a+b,0);
+const isWorking=b=>(b.cond??100)>=OPS().brokenBelow;
+function ensureOps(){
+  const z=save.zoo; if(!z) return;
+  z.staff=z.staff||{...OPS().startStaff};
+  z.ticket=z.ticket??OPS().ticketDefault;
+  z.clean=z.clean??100; z.births=z.births||0; z.ach=z.ach||{};
+  for(const b of z.buildings) if(b.cond==null) b.cond=100;
+  for(const a of z.animals) if(a.health==null) a.health=100;
+}
+
+/* 每次模擬：先處理員工（薪水、照護覆蓋、維修、清潔、醫療），再算動物需求 */
+function opsBeforeAnimals(min){
+  const z=save.zoo, O=OPS(), S=DATA.staffById;
+  // 薪水
+  const salary=Object.entries(z.staff).reduce((s,[id,n])=>s+(S[id]?S[id].salaryPerMin*n:0),0);
+  opsStats.salary=salary; z.coins-=salary*min;
+  opsStats.unpaid=z.coins<0; if(z.coins<0) z.coins=0;
+  const eff=opsStats.unpaid?0.5:1;
+  // 飼育員覆蓋率
+  const need=z.animals.length;
+  opsStats.coverage=need?Math.min(1,staffCount('keeper')*S.keeper.capacity*eff/need):1;
+  // 設施耗損與技工維修
+  const wear=z.buildings.filter(b=>{ const k=bdef(b.type).kind; return k!=='path'&&k!=='gate'; });
+  for(const b of wear) b.cond=Math.max(0,(b.cond??100)-O.conditionDecayPerMin*min);
+  let repair=staffCount('mechanic')*S.mechanic.repairPerMin*eff*min;
+  for(const b of wear.slice().sort((a,b)=>a.cond-b.cond)){ if(repair<=0) break; const r=Math.min(repair,100-b.cond); b.cond+=r; repair-=r; }
+  // 清潔
+  z.clean=Math.max(0,Math.min(100,z.clean-(zooStats.visitors||0)*O.litterPerVisitorMin*min+staffCount('janitor')*S.janitor.cleanPerMin*eff*min));
+  // 生病與獸醫
+  let cure=staffCount('vet')*S.vet.curePerMin*eff*min;
+  for(const a of z.animals){
+    if(!a.sick&&Math.random()<O.sickChancePerMin*min*(a.food<30?3:1)) a.sick=true;
+    if(a.sick&&cure>=1){ a.sick=false; cure-=1; }
+    else if(a.sick&&cure>0&&Math.random()<cure){ a.sick=false; cure=0; }
+    a.health=Math.max(5,Math.min(100,(a.health??100)+(a.sick?-O.sickHealthLossPerMin:O.healthRegenPerMin)*min));
+  }
+}
+function animalOpsPenalty(a,b){
+  return (1-opsStats.coverage)*25+(100-(a.health??100))*0.3+(isWorking(b)?0:12);
+}
+
+/* 遊客、門票、消費、研究 */
+function facilityCoverage(service,visitors){
+  const serves=save.zoo.buildings.filter(b=>{ const d=bdef(b.type); return d.kind==='facility'&&d.service===service&&isWorking(b); }).reduce((s,b)=>s+bdef(b.type).serves,0);
+  return visitors<=0?1:Math.min(1,serves/visitors);
+}
+function opsEconomy(attract,min){
+  const z=save.zoo, O=OPS(), Z=ZC();
+  const prevV=Math.max(1,zooStats.visitors||0);
+  const viewing=z.animals.length?z.animals.reduce((s,a)=>s+(a.happy??60),0)/z.animals.length:20;
+  const needs={food:facilityCoverage('food',prevV),restroom:facilityCoverage('restroom',prevV),rest:facilityCoverage('rest',prevV),shop:facilityCoverage('shop',prevV)};
+  const boards=(z.props||[]).filter(p=>p.type==='info_board').length;
+  const education=Math.min(100,staffCount('educator')*DATA.staffById.educator.satisfaction*4+boards*6);
+  const decor=Math.min(100,(z.props||[]).length*2);
+  const needScore=(needs.food+needs.restroom+needs.rest)/3*100;
+  const sat=0.35*viewing+0.25*needScore+0.2*z.clean+0.1*education+0.1*decor;
+  opsStats.needs=needs; opsStats.satisfaction=sat; opsStats.parts.sat={viewing,needScore,clean:z.clean,education,decor};
+  const priceF=Math.max(0.2,1-(z.ticket-O.ticketDefault)*O.priceElasticity);
+  const visitors=Math.round(attract*Z.visitorPerAttract*(0.5+sat/100)*priceF*(0.7+0.1*opsStats.rating));
+  let ticket=visitors*z.ticket*O.coinsPerVisitorTicketMin;
+  let spend=0;
+  for(const b of z.buildings){ const d=bdef(b.type); if(d.kind==='facility'&&d.spendPerVisitorMin&&isWorking(b)) spend+=Math.min(visitors,d.serves)*d.spendPerVisitorMin; }
+  opsStats.theft=staffCount('security')*DATA.staffById.security.capacity<visitors&&visitors>20;
+  const mult=opsStats.theft?1-O.theftLoss:1;
+  opsStats.income={ticket:ticket*mult,spend:spend*mult};
+  zooStats.visitors=visitors; zooStats.coinsPerMin=(ticket+spend)*mult;
+  z.coins+=zooStats.coinsPerMin*min;
+  const distinct=new Set(z.animals.map(a=>a.species)).size;
+  zooStats.researchPerMin=distinct*(Z.researchPerSpeciesPerMin||0)*(1+staffCount('educator')*DATA.staffById.educator.researchBonus);
+  z.research=(z.research||0)+zooStats.researchPerMin*min;
+}
+
+/* 園區評價：動物福利、遊客滿意度、物種多樣性、保育、整潔 */
+function computeRating(){
+  const z=save.zoo, O=OPS(), W=O.ratingWeights;
+  const welfare=z.animals.length?z.animals.reduce((s,a)=>s+(a.happy??60),0)/z.animals.length:0;
+  const distinct=new Set(z.animals.map(a=>a.species));
+  const diversity=Math.min(1,distinct.size/O.diversityFull)*100;
+  const endangered=[...distinct].filter(id=>{ const r=DATA.speciesById[id]&&DATA.speciesById[id].rarity; return r==='endangered'||r==='legendary'; }).length;
+  const conservation=Math.min(1,(endangered+(z.released||0)*0.5)/O.conservationFull)*100;
+  const parts={welfare,satisfaction:opsStats.satisfaction,diversity,conservation,cleanliness:z.clean};
+  const score=Object.entries(W).reduce((s,[k,w])=>s+w*parts[k],0);
+  opsStats.parts.rating=parts; opsStats.score=score; opsStats.endangered=endangered;
+  opsStats.rating=Math.max(1,Math.min(5,1+Math.floor(score/20)));
+  return opsStats.rating;
+}
+
+/* 成就 */
+function achStat(k){
+  const z=save.zoo;
+  return {species:Object.keys(save.collection).length,births:z.births||0,released:z.released||0,visitors:zooStats.visitors||0,
+    rating:opsStats.rating,staff:totalStaff(),props:(z.props||[]).length,runs:save.runs||0,endangered:opsStats.endangered||0}[k]||0;
+}
+function checkAchievements(){
+  const z=save.zoo; let got=[];
+  for(const a of DATA.achievements){
+    if(z.ach[a.id]) continue;
+    if(achStat(a.stat)>=a.target){ z.ach[a.id]=Date.now(); pay(a.reward,1); got.push(a); }
+  }
+  if(got.length){ toast(`成就達成：${got.map(a=>a.name).join('、')}（獎勵 ${got.map(a=>costText(a.reward)).join('、')}）`); persist(); }
+}
+
+/* 遊客小人：在步道上走動 */
+let zooPeople=[];
+const PEOPLE_COLORS=[0xc8402a,0x2a5ad8,0xe8c040,0x3a8a4a,0x8a3a9a,0xe0802a,0xf2efe6,0x2a2828];
+function makePerson(){
+  const g=new THREE.Group(), c=PEOPLE_COLORS[Math.floor(Math.random()*PEOPLE_COLORS.length)];
+  const body=cyl(0.18,0.22,0.8,c,8); body.position.y=0.6; g.add(body);
+  const legs=cyl(0.14,0.14,0.4,0x2a2c34,6); legs.position.y=0.2; g.add(legs);
+  const head=sph(0.15,0xe8c0a0); head.position.y=1.15; g.add(head);
+  return g;
+}
+function pathTargets(){
+  const ps=save.zoo.buildings.filter(b=>bdef(b.type).kind==='path'||bdef(b.type).kind==='facility'||b.type==='gate').map(tileCenter);
+  return ps.length?ps:[{x:0,z:GN()*TS()/2-3}];
+}
+function updatePeople(dt){
+  const want=Math.min(36,Math.round((zooStats.visitors||0)/4));
+  const targets=pathTargets();
+  while(zooPeople.length<want){ const p=makePerson(), t=targets[Math.floor(Math.random()*targets.length)]; p.position.set(t.x+(Math.random()-0.5),0,t.z+(Math.random()-0.5)); zooRoot.add(p); zooPeople.push({m:p,tx:p.position.x,tz:p.position.z,wait:Math.random()*3,ph:Math.random()*6}); }
+  while(zooPeople.length>want){ const p=zooPeople.pop(); zooRoot.remove(p.m); }
+  for(const p of zooPeople){
+    const m=p.m;
+    if(p.wait>0){ p.wait-=dt; }
+    else{
+      const dx=p.tx-m.position.x, dz=p.tz-m.position.z, d=Math.hypot(dx,dz);
+      if(d<0.3){ const t=targets[Math.floor(Math.random()*targets.length)]; p.tx=t.x+(Math.random()-0.5)*1.4; p.tz=t.z+(Math.random()-0.5)*1.4; p.wait=Math.random()*4; }
+      else{ const s=Math.min(d,dt*1.3); m.position.x+=dx/d*s; m.position.z+=dz/d*s; m.rotation.y=Math.atan2(dx,dz); p.ph+=dt*9; }
+    }
+    m.position.y=ZH(m.position.x,m.position.z)+Math.abs(Math.sin(p.ph))*0.05;
+  }
+}
+function clearPeople(){ for(const p of zooPeople) zooRoot.remove(p.m); zooPeople=[]; }
+
+/* 營運面板 */
+let opsTab='staff';
+const bar100=(v,cls='')=>`<span class="zbar ${cls}"><i style="width:${Math.max(0,Math.min(100,Math.round(v)))}%"></i></span>`;
+const starsTxt=n=>'★'.repeat(n)+'☆'.repeat(5-n);
+function showOps(msg){
+  ensureOps(); state='ops'; computeRating();
+  const z=save.zoo, O=OPS();
+  let body='';
+  if(opsTab==='staff'){
+    body=DATA.staff.map(s=>{ const n=staffCount(s.id);
+      return `<div class="shopcard"><div class="sc-main"><b>${esc(s.name)} <em class="num">×${n}</em></b><span>${esc(s.desc)}</span><span>薪水每人每分鐘 ${s.salaryPerMin} 金幣・雇用費 ${s.hireCost}</span></div>
+        <div class="zp-btns"><button type="button" class="zmini add" data-hire="${s.id}" ${z.coins>=s.hireCost?'':'disabled'}>雇用</button><button type="button" class="zmini" data-fire="${s.id}" ${n?'':'disabled'}>解雇</button></div></div>`; }).join('');
+    const broken=z.buildings.filter(b=>!isWorking(b)).length, sick=z.animals.filter(a=>a.sick).length;
+    body=`<div class="statline">每分鐘薪水 ${opsStats.salary.toFixed(1)} 金幣・照護覆蓋 ${Math.round(opsStats.coverage*100)}%・生病動物 ${sick} 隻・損壞設施 ${broken} 座・整潔 ${Math.round(z.clean)}%${opsStats.unpaid?'・<em>金幣不足，員工效率減半</em>':''}</div>`+body;
+  } else if(opsTab==='visitors'){
+    const p=opsStats.parts.sat||{}, n=opsStats.needs||{};
+    body=`<div class="statline">遊客 ${zooStats.visitors} 人・滿意度 ${Math.round(opsStats.satisfaction)}・每分鐘收入：門票 ${opsStats.income.ticket.toFixed(1)}、消費 ${opsStats.income.spend.toFixed(1)}${opsStats.theft?'・<em>保全不足，損失 '+Math.round(O.theftLoss*100)+'%</em>':''}</div>
+      <label class="zopt ticket">門票價格 <input type="range" id="ticketIn" min="${O.ticketMin}" max="${O.ticketMax}" step="1" value="${z.ticket}"> <b class="num" id="ticketOut">${z.ticket} 金幣</b></label>
+      <div class="opsgrid">
+        <label>看動物（動物平均幸福度）${bar100(p.viewing)}</label>
+        <label>餐飲 ${bar100((n.food||0)*100,n.food<0.6?'low':'')}</label>
+        <label>廁所 ${bar100((n.restroom||0)*100,n.restroom<0.6?'low':'')}</label>
+        <label>休息區 ${bar100((n.rest||0)*100,n.rest<0.6?'low':'')}</label>
+        <label>整潔 ${bar100(p.clean,p.clean<50?'low':'')}</label>
+        <label>教育（教育人員、解說牌）${bar100(p.education)}</label>
+        <label>造景（自由擺放物件）${bar100(p.decor)}</label>
+      </div>
+      <p class="zp-empty">票價越高，來的人越少。餐廳、廁所、休息區在「設施」分頁建造；遊客越多，需要的數量越多。</p>`;
+  } else if(opsTab==='rating'){
+    const r=opsStats.parts.rating||{}, names={welfare:'動物福利',satisfaction:'遊客滿意度',diversity:'物種多樣性',conservation:'保育成果',cleanliness:'整潔'};
+    body=`<div class="rating"><span class="bigstars">${starsTxt(opsStats.rating)}</span><span class="num">總分 ${Math.round(opsStats.score)}／100</span></div>
+      <div class="opsgrid">${Object.keys(names).map(k=>`<label>${names[k]}（權重 ${Math.round(O.ratingWeights[k]*100)}%）${bar100(r[k])}</label>`).join('')}</div>
+      <p class="zp-empty">評價越高，遊客越多。保育成果看園區裡的瀕危與傳說級物種數量，以及野放的動物。</p>`;
+  } else {
+    body=DATA.achievements.map(a=>{ const done=z.ach[a.id], v=achStat(a.stat);
+      return `<div class="shopcard${done?' on':''}"><div class="sc-main"><b>${done?'✔ ':''}${esc(a.name)}</b><span>${esc(a.desc)}・獎勵 ${esc(costText(a.reward))}</span>${done?'':bar100(v/a.target*100)}</div><span class="sc-max num">${Math.min(v,a.target)}/${a.target}</span></div>`; }).join('');
+  }
+  const tabs=[['staff','員工'],['visitors','遊客'],['rating','評價'],['ach','成就']];
+  screenEl.hidden=false;
+  screenEl.innerHTML=`<div class="hub">
+    <div class="hub-head"><h1><small>OPERATIONS · 園區營運</small>營運</h1><span class="savechip">${starsTxt(opsStats.rating)}・金幣 ${Math.floor(z.coins)}</span></div>
+    <div class="dextabs" role="tablist">${tabs.map(([id,n])=>`<button type="button" role="tab" class="dextab${opsTab===id?' on':''}" data-otab="${id}" aria-selected="${opsTab===id}">${n}</button>`).join('')}</div>
+    ${msg?`<div class="dexinfo">${esc(msg)}</div>`:''}
+    <div class="shoplist">${body}</div>
+    <button class="btn ghost" id="opsBack" type="button">回到園區</button>
+  </div>`;
+  screenEl.querySelectorAll('[data-otab]').forEach(el=>el.onclick=()=>{ opsTab=el.dataset.otab; showOps(); });
+  screenEl.querySelectorAll('[data-hire]').forEach(el=>el.onclick=()=>{ const s=DATA.staffById[el.dataset.hire]; if(z.coins<s.hireCost) return; z.coins-=s.hireCost; z.staff[s.id]=(z.staff[s.id]||0)+1; simulate(0); persist(); showOps(`雇用了一位${s.name}`); });
+  screenEl.querySelectorAll('[data-fire]').forEach(el=>el.onclick=()=>{ const id=el.dataset.fire; if(!z.staff[id]) return; z.staff[id]--; simulate(0); persist(); showOps(`解雇了一位${DATA.staffById[id].name}`); });
+  const ti=$('ticketIn'); if(ti){ ti.oninput=e=>{ $('ticketOut').textContent=e.target.value+' 金幣'; }; ti.onchange=e=>{ z.ticket=parseInt(e.target.value,10); simulate(0); persist(); showOps(); }; }
+  $('opsBack').onclick=()=>{ screenEl.hidden=true; state='zoo'; $('zooUI').hidden=false; updateZooHud(); };
+}
 
 /* =========================================================
    觸控操作設定：搖桿與按鈕可以調整大小、拖曳位置

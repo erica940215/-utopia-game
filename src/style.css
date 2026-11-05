@@ -248,3 +248,13 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
 .credits summary{cursor:pointer;color:var(--frost);font-size:13px}
 .credits a{color:var(--ice)}
 .credits p{margin:6px 0 0}
+
+/* 營運 */
+.zres .zstar b{color:#e9c46a;font-size:14px;letter-spacing:.05em}
+.opsgrid{display:flex;flex-direction:column;gap:8px}
+.opsgrid label{display:flex;flex-direction:column;gap:4px;font-size:12px;color:var(--frost-dim)}
+.opsgrid .zbar{height:7px}
+.zopt.ticket{align-self:flex-start}
+.rating{display:flex;align-items:baseline;gap:12px}
+.bigstars{font-size:30px;color:#e9c46a;letter-spacing:.06em}
+.statline em{font-style:normal;color:var(--danger)}

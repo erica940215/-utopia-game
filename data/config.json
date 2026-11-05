@@ -1,5 +1,5 @@
 {
-  "version": 6,
+  "version": 7,
   "expedition": {
     "runSeconds": 300,
     "stormWarnSeconds": 60,
@@ -285,5 +285,31 @@
         "color": "#a8acb0"
       }
     ]
+  },
+  "ops": {
+    "startStaff": {
+      "keeper": 1
+    },
+    "sickChancePerMin": 0.0015,
+    "sickHealthLossPerMin": 4,
+    "healthRegenPerMin": 2,
+    "conditionDecayPerMin": 0.12,
+    "brokenBelow": 25,
+    "litterPerVisitorMin": 0.004,
+    "theftLoss": 0.12,
+    "ticketDefault": 10,
+    "ticketMin": 0,
+    "ticketMax": 40,
+    "priceElasticity": 0.035,
+    "coinsPerVisitorTicketMin": 0.0167,
+    "ratingWeights": {
+      "welfare": 0.3,
+      "satisfaction": 0.25,
+      "diversity": 0.2,
+      "conservation": 0.15,
+      "cleanliness": 0.1
+    },
+    "diversityFull": 40,
+    "conservationFull": 8
   }
 }

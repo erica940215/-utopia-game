@@ -1,0 +1,150 @@
+[
+ {
+  "id": "first_rescue",
+  "name": "第一次救援",
+  "desc": "圖鑑發現 1 種生物",
+  "stat": "species",
+  "target": 1,
+  "reward": {
+   "coins": 50
+  }
+ },
+ {
+  "id": "species_10",
+  "name": "小小方舟",
+  "desc": "圖鑑發現 10 種生物",
+  "stat": "species",
+  "target": 10,
+  "reward": {
+   "coins": 150,
+   "research": 10
+  }
+ },
+ {
+  "id": "species_50",
+  "name": "冰原動物學家",
+  "desc": "圖鑑發現 50 種生物",
+  "stat": "species",
+  "target": 50,
+  "reward": {
+   "coins": 600,
+   "research": 50
+  }
+ },
+ {
+  "id": "species_150",
+  "name": "活的百科全書",
+  "desc": "圖鑑發現 150 種生物",
+  "stat": "species",
+  "target": 150,
+  "reward": {
+   "coins": 2000,
+   "research": 200
+  }
+ },
+ {
+  "id": "first_birth",
+  "name": "新生命",
+  "desc": "園區第一次有寶寶出生",
+  "stat": "births",
+  "target": 1,
+  "reward": {
+   "coins": 80,
+   "research": 5
+  }
+ },
+ {
+  "id": "births_20",
+  "name": "繁殖專家",
+  "desc": "累計出生 20 隻寶寶",
+  "stat": "births",
+  "target": 20,
+  "reward": {
+   "coins": 400,
+   "research": 40
+  }
+ },
+ {
+  "id": "release_5",
+  "name": "回到野外",
+  "desc": "野放 5 隻動物",
+  "stat": "released",
+  "target": 5,
+  "reward": {
+   "research": 30
+  }
+ },
+ {
+  "id": "visitors_100",
+  "name": "人氣景點",
+  "desc": "同時有 100 位遊客",
+  "stat": "visitors",
+  "target": 100,
+  "reward": {
+   "coins": 300
+  }
+ },
+ {
+  "id": "rating_3",
+  "name": "三星動物園",
+  "desc": "園區評價達到 3 星",
+  "stat": "rating",
+  "target": 3,
+  "reward": {
+   "coins": 300,
+   "research": 20
+  }
+ },
+ {
+  "id": "rating_5",
+  "name": "五星烏托邦",
+  "desc": "園區評價達到 5 星",
+  "stat": "rating",
+  "target": 5,
+  "reward": {
+   "coins": 1500,
+   "research": 100
+  }
+ },
+ {
+  "id": "staff_10",
+  "name": "團隊成形",
+  "desc": "雇用 10 位員工",
+  "stat": "staff",
+  "target": 10,
+  "reward": {
+   "coins": 200
+  }
+ },
+ {
+  "id": "decor_30",
+  "name": "造景師",
+  "desc": "放置 30 個自由擺放物件",
+  "stat": "props",
+  "target": 30,
+  "reward": {
+   "coins": 200
+  }
+ },
+ {
+  "id": "expeditions_20",
+  "name": "老練列車長",
+  "desc": "完成 20 次遠征",
+  "stat": "runs",
+  "target": 20,
+  "reward": {
+   "coins": 300,
+   "research": 20
+  }
+ },
+ {
+  "id": "endangered_5",
+  "name": "保育先鋒",
+  "desc": "園區同時飼養 5 種瀕危或傳說級物種",
+  "stat": "endangered",
+  "target": 5,
+  "reward": {
+   "research": 80
+  }
+ }
+]
