@@ -1,0 +1,50 @@
+{
+  "version": 1,
+  "expedition": {
+    "runSeconds": 300,
+    "stormWarnSeconds": 60,
+    "bagCapacity": 12,
+    "followCapacity": 2,
+    "heatRadius": 11,
+    "walkSpeed": 4.8,
+    "sprintSpeed": 8.2
+  },
+  "temperature": {
+    "max": 100,
+    "drainPerSec": 1.0,
+    "sprintExtraDrain": 0.55,
+    "perFollowerDrain": 0.15,
+    "stormDrainPerSec": 4.2,
+    "heatRegenPerSec": 14,
+    "respawnTemp": 55,
+    "collapseTimePenalty": 30
+  },
+  "death": {
+    "dropFraction": 0.35,
+    "followersReturnToIce": true
+  },
+  "wraith": {
+    "firstSpawnAt": 55,
+    "spawnInterval": 14,
+    "stormSpawnInterval": 6,
+    "baseMax": 3,
+    "addMaxEverySeconds": 90,
+    "stormMax": 7,
+    "hp": 2,
+    "speed": 3.1,
+    "stormSpeed": 4.2,
+    "chaseRange": 45,
+    "touchDrainPerSec": 16
+  },
+  "rarity": {
+    "common":     { "name": "普通", "color": "#9fb7c6", "weight": 10, "minDist": 38 },
+    "rare":       { "name": "稀有", "color": "#7cc8e8", "weight": 4,  "minDist": 60 },
+    "endangered": { "name": "瀕危", "color": "#ff9a3c", "weight": 2,  "minDist": 85 },
+    "legendary":  { "name": "傳說", "color": "#e9c46a", "weight": 1,  "minDist": 110 }
+  },
+  "categories": {
+    "land":    { "name": "陸生" },
+    "aquatic": { "name": "水生" },
+    "insect":  { "name": "昆蟲" }
+  }
+}

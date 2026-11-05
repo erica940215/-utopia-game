@@ -1,0 +1,15 @@
+[
+  { "id": "penguin",     "name": "企鵝",       "category": "land",    "rarity": "common",     "model": "penguin",  "tempRange": [-30, 5],  "diet": "魚",     "social": "群居", "attract": 6, "spawn": ["ruins"] },
+  { "id": "arctic_fox",  "name": "北極狐",     "category": "land",    "rarity": "common",     "model": "fox",      "tempRange": [-40, 10], "diet": "肉",     "social": "獨居", "attract": 5, "spawn": ["ruins"] },
+  { "id": "arctic_hare", "name": "北極兔",     "category": "land",    "rarity": "common",     "model": "hare",     "tempRange": [-40, 10], "diet": "草",     "social": "小群", "attract": 3, "spawn": ["ruins"] },
+  { "id": "red_panda",   "name": "小貓熊",     "category": "land",    "rarity": "rare",       "model": "redpanda", "tempRange": [-10, 20], "diet": "竹",     "social": "獨居", "attract": 8, "spawn": ["ruins"] },
+  { "id": "snow_monkey", "name": "日本雪猴",   "category": "land",    "rarity": "rare",       "model": "monkey",   "tempRange": [-15, 25], "diet": "雜食",   "social": "群居", "attract": 7, "spawn": ["ruins"] },
+  { "id": "musk_ox",     "name": "麝香牛",     "category": "land",    "rarity": "endangered", "model": null,       "tempRange": [-45, 5],  "diet": "草",     "social": "群居", "attract": 8, "spawn": [] },
+  { "id": "snow_leopard","name": "雪豹",       "category": "land",    "rarity": "legendary",  "model": null,       "tempRange": [-35, 15], "diet": "肉",     "social": "獨居", "attract": 12, "spawn": [] },
+  { "id": "harbor_seal", "name": "港海豹",     "category": "aquatic", "rarity": "common",     "model": null,       "tempRange": [-20, 10], "diet": "魚",     "social": "群居", "attract": 7, "spawn": [] },
+  { "id": "arctic_char", "name": "北極紅點鮭", "category": "aquatic", "rarity": "common",     "model": null,       "tempRange": [0, 12],   "diet": "浮游生物", "social": "魚群", "attract": 2, "spawn": [] },
+  { "id": "sea_otter",   "name": "海獺",       "category": "aquatic", "rarity": "rare",       "model": null,       "tempRange": [-5, 15],  "diet": "貝類",   "social": "群居", "attract": 9, "spawn": [] },
+  { "id": "ice_worm",    "name": "冰川冰蟲",   "category": "insect",  "rarity": "rare",       "model": null,       "tempRange": [-7, 0],   "diet": "藻類",   "social": "群聚", "attract": 3, "spawn": [] },
+  { "id": "snow_flea",   "name": "雪蚤",       "category": "insect",  "rarity": "common",     "model": null,       "tempRange": [-10, 5],  "diet": "腐植質", "social": "群聚", "attract": 1, "spawn": [] },
+  { "id": "monarch",     "name": "帝王斑蝶",   "category": "insect",  "rarity": "endangered", "model": null,       "tempRange": [12, 30],  "diet": "花蜜",   "social": "群聚", "attract": 6, "spawn": [] }
+]

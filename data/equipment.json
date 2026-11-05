@@ -1,0 +1,3 @@
+[
+  { "id": "flare_gun", "name": "信號槍", "slot": "weapon", "ammo": 6, "damage": 1, "projectileSpeed": 42, "range": 1.6, "refillSeconds": 1.2 }
+]

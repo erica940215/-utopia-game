@@ -1,0 +1,5 @@
+[
+  { "id": "fuel",  "name": "煤炭", "color": "#24262b", "lootWeight": 42, "amount": [2, 4], "use": "火車燃料" },
+  { "id": "scrap", "name": "廢鐵", "color": "#76808a", "lootWeight": 33, "amount": [2, 4], "use": "升級與建造" },
+  { "id": "feed",  "name": "飼料", "color": "#8c7a42", "lootWeight": 25, "amount": [2, 4], "use": "餵養動物" }
+]
