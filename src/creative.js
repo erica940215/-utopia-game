@@ -39,20 +39,24 @@ function buildTerrainMesh(){
   const g=new THREE.PlaneGeometry(side,side,n-1,n-1); g.rotateX(-Math.PI/2);
   g.setAttribute('color',new THREE.BufferAttribute(new Float32Array(n*n*3),3));
   zVarSeed=new Float32Array(n*n); for(let i=0;i<n*n;i++) zVarSeed[i]=0.93+Math.random()*0.1;
-  zTerrain=new THREE.Mesh(g,new THREE.MeshLambertMaterial({vertexColors:true,map:noiseTexture()}));
+  g.setAttribute('w0',new THREE.BufferAttribute(new Float32Array(n*n*3),3));
+  g.setAttribute('w1',new THREE.BufferAttribute(new Float32Array(n*n*3),3));
+  zTerrain=new THREE.Mesh(g,terrainTex&&terrainTex.length===6?splatMaterial():new THREE.MeshLambertMaterial({vertexColors:true,map:noiseTexture()}));
   zooScene.add(zTerrain);
   zWater=new THREE.Mesh(new THREE.PlaneGeometry(side,side),new THREE.MeshPhongMaterial({color:0x2a6f99,transparent:true,opacity:0.78,shininess:90}));
   zWater.rotation.x=-Math.PI/2; zWater.position.y=TRN().waterLevel; zooScene.add(zWater);
   refreshTerrain();
 }
 function refreshTerrain(){
-  const T=save.zoo.terrain, g=zTerrain.geometry, pos=g.attributes.position, col=g.attributes.color, pal=PAINT_RGB(), n=zTerrN;
+  const T=save.zoo.terrain, g=zTerrain.geometry, pos=g.attributes.position, col=g.attributes.color, pal=PAINT_RGB(), n=zTerrN, w0=g.attributes.w0, w1=g.attributes.w1;
   // PlaneGeometry 的頂點順序：列（z）由負到正、行（x）由負到正
   for(let j=0;j<n;j++) for(let i=0;i<n;i++){
     const k=j*n+i; pos.setY(k,T.h[k]);
     const c=pal[T.p[k]]||pal[0], v=zVarSeed[k]*(T.h[k]<TRN().waterLevel-0.2?0.8:1);
     col.setXYZ(k,c.r*v,c.g*v,c.b*v);
+    if(w0){ const p=T.p[k]||0; w0.setXYZ(k,p===0?1:0,p===1?1:0,p===2?1:0); w1.setXYZ(k,p===3?1:0,p===4?1:0,p===5?1:0); }
   }
+  if(w0){ w0.needsUpdate=true; w1.needsUpdate=true; }
   pos.needsUpdate=true; col.needsUpdate=true; g.computeVertexNormals(); g.computeBoundingSphere&&g.computeBoundingSphere();
 }
 function flattenRect(x0,z0,x1,z1,margin){
@@ -129,7 +133,8 @@ function makeProp(type){
 }
 function placePropMesh(p){
   const old=zPropMeshes.get(p.uid); if(old) zPropRoot.remove(old);
-  const g=makeProp(p.type); g.position.set(p.x,ZH(p.x,p.z)+(p.y||0),p.z); g.rotation.y=p.rot||0; g.userData.prop=p.uid;
+  const g=makeProp(p.type), pd=pdef(p.type);
+  if(pd&&pd.asset){ const st=staticAsset(pd.asset,{height:pd.height}); if(st){ for(const ch of [...g.children]) g.remove(ch); g.add(st); } else swapInAsset(g,pd.asset,{height:pd.height}); } g.position.set(p.x,ZH(p.x,p.z)+(p.y||0),p.z); g.rotation.y=p.rot||0; g.userData.prop=p.uid;
   zPropRoot.add(g); zPropMeshes.set(p.uid,g);
 }
 function rebuildProps(){ for(const g of zPropMeshes.values()) zPropRoot.remove(g); zPropMeshes.clear(); for(const p of save.zoo.props) placePropMesh(p); }
@@ -209,4 +214,34 @@ function afterTerrainEdit(){
   refreshTerrain();
   for(const [uid,g] of zooBMeshes){ const b=findB(uid); if(!b) continue; const c=tileCenter(b); g.position.y=ZH(c.x,c.z); }
   for(const p of save.zoo.props){ const g=zPropMeshes.get(p.uid); if(g) g.position.y=ZH(p.x,p.z)+(p.y||0); }
+}
+
+/* 寫實地形材質：六張 ambientCG 貼圖依每個頂點的上色權重混合 */
+function splatMaterial(){
+  const u=THREE.UniformsUtils.merge([THREE.UniformsLib.fog,{
+    t0:{value:terrainTex[0]},t1:{value:terrainTex[1]},t2:{value:terrainTex[2]},t3:{value:terrainTex[3]},t4:{value:terrainTex[4]},t5:{value:terrainTex[5]},
+    sunDir:{value:new THREE.Vector3(30,60,20).normalize()},sky:{value:new THREE.Color(0xeaf4ff)},ground:{value:new THREE.Color(0x8a9aa6)},water:{value:TRN().waterLevel}}]);
+  return new THREE.ShaderMaterial({uniforms:u,fog:true,
+    vertexShader:`attribute vec3 w0; attribute vec3 w1; attribute vec3 color;
+      varying vec3 vW0; varying vec3 vW1; varying vec2 vUv; varying vec3 vN; varying float vShade; varying float vH;
+      #include <fog_pars_vertex>
+      void main(){ vW0=w0; vW1=w1; vUv=position.xz/2.5; vN=normalize(normalMatrix*normal); vShade=dot(color,vec3(0.333)); vH=position.y;
+        vec4 mvPosition=modelViewMatrix*vec4(position,1.0); gl_Position=projectionMatrix*mvPosition;
+        #include <fog_vertex>
+      }`,
+    fragmentShader:`uniform sampler2D t0; uniform sampler2D t1; uniform sampler2D t2; uniform sampler2D t3; uniform sampler2D t4; uniform sampler2D t5;
+      uniform vec3 sunDir; uniform vec3 sky; uniform vec3 ground; uniform float water;
+      varying vec3 vW0; varying vec3 vW1; varying vec2 vUv; varying vec3 vN; varying float vShade; varying float vH;
+      #include <fog_pars_fragment>
+      void main(){
+        vec3 c=texture2D(t0,vUv).rgb*vW0.x+texture2D(t1,vUv).rgb*vW0.y+texture2D(t2,vUv).rgb*vW0.z
+              +texture2D(t3,vUv).rgb*vW1.x+texture2D(t4,vUv).rgb*vW1.y+texture2D(t5,vUv).rgb*vW1.z;
+        float wsum=vW0.x+vW0.y+vW0.z+vW1.x+vW1.y+vW1.z; c/=max(wsum,0.001);
+        vec3 n=normalize(vN); vec3 hemi=mix(ground,sky,n.y*0.5+0.5)*0.75;
+        float d=max(dot(n,normalize((viewMatrix*vec4(sunDir,0.0)).xyz)),0.0);
+        vec3 col=c*(hemi+vec3(1.0,0.95,0.86)*d*0.6);
+        if(vH<water-0.15) col*=0.75;
+        gl_FragColor=vec4(col,1.0);
+        #include <fog_fragment>
+      }`});
 }

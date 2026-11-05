@@ -10,7 +10,24 @@
   "size": [
    1.5,
    1.5
-  ]
+  ],
+  "asset": "q_PineTree_1",
+  "height": 5
+ },
+ {
+  "id": "pine_snow",
+  "name": "積雪雲杉",
+  "cat": "nature",
+  "kind": "pine",
+  "cost": {
+   "coins": 8
+  },
+  "size": [
+   1.5,
+   1.5
+  ],
+  "asset": "q_PineTree_Snow_1",
+  "height": 5
  },
  {
   "id": "broadleaf",
@@ -23,7 +40,24 @@
   "size": [
    2,
    2
-  ]
+  ],
+  "asset": "q_CommonTree_1",
+  "height": 5
+ },
+ {
+  "id": "birch_snow",
+  "name": "積雪白樺",
+  "cat": "nature",
+  "kind": "birch",
+  "cost": {
+   "coins": 10
+  },
+  "size": [
+   1,
+   1
+  ],
+  "asset": "q_BirchTree_Snow_1",
+  "height": 5
  },
  {
   "id": "birch",
@@ -36,7 +70,9 @@
   "size": [
    1,
    1
-  ]
+  ],
+  "asset": "q_BirchTree_1",
+  "height": 5
  },
  {
   "id": "palm",
@@ -49,7 +85,9 @@
   "size": [
    1.5,
    1.5
-  ]
+  ],
+  "asset": "q_PalmTree_1",
+  "height": 5.5
  },
  {
   "id": "bamboo",
@@ -75,7 +113,9 @@
   "size": [
    1,
    1
-  ]
+  ],
+  "asset": "q_Bush_1",
+  "height": 1.1
  },
  {
   "id": "flowers",
@@ -88,7 +128,24 @@
   "size": [
    1,
    1
-  ]
+  ],
+  "asset": "q_Flowers",
+  "height": 0.6
+ },
+ {
+  "id": "rock_snow",
+  "name": "積雪岩石",
+  "cat": "nature",
+  "kind": "rock_l",
+  "cost": {
+   "coins": 8
+  },
+  "size": [
+   2,
+   2
+  ],
+  "asset": "q_Rock_Snow_3",
+  "height": 1.4
  },
  {
   "id": "grass",
@@ -101,7 +158,9 @@
   "size": [
    1,
    1
-  ]
+  ],
+  "asset": "q_Grass",
+  "height": 0.5
  },
  {
   "id": "rock_s",
@@ -114,7 +173,9 @@
   "size": [
    1,
    1
-  ]
+  ],
+  "asset": "q_Rock_1",
+  "height": 0.8
  },
  {
   "id": "rock_l",
@@ -127,7 +188,9 @@
   "size": [
    2.5,
    2.5
-  ]
+  ],
+  "asset": "q_Rock_Moss_1",
+  "height": 2.0
  },
  {
   "id": "log",
@@ -140,7 +203,9 @@
   "size": [
    3,
    1
-  ]
+  ],
+  "asset": "q_WoodLog",
+  "height": 0.7
  },
  {
   "id": "stump",
@@ -153,7 +218,9 @@
   "size": [
    1,
    1
-  ]
+  ],
+  "asset": "q_TreeStump",
+  "height": 0.7
  },
  {
   "id": "bench",

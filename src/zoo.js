@@ -63,7 +63,9 @@ function buildZooBase(){
   for(let i=0;i<60;i++){
     const a=Math.random()*Math.PI*2, r=half+10+Math.random()*60, x=Math.cos(a)*r, z=Math.sin(a)*r;
     if(z<-half-2&&z>-half-12) continue;
-    const g=new THREE.Group(), hh=3+Math.random()*3;
+    const hh=3+Math.random()*3, A=DATA.assets, at=A?staticAsset(A.nature.snowTrees[Math.floor(Math.random()*A.nature.snowTrees.length)],{height:hh*1.2}):null;
+    if(at){ const w=new THREE.Group(); w.add(at); w.position.set(x,0,z); w.rotation.y=Math.random()*6.28; zooScene.add(w); continue; }
+    const g=new THREE.Group();
     const tr=cyl(0.15,0.25,hh,trunk,6); tr.position.y=hh/2; g.add(tr);
     const c=new THREE.Mesh(new THREE.ConeGeometry(1.2+Math.random()*0.6,hh*0.8,7),pine); c.position.y=hh*0.75; g.add(c);
     const s=new THREE.Mesh(new THREE.ConeGeometry(0.7,0.8,7),snowCap); s.position.y=hh*1.1; g.add(s);
@@ -379,11 +381,12 @@ function zooUpdate(dt){
   for(const z of zooAnimals){
     const m=z.mesh;
     const gy=ZH(m.position.x,m.position.z);
-    if(z.wait>0){ z.wait-=dt; m.position.y=gy+0.1; continue; }
+    const lift=DATA.speciesById[z.a.species]&&DATA.speciesById[z.a.species].category==='aquatic'?0.35:0;
+    if(z.wait>0){ z.wait-=dt; m.position.y=gy+0.1+lift; setAnim(m,'idle'); continue; }
     const dx=z.tx-m.position.x, dz=z.tz-m.position.z, d=Math.hypot(dx,dz);
     if(d<0.2){ z.tx=z.c.x+(Math.random()*2-1)*z.hw; z.tz=z.c.z+(Math.random()*2-1)*z.hd; z.wait=1+Math.random()*4; continue; }
-    const s=Math.min(d,dt*1.4); m.position.x+=dx/d*s; m.position.z+=dz/d*s; m.rotation.y=Math.atan2(dx,dz);
-    z.hop+=dt*10; m.position.y=gy+0.1+Math.abs(Math.sin(z.hop))*0.12;
+    const s=Math.min(d,dt*1.4); m.position.x+=dx/d*s; m.position.z+=dz/d*s; m.rotation.y=Math.atan2(dx,dz); setAnim(m,'walk');
+    z.hop+=dt*10; m.position.y=gy+0.1+lift+(isAnimated(m)?0:Math.abs(Math.sin(z.hop))*0.12);
   }
   if(state==='zoowalk'){
     let ix=(keys.KeyD?1:0)-(keys.KeyA?1:0)+joy.x, iz=(keys.KeyS?1:0)-(keys.KeyW?1:0)+joy.y;

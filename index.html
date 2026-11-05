@@ -317,6 +317,8 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
 <div id="screen"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/utils/SkeletonUtils.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
 <script>
 (() => {
@@ -330,7 +332,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
    ========================================================= */
 const DATA = {};
 async function loadData(){
-  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props'];
+  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets'];
   const res = await Promise.all(names.map(n => fetch(`data/${n}.json`).then(r => { if(!r.ok) throw new Error(n); return r.json(); })));
   names.forEach((n,i) => DATA[n] = res[i]);
   DATA.speciesById = Object.fromEntries(DATA.species.map(s => [s.id, s]));
@@ -438,6 +440,7 @@ const sph = (r,c) => new THREE.Mesh(new THREE.SphereGeometry(r,12,9), typeof c==
 const cyl = (r1,r2,h,c,s=12) => new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,h,s), typeof c==='number'?M(c):c);
 const hex = s => parseInt(String(s).replace('#',''),16);
 
+let groundMesh=null;
 function heightAt(x,z){
   const ax=Math.abs(x); let t=Math.min(1,Math.max(0,(ax-6)/14)); t=t*t*(3-2*t);
   const h=2.6*Math.sin(x*0.045)*Math.cos(z*0.038)+1.6*Math.sin(x*0.12+z*0.07)+0.8*Math.sin(z*0.19-x*0.1)+5*Math.sin(x*0.012+1.3)*Math.sin(z*0.015);
@@ -446,7 +449,7 @@ function heightAt(x,z){
 {
   const g=new THREE.PlaneGeometry(420,420,140,140); g.rotateX(-Math.PI/2);
   const p=g.attributes.position; for(let i=0;i<p.count;i++) p.setY(i,heightAt(p.getX(i),p.getZ(i)));
-  g.computeVertexNormals(); scene.add(new THREE.Mesh(g,M(0xdfeaf2)));
+  g.computeVertexNormals(); groundMesh=new THREE.Mesh(g,M(0xdfeaf2)); scene.add(groundMesh);
   const rail=M(0x50565e), sleeper=M(0x3a2c24);
   for(const x of [-0.75,0.75]){ const r=box(0.12,0.12,420,rail); r.position.set(x,0.18,0); scene.add(r); }
   const inst=new THREE.InstancedMesh(new THREE.BoxGeometry(2.4,0.12,0.35),sleeper,420), dm=new THREE.Object3D();
@@ -582,6 +585,7 @@ function makeModel(sp){
   else if(sp.model&&MODELS[sp.model]) MODELS[sp.model](g);
   else if(sp.body){ const inner=new THREE.Group(); bodyModel(inner,sp.body); g.add(inner); }
   else MODELS.hare(g);
+  if(typeof sp!=='string'){ const a=speciesAsset(sp); if(a) swapInAsset(g,a.file,a.opt,a.anim); }
   return g;
 }
 
@@ -663,13 +667,18 @@ function buildStation(node, seed){
     const a=R(0,Math.PI*2), r=R(15,190), x=Math.cos(a)*r, z=Math.sin(a)*r;
     if(!farFromTrain(x,z,1)||avoid(x,z)) continue;
     const y=heightAt(x,z);
+    const assetPick=(list,o)=>{ const A=DATA.assets; if(!A) return null; const f=A.nature[list][Math.floor(rng()*A.nature[list].length)]; return staticAsset(f,o); };
     if(rng()<0.65){
-      const g=new THREE.Group(), h=R(3,6);
+      const h=R(3,6), at=assetPick('snowTrees',{height:h*1.15});
+      if(at){ at.rotation.y=R(0,6.28); const w=new THREE.Group(); w.add(at); w.position.set(x,y-0.1,z); w.rotation.y=R(0,6.28); world.add(w); colliders.push({x0:x-0.35,x1:x+0.35,z0:z-0.35,z1:z+0.35}); continue; }
+      const g=new THREE.Group();
       const t=cyl(0.15,0.25,h,trunk,6); t.position.y=h/2; g.add(t);
       if(rng()<0.6){ const c=new THREE.Mesh(new THREE.ConeGeometry(R(1,1.6),h*0.8,7),pine); c.position.y=h*0.75; g.add(c); const s=new THREE.Mesh(new THREE.ConeGeometry(0.7,0.8,7),snowCap); s.position.y=h*1.1; g.add(s); }
       g.position.set(x,y-0.2,z); world.add(g); colliders.push({x0:x-0.3,x1:x+0.3,z0:z-0.3,z1:z+0.3});
     } else {
-      const s=R(0.6,1.8), rk=new THREE.Mesh(new THREE.DodecahedronGeometry(s,0),M(0x6a7078)); rk.position.set(x,y+s*0.3,z); rk.rotation.set(R(0,3),R(0,3),0); world.add(rk);
+      const s=R(0.6,1.8), ar=assetPick('snowRocks',{height:s*1.3});
+      if(ar){ const w=new THREE.Group(); w.add(ar); w.position.set(x,y-0.05,z); w.rotation.y=R(0,6.28); world.add(w); colliders.push({x0:x-s*0.7,x1:x+s*0.7,z0:z-s*0.7,z1:z+s*0.7}); continue; }
+      const rk=new THREE.Mesh(new THREE.DodecahedronGeometry(s,0),M(0x6a7078)); rk.position.set(x,y+s*0.3,z); rk.rotation.set(R(0,3),R(0,3),0); world.add(rk);
       colliders.push({x0:x-s*0.8,x1:x+s*0.8,z0:z-s*0.8,z1:z+s*0.8});
     }
   }
@@ -705,7 +714,7 @@ function placeCatch(sp,C,x,z){
 }
 function placeIce(sp,x,z,rot){
   const y=heightAt(x,z), g=new THREE.Group(); g.position.set(x,y,z);
-  const an=makeModel(sp); an.rotation.y=rot; g.add(an);
+  const an=makeModel(sp); an.rotation.y=rot; g.add(an); setAnim(an,'idle'); freezeAnim(an,true);
   const isz=Math.max(1,(sp.body&&sp.body.size)||1)*(sp.body&&sp.body.neck>1?1.6:1);
   const ice=box(1.5*isz,1.5*isz,1.5*isz,iceMat); ice.position.y=0.65*isz; ice.rotation.y=rot*0.3; g.add(ice);
   const mk=addMarker(g,new THREE.MeshBasicMaterial({color:hex(DATA.config.rarity[sp.rarity].color)}),2.2);
@@ -876,7 +885,7 @@ function interact(dt){
       pg.style.width=Math.min(100,it.thaw*100)+'%';
       if(it.thaw>=1){
         it.done=true; it.group.remove(it.ice); it.group.remove(it.marker);
-        const an=it.animal; it.group.remove(an); an.position.copy(it.pos); world.add(an);
+        const an=it.animal; it.group.remove(an); an.position.copy(it.pos); world.add(an); freezeAnim(an,false); setAnim(an,'walk');
         followers.push({mesh:an,species:sp,origin:it.pos.clone(),rot:an.rotation.y,hop:Math.random()*6});
         toast(`${sp.name} 救出來了！帶牠回火車`);
       }
@@ -1077,7 +1086,9 @@ function buildZooBase(){
   for(let i=0;i<60;i++){
     const a=Math.random()*Math.PI*2, r=half+10+Math.random()*60, x=Math.cos(a)*r, z=Math.sin(a)*r;
     if(z<-half-2&&z>-half-12) continue;
-    const g=new THREE.Group(), hh=3+Math.random()*3;
+    const hh=3+Math.random()*3, A=DATA.assets, at=A?staticAsset(A.nature.snowTrees[Math.floor(Math.random()*A.nature.snowTrees.length)],{height:hh*1.2}):null;
+    if(at){ const w=new THREE.Group(); w.add(at); w.position.set(x,0,z); w.rotation.y=Math.random()*6.28; zooScene.add(w); continue; }
+    const g=new THREE.Group();
     const tr=cyl(0.15,0.25,hh,trunk,6); tr.position.y=hh/2; g.add(tr);
     const c=new THREE.Mesh(new THREE.ConeGeometry(1.2+Math.random()*0.6,hh*0.8,7),pine); c.position.y=hh*0.75; g.add(c);
     const s=new THREE.Mesh(new THREE.ConeGeometry(0.7,0.8,7),snowCap); s.position.y=hh*1.1; g.add(s);
@@ -1393,11 +1404,12 @@ function zooUpdate(dt){
   for(const z of zooAnimals){
     const m=z.mesh;
     const gy=ZH(m.position.x,m.position.z);
-    if(z.wait>0){ z.wait-=dt; m.position.y=gy+0.1; continue; }
+    const lift=DATA.speciesById[z.a.species]&&DATA.speciesById[z.a.species].category==='aquatic'?0.35:0;
+    if(z.wait>0){ z.wait-=dt; m.position.y=gy+0.1+lift; setAnim(m,'idle'); continue; }
     const dx=z.tx-m.position.x, dz=z.tz-m.position.z, d=Math.hypot(dx,dz);
     if(d<0.2){ z.tx=z.c.x+(Math.random()*2-1)*z.hw; z.tz=z.c.z+(Math.random()*2-1)*z.hd; z.wait=1+Math.random()*4; continue; }
-    const s=Math.min(d,dt*1.4); m.position.x+=dx/d*s; m.position.z+=dz/d*s; m.rotation.y=Math.atan2(dx,dz);
-    z.hop+=dt*10; m.position.y=gy+0.1+Math.abs(Math.sin(z.hop))*0.12;
+    const s=Math.min(d,dt*1.4); m.position.x+=dx/d*s; m.position.z+=dz/d*s; m.rotation.y=Math.atan2(dx,dz); setAnim(m,'walk');
+    z.hop+=dt*10; m.position.y=gy+0.1+lift+(isAnimated(m)?0:Math.abs(Math.sin(z.hop))*0.12);
   }
   if(state==='zoowalk'){
     let ix=(keys.KeyD?1:0)-(keys.KeyA?1:0)+joy.x, iz=(keys.KeyS?1:0)-(keys.KeyW?1:0)+joy.y;
@@ -1735,20 +1747,24 @@ function buildTerrainMesh(){
   const g=new THREE.PlaneGeometry(side,side,n-1,n-1); g.rotateX(-Math.PI/2);
   g.setAttribute('color',new THREE.BufferAttribute(new Float32Array(n*n*3),3));
   zVarSeed=new Float32Array(n*n); for(let i=0;i<n*n;i++) zVarSeed[i]=0.93+Math.random()*0.1;
-  zTerrain=new THREE.Mesh(g,new THREE.MeshLambertMaterial({vertexColors:true,map:noiseTexture()}));
+  g.setAttribute('w0',new THREE.BufferAttribute(new Float32Array(n*n*3),3));
+  g.setAttribute('w1',new THREE.BufferAttribute(new Float32Array(n*n*3),3));
+  zTerrain=new THREE.Mesh(g,terrainTex&&terrainTex.length===6?splatMaterial():new THREE.MeshLambertMaterial({vertexColors:true,map:noiseTexture()}));
   zooScene.add(zTerrain);
   zWater=new THREE.Mesh(new THREE.PlaneGeometry(side,side),new THREE.MeshPhongMaterial({color:0x2a6f99,transparent:true,opacity:0.78,shininess:90}));
   zWater.rotation.x=-Math.PI/2; zWater.position.y=TRN().waterLevel; zooScene.add(zWater);
   refreshTerrain();
 }
 function refreshTerrain(){
-  const T=save.zoo.terrain, g=zTerrain.geometry, pos=g.attributes.position, col=g.attributes.color, pal=PAINT_RGB(), n=zTerrN;
+  const T=save.zoo.terrain, g=zTerrain.geometry, pos=g.attributes.position, col=g.attributes.color, pal=PAINT_RGB(), n=zTerrN, w0=g.attributes.w0, w1=g.attributes.w1;
   // PlaneGeometry 的頂點順序：列（z）由負到正、行（x）由負到正
   for(let j=0;j<n;j++) for(let i=0;i<n;i++){
     const k=j*n+i; pos.setY(k,T.h[k]);
     const c=pal[T.p[k]]||pal[0], v=zVarSeed[k]*(T.h[k]<TRN().waterLevel-0.2?0.8:1);
     col.setXYZ(k,c.r*v,c.g*v,c.b*v);
+    if(w0){ const p=T.p[k]||0; w0.setXYZ(k,p===0?1:0,p===1?1:0,p===2?1:0); w1.setXYZ(k,p===3?1:0,p===4?1:0,p===5?1:0); }
   }
+  if(w0){ w0.needsUpdate=true; w1.needsUpdate=true; }
   pos.needsUpdate=true; col.needsUpdate=true; g.computeVertexNormals(); g.computeBoundingSphere&&g.computeBoundingSphere();
 }
 function flattenRect(x0,z0,x1,z1,margin){
@@ -1825,7 +1841,8 @@ function makeProp(type){
 }
 function placePropMesh(p){
   const old=zPropMeshes.get(p.uid); if(old) zPropRoot.remove(old);
-  const g=makeProp(p.type); g.position.set(p.x,ZH(p.x,p.z)+(p.y||0),p.z); g.rotation.y=p.rot||0; g.userData.prop=p.uid;
+  const g=makeProp(p.type), pd=pdef(p.type);
+  if(pd&&pd.asset){ const st=staticAsset(pd.asset,{height:pd.height}); if(st){ for(const ch of [...g.children]) g.remove(ch); g.add(st); } else swapInAsset(g,pd.asset,{height:pd.height}); } g.position.set(p.x,ZH(p.x,p.z)+(p.y||0),p.z); g.rotation.y=p.rot||0; g.userData.prop=p.uid;
   zPropRoot.add(g); zPropMeshes.set(p.uid,g);
 }
 function rebuildProps(){ for(const g of zPropMeshes.values()) zPropRoot.remove(g); zPropMeshes.clear(); for(const p of save.zoo.props) placePropMesh(p); }
@@ -1906,6 +1923,133 @@ function afterTerrainEdit(){
   for(const [uid,g] of zooBMeshes){ const b=findB(uid); if(!b) continue; const c=tileCenter(b); g.position.y=ZH(c.x,c.z); }
   for(const p of save.zoo.props){ const g=zPropMeshes.get(p.uid); if(g) g.position.y=ZH(p.x,p.z)+(p.y||0); }
 }
+
+/* 寫實地形材質：六張 ambientCG 貼圖依每個頂點的上色權重混合 */
+function splatMaterial(){
+  const u=THREE.UniformsUtils.merge([THREE.UniformsLib.fog,{
+    t0:{value:terrainTex[0]},t1:{value:terrainTex[1]},t2:{value:terrainTex[2]},t3:{value:terrainTex[3]},t4:{value:terrainTex[4]},t5:{value:terrainTex[5]},
+    sunDir:{value:new THREE.Vector3(30,60,20).normalize()},sky:{value:new THREE.Color(0xeaf4ff)},ground:{value:new THREE.Color(0x8a9aa6)},water:{value:TRN().waterLevel}}]);
+  return new THREE.ShaderMaterial({uniforms:u,fog:true,
+    vertexShader:`attribute vec3 w0; attribute vec3 w1; attribute vec3 color;
+      varying vec3 vW0; varying vec3 vW1; varying vec2 vUv; varying vec3 vN; varying float vShade; varying float vH;
+      #include <fog_pars_vertex>
+      void main(){ vW0=w0; vW1=w1; vUv=position.xz/2.5; vN=normalize(normalMatrix*normal); vShade=dot(color,vec3(0.333)); vH=position.y;
+        vec4 mvPosition=modelViewMatrix*vec4(position,1.0); gl_Position=projectionMatrix*mvPosition;
+        #include <fog_vertex>
+      }`,
+    fragmentShader:`uniform sampler2D t0; uniform sampler2D t1; uniform sampler2D t2; uniform sampler2D t3; uniform sampler2D t4; uniform sampler2D t5;
+      uniform vec3 sunDir; uniform vec3 sky; uniform vec3 ground; uniform float water;
+      varying vec3 vW0; varying vec3 vW1; varying vec2 vUv; varying vec3 vN; varying float vShade; varying float vH;
+      #include <fog_pars_fragment>
+      void main(){
+        vec3 c=texture2D(t0,vUv).rgb*vW0.x+texture2D(t1,vUv).rgb*vW0.y+texture2D(t2,vUv).rgb*vW0.z
+              +texture2D(t3,vUv).rgb*vW1.x+texture2D(t4,vUv).rgb*vW1.y+texture2D(t5,vUv).rgb*vW1.z;
+        float wsum=vW0.x+vW0.y+vW0.z+vW1.x+vW1.y+vW1.z; c/=max(wsum,0.001);
+        vec3 n=normalize(vN); vec3 hemi=mix(ground,sky,n.y*0.5+0.5)*0.75;
+        float d=max(dot(n,normalize((viewMatrix*vec4(sunDir,0.0)).xyz)),0.0);
+        vec3 col=c*(hemi+vec3(1.0,0.95,0.86)*d*0.6);
+        if(vH<water-0.15) col*=0.75;
+        gl_FragColor=vec4(col,1.0);
+        #include <fog_fragment>
+      }`});
+}
+
+/* =========================================================
+   外部 CC0 素材：glTF 模型（Quaternius、Kenney）與寫實材質（ambientCG）
+   對應表在 data/assets.json；模型先用程序模型佔位，載入後再替換
+   ========================================================= */
+const MODEL_EXT='glb'/*@@MODEL_EXT@@*/;
+const assetCache={}, assetWait={};
+const mixers=new Set();
+function loadAsset(file){
+  if(assetCache[file]) return Promise.resolve(assetCache[file]);
+  if(assetWait[file]) return assetWait[file];
+  if(!THREE.GLTFLoader) return Promise.reject(new Error('no loader'));
+  assetWait[file]=new Promise((res,rej)=>{
+    try{ new THREE.GLTFLoader().load(`models/${file}.${MODEL_EXT}`,g=>{
+      g.scene.updateMatrixWorld(true);
+      g.userData={box:new THREE.Box3().setFromObject(g.scene)};
+      assetCache[file]=g; res(g);
+    },undefined,e=>{ delete assetWait[file]; rej(e); }); }catch(e){ rej(e); }
+  });
+  return assetWait[file];
+}
+function tintObject(obj,tint){
+  const c=new THREE.Color(hex(tint));
+  obj.traverse(o=>{ if(!o.isMesh) return; const ms=Array.isArray(o.material)?o.material:[o.material];
+    const nm=ms.map(m=>{ const k=m.clone(); if(k.color) k.color.lerp(c,0.65); return k; }); o.material=Array.isArray(o.material)?nm:nm[0]; });
+}
+/* 依高度（或長度）縮放，底部貼地、置中 */
+function instAsset(g,opt){
+  const animated=g.animations&&g.animations.length&&THREE.SkeletonUtils;
+  const obj=animated?THREE.SkeletonUtils.clone(g.scene):g.scene.clone(true);
+  const b=g.userData.box, sz=b.getSize(new THREE.Vector3());
+  const s=opt.length?opt.length/Math.max(sz.z,sz.x,0.001):opt.scale?opt.scale:(opt.height||1)/Math.max(sz.y,0.001);
+  obj.scale.setScalar(s);
+  obj.position.set(-(b.min.x+b.max.x)/2*s,-b.min.y*s,-(b.min.z+b.max.z)/2*s);
+  if(opt.tint) tintObject(obj,opt.tint);
+  obj.traverse(o=>{ if(o.isMesh) o.frustumCulled=false; });
+  const out={obj,mixer:null,actions:{},cur:null};
+  if(animated){ out.mixer=new THREE.AnimationMixer(obj); for(const a of g.animations) out.actions[a.name.replace(/.*\|/,'')]=out.mixer.clipAction(a); mixers.add(out.mixer); }
+  return out;
+}
+/* 把程序模型換成外部模型（載入完成才換，失敗就維持程序模型） */
+function swapInAsset(group,file,opt,anims){
+  loadAsset(file).then(g=>{
+    if(group.userData.disposed) return;
+    for(const c of [...group.children]) group.remove(c);
+    const inst=instAsset(g,opt); group.add(inst.obj);
+    group.userData.asset=inst; group.userData.animMap=anims||{};
+    setAnim(group,group.userData.wantAnim||'idle');
+  }).catch(()=>{});
+}
+function setAnim(group,kind){
+  group.userData.wantAnim=kind;
+  const inst=group.userData.asset; if(!inst||!inst.mixer) return;
+  const name=(group.userData.animMap||{})[kind]||(group.userData.animMap||{}).idle; const act=name&&inst.actions[name];
+  if(!act||inst.cur===act) return;
+  act.reset().play(); if(inst.cur) act.crossFadeFrom(inst.cur,0.25,false); inst.cur=act;
+}
+function freezeAnim(group,frozen){ const inst=group.userData.asset; if(inst&&inst.mixer) inst.mixer.timeScale=frozen?0:1; group.userData.frozen=frozen; }
+const isAnimated=group=>!!(group.userData.asset&&group.userData.asset.mixer);
+function updateMixers(dt){
+  for(const m of mixers){
+    let o=m.getRoot(); while(o.parent) o=o.parent;
+    if(!o.isScene){ mixers.delete(m); continue; }
+    m.update(dt);
+  }
+}
+function speciesAsset(sp){
+  const A=DATA.assets; if(!A) return null;
+  const map=A.species[sp.id]; if(!map) return null;
+  const an=A.animals[map.asset]; return an?{file:an.file,anim:an.anim,opt:map}:null;
+}
+/* 靜態物件（樹、岩石）：已載入就直接複製，否則先回傳 null */
+function staticAsset(file,opt){ const g=assetCache[file]; if(!g) return null; return instAsset(g,opt).obj; }
+
+/* 開場預先載入：火車、積雪樹木岩石、地形材質 */
+let terrainTex=null;
+function preloadCore(){
+  const A=DATA.assets; if(!A||!THREE.GLTFLoader) return Promise.resolve();
+  const files=[A.train.loco,...A.train.cars,...A.nature.snowTrees,...A.nature.snowRocks];
+  const timeout=new Promise(r=>setTimeout(r,9000));
+  const tex=new Promise(res=>{ try{ const L=new THREE.TextureLoader(); let n=0; terrainTex=A.terrain.map(u=>L.load(u,()=>{ if(++n===A.terrain.length) res(); },undefined,()=>{ if(++n===A.terrain.length) res(); }));
+      terrainTex.forEach(t=>{ t.wrapS=t.wrapT=THREE.RepeatWrapping; }); }catch(e){ res(); } });
+  return Promise.race([Promise.all([...files.map(f=>loadAsset(f).catch(()=>null)),tex]),timeout]);
+}
+/* 把遠征火車換成 Kenney 火車模型（保留燈光與碰撞） */
+function upgradeTrain(){
+  const A=DATA.assets; if(!A||!trainGroup) return;
+  const loco=assetCache[A.train.loco], cars=A.train.cars.map(f=>assetCache[f]).filter(Boolean);
+  if(!loco||cars.length<2) return;
+  for(const c of [...trainGroup.children]) c.visible=false;
+  const s=A.train.scale;
+  const place=(g,z)=>{ const o=instAsset(g,{scale:s}).obj; o.position.z+=z; trainGroup.add(o); return o; };
+  place(loco,29.5); place(cars[0],17.5); place(cars[1],5);
+}
+
+/* 測試用：讓自動測試檢查場景與已載入的素材 */
+try{ window.__utopiaDebug={assetCache,get zooScene(){ return zooScene; },get scene(){ return scene; }}; }catch(e){}
 
 /* =========================================================
    觸控操作設定：搖桿與按鈕可以調整大小、拖曳位置
@@ -2007,8 +2151,8 @@ function update(dt){
   followers.forEach((f,i)=>{
     const back=1.6+i*1.3; tmpV.set(player.pos.x+Math.sin(player.yaw)*back,0,player.pos.z+Math.cos(player.yaw)*back);
     const m=f.mesh, dx=tmpV.x-m.position.x, dz=tmpV.z-m.position.z, d=Math.hypot(dx,dz);
-    if(d>0.3){ const s=Math.min(d,dt*(d>4?9:5)); m.position.x+=dx/d*s; m.position.z+=dz/d*s; m.rotation.y=Math.atan2(dx,dz); f.hop+=dt*12; }
-    m.position.y=heightAt(m.position.x,m.position.z)+Math.abs(Math.sin(f.hop))*0.12;
+    if(d>0.3){ const s=Math.min(d,dt*(d>4?9:5)); m.position.x+=dx/d*s; m.position.z+=dz/d*s; m.rotation.y=Math.atan2(dx,dz); f.hop+=dt*12; setAnim(m,d>4?'run':'walk'); } else setAnim(m,'idle');
+    m.position.y=heightAt(m.position.x,m.position.z)+(isAnimated(m)?0:Math.abs(Math.sin(f.hop))*0.12);
   });
   const elapsed=C.runSeconds-timeLeft;
   if(elapsed>nextSpawn){
@@ -2045,7 +2189,7 @@ function update(dt){
   if(player.temp<=0) collapse();
   if(state==='play') hud(inHeat);
 }
-function loop(){ requestAnimationFrame(loop); const dt=Math.min(clock.getDelta(),0.05); update(dt); if(zooActive) renderer.render(zooScene,state==='zoowalk'?camera:zooCam); else renderer.render(scene,camera); }
+function loop(){ requestAnimationFrame(loop); const dt=Math.min(clock.getDelta(),0.05); update(dt); updateMixers(dt); if(zooActive) renderer.render(zooScene,state==='zoowalk'?camera:zooCam); else renderer.render(scene,camera); }
 
 /* =========================================================
    9. 啟動
@@ -2056,6 +2200,10 @@ loop();
 (async()=>{
   try{ await loadData(); }
   catch(e){ screenEl.innerHTML='<div class="card"><h2>遊戲資料讀取失敗</h2><p>設定表沒有載入成功，請重新整理頁面再試一次。</p></div>'; return; }
+  screenEl.innerHTML='<div class="loading">載入模型與材質…</div>';
+  try{ await preloadCore(); }catch(e){}
+  upgradeTrain();
+  if(terrainTex&&terrainTex[0]&&groundMesh){ const t=terrainTex[0].clone(); t.needsUpdate=true; t.wrapS=t.wrapT=THREE.RepeatWrapping; t.repeat.set(140,140); groundMesh.material.map=t; groundMesh.material.color.setHex(0xffffff); groundMesh.material.needsUpdate=true; }
   buildStation(DATA.mapById.old_town,12345);
   await initSave();
   enterZoo();

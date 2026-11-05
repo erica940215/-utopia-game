@@ -9,7 +9,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
    ========================================================= */
 const DATA = {};
 async function loadData(){
-  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props'];
+  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets'];
   const res = await Promise.all(names.map(n => fetch(`data/${n}.json`).then(r => { if(!r.ok) throw new Error(n); return r.json(); })));
   names.forEach((n,i) => DATA[n] = res[i]);
   DATA.speciesById = Object.fromEntries(DATA.species.map(s => [s.id, s]));
@@ -117,6 +117,7 @@ const sph = (r,c) => new THREE.Mesh(new THREE.SphereGeometry(r,12,9), typeof c==
 const cyl = (r1,r2,h,c,s=12) => new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,h,s), typeof c==='number'?M(c):c);
 const hex = s => parseInt(String(s).replace('#',''),16);
 
+let groundMesh=null;
 function heightAt(x,z){
   const ax=Math.abs(x); let t=Math.min(1,Math.max(0,(ax-6)/14)); t=t*t*(3-2*t);
   const h=2.6*Math.sin(x*0.045)*Math.cos(z*0.038)+1.6*Math.sin(x*0.12+z*0.07)+0.8*Math.sin(z*0.19-x*0.1)+5*Math.sin(x*0.012+1.3)*Math.sin(z*0.015);
@@ -125,7 +126,7 @@ function heightAt(x,z){
 {
   const g=new THREE.PlaneGeometry(420,420,140,140); g.rotateX(-Math.PI/2);
   const p=g.attributes.position; for(let i=0;i<p.count;i++) p.setY(i,heightAt(p.getX(i),p.getZ(i)));
-  g.computeVertexNormals(); scene.add(new THREE.Mesh(g,M(0xdfeaf2)));
+  g.computeVertexNormals(); groundMesh=new THREE.Mesh(g,M(0xdfeaf2)); scene.add(groundMesh);
   const rail=M(0x50565e), sleeper=M(0x3a2c24);
   for(const x of [-0.75,0.75]){ const r=box(0.12,0.12,420,rail); r.position.set(x,0.18,0); scene.add(r); }
   const inst=new THREE.InstancedMesh(new THREE.BoxGeometry(2.4,0.12,0.35),sleeper,420), dm=new THREE.Object3D();
@@ -261,6 +262,7 @@ function makeModel(sp){
   else if(sp.model&&MODELS[sp.model]) MODELS[sp.model](g);
   else if(sp.body){ const inner=new THREE.Group(); bodyModel(inner,sp.body); g.add(inner); }
   else MODELS.hare(g);
+  if(typeof sp!=='string'){ const a=speciesAsset(sp); if(a) swapInAsset(g,a.file,a.opt,a.anim); }
   return g;
 }
 
@@ -342,13 +344,18 @@ function buildStation(node, seed){
     const a=R(0,Math.PI*2), r=R(15,190), x=Math.cos(a)*r, z=Math.sin(a)*r;
     if(!farFromTrain(x,z,1)||avoid(x,z)) continue;
     const y=heightAt(x,z);
+    const assetPick=(list,o)=>{ const A=DATA.assets; if(!A) return null; const f=A.nature[list][Math.floor(rng()*A.nature[list].length)]; return staticAsset(f,o); };
     if(rng()<0.65){
-      const g=new THREE.Group(), h=R(3,6);
+      const h=R(3,6), at=assetPick('snowTrees',{height:h*1.15});
+      if(at){ at.rotation.y=R(0,6.28); const w=new THREE.Group(); w.add(at); w.position.set(x,y-0.1,z); w.rotation.y=R(0,6.28); world.add(w); colliders.push({x0:x-0.35,x1:x+0.35,z0:z-0.35,z1:z+0.35}); continue; }
+      const g=new THREE.Group();
       const t=cyl(0.15,0.25,h,trunk,6); t.position.y=h/2; g.add(t);
       if(rng()<0.6){ const c=new THREE.Mesh(new THREE.ConeGeometry(R(1,1.6),h*0.8,7),pine); c.position.y=h*0.75; g.add(c); const s=new THREE.Mesh(new THREE.ConeGeometry(0.7,0.8,7),snowCap); s.position.y=h*1.1; g.add(s); }
       g.position.set(x,y-0.2,z); world.add(g); colliders.push({x0:x-0.3,x1:x+0.3,z0:z-0.3,z1:z+0.3});
     } else {
-      const s=R(0.6,1.8), rk=new THREE.Mesh(new THREE.DodecahedronGeometry(s,0),M(0x6a7078)); rk.position.set(x,y+s*0.3,z); rk.rotation.set(R(0,3),R(0,3),0); world.add(rk);
+      const s=R(0.6,1.8), ar=assetPick('snowRocks',{height:s*1.3});
+      if(ar){ const w=new THREE.Group(); w.add(ar); w.position.set(x,y-0.05,z); w.rotation.y=R(0,6.28); world.add(w); colliders.push({x0:x-s*0.7,x1:x+s*0.7,z0:z-s*0.7,z1:z+s*0.7}); continue; }
+      const rk=new THREE.Mesh(new THREE.DodecahedronGeometry(s,0),M(0x6a7078)); rk.position.set(x,y+s*0.3,z); rk.rotation.set(R(0,3),R(0,3),0); world.add(rk);
       colliders.push({x0:x-s*0.8,x1:x+s*0.8,z0:z-s*0.8,z1:z+s*0.8});
     }
   }
@@ -384,7 +391,7 @@ function placeCatch(sp,C,x,z){
 }
 function placeIce(sp,x,z,rot){
   const y=heightAt(x,z), g=new THREE.Group(); g.position.set(x,y,z);
-  const an=makeModel(sp); an.rotation.y=rot; g.add(an);
+  const an=makeModel(sp); an.rotation.y=rot; g.add(an); setAnim(an,'idle'); freezeAnim(an,true);
   const isz=Math.max(1,(sp.body&&sp.body.size)||1)*(sp.body&&sp.body.neck>1?1.6:1);
   const ice=box(1.5*isz,1.5*isz,1.5*isz,iceMat); ice.position.y=0.65*isz; ice.rotation.y=rot*0.3; g.add(ice);
   const mk=addMarker(g,new THREE.MeshBasicMaterial({color:hex(DATA.config.rarity[sp.rarity].color)}),2.2);
@@ -555,7 +562,7 @@ function interact(dt){
       pg.style.width=Math.min(100,it.thaw*100)+'%';
       if(it.thaw>=1){
         it.done=true; it.group.remove(it.ice); it.group.remove(it.marker);
-        const an=it.animal; it.group.remove(an); an.position.copy(it.pos); world.add(an);
+        const an=it.animal; it.group.remove(an); an.position.copy(it.pos); world.add(an); freezeAnim(an,false); setAnim(an,'walk');
         followers.push({mesh:an,species:sp,origin:it.pos.clone(),rot:an.rotation.y,hop:Math.random()*6});
         toast(`${sp.name} 救出來了！帶牠回火車`);
       }
@@ -696,6 +703,7 @@ function wireAuth(){
 /*@@WORKSHOP@@*/
 /*@@BREEDING@@*/
 /*@@CREATIVE@@*/
+/*@@ASSETS@@*/
 /*@@CONTROLS@@*/
 /* =========================================================
    8. 主迴圈
@@ -754,8 +762,8 @@ function update(dt){
   followers.forEach((f,i)=>{
     const back=1.6+i*1.3; tmpV.set(player.pos.x+Math.sin(player.yaw)*back,0,player.pos.z+Math.cos(player.yaw)*back);
     const m=f.mesh, dx=tmpV.x-m.position.x, dz=tmpV.z-m.position.z, d=Math.hypot(dx,dz);
-    if(d>0.3){ const s=Math.min(d,dt*(d>4?9:5)); m.position.x+=dx/d*s; m.position.z+=dz/d*s; m.rotation.y=Math.atan2(dx,dz); f.hop+=dt*12; }
-    m.position.y=heightAt(m.position.x,m.position.z)+Math.abs(Math.sin(f.hop))*0.12;
+    if(d>0.3){ const s=Math.min(d,dt*(d>4?9:5)); m.position.x+=dx/d*s; m.position.z+=dz/d*s; m.rotation.y=Math.atan2(dx,dz); f.hop+=dt*12; setAnim(m,d>4?'run':'walk'); } else setAnim(m,'idle');
+    m.position.y=heightAt(m.position.x,m.position.z)+(isAnimated(m)?0:Math.abs(Math.sin(f.hop))*0.12);
   });
   const elapsed=C.runSeconds-timeLeft;
   if(elapsed>nextSpawn){
@@ -792,7 +800,7 @@ function update(dt){
   if(player.temp<=0) collapse();
   if(state==='play') hud(inHeat);
 }
-function loop(){ requestAnimationFrame(loop); const dt=Math.min(clock.getDelta(),0.05); update(dt); if(zooActive) renderer.render(zooScene,state==='zoowalk'?camera:zooCam); else renderer.render(scene,camera); }
+function loop(){ requestAnimationFrame(loop); const dt=Math.min(clock.getDelta(),0.05); update(dt); updateMixers(dt); if(zooActive) renderer.render(zooScene,state==='zoowalk'?camera:zooCam); else renderer.render(scene,camera); }
 
 /* =========================================================
    9. 啟動
@@ -803,6 +811,10 @@ loop();
 (async()=>{
   try{ await loadData(); }
   catch(e){ screenEl.innerHTML='<div class="card"><h2>遊戲資料讀取失敗</h2><p>設定表沒有載入成功，請重新整理頁面再試一次。</p></div>'; return; }
+  screenEl.innerHTML='<div class="loading">載入模型與材質…</div>';
+  try{ await preloadCore(); }catch(e){}
+  upgradeTrain();
+  if(terrainTex&&terrainTex[0]&&groundMesh){ const t=terrainTex[0].clone(); t.needsUpdate=true; t.wrapS=t.wrapT=THREE.RepeatWrapping; t.repeat.set(140,140); groundMesh.material.map=t; groundMesh.material.color.setHex(0xffffff); groundMesh.material.needsUpdate=true; }
   buildStation(DATA.mapById.old_town,12345);
   await initSave();
   enterZoo();

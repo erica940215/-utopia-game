@@ -1,0 +1,274 @@
+{
+ "_comment": "外部 CC0 模型與材質。檔名對應 models/、textures/ 底下的檔案（不含副檔名）。來源：Quaternius（CC0）、Kenney（CC0）、ambientCG（CC0）",
+ "animals": {
+  "fox": {
+   "file": "q_Fox",
+   "anim": {
+    "walk": "Walk",
+    "idle": "Idle",
+    "run": "Gallop",
+    "eat": "Eating"
+   }
+  },
+  "wolf": {
+   "file": "q_Wolf",
+   "anim": {
+    "walk": "Walk",
+    "idle": "Idle",
+    "run": "Gallop",
+    "eat": "Eating"
+   }
+  },
+  "deer": {
+   "file": "q_Deer",
+   "anim": {
+    "walk": "Walk",
+    "idle": "Idle",
+    "run": "Gallop",
+    "eat": "Eating"
+   }
+  },
+  "stag": {
+   "file": "q_Stag",
+   "anim": {
+    "walk": "Walk",
+    "idle": "Idle",
+    "run": "Gallop",
+    "eat": "Eating"
+   }
+  },
+  "alpaca": {
+   "file": "q_Alpaca",
+   "anim": {
+    "walk": "Walk",
+    "idle": "Idle",
+    "run": "Gallop",
+    "eat": "Eating"
+   }
+  },
+  "horse": {
+   "file": "q_Horse",
+   "anim": {
+    "walk": "Walk",
+    "idle": "Idle",
+    "run": "Gallop",
+    "eat": "Eating"
+   }
+  },
+  "donkey": {
+   "file": "q_Donkey",
+   "anim": {
+    "walk": "Walk",
+    "idle": "Idle",
+    "run": "Gallop",
+    "eat": "Eating"
+   }
+  },
+  "tuna": {
+   "file": "q_Tuna",
+   "anim": {
+    "swim": "Swimming_Normal",
+    "idle": "Swimming_Normal",
+    "walk": "Swimming_Normal"
+   }
+  },
+  "tetra": {
+   "file": "q_Tetra",
+   "anim": {
+    "swim": "Swimming_Normal",
+    "idle": "Swimming_Normal",
+    "walk": "Swimming_Normal"
+   }
+  },
+  "piranha": {
+   "file": "q_Piranha",
+   "anim": {
+    "swim": "Swimming_Normal",
+    "idle": "Swimming_Normal",
+    "walk": "Swimming_Normal"
+   }
+  },
+  "koi": {
+   "file": "q_Koi",
+   "anim": {
+    "swim": "Swimming_Normal",
+    "idle": "Swimming_Normal",
+    "walk": "Swimming_Normal"
+   }
+  },
+  "flowerhorn": {
+   "file": "q_FlowerHorn",
+   "anim": {
+    "swim": "Swimming_Normal",
+    "idle": "Swimming_Normal",
+    "walk": "Swimming_Normal"
+   }
+  },
+  "grouper": {
+   "file": "q_CoralGrouper",
+   "anim": {
+    "swim": "Swimming_Normal",
+    "idle": "Swimming_Normal",
+    "walk": "Swimming_Normal"
+   }
+  },
+  "betta": {
+   "file": "q_Betta",
+   "anim": {
+    "swim": "Swimming_Normal",
+    "idle": "Swimming_Normal",
+    "walk": "Swimming_Normal"
+   }
+  },
+  "fish1": {
+   "file": "q_Fish1",
+   "anim": {
+    "swim": "Swim",
+    "idle": "Swim",
+    "walk": "Swim"
+   }
+  },
+  "fish3": {
+   "file": "q_Fish3",
+   "anim": {
+    "swim": "Swim",
+    "idle": "Swim",
+    "walk": "Swim"
+   }
+  },
+  "manta": {
+   "file": "q_Manta_ray",
+   "anim": {
+    "swim": "Swim",
+    "idle": "Swim",
+    "walk": "Swim"
+   }
+  }
+ },
+ "species": {
+  "arctic_fox": {
+   "asset": "fox",
+   "height": 0.75,
+   "tint": "#f2f5f8"
+  },
+  "gray_wolf": {
+   "asset": "wolf",
+   "height": 0.9
+  },
+  "sika_deer": {
+   "asset": "deer",
+   "height": 1.3
+  },
+  "formosan_reeve_s_muntjac": {
+   "asset": "deer",
+   "height": 0.65,
+   "tint": "#9a6a42"
+  },
+  "formosan_sambar": {
+   "asset": "stag",
+   "height": 1.6,
+   "tint": "#5a4434"
+  },
+  "alpaca": {
+   "asset": "alpaca",
+   "height": 1.7
+  },
+  "przewalski_horse": {
+   "asset": "horse",
+   "height": 1.45,
+   "tint": "#c49a64"
+  },
+  "pony": {
+   "asset": "horse",
+   "height": 1.0
+  },
+  "donkey": {
+   "asset": "donkey",
+   "height": 1.25
+  },
+  "african_wild_ass": {
+   "asset": "donkey",
+   "height": 1.3,
+   "tint": "#a8a49c"
+  },
+  "arapaima": {
+   "asset": "tuna",
+   "length": 2.0,
+   "tint": "#7a6a5a"
+  },
+  "pink_tailed_chalceus": {
+   "asset": "tetra",
+   "length": 0.35
+  },
+  "red_belied_pacu": {
+   "asset": "piranha",
+   "length": 0.5
+  },
+  "jullien_s_golden_carp": {
+   "asset": "koi",
+   "length": 0.7
+  },
+  "threadfin_acara": {
+   "asset": "flowerhorn",
+   "length": 0.35
+  },
+  "yellow_peacock_bass": {
+   "asset": "grouper",
+   "length": 0.6,
+   "tint": "#d8b040"
+  },
+  "pearl_cichlid": {
+   "asset": "betta",
+   "length": 0.3
+  },
+  "silver_arowana": {
+   "asset": "fish3",
+   "length": 0.9,
+   "tint": "#c8ccd0"
+  },
+  "arctic_char": {
+   "asset": "fish1",
+   "length": 0.6
+  },
+  "pearl_stingray": {
+   "asset": "manta",
+   "length": 0.8,
+   "tint": "#3a3430"
+  }
+ },
+ "nature": {
+  "snowTrees": [
+   "q_PineTree_Snow_1",
+   "q_PineTree_Snow_2",
+   "q_PineTree_Snow_3",
+   "q_BirchTree_Snow_1",
+   "q_BirchTree_Snow_2",
+   "q_Willow_Snow_1",
+   "q_CommonTree_Snow_1"
+  ],
+  "snowRocks": [
+   "q_Rock_Snow_1",
+   "q_Rock_Snow_3",
+   "q_Rock_Snow_5",
+   "q_WoodLog_Snow",
+   "q_TreeStump_Snow",
+   "q_Bush_Snow_1"
+  ]
+ },
+ "train": {
+  "loco": "kenney-train/train-locomotive-a",
+  "cars": [
+   "kenney-train/train-carriage-box",
+   "kenney-train/train-carriage-coal"
+  ],
+  "scale": 3.0
+ },
+ "terrain": [
+  "textures/terrain_snow.jpg",
+  "textures/terrain_grass.jpg",
+  "textures/terrain_dirt.jpg",
+  "textures/terrain_sand.jpg",
+  "textures/terrain_rock.jpg",
+  "textures/terrain_stone.jpg"
+ ]
+}
