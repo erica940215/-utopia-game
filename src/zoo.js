@@ -11,7 +11,7 @@ const zooCam=new THREE.PerspectiveCamera(50,1,0.5,500);
 function zooResize(){ zooCam.aspect=innerWidth/innerHeight; zooCam.updateProjectionMatrix(); }
 addEventListener('resize',zooResize); zooResize();
 
-let zAchT=0;
+let zAchT=0, zChT=0;
 let zooActive=false, zooBaseBuilt=false, zooRoot=null, zTool='select', zSelUid=null, zooAcc=0, zSaveT=0, zHudT=0;
 const zooCamT={x:0,z:4,d:48};
 const zooBMeshes=new Map();   // uid → THREE.Group
@@ -183,6 +183,8 @@ function simulate(min){
 function catchUp(){
   const zoo=save.zoo, Z=ZC();
   let m=Math.min(Z.offlineCapMinutes,Math.max(0,(Date.now()-(zoo.lastTick||Date.now()))/60000));
+  // 只有生涯在離線時繼續運作；沙盒與挑戰離開時暫停（挑戰中去遠征 20 分鐘內仍會計時）
+  if(modeOf()==='sandbox' || (modeOf()==='challenge' && m>20)) m=0;
   if(m<0.05){ simulate(0); return null; }
   const c0=zoo.coins, f0=save.resources.feed||0, total=m, b0=zooBirthLog.length;
   while(m>0){ const s=Math.min(1,m); simulate(s); m-=s; }
@@ -194,11 +196,12 @@ function catchUp(){
 function enterZoo(){
   ensureZoo(); migrateAnimals(); ensureTerrain();
   if(!zooBaseBuilt) buildZooBase();
-  rebuildZoo();
+  rebuildZoo(); chResolved=!!save.chResult;
   const away=catchUp();
   zooActive=true; state='zoo'; zTool='select'; zSelUid=null; updateSelBox();
   screenEl.hidden=true; $('hud').hidden=true; $('touch').hidden=true; $('touch').classList.remove('walk');
-  $('zooUI').hidden=false; $('zWalkExit').hidden=true; $('zMain').hidden=false; $('zPanel').hidden=true;
+  $('zooUI').hidden=false; $('zWalkExit').hidden=true; $('zMain').hidden=false; $('zPanel').hidden=true; challengeHud();
+  $('zModeTag').textContent=MODE_NAME[modeOf()]; $('zModeTag').hidden=modeOf()==='career';
   if(document.exitPointerLock) document.exitPointerLock();
   renderZooTools(); updateZooHud();
   if(away && away.minutes>=1) toast(`離開的 ${away.minutes} 分鐘裡：門票 +${away.coins} 金幣，吃掉飼料 ${away.feed}${away.births?`，出生了 ${away.births} 隻寶寶`:''}`);
@@ -376,11 +379,13 @@ function endZooWalk(){
 /* ---------- 每幀 ---------- */
 function zooUpdate(dt){
   if(toastT>0){ toastT-=dt; if(toastT<=0) $('toast').style.opacity=0; }
+  if(state==='mode'||state==='chend') return;
   zooAcc+=dt; if(zooAcc>=0.5){ simulate(zooAcc/60); zooAcc=0;
     if(zooBirthLog.length){ const names=[...new Set(zooBirthLog.map(a=>DATA.speciesById[a.species].name))]; toast(`出生了：${names.join('、')}寶寶 ×${zooBirthLog.length}`); zooBirthLog=[]; rebuildZooAnimals(); persist(); const b=zSelUid&&findB(zSelUid); if(b&&!$('zPanel').hidden&&bdef(b.type).kind==='habitat') openHabitatPanel(b); } }
   zSaveT+=dt; if(zSaveT>=ZC().autosaveSeconds){ zSaveT=0; persist(); }
   zHudT+=dt; if(zHudT>=0.5){ zHudT=0; updateZooHud(); }
   zAchT=(zAchT||0)+dt; if(zAchT>=5){ zAchT=0; checkAchievements(); }
+  zChT=(zChT||0)+dt; if(zChT>=1){ zChT=0; challengeHud(); checkChallenge(); }
   updatePeople(dt);
   if(zBrushing&&state==='zoo'){ applyBrush(zBrushing.x,zBrushing.z,zBrushing.tool,dt); refreshTerrain(); }
   if(state==='zoo'){ const px=(keys.KeyD||keys.ArrowRight?1:0)-(keys.KeyA||keys.ArrowLeft?1:0), pz=(keys.KeyS||keys.ArrowDown?1:0)-(keys.KeyW||keys.ArrowUp?1:0);
@@ -413,6 +418,7 @@ $('zWalk').onclick=()=>startZooWalk();
 $('zWalkExit').onclick=()=>endZooWalk();
 $('zDex').onclick=()=>{ $('zooUI').hidden=true; showDex(); };
 $('zGo').onclick=()=>showMap();
+$('zMode').onclick=()=>{ persist(); showModeSelect(); };
 $('zLab').onclick=()=>{ $('zooUI').hidden=true; showLab(); };
 $('zOps').onclick=()=>{ $('zooUI').hidden=true; showOps(); };
 $('zShop').onclick=()=>{ $('zooUI').hidden=true; showWorkshop(); };

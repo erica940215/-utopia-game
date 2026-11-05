@@ -100,6 +100,7 @@ function achStat(k){
     rating:opsStats.rating,staff:totalStaff(),props:(z.props||[]).length,runs:save.runs||0,endangered:opsStats.endangered||0}[k]||0;
 }
 function checkAchievements(){
+  if(modeOf()!=='career') return;
   const z=save.zoo; let got=[];
   for(const a of DATA.achievements){
     if(z.ach[a.id]) continue;

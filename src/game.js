@@ -9,7 +9,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
    ========================================================= */
 const DATA = {};
 async function loadData(){
-  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets','staff','achievements','research'];
+  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets','staff','achievements','research','challenges'];
   const res = await Promise.all(names.map(n => fetch(`data/${n}.json`).then(r => { if(!r.ok) throw new Error(n); return r.json(); })));
   names.forEach((n,i) => DATA[n] = res[i]);
   DATA.speciesById = Object.fromEntries(DATA.species.map(s => [s.id, s]));
@@ -88,8 +88,9 @@ async function initSave(){
   try{ const cloud=await makeCloudStore(); if(cloud){ store=cloud; const d=await store.load(); if(d&&d.version) save=Object.assign(emptySave(),d); } }catch(e){ store=LocalStore; }
 }
 function persist(){
-  save.updatedAt = new Date().toISOString();
-  const snapshot = JSON.parse(JSON.stringify(save));
+  const root = (typeof rootSave==='function') ? rootSave() : save;
+  root.updatedAt = new Date().toISOString();
+  const snapshot = JSON.parse(JSON.stringify(root));
   LocalStore.save(snapshot);
   saving = saving.then(() => store.save(snapshot)).catch(() => { store = LocalStore; return LocalStore.save(snapshot); });
   return saving;
@@ -687,7 +688,7 @@ function showDex(){
   });
 }
 let dexCat='mammal';
-if(sb) sb.auth.onAuthStateChange(async (ev)=>{ if(ev==='SIGNED_IN' && !sbUser && (state==='dex'||state==='zoo')){ await initSave(); enterZoo(); } });
+if(sb) sb.auth.onAuthStateChange(async (ev)=>{ if(ev==='SIGNED_IN' && !sbUser && (state==='dex'||state==='zoo')){ await initSave(); careerSave=save; activeSlot='career'; enterZoo(); } });
 function authHtml(){
   if(sbUser) return `<div class="sec"><div class="auth"><span class="auth-note">已登入 ${esc(sbUser.email||'')}，進度會同步到雲端</span><button class="btn ghost" id="logout" type="button">登出</button></div></div>`;
   return `<div class="sec"><form class="auth" id="loginForm"><input id="email" type="email" required placeholder="輸入 Email 登入，跨裝置同步存檔" autocomplete="email"><button class="btn" type="submit">寄登入連結</button></form><span class="auth-note" id="authMsg">沒登入也能玩，進度會先存在這台裝置。</span></div>`;
@@ -713,6 +714,7 @@ function wireAuth(){
 /*@@ASSETS@@*/
 /*@@OPS@@*/
 /*@@RESEARCH@@*/
+/*@@MODES@@*/
 /*@@CONTROLS@@*/
 /* =========================================================
    8. 主迴圈
@@ -825,8 +827,8 @@ loop();
   upgradeTrain();
   if(terrainTex&&terrainTex[0]&&groundMesh){ const t=terrainTex[0].clone(); t.needsUpdate=true; t.wrapS=t.wrapT=THREE.RepeatWrapping; t.repeat.set(140,140); groundMesh.material.map=t; groundMesh.material.color.setHex(0xffffff); groundMesh.material.needsUpdate=true; }
   buildStation(DATA.mapById.old_town,12345);
-  await initSave();
-  enterZoo();
+  await initSave(); careerSave=save; activeSlot='career';
+  showModeSelect();
 })();
 })();
 

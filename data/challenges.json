@@ -1,0 +1,157 @@
+[
+ {
+  "id": "rookie",
+  "name": "新手園長",
+  "minutes": 30,
+  "desc": "只有 300 金幣和幾隻寒帶動物，讓遊客達到 30 人。",
+  "brief": "挑戰開始：先蓋寒帶棲地和飼料站，把企鵝和北極狐放進去。",
+  "start": {
+   "coins": 300,
+   "resources": {
+    "scrap": 40,
+    "feed": 60,
+    "fuel": 5
+   },
+   "animals": {
+    "penguin": 3,
+    "arctic_fox": 2
+   }
+  },
+  "goals": [
+   {
+    "stat": "visitors",
+    "target": 30,
+    "label": "遊客"
+   }
+  ]
+ },
+ {
+  "id": "cold_snap",
+  "name": "寒冬危機",
+  "minutes": 60,
+  "desc": "一群熱帶動物被送來，煤炭卻快用完了。讓園區評價達到 3 星。",
+  "brief": "熱帶動物怕冷，暖爐要煤炭，先想辦法弄到燃料。",
+  "start": {
+   "coins": 700,
+   "resources": {
+    "scrap": 80,
+    "feed": 80,
+    "fuel": 4
+   },
+   "animals": {
+    "capybara": 2,
+    "ring_tailed_lemur": 3,
+    "common_peafowl": 2
+   }
+  },
+  "goals": [
+   {
+    "stat": "rating",
+    "target": 3,
+    "label": "評價星數"
+   }
+  ]
+ },
+ {
+  "id": "baby_boom",
+  "name": "嬰兒潮",
+  "minutes": 60,
+  "desc": "在時限內讓園區出生 5 隻寶寶。",
+  "brief": "一公一母、成年、幸福度 70 以上就有機會懷孕。研究所的繁殖技術會很有幫助。",
+  "start": {
+   "coins": 1200,
+   "resources": {
+    "scrap": 80,
+    "feed": 150,
+    "fuel": 10
+   },
+   "research": 60,
+   "animals": {
+    "penguin": 4,
+    "chicken": 4,
+    "rabbit": 4
+   }
+  },
+  "goals": [
+   {
+    "stat": "births",
+    "target": 5,
+    "label": "出生寶寶"
+   }
+  ]
+ },
+ {
+  "id": "tight_budget",
+  "name": "精打細算",
+  "minutes": 40,
+  "desc": "從 200 金幣開始，把金幣累積到 3000。",
+  "brief": "門票、餐廳和紀念品店都能賺錢，但員工薪水不能忘。",
+  "start": {
+   "coins": 200,
+   "resources": {
+    "scrap": 60,
+    "feed": 100,
+    "fuel": 5
+   },
+   "animals": {
+    "alpaca": 3,
+    "donkey": 2,
+    "domestic_pig": 2
+   }
+  },
+  "goals": [
+   {
+    "stat": "coins",
+    "target": 3000,
+    "label": "金幣"
+   }
+  ]
+ },
+ {
+  "id": "five_star",
+  "name": "五星挑戰",
+  "minutes": 120,
+  "desc": "資金充足、動物多樣，在兩小時內打造五星動物園。",
+  "brief": "五星需要動物福利、遊客滿意度、多樣性、保育、整潔全部都好。",
+  "start": {
+   "coins": 8000,
+   "resources": {
+    "scrap": 400,
+    "feed": 400,
+    "fuel": 40
+   },
+   "research": 150,
+   "animals": {
+    "african_elephant": 2,
+    "giraffe": 2,
+    "lion": 2,
+    "chapman_zebra": 3,
+    "hippo": 2,
+    "white_rhino": 2,
+    "penguin": 4,
+    "red_panda": 2,
+    "bengal_tiger": 2,
+    "common_peafowl": 2
+   },
+   "staff": {
+    "keeper": 3,
+    "vet": 1,
+    "mechanic": 1,
+    "janitor": 2,
+    "security": 1
+   }
+  },
+  "goals": [
+   {
+    "stat": "rating",
+    "target": 5,
+    "label": "評價星數"
+   },
+   {
+    "stat": "satisfaction",
+    "target": 70,
+    "label": "滿意度"
+   }
+  ]
+ }
+]
