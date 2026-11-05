@@ -1,0 +1,175 @@
+[
+ {
+  "id": "nutrition",
+  "name": "營養配方",
+  "cat": "care",
+  "cost": 15,
+  "requires": [],
+  "effects": {
+   "feedEfficiency": 0.75
+  },
+  "desc": "飼料用量減少 25%"
+ },
+ {
+  "id": "enrichment",
+  "name": "行為豐富化",
+  "cat": "care",
+  "cost": 25,
+  "requires": [],
+  "effects": {
+   "happinessBonus": 6
+  },
+  "desc": "所有動物幸福度 +6"
+ },
+ {
+  "id": "vet_medicine",
+  "name": "獸醫學",
+  "cat": "care",
+  "cost": 30,
+  "requires": [
+   "nutrition"
+  ],
+  "effects": {
+   "sickChanceMult": 0.55
+  },
+  "desc": "生病機率降低 45%"
+ },
+ {
+  "id": "breeding_program",
+  "name": "人工繁殖技術",
+  "cat": "care",
+  "cost": 45,
+  "requires": [
+   "enrichment"
+  ],
+  "effects": {
+   "breedChanceMult": 1.6
+  },
+  "desc": "懷孕機率 +60%"
+ },
+ {
+  "id": "nursery",
+  "name": "育幼室",
+  "cat": "care",
+  "cost": 40,
+  "requires": [
+   "breeding_program"
+  ],
+  "effects": {
+   "adultMinutesMult": 0.6
+  },
+  "desc": "幼體成長快 40%"
+ },
+ {
+  "id": "climate_dome_tech",
+  "name": "氣候圓頂",
+  "cat": "facility",
+  "cost": 60,
+  "requires": [
+   "enrichment"
+  ],
+  "effects": {},
+  "unlocks": [
+   "climate_dome"
+  ],
+  "desc": "解鎖會自動調整溫度的棲地"
+ },
+ {
+  "id": "large_feeder_tech",
+  "name": "自動餵食系統",
+  "cat": "facility",
+  "cost": 20,
+  "requires": [
+   "nutrition"
+  ],
+  "effects": {},
+  "unlocks": [
+   "large_feeder"
+  ],
+  "desc": "解鎖半徑更大的大型餵食站"
+ },
+ {
+  "id": "aquarium_tech",
+  "name": "水族館工程",
+  "cat": "facility",
+  "cost": 35,
+  "requires": [],
+  "effects": {},
+  "unlocks": [
+   "aquarium"
+  ],
+  "desc": "解鎖容量更大的水族館"
+ },
+ {
+  "id": "staff_training",
+  "name": "員工訓練",
+  "cat": "ops",
+  "cost": 25,
+  "requires": [],
+  "effects": {
+   "keeperCapacityMult": 1.5,
+   "repairMult": 1.5,
+   "cleanMult": 1.5
+  },
+  "desc": "飼育員、技工、清潔人員效率 +50%"
+ },
+ {
+  "id": "marketing",
+  "name": "行銷宣傳",
+  "cat": "ops",
+  "cost": 30,
+  "requires": [],
+  "effects": {
+   "visitorMult": 1.15
+  },
+  "desc": "遊客 +15%"
+ },
+ {
+  "id": "membership",
+  "name": "年票會員",
+  "cat": "ops",
+  "cost": 45,
+  "requires": [
+   "marketing"
+  ],
+  "effects": {
+   "priceElasticityMult": 0.6
+  },
+  "desc": "漲票價時流失的遊客變少"
+ },
+ {
+  "id": "cold_gear",
+  "name": "極地服裝研究",
+  "cat": "expedition",
+  "cost": 20,
+  "requires": [],
+  "effects": {
+   "expDrainMult": 0.85
+  },
+  "desc": "遠征時體溫流失 -15%"
+ },
+ {
+  "id": "wraith_study",
+  "name": "霜影研究",
+  "cat": "expedition",
+  "cost": 35,
+  "requires": [
+   "cold_gear"
+  ],
+  "effects": {
+   "expWraithMult": 0.7
+  },
+  "desc": "霜影傷害 -30%"
+ },
+ {
+  "id": "field_kit_plus",
+  "name": "野外容器改良",
+  "cat": "expedition",
+  "cost": 30,
+  "requires": [],
+  "effects": {
+   "expContainerBonus": 2
+  },
+  "desc": "容器 +2"
+ }
+]

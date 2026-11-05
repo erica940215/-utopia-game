@@ -22,7 +22,7 @@ function migrateAnimals(){
     if(a.breed==null) a.breed=true;
   }
 }
-const isAdult=a=>(save.zoo.clock-a.born)>=BR().adultMinutes;
+const isAdult=a=>(save.zoo.clock-a.born)>=BR().adultMinutes*RF().adultMinutesMult;
 function related(a,b){
   if(a.parents.includes(b.id)||b.parents.includes(a.id)) return '親子';
   if(a.parents.length&&b.parents.some(p=>a.parents.includes(p))) return '手足';
@@ -48,7 +48,7 @@ function breedingStep(min){
       if(f.preg.inbred) st-=B.inbreedPenalty;
       st=Math.max(1,Math.min(B.maxStars,st));
       const baby=newIndividual(f.species,f.habitat,{stars:st,born:z.clock,parents:[father.id,f.id],gen:Math.max(f.gen,father.gen||0)+1,happy:80});
-      z.animals.push(baby); zooBirthLog.push(baby); z.births=(z.births||0)+1;
+      z.animals.push(baby); zooBirthLog.push(baby); z.births=(z.births||0)+1; consOnBirth(baby);
     }
     f.cooldownUntil=z.clock+B.cooldownMinutes; delete f.preg;
   }
@@ -59,7 +59,7 @@ function breedingStep(min){
     if(!mates.length) continue;
     const unrelated=mates.filter(m=>!related(f,m));
     const m=(unrelated.length?unrelated:mates)[Math.floor(Math.random()*(unrelated.length||mates.length))];
-    if(Math.random()<B.chancePerMin*min) f.preg={due:z.clock+B.gestationMinutes,father:m.id,inbred:!!related(f,m)};
+    if(Math.random()<B.chancePerMin*RF().breedChanceMult*min) f.preg={due:z.clock+B.gestationMinutes,father:m.id,inbred:!!related(f,m)};
   }
 }
 function habitatBreedNote(b){
@@ -75,6 +75,6 @@ function releaseAnimal(a){
   const B=BR(), sp=DATA.speciesById[a.species], rar=['common','rare','endangered','legendary'].indexOf(sp.rarity);
   const research=Math.round(B.releaseResearch*(1+rar)*(a.stars/2)), coins=Math.round(B.releaseCoins*(1+rar)*(a.stars/2));
   save.zoo.research=(save.zoo.research||0)+research; save.zoo.coins+=coins;
-  save.zoo.released=(save.zoo.released||0)+1;
+  save.zoo.released=(save.zoo.released||0)+1; consOnRelease(a);
   return {research,coins};
 }

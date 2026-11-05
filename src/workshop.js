@@ -21,6 +21,7 @@ function computeStats(){
     if(g.sprintSpeed) s.sprintSpeed=Math.max(s.sprintSpeed,g.sprintSpeed);
     if(g.walkSpeed) s.walkSpeed=Math.max(s.walkSpeed,g.walkSpeed);
   }
+  const rf=RF(); s.drainMult*=rf.expDrainMult; s.wraithTouchMult*=rf.expWraithMult; s.containerCapacity+=rf.expContainerBonus;
   return s;
 }
 let shopTab='train';

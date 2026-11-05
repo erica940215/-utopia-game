@@ -26,18 +26,18 @@ function opsBeforeAnimals(min){
   const eff=opsStats.unpaid?0.5:1;
   // 飼育員覆蓋率
   const need=z.animals.length;
-  opsStats.coverage=need?Math.min(1,staffCount('keeper')*S.keeper.capacity*eff/need):1;
+  opsStats.coverage=need?Math.min(1,staffCount('keeper')*S.keeper.capacity*RF().keeperCapacityMult*eff/need):1;
   // 設施耗損與技工維修
   const wear=z.buildings.filter(b=>{ const k=bdef(b.type).kind; return k!=='path'&&k!=='gate'; });
   for(const b of wear) b.cond=Math.max(0,(b.cond??100)-O.conditionDecayPerMin*min);
-  let repair=staffCount('mechanic')*S.mechanic.repairPerMin*eff*min;
+  let repair=staffCount('mechanic')*S.mechanic.repairPerMin*RF().repairMult*eff*min;
   for(const b of wear.slice().sort((a,b)=>a.cond-b.cond)){ if(repair<=0) break; const r=Math.min(repair,100-b.cond); b.cond+=r; repair-=r; }
   // 清潔
-  z.clean=Math.max(0,Math.min(100,z.clean-(zooStats.visitors||0)*O.litterPerVisitorMin*min+staffCount('janitor')*S.janitor.cleanPerMin*eff*min));
+  z.clean=Math.max(0,Math.min(100,z.clean-(zooStats.visitors||0)*O.litterPerVisitorMin*min+staffCount('janitor')*S.janitor.cleanPerMin*RF().cleanMult*eff*min));
   // 生病與獸醫
   let cure=staffCount('vet')*S.vet.curePerMin*eff*min;
   for(const a of z.animals){
-    if(!a.sick&&Math.random()<O.sickChancePerMin*min*(a.food<30?3:1)) a.sick=true;
+    if(!a.sick&&Math.random()<O.sickChancePerMin*RF().sickChanceMult*min*(a.food<30?3:1)) a.sick=true;
     if(a.sick&&cure>=1){ a.sick=false; cure-=1; }
     else if(a.sick&&cure>0&&Math.random()<cure){ a.sick=false; cure=0; }
     a.health=Math.max(5,Math.min(100,(a.health??100)+(a.sick?-O.sickHealthLossPerMin:O.healthRegenPerMin)*min));
@@ -63,8 +63,8 @@ function opsEconomy(attract,min){
   const needScore=(needs.food+needs.restroom+needs.rest)/3*100;
   const sat=0.35*viewing+0.25*needScore+0.2*z.clean+0.1*education+0.1*decor;
   opsStats.needs=needs; opsStats.satisfaction=sat; opsStats.parts.sat={viewing,needScore,clean:z.clean,education,decor};
-  const priceF=Math.max(0.2,1-(z.ticket-O.ticketDefault)*O.priceElasticity);
-  const visitors=Math.round(attract*Z.visitorPerAttract*(0.5+sat/100)*priceF*(0.7+0.1*opsStats.rating));
+  const priceF=Math.max(0.2,1-(z.ticket-O.ticketDefault)*O.priceElasticity*RF().priceElasticityMult);
+  const visitors=Math.round(attract*Z.visitorPerAttract*(0.5+sat/100)*priceF*(0.7+0.1*opsStats.rating)*RF().visitorMult);
   let ticket=visitors*z.ticket*O.coinsPerVisitorTicketMin;
   let spend=0;
   for(const b of z.buildings){ const d=bdef(b.type); if(d.kind==='facility'&&d.spendPerVisitorMin&&isWorking(b)) spend+=Math.min(visitors,d.serves)*d.spendPerVisitorMin; }
@@ -85,7 +85,7 @@ function computeRating(){
   const distinct=new Set(z.animals.map(a=>a.species));
   const diversity=Math.min(1,distinct.size/O.diversityFull)*100;
   const endangered=[...distinct].filter(id=>{ const r=DATA.speciesById[id]&&DATA.speciesById[id].rarity; return r==='endangered'||r==='legendary'; }).length;
-  const conservation=Math.min(1,(endangered+(z.released||0)*0.5)/O.conservationFull)*100;
+  const conservation=Math.min(1,(endangered+(z.released||0)*0.5+consDoneCount()*2)/O.conservationFull)*100;
   const parts={welfare,satisfaction:opsStats.satisfaction,diversity,conservation,cleanliness:z.clean};
   const score=Object.entries(W).reduce((s,[k,w])=>s+w*parts[k],0);
   opsStats.parts.rating=parts; opsStats.score=score; opsStats.endangered=endangered;

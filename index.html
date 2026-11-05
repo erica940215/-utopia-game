@@ -318,6 +318,7 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
     <div class="zacts" id="zMain">
       <span class="zpool num" id="zPool"></span>
       <button type="button" class="zbtn" id="zWalk">逛園</button>
+      <button type="button" class="zbtn" id="zLab">研究所</button>
       <button type="button" class="zbtn" id="zOps">營運</button>
       <button type="button" class="zbtn" id="zShop">工坊</button>
       <button type="button" class="zbtn" id="zDex">圖鑑・倉庫</button>
@@ -348,13 +349,14 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
    ========================================================= */
 const DATA = {};
 async function loadData(){
-  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets','staff','achievements'];
+  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets','staff','achievements','research'];
   const res = await Promise.all(names.map(n => fetch(`data/${n}.json`).then(r => { if(!r.ok) throw new Error(n); return r.json(); })));
   names.forEach((n,i) => DATA[n] = res[i]);
   DATA.speciesById = Object.fromEntries(DATA.species.map(s => [s.id, s]));
   DATA.itemsById = Object.fromEntries(DATA.items.map(s => [s.id, s]));
   DATA.equipById = Object.fromEntries(DATA.equipment.map(s => [s.id, s]));
   DATA.stationById = Object.fromEntries(DATA.stations.map(s => [s.id, s]));
+  DATA.researchById = Object.fromEntries(DATA.research.map(s => [s.id, s]));
   DATA.staffById = Object.fromEntries(DATA.staff.map(s => [s.id, s]));
   DATA.propById = Object.fromEntries(DATA.props.map(s => [s.id, s]));
   DATA.upgradeById = Object.fromEntries(DATA.upgrades.map(s => [s.id, s]));
@@ -1190,10 +1192,11 @@ function updateSelBox(){
 /* ---------- 模擬：需求、溫度、門票 ---------- */
 function heatersOn(){ return zooStats.heatOn; }
 function habitatTemp(b){
-  const d=bdef(b.type); let t=d.baseTemp||0;
+  const d=bdef(b.type); let t=d.baseTemp==='auto'?autoTemp(b):(d.baseTemp||0);
   if(heatersOn()) for(const h of save.zoo.buildings){ const hd=bdef(h.type); if(hd.kind==='heater' && isWorking(h) && tileDist(h,b)<=hd.radius+Math.max(...d.size)/2) t+=hd.heat; }
   return t;
 }
+function autoTemp(b){ const sp=save.zoo.animals.filter(a=>a.habitat===b.uid).map(a=>DATA.speciesById[a.species]).filter(Boolean); if(!sp.length) return 15; const lo=Math.max(...sp.map(s=>s.tempRange[0])), hi=Math.min(...sp.map(s=>s.tempRange[1])); return Math.round(lo<=hi?(lo+hi)/2:sp.reduce((t,s)=>t+(s.tempRange[0]+s.tempRange[1])/2,0)/sp.length); }
 function habitatFed(b){ const d=bdef(b.type); return save.zoo.buildings.some(f=>{ const fd=bdef(f.type); return fd.kind==='feeder' && isWorking(f) && tileDist(f,b)<=fd.radius+Math.max(...d.size)/2; }); }
 function simulate(min){
   const Z=ZC(), zoo=save.zoo;
@@ -1204,7 +1207,7 @@ function simulate(min){
     while(zoo.fuelDebt>=1 && (save.resources.fuel||0)>0){ save.resources.fuel--; zoo.fuelDebt--; }
     zooStats.heatOn=(save.resources.fuel||0)>0 || zoo.fuelDebt<1;
   } else zooStats.heatOn=true;
-  ensureOps(); opsBeforeAnimals(min);
+  ensureOps(); ensureResearch(); const rf=RF(), SR=DATA.config.speciesResearch; opsBeforeAnimals(min);
   const temps=new Map(), fed=new Map(), counts=new Map();
   for(const a of zoo.animals){ const k=a.habitat+'|'+a.species; counts.set(k,(counts.get(k)||0)+1); }
   let attract=0;
@@ -1212,13 +1215,13 @@ function simulate(min){
     const b=findB(a.habitat), sp=DATA.speciesById[a.species]; if(!b||!sp) continue;
     if(!temps.has(b.uid)){ temps.set(b.uid,habitatTemp(b)); fed.set(b.uid,habitatFed(b)); }
     a.food=Math.max(0,(a.food??80)-Z.foodDecayPerMin*min);
-    while(a.food<Z.feedRefillAt && fed.get(b.uid) && (save.resources.feed||0)>=1){ save.resources.feed--; a.food=Math.min(100,a.food+Z.feedRefillAmount); }
+    while(a.food<Z.feedRefillAt && fed.get(b.uid) && (save.resources.feed||0)>=1){ if(Math.random()<rf.feedEfficiency) save.resources.feed--; a.food=Math.min(100,a.food+Z.feedRefillAmount); }
     const T=temps.get(b.uid), tempOK=T>=sp.tempRange[0]&&T<=sp.tempRange[1];
     const socialOK=!SOCIAL_GROUP.includes(sp.social) || counts.get(b.uid+'|'+a.species)>=2;
-    const target=Math.max(0,Math.min(40,a.food/30*40)+(tempOK?40:0)+(socialOK?20:5)-animalOpsPenalty(a,b));
+    const target=Math.max(0,Math.min(40,a.food/30*40)+(tempOK?40:0)+(socialOK?20:5)-animalOpsPenalty(a,b)+rf.happinessBonus+knowLevel(a.species)*SR.happinessPerLevel);
     const h=a.happy??60, step=Z.happinessPerMin*min;
     a.happy=Math.abs(target-h)<=step?target:h+Math.sign(target-h)*step;
-    attract+=sp.attract*a.happy/100*(0.8+0.1*(a.stars||2))*(isAdult(a)?1:1.25);
+    attract+=sp.attract*a.happy/100*(0.8+0.1*(a.stars||2))*(isAdult(a)?1:1.25)*(1+knowLevel(a.species)*SR.attractPerLevel);
   }
   opsEconomy(attract,min); computeRating();
   breedingStep(min);
@@ -1266,10 +1269,10 @@ function updateZooHud(){
 }
 function renderZooTools(){
   const tools=zTab==='facility'?[{id:'select',name:'選取',sub:'查看・放動物'},{id:'demolish',name:'拆除',sub:`退還 ${Math.round(ZC().demolishRefund*100)}%`}]
-    .concat(DATA.buildings.filter(b=>b.buildable!==false).map(b=>({id:b.id,name:b.name,sub:costText(b.cost),cost:b.cost})))
+    .concat(DATA.buildings.filter(b=>b.buildable!==false).map(b=>({id:b.id,name:b.name,sub:buildingUnlocked(b)?costText(b.cost):`需要研究：${DATA.researchById[b.requires].name}`,cost:b.cost,locked:!buildingUnlocked(b)})))
     :[{id:'select',name:'選取',sub:'調整物件'},{id:'demolish',name:'拆除',sub:'物件與設施'},...creativeTools()];
   $('zTools').innerHTML=`<div class="ztabs">${Z_TABS.map(([id,n])=>`<button type="button" class="ztab${zTab===id?' on':''}" data-ztab="${id}">${n}</button>`).join('')}<span class="zopts">${creativeOptions()}</span></div>
-    <div class="ztoolrow">${tools.map(t=>`<button type="button" class="ztool${zTool===t.id?' on':''}${t.cost&&!affordable(t.cost)?' poor':''}" data-tool="${t.id}">${t.swatch?`<i class="sw" style="background:${t.swatch}"></i>`:''}<b>${esc(t.name)}</b><span>${esc(t.sub)}</span></button>`).join('')}</div>`;
+    <div class="ztoolrow">${tools.map(t=>`<button type="button" class="ztool${zTool===t.id?' on':''}${(t.cost&&!affordable(t.cost))||t.locked?' poor':''}" data-tool="${t.id}">${t.swatch?`<i class="sw" style="background:${t.swatch}"></i>`:''}<b>${esc(t.name)}</b><span>${esc(t.sub)}</span></button>`).join('')}</div>`;
   $('zTools').querySelectorAll('[data-ztab]').forEach(el=>el.onclick=()=>{ zTab=el.dataset.ztab; zTool='select'; zGhost.visible=false; renderZooTools(); });
   $('zTools').querySelectorAll('.ztool').forEach(el=>el.onclick=()=>{ zTool=el.dataset.tool; zGhost.visible=false; zMoveUid=null;
     if(zTool!=='select'){ zSelUid=null; zSelProp=null; zSelBox.visible=false; $('zPanel').hidden=true; }
@@ -1359,6 +1362,7 @@ function zooTap(cx,cy){
     return;
   }
   const d=bdef(zTool); if(!d) return;
+  if(!buildingUnlocked(d)){ toast(`要先在研究所完成「${DATA.researchById[d.requires].name}」`); return; }
   const p=placeOffset(d,t);
   if(!canPlace(d,p.x,p.z)){ toast('這裡放不下'); return; }
   if(!affordable(d.cost)){ toast(`不夠：需要 ${costText(d.cost)}`); return; }
@@ -1456,6 +1460,7 @@ $('zWalk').onclick=()=>startZooWalk();
 $('zWalkExit').onclick=()=>endZooWalk();
 $('zDex').onclick=()=>{ $('zooUI').hidden=true; showDex(); };
 $('zGo').onclick=()=>showMap();
+$('zLab').onclick=()=>{ $('zooUI').hidden=true; showLab(); };
 $('zOps').onclick=()=>{ $('zooUI').hidden=true; showOps(); };
 $('zShop').onclick=()=>{ $('zooUI').hidden=true; showWorkshop(); };
 $('zCtrl').hidden=!isTouch; $('zCtrl').onclick=()=>{ $('zooUI').hidden=true; startCtrlEdit(); };
@@ -1595,6 +1600,7 @@ function computeStats(){
     if(g.sprintSpeed) s.sprintSpeed=Math.max(s.sprintSpeed,g.sprintSpeed);
     if(g.walkSpeed) s.walkSpeed=Math.max(s.walkSpeed,g.walkSpeed);
   }
+  const rf=RF(); s.drainMult*=rf.expDrainMult; s.wraithTouchMult*=rf.expWraithMult; s.containerCapacity+=rf.expContainerBonus;
   return s;
 }
 let shopTab='train';
@@ -1678,7 +1684,7 @@ function migrateAnimals(){
     if(a.breed==null) a.breed=true;
   }
 }
-const isAdult=a=>(save.zoo.clock-a.born)>=BR().adultMinutes;
+const isAdult=a=>(save.zoo.clock-a.born)>=BR().adultMinutes*RF().adultMinutesMult;
 function related(a,b){
   if(a.parents.includes(b.id)||b.parents.includes(a.id)) return '親子';
   if(a.parents.length&&b.parents.some(p=>a.parents.includes(p))) return '手足';
@@ -1704,7 +1710,7 @@ function breedingStep(min){
       if(f.preg.inbred) st-=B.inbreedPenalty;
       st=Math.max(1,Math.min(B.maxStars,st));
       const baby=newIndividual(f.species,f.habitat,{stars:st,born:z.clock,parents:[father.id,f.id],gen:Math.max(f.gen,father.gen||0)+1,happy:80});
-      z.animals.push(baby); zooBirthLog.push(baby); z.births=(z.births||0)+1;
+      z.animals.push(baby); zooBirthLog.push(baby); z.births=(z.births||0)+1; consOnBirth(baby);
     }
     f.cooldownUntil=z.clock+B.cooldownMinutes; delete f.preg;
   }
@@ -1715,7 +1721,7 @@ function breedingStep(min){
     if(!mates.length) continue;
     const unrelated=mates.filter(m=>!related(f,m));
     const m=(unrelated.length?unrelated:mates)[Math.floor(Math.random()*(unrelated.length||mates.length))];
-    if(Math.random()<B.chancePerMin*min) f.preg={due:z.clock+B.gestationMinutes,father:m.id,inbred:!!related(f,m)};
+    if(Math.random()<B.chancePerMin*RF().breedChanceMult*min) f.preg={due:z.clock+B.gestationMinutes,father:m.id,inbred:!!related(f,m)};
   }
 }
 function habitatBreedNote(b){
@@ -1731,7 +1737,7 @@ function releaseAnimal(a){
   const B=BR(), sp=DATA.speciesById[a.species], rar=['common','rare','endangered','legendary'].indexOf(sp.rarity);
   const research=Math.round(B.releaseResearch*(1+rar)*(a.stars/2)), coins=Math.round(B.releaseCoins*(1+rar)*(a.stars/2));
   save.zoo.research=(save.zoo.research||0)+research; save.zoo.coins+=coins;
-  save.zoo.released=(save.zoo.released||0)+1;
+  save.zoo.released=(save.zoo.released||0)+1; consOnRelease(a);
   return {research,coins};
 }
 
@@ -2130,18 +2136,18 @@ function opsBeforeAnimals(min){
   const eff=opsStats.unpaid?0.5:1;
   // 飼育員覆蓋率
   const need=z.animals.length;
-  opsStats.coverage=need?Math.min(1,staffCount('keeper')*S.keeper.capacity*eff/need):1;
+  opsStats.coverage=need?Math.min(1,staffCount('keeper')*S.keeper.capacity*RF().keeperCapacityMult*eff/need):1;
   // 設施耗損與技工維修
   const wear=z.buildings.filter(b=>{ const k=bdef(b.type).kind; return k!=='path'&&k!=='gate'; });
   for(const b of wear) b.cond=Math.max(0,(b.cond??100)-O.conditionDecayPerMin*min);
-  let repair=staffCount('mechanic')*S.mechanic.repairPerMin*eff*min;
+  let repair=staffCount('mechanic')*S.mechanic.repairPerMin*RF().repairMult*eff*min;
   for(const b of wear.slice().sort((a,b)=>a.cond-b.cond)){ if(repair<=0) break; const r=Math.min(repair,100-b.cond); b.cond+=r; repair-=r; }
   // 清潔
-  z.clean=Math.max(0,Math.min(100,z.clean-(zooStats.visitors||0)*O.litterPerVisitorMin*min+staffCount('janitor')*S.janitor.cleanPerMin*eff*min));
+  z.clean=Math.max(0,Math.min(100,z.clean-(zooStats.visitors||0)*O.litterPerVisitorMin*min+staffCount('janitor')*S.janitor.cleanPerMin*RF().cleanMult*eff*min));
   // 生病與獸醫
   let cure=staffCount('vet')*S.vet.curePerMin*eff*min;
   for(const a of z.animals){
-    if(!a.sick&&Math.random()<O.sickChancePerMin*min*(a.food<30?3:1)) a.sick=true;
+    if(!a.sick&&Math.random()<O.sickChancePerMin*RF().sickChanceMult*min*(a.food<30?3:1)) a.sick=true;
     if(a.sick&&cure>=1){ a.sick=false; cure-=1; }
     else if(a.sick&&cure>0&&Math.random()<cure){ a.sick=false; cure=0; }
     a.health=Math.max(5,Math.min(100,(a.health??100)+(a.sick?-O.sickHealthLossPerMin:O.healthRegenPerMin)*min));
@@ -2167,8 +2173,8 @@ function opsEconomy(attract,min){
   const needScore=(needs.food+needs.restroom+needs.rest)/3*100;
   const sat=0.35*viewing+0.25*needScore+0.2*z.clean+0.1*education+0.1*decor;
   opsStats.needs=needs; opsStats.satisfaction=sat; opsStats.parts.sat={viewing,needScore,clean:z.clean,education,decor};
-  const priceF=Math.max(0.2,1-(z.ticket-O.ticketDefault)*O.priceElasticity);
-  const visitors=Math.round(attract*Z.visitorPerAttract*(0.5+sat/100)*priceF*(0.7+0.1*opsStats.rating));
+  const priceF=Math.max(0.2,1-(z.ticket-O.ticketDefault)*O.priceElasticity*RF().priceElasticityMult);
+  const visitors=Math.round(attract*Z.visitorPerAttract*(0.5+sat/100)*priceF*(0.7+0.1*opsStats.rating)*RF().visitorMult);
   let ticket=visitors*z.ticket*O.coinsPerVisitorTicketMin;
   let spend=0;
   for(const b of z.buildings){ const d=bdef(b.type); if(d.kind==='facility'&&d.spendPerVisitorMin&&isWorking(b)) spend+=Math.min(visitors,d.serves)*d.spendPerVisitorMin; }
@@ -2189,7 +2195,7 @@ function computeRating(){
   const distinct=new Set(z.animals.map(a=>a.species));
   const diversity=Math.min(1,distinct.size/O.diversityFull)*100;
   const endangered=[...distinct].filter(id=>{ const r=DATA.speciesById[id]&&DATA.speciesById[id].rarity; return r==='endangered'||r==='legendary'; }).length;
-  const conservation=Math.min(1,(endangered+(z.released||0)*0.5)/O.conservationFull)*100;
+  const conservation=Math.min(1,(endangered+(z.released||0)*0.5+consDoneCount()*2)/O.conservationFull)*100;
   const parts={welfare,satisfaction:opsStats.satisfaction,diversity,conservation,cleanliness:z.clean};
   const score=Object.entries(W).reduce((s,[k,w])=>s+w*parts[k],0);
   opsStats.parts.rating=parts; opsStats.score=score; opsStats.endangered=endangered;
@@ -2295,6 +2301,82 @@ function showOps(msg){
   screenEl.querySelectorAll('[data-fire]').forEach(el=>el.onclick=()=>{ const id=el.dataset.fire; if(!z.staff[id]) return; z.staff[id]--; simulate(0); persist(); showOps(`解雇了一位${DATA.staffById[id].name}`); });
   const ti=$('ticketIn'); if(ti){ ti.oninput=e=>{ $('ticketOut').textContent=e.target.value+' 金幣'; }; ti.onchange=e=>{ z.ticket=parseInt(e.target.value,10); simulate(0); persist(); showOps(); }; }
   $('opsBack').onclick=()=>{ screenEl.hidden=true; state='zoo'; $('zooUI').hidden=false; updateZooHud(); };
+}
+
+/* =========================================================
+   研究所：技術研究、物種研究、保育計畫
+   技術在 data/research.json；物種研究與保育的數值在 config.speciesResearch / config.conservation
+   ========================================================= */
+function ensureResearch(){
+  const z=save.zoo; if(!z) return;
+  z.tech=z.tech||{}; z.know=z.know||{}; z.cons=z.cons||{};
+}
+/* 已完成技術的效果合併（乘數相乘、加值相加） */
+function RF(){
+  const out={feedEfficiency:1,happinessBonus:0,sickChanceMult:1,breedChanceMult:1,adultMinutesMult:1,keeperCapacityMult:1,repairMult:1,cleanMult:1,
+    visitorMult:1,priceElasticityMult:1,expDrainMult:1,expWraithMult:1,expContainerBonus:0};
+  const done=(save.zoo&&save.zoo.tech)||{};
+  for(const r of DATA.research){ if(!done[r.id]) continue;
+    for(const [k,v] of Object.entries(r.effects||{})){ if(k.endsWith('Bonus')) out[k]+=v; else out[k]*=v; } }
+  return out;
+}
+const techDone=id=>!!(save.zoo&&save.zoo.tech&&save.zoo.tech[id]);
+const buildingUnlocked=d=>!d.requires||techDone(d.requires);
+const knowLevel=id=>(save.zoo&&save.zoo.know&&save.zoo.know[id])||0;
+function knowCost(sp){ const C=DATA.config.speciesResearch, lv=knowLevel(sp.id); if(lv>=C.costs.length) return null; return Math.round(C.costs[lv]*(C.rarityMult[sp.rarity]||1)); }
+
+/* 保育計畫：瀕危、傳說級物種各有一個計畫——園區出生 N 隻，再野放 1 隻園區出生的個體 */
+function consFor(id){ const z=save.zoo; z.cons[id]=z.cons[id]||{born:0,released:0,done:false}; return z.cons[id]; }
+function consEligible(sp){ return DATA.config.conservation.rarities.includes(sp.rarity); }
+function consOnBirth(baby){ ensureResearch(); const sp=DATA.speciesById[baby.species]; if(sp&&consEligible(sp)){ consFor(sp.id).born++; checkCons(sp); } }
+function consOnRelease(a){ ensureResearch(); const sp=DATA.speciesById[a.species]; if(sp&&consEligible(sp)&&a.gen>0){ consFor(sp.id).released++; checkCons(sp); } }
+function checkCons(sp){
+  const C=DATA.config.conservation, c=consFor(sp.id);
+  if(c.done||c.born<C.bornTarget||c.released<C.releaseTarget) return;
+  c.done=true; const rw=C.reward[sp.rarity]; pay(rw,1);
+  toast(`保育計畫完成：${sp.name}！獎勵 ${costText(rw)}`);
+}
+const consDoneCount=()=>Object.values((save.zoo&&save.zoo.cons)||{}).filter(c=>c.done).length;
+
+let labTab='tech';
+function showLab(msg){
+  ensureOps(); ensureResearch(); state='lab';
+  const z=save.zoo, catName={care:'動物照護',facility:'設施',ops:'營運',expedition:'遠征'};
+  let body='';
+  if(labTab==='tech'){
+    body=Object.keys(catName).map(cat=>`<div class="sec-title"><span>${catName[cat]}</span></div>`+DATA.research.filter(r=>r.cat===cat).map(r=>{
+      const done=techDone(r.id), reqOK=r.requires.every(techDone), can=!done&&reqOK&&(z.research||0)>=r.cost;
+      const btn=done?'<span class="sc-max">已完成</span>':!reqOK?`<span class="sc-max">需要先完成：${r.requires.map(x=>DATA.researchById[x].name).join('、')}</span>`
+        :`<button type="button" class="zmini add" data-tech="${r.id}" ${can?'':'disabled'}>研究 ${r.cost}</button>`;
+      return `<div class="shopcard${done?' on':''}"><div class="sc-main"><b>${esc(r.name)}</b><span>${esc(r.desc)}</span></div>${btn}</div>`; }).join('')).join('');
+  } else if(labTab==='species'){
+    const owned=[...new Set(z.animals.map(a=>a.species))].map(id=>DATA.speciesById[id]).filter(Boolean);
+    body=owned.length?owned.map(sp=>{ const lv=knowLevel(sp.id), cost=knowCost(sp), max=DATA.config.speciesResearch.costs.length;
+      return `<div class="shopcard${lv>=max?' on':''}"><div class="sc-main"><b>${esc(sp.name)} <em class="num">Lv${lv}/${max}</em></b><span>每級：這種動物幸福度 +${DATA.config.speciesResearch.happinessPerLevel}、吸引力 +${Math.round(DATA.config.speciesResearch.attractPerLevel*100)}%</span></div>
+        ${cost==null?'<span class="sc-max">已研究完成</span>':`<button type="button" class="zmini add" data-know="${sp.id}" ${(z.research||0)>=cost?'':'disabled'}>研究 ${cost}</button>`}</div>`; }).join('')
+      :'<p class="zp-empty">先把動物放進園區，才能研究牠們。</p>';
+  } else {
+    const C=DATA.config.conservation;
+    const list=Object.keys(save.collection).map(id=>DATA.speciesById[id]).filter(sp=>sp&&consEligible(sp));
+    body=`<p class="zp-empty">瀕危與傳說級物種各有一個保育計畫：在園區繁殖出 ${C.bornTarget} 隻寶寶，再野放 ${C.releaseTarget} 隻園區出生的個體。完成後可以拿到大量研究點數，也會提高園區的保育評價。</p>`+
+      (list.length?list.map(sp=>{ const c=consFor(sp.id), r=DATA.config.rarity[sp.rarity];
+        return `<div class="shopcard${c.done?' on':''}"><div class="sc-main"><b>${c.done?'✔ ':''}${esc(sp.name)} <em>${esc(r.name)}</em></b>
+          <span>園區出生 ${Math.min(c.born,C.bornTarget)}/${C.bornTarget}・野放園區出生個體 ${Math.min(c.released,C.releaseTarget)}/${C.releaseTarget}</span><span>獎勵 ${esc(costText(C.reward[sp.rarity]))}</span></div></div>`; }).join('')
+       :'<p class="zp-empty">還沒有發現瀕危或傳說級物種。往遠方的站點找找看。</p>');
+  }
+  const tabs=[['tech','技術'],['species','物種研究'],['cons','保育計畫']];
+  screenEl.hidden=false;
+  screenEl.innerHTML=`<div class="hub">
+    <div class="hub-head"><h1><small>RESEARCH · 研究所</small>研究所</h1><span class="savechip">研究點數 ${Math.floor(z.research||0)}</span></div>
+    <div class="dextabs" role="tablist">${tabs.map(([id,n])=>`<button type="button" role="tab" class="dextab${labTab===id?' on':''}" data-ltab="${id}" aria-selected="${labTab===id}">${n}</button>`).join('')}</div>
+    ${msg?`<div class="dexinfo">${esc(msg)}</div>`:''}
+    <div class="shoplist">${body}</div>
+    <button class="btn ghost" id="labBack" type="button">回到園區</button>
+  </div>`;
+  screenEl.querySelectorAll('[data-ltab]').forEach(el=>el.onclick=()=>{ labTab=el.dataset.ltab; showLab(); });
+  screenEl.querySelectorAll('[data-tech]').forEach(el=>el.onclick=()=>{ const r=DATA.researchById[el.dataset.tech]; if((z.research||0)<r.cost) return; z.research-=r.cost; z.tech[r.id]=Date.now(); persist(); renderZooTools(); showLab(`完成研究：${r.name}`); });
+  screenEl.querySelectorAll('[data-know]').forEach(el=>el.onclick=()=>{ const sp=DATA.speciesById[el.dataset.know], cost=knowCost(sp); if(cost==null||(z.research||0)<cost) return; z.research-=cost; z.know[sp.id]=knowLevel(sp.id)+1; persist(); showLab(`${sp.name} 研究到 Lv${z.know[sp.id]}`); });
+  $('labBack').onclick=()=>{ screenEl.hidden=true; state='zoo'; $('zooUI').hidden=false; updateZooHud(); };
 }
 
 /* =========================================================

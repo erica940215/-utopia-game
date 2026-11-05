@@ -1,5 +1,5 @@
 {
-  "version": 7,
+  "version": 8,
   "expedition": {
     "runSeconds": 300,
     "stormWarnSeconds": 60,
@@ -311,5 +311,38 @@
     },
     "diversityFull": 40,
     "conservationFull": 8
+  },
+  "speciesResearch": {
+    "costs": [
+      5,
+      15,
+      40
+    ],
+    "rarityMult": {
+      "common": 1,
+      "rare": 1.5,
+      "endangered": 2.5,
+      "legendary": 4
+    },
+    "happinessPerLevel": 5,
+    "attractPerLevel": 0.1
+  },
+  "conservation": {
+    "rarities": [
+      "endangered",
+      "legendary"
+    ],
+    "bornTarget": 2,
+    "releaseTarget": 1,
+    "reward": {
+      "endangered": {
+        "research": 40,
+        "coins": 300
+      },
+      "legendary": {
+        "research": 100,
+        "coins": 800
+      }
+    }
   }
 }

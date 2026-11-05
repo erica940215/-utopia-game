@@ -304,6 +304,70 @@
   "color": "#6a8a4a"
  },
  {
+  "id": "large_feeder",
+  "name": "大型餵食站",
+  "kind": "feeder",
+  "size": [
+   2,
+   2
+  ],
+  "cost": {
+   "scrap": 14,
+   "coins": 60
+  },
+  "radius": 11,
+  "color": "#6a5a32",
+  "requires": "large_feeder_tech"
+ },
+ {
+  "id": "climate_dome",
+  "name": "氣候圓頂",
+  "kind": "habitat",
+  "size": [
+   5,
+   5
+  ],
+  "cost": {
+   "scrap": 40,
+   "fuel": 8,
+   "coins": 220
+  },
+  "baseTemp": "auto",
+  "accepts": [
+   "mammal",
+   "bird",
+   "reptile"
+  ],
+  "capacity": 5,
+  "ground": "#5a7a5a",
+  "fence": "#c9d6dd",
+  "house": true,
+  "requires": "climate_dome_tech"
+ },
+ {
+  "id": "aquarium",
+  "name": "水族館",
+  "kind": "habitat",
+  "size": [
+   4,
+   4
+  ],
+  "cost": {
+   "scrap": 30,
+   "coins": 160
+  },
+  "baseTemp": "auto",
+  "accepts": [
+   "aquatic"
+  ],
+  "capacity": 10,
+  "ground": "#2a6f99",
+  "fence": "#c9d6dd",
+  "water": true,
+  "house": true,
+  "requires": "aquarium_tech"
+ },
+ {
   "id": "gate",
   "name": "入口",
   "kind": "gate",
