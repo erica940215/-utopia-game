@@ -9,7 +9,7 @@ function ensureResearch(){
 /* 已完成技術的效果合併（乘數相乘、加值相加） */
 function RF(){
   const out={feedEfficiency:1,happinessBonus:0,sickChanceMult:1,breedChanceMult:1,adultMinutesMult:1,keeperCapacityMult:1,repairMult:1,cleanMult:1,
-    visitorMult:1,priceElasticityMult:1,expDrainMult:1,expWraithMult:1,expContainerBonus:0};
+    visitorMult:1,priceElasticityMult:1,lifespanMult:1,elderPenaltyMult:1,expDrainMult:1,expWraithMult:1,expContainerBonus:0};
   const done=(save.zoo&&save.zoo.tech)||{};
   for(const r of DATA.research){ if(!done[r.id]) continue;
     for(const [k,v] of Object.entries(r.effects||{})){ if(k.endsWith('Bonus')) out[k]+=v; else out[k]*=v; } }

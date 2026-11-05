@@ -25,7 +25,7 @@ function newSandbox(){
   s.map={visited:DATA.map.map(n=>n.id)};
   const keep=save; save=s; ensureZoo(); ensureOps(); ensureResearch();
   s.zoo.coins=999999; s.zoo.research=99999; s.zoo.tech=Object.fromEntries(DATA.research.map(r=>[r.id,1]));
-  s.zoo.staff={keeper:4,vet:2,mechanic:2,janitor:3,security:2,educator:1};
+  s.zoo.staff={keeper:4,vet:2,mechanic:2,janitor:3,security:2,educator:1}; s.zoo.noAging=true;
   save=keep; return s;
 }
 function newChallenge(ch){

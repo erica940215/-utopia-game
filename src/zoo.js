@@ -171,13 +171,13 @@ function simulate(min){
     while(a.food<Z.feedRefillAt && fed.get(b.uid) && (save.resources.feed||0)>=1){ if(Math.random()<rf.feedEfficiency) save.resources.feed--; a.food=Math.min(100,a.food+Z.feedRefillAmount); }
     const T=temps.get(b.uid), tempOK=T>=sp.tempRange[0]&&T<=sp.tempRange[1];
     const socialOK=!SOCIAL_GROUP.includes(sp.social) || counts.get(b.uid+'|'+a.species)>=2;
-    const target=Math.max(0,Math.min(40,a.food/30*40)+(tempOK?40:0)+(socialOK?20:5)-animalOpsPenalty(a,b)+rf.happinessBonus+knowLevel(a.species)*SR.happinessPerLevel);
+    const target=Math.max(0,Math.min(40,a.food/30*40)+(tempOK?40:0)+(socialOK?20:5)-animalOpsPenalty(a,b)-elderPenalty(a)+rf.happinessBonus+knowLevel(a.species)*SR.happinessPerLevel);
     const h=a.happy??60, step=Z.happinessPerMin*min;
     a.happy=Math.abs(target-h)<=step?target:h+Math.sign(target-h)*step;
-    attract+=sp.attract*a.happy/100*(0.8+0.1*(a.stars||2))*(isAdult(a)?1:1.25)*(1+knowLevel(a.species)*SR.attractPerLevel);
+    attract+=sp.attract*a.happy/100*(0.8+0.1*(a.stars||2))*(isAdult(a)?1:1.25)*elderAttract(a)*(1+knowLevel(a.species)*SR.attractPerLevel);
   }
   opsEconomy(attract,min); computeRating();
-  breedingStep(min);
+  breedingStep(min); agingStep(min);
   zoo.lastTick=Date.now();
 }
 function catchUp(){
@@ -186,10 +186,10 @@ function catchUp(){
   // 只有生涯在離線時繼續運作；沙盒與挑戰離開時暫停（挑戰中去遠征 20 分鐘內仍會計時）
   if(modeOf()==='sandbox' || (modeOf()==='challenge' && m>20)) m=0;
   if(m<0.05){ simulate(0); return null; }
-  const c0=zoo.coins, f0=save.resources.feed||0, total=m, b0=zooBirthLog.length;
+  const c0=zoo.coins, f0=save.resources.feed||0, total=m, b0=zooBirthLog.length, d0=zooDeathLog.length;
   while(m>0){ const s=Math.min(1,m); simulate(s); m-=s; }
-  const births=zooBirthLog.length-b0; zooBirthLog=[];
-  return { minutes:Math.round(total), coins:Math.floor(zoo.coins-c0), feed:f0-(save.resources.feed||0), births };
+  const births=zooBirthLog.length-b0, deaths=zooDeathLog.length-d0; zooBirthLog=[]; zooDeathLog=[];
+  return { minutes:Math.round(total), coins:Math.floor(zoo.coins-c0), feed:f0-(save.resources.feed||0), births, deaths };
 }
 
 /* ---------- 進出園區 ---------- */
@@ -204,7 +204,7 @@ function enterZoo(){
   $('zModeTag').textContent=MODE_NAME[modeOf()]; $('zModeTag').hidden=modeOf()==='career';
   if(document.exitPointerLock) document.exitPointerLock();
   renderZooTools(); updateZooHud();
-  if(away && away.minutes>=1) toast(`離開的 ${away.minutes} 分鐘裡：門票 +${away.coins} 金幣，吃掉飼料 ${away.feed}${away.births?`，出生了 ${away.births} 隻寶寶`:''}`);
+  if(away && away.minutes>=1) toast(`離開的 ${away.minutes} 分鐘裡：門票 +${away.coins} 金幣，吃掉飼料 ${away.feed}${away.births?`，出生了 ${away.births} 隻寶寶`:''}${away.deaths?`，有 ${away.deaths} 隻動物壽終正寢`:''}`);
   else if(!save.zoo.animals.length) toast(Object.values(save.zoo.unplaced).some(n=>n>0)?'先蓋一座棲地，再把救回來的動物放進去':'先出發遠征，把動物救回來');
   persist();
 }
@@ -250,15 +250,15 @@ function openHabitatPanel(b){
     ${note?`<div class="zp-note">${note}</div>`:''}
     ${inside.length?inside.map(a=>{ const sp=DATA.speciesById[a.species], tOK=T>=sp.tempRange[0]&&T<=sp.tempRange[1], adult=isAdult(a);
       return `<div class="zp-row"><div class="zp-name"><b>${sexIcon(a)} ${esc(nameOf(a))} <span class="stars">${STAR_TXT(a.stars)}</span></b>
-          <span>${adult?'成年':'幼體'}${a.preg?'・懷孕中':''}${a.gen?`・第 ${a.gen} 代`:''}・適溫 ${sp.tempRange[0]}～${sp.tempRange[1]}°C${tOK?'':'・<em>溫度不合</em>'}</span></div>
-        <div class="zp-bars"><label>幸福${bar(a.happy??60,(a.happy??60)<40?'low':'')}</label><label>飽足${bar(a.food??80,(a.food??80)<30?'low':'')}</label></div>
+          <span>${stageOf(a)==='老年'?'<em>老年</em>':stageOf(a)}${a.preg?'・懷孕中':''}${a.gen?`・第 ${a.gen} 代`:''}・適溫 ${sp.tempRange[0]}～${sp.tempRange[1]}°C${tOK?'':'・<em>溫度不合</em>'}</span></div>
+        <div class="zp-bars"><label>幸福${bar(a.happy??60,(a.happy??60)<40?'low':'')}</label><label>飽足${bar(a.food??80,(a.food??80)<30?'low':'')}</label>${agingOff()?'':`<label>壽命${bar(Math.max(0,100-lifeFrac(a)*100),lifeFrac(a)>=AG().elderAt?'low':'')}</label>`}</div>
         <div class="zp-btns"><button type="button" class="zmini" data-breed="${a.id}">${a.breed?'繁殖：開':'繁殖：關'}</button><button type="button" class="zmini" data-out="${a.id}">移出</button><button type="button" class="zmini" data-rel="${a.id}">野放</button></div></div>`; }).join('')
       :`<p class="zp-empty">這裡還沒有動物。</p>`}
     <div class="zp-add">${full?'<span class="zp-empty">已經住滿了，寶寶要等有空位才會出生</span>'
       :(cand.length||stored.length)?[...stored.map(a=>`<button type="button" class="zmini add" data-st="${a.id}">放入 ${a.sex==='M'?'♂':'♀'} ${esc(nameOf(a))} ${'★'.repeat(a.stars)}</button>`),
           ...cand.map(([id,n])=>`<button type="button" class="zmini add" data-in="${id}">放入新的 ${esc(DATA.speciesById[id].name)}（${n}）</button>`)].join('')
       :`<span class="zp-empty">沒有可以放進${esc(d.name)}的${d.accepts.map(c=>DATA.config.categories[c].name).join('、')}生物</span>`}</div>
-    <p class="zp-empty">同種、一公一母、都成年而且幸福度 ${BR().minHappy} 以上，就有機會懷孕。寶寶的星等接近父母的平均。</p>`;
+    <p class="zp-empty">同種、一公一母、都成年而且幸福度 ${BR().minHappy} 以上，就有機會懷孕。寶寶的星等接近父母的平均。${agingOff()?'':'動物會慢慢變老：老年動物不再繁殖、幸福度和吸引力稍微下降，壽命走完後會安詳離開。星等越高活得越久。'}</p>`;
   $('zPanel').hidden=false;
   const after=()=>{ rebuildZooAnimals(); simulate(0); openHabitatPanel(b); updateZooHud(); persist(); };
   $('zpClose').onclick=()=>{ $('zPanel').hidden=true; zSelUid=null; updateSelBox(); };
@@ -381,7 +381,8 @@ function zooUpdate(dt){
   if(toastT>0){ toastT-=dt; if(toastT<=0) $('toast').style.opacity=0; }
   if(state==='mode'||state==='chend') return;
   zooAcc+=dt; if(zooAcc>=0.5){ simulate(zooAcc/60); zooAcc=0;
-    if(zooBirthLog.length){ const names=[...new Set(zooBirthLog.map(a=>DATA.speciesById[a.species].name))]; toast(`出生了：${names.join('、')}寶寶 ×${zooBirthLog.length}`); zooBirthLog=[]; rebuildZooAnimals(); persist(); const b=zSelUid&&findB(zSelUid); if(b&&!$('zPanel').hidden&&bdef(b.type).kind==='habitat') openHabitatPanel(b); } }
+    if(zooBirthLog.length){ const names=[...new Set(zooBirthLog.map(a=>DATA.speciesById[a.species].name))]; toast(`出生了：${names.join('、')}寶寶 ×${zooBirthLog.length}`); zooBirthLog=[]; rebuildZooAnimals(); persist(); const b=zSelUid&&findB(zSelUid); if(b&&!$('zPanel').hidden&&bdef(b.type).kind==='habitat') openHabitatPanel(b); }
+    if(zooDeathLog.length){ toast(zooDeathLog.length===1?`${nameOf(zooDeathLog[0])} 年紀大了，安詳地離開了。牠的名字留在紀念牆上。`:`${zooDeathLog.length} 隻動物年老離開了，名字都留在紀念牆上。`); zooDeathLog=[]; rebuildZooAnimals(); persist(); const b=zSelUid&&findB(zSelUid); if(b&&!$('zPanel').hidden&&bdef(b.type).kind==='habitat') openHabitatPanel(b); } }
   zSaveT+=dt; if(zSaveT>=ZC().autosaveSeconds){ zSaveT=0; persist(); }
   zHudT+=dt; if(zHudT>=0.5){ zHudT=0; updateZooHud(); }
   zAchT=(zAchT||0)+dt; if(zAchT>=5){ zAchT=0; checkAchievements(); }

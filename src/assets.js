@@ -115,4 +115,4 @@ function upgradeTrain(){
 }
 
 /* 測試用：讓自動測試檢查場景與已載入的素材 */
-try{ window.__utopiaDebug={assetCache,loadZad,get zooScene(){ return zooScene; },get scene(){ return scene; }}; }catch(e){}
+try{ window.__utopiaDebug={assetCache,loadZad,get zooScene(){ return zooScene; },get scene(){ return scene; },run:src=>eval(src)}; }catch(e){}

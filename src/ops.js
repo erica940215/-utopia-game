@@ -174,11 +174,14 @@ function showOps(msg){
     body=`<div class="rating"><span class="bigstars">${starsTxt(opsStats.rating)}</span><span class="num">總分 ${Math.round(opsStats.score)}／100</span></div>
       <div class="opsgrid">${Object.keys(names).map(k=>`<label>${names[k]}（權重 ${Math.round(O.ratingWeights[k]*100)}%）${bar100(r[k])}</label>`).join('')}</div>
       <p class="zp-empty">評價越高，遊客越多。保育成果看園區裡的瀕危與傳說級物種數量，以及野放的動物。</p>`;
+  } else if(opsTab==='memorial'){
+    const M=z.memorial||[];
+    body=(modeOf()==='sandbox'?`<button type="button" class="zmini" id="agingTgl">動物老化：${z.noAging?'關':'開'}</button>`:'')+`<div class="statline">園區至今送走 ${z.deaths||0} 隻動物</div>`+(M.length?M.map(m=>{ const sp=DATA.speciesById[m.species]; return `<div class="shopcard"><div class="sc-main"><b>${m.sex==='M'?'♂':'♀'} ${esc(sp?sp.name:m.species)} #${esc(String(m.id).slice(1))} <span class="stars">${'★'.repeat(m.stars||1)}</span></b><span>${m.gen?`第 ${m.gen} 代・`:''}活了約 ${Math.round(m.age/60)} 小時・${new Date(m.at).toLocaleDateString('zh-TW')}</span></div></div>`; }).join(''):'<p class="zp-empty">紀念牆還是空的。動物壽命走完後，名字會留在這裡。</p>');
   } else {
     body=DATA.achievements.map(a=>{ const done=z.ach[a.id], v=achStat(a.stat);
       return `<div class="shopcard${done?' on':''}"><div class="sc-main"><b>${done?'✔ ':''}${esc(a.name)}</b><span>${esc(a.desc)}・獎勵 ${esc(costText(a.reward))}</span>${done?'':bar100(v/a.target*100)}</div><span class="sc-max num">${Math.min(v,a.target)}/${a.target}</span></div>`; }).join('');
   }
-  const tabs=[['staff','員工'],['visitors','遊客'],['rating','評價'],['ach','成就']];
+  const tabs=[['staff','員工'],['visitors','遊客'],['rating','評價'],['ach','成就'],['memorial','紀念牆']];
   screenEl.hidden=false;
   screenEl.innerHTML=`<div class="hub">
     <div class="hub-head"><h1><small>OPERATIONS · 園區營運</small>營運</h1><span class="savechip">${starsTxt(opsStats.rating)}・金幣 ${Math.floor(z.coins)}</span></div>
@@ -191,5 +194,6 @@ function showOps(msg){
   screenEl.querySelectorAll('[data-hire]').forEach(el=>el.onclick=()=>{ const s=DATA.staffById[el.dataset.hire]; if(z.coins<s.hireCost) return; z.coins-=s.hireCost; z.staff[s.id]=(z.staff[s.id]||0)+1; simulate(0); persist(); showOps(`雇用了一位${s.name}`); });
   screenEl.querySelectorAll('[data-fire]').forEach(el=>el.onclick=()=>{ const id=el.dataset.fire; if(!z.staff[id]) return; z.staff[id]--; simulate(0); persist(); showOps(`解雇了一位${DATA.staffById[id].name}`); });
   const ti=$('ticketIn'); if(ti){ ti.oninput=e=>{ $('ticketOut').textContent=e.target.value+' 金幣'; }; ti.onchange=e=>{ z.ticket=parseInt(e.target.value,10); simulate(0); persist(); showOps(); }; }
+  const ag=$('agingTgl'); if(ag) ag.onclick=()=>{ z.noAging=!z.noAging; persist(); showOps(z.noAging?'沙盒的動物不會變老':'沙盒的動物也會變老了'); };
   $('opsBack').onclick=()=>{ screenEl.hidden=true; state='zoo'; $('zooUI').hidden=false; updateZooHud(); };
 }

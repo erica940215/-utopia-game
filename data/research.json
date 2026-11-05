@@ -61,6 +61,20 @@
   "desc": "幼體成長快 40%"
  },
  {
+  "id": "geriatric_care",
+  "name": "老年照護",
+  "cat": "care",
+  "cost": 45,
+  "requires": [
+   "vet_medicine"
+  ],
+  "effects": {
+   "lifespanMult": 1.3,
+   "elderPenaltyMult": 0.4
+  },
+  "desc": "動物壽命延長 30%，老年動物的幸福度下降減少 60%"
+ },
+ {
   "id": "climate_dome_tech",
   "name": "氣候圓頂",
   "cat": "facility",

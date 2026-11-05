@@ -1,348 +1,375 @@
 {
-  "version": 8,
-  "expedition": {
-    "runSeconds": 300,
-    "stormWarnSeconds": 60,
-    "bagCapacity": 12,
-    "followCapacity": 2,
-    "heatRadius": 11,
-    "walkSpeed": 4.8,
-    "sprintSpeed": 8.2,
-    "containerCapacity": 4,
-    "maxTier": 1
+ "version": 9,
+ "expedition": {
+  "runSeconds": 300,
+  "stormWarnSeconds": 60,
+  "bagCapacity": 12,
+  "followCapacity": 2,
+  "heatRadius": 11,
+  "walkSpeed": 4.8,
+  "sprintSpeed": 8.2,
+  "containerCapacity": 4,
+  "maxTier": 1
+ },
+ "temperature": {
+  "max": 100,
+  "drainPerSec": 1.0,
+  "sprintExtraDrain": 0.55,
+  "perFollowerDrain": 0.15,
+  "stormDrainPerSec": 4.2,
+  "heatRegenPerSec": 14,
+  "respawnTemp": 55,
+  "collapseTimePenalty": 30
+ },
+ "death": {
+  "dropFraction": 0.35,
+  "followersReturnToIce": true
+ },
+ "wraith": {
+  "firstSpawnAt": 55,
+  "spawnInterval": 14,
+  "stormSpawnInterval": 6,
+  "baseMax": 3,
+  "addMaxEverySeconds": 90,
+  "stormMax": 7,
+  "hp": 2,
+  "speed": 3.1,
+  "stormSpeed": 4.2,
+  "chaseRange": 45,
+  "touchDrainPerSec": 16
+ },
+ "rarity": {
+  "common": {
+   "name": "普通",
+   "color": "#9fb7c6",
+   "weight": 10,
+   "minDist": 38
   },
-  "temperature": {
-    "max": 100,
-    "drainPerSec": 1.0,
-    "sprintExtraDrain": 0.55,
-    "perFollowerDrain": 0.15,
-    "stormDrainPerSec": 4.2,
-    "heatRegenPerSec": 14,
-    "respawnTemp": 55,
-    "collapseTimePenalty": 30
+  "rare": {
+   "name": "稀有",
+   "color": "#7cc8e8",
+   "weight": 4,
+   "minDist": 60
   },
-  "death": {
-    "dropFraction": 0.35,
-    "followersReturnToIce": true
+  "endangered": {
+   "name": "瀕危",
+   "color": "#ff9a3c",
+   "weight": 2,
+   "minDist": 85
   },
-  "wraith": {
-    "firstSpawnAt": 55,
-    "spawnInterval": 14,
-    "stormSpawnInterval": 6,
-    "baseMax": 3,
-    "addMaxEverySeconds": 90,
-    "stormMax": 7,
-    "hp": 2,
-    "speed": 3.1,
-    "stormSpeed": 4.2,
-    "chaseRange": 45,
-    "touchDrainPerSec": 16
-  },
-  "rarity": {
-    "common": {
-      "name": "普通",
-      "color": "#9fb7c6",
-      "weight": 10,
-      "minDist": 38
-    },
-    "rare": {
-      "name": "稀有",
-      "color": "#7cc8e8",
-      "weight": 4,
-      "minDist": 60
-    },
-    "endangered": {
-      "name": "瀕危",
-      "color": "#ff9a3c",
-      "weight": 2,
-      "minDist": 85
-    },
-    "legendary": {
-      "name": "傳說",
-      "color": "#e9c46a",
-      "weight": 1,
-      "minDist": 110
-    }
-  },
-  "categories": {
-    "mammal": {
-      "name": "哺乳類"
-    },
-    "bird": {
-      "name": "鳥類"
-    },
-    "reptile": {
-      "name": "兩棲爬蟲"
-    },
-    "aquatic": {
-      "name": "水生"
-    },
-    "insect": {
-      "name": "昆蟲"
-    }
-  },
-  "zoo": {
-    "gridSize": 28,
-    "tile": 2,
-    "startCoins": 100,
-    "offlineCapMinutes": 480,
-    "foodDecayPerMin": 1.5,
-    "feedRefillAt": 70,
-    "feedRefillAmount": 30,
-    "happinessPerMin": 20,
-    "coinPerAttractPerMin": 0.5,
-    "visitorPerAttract": 3,
-    "demolishRefund": 0.5,
-    "autosaveSeconds": 30,
-    "researchPerSpeciesPerMin": 0.05,
-    "propRefund": 0.5
-  },
-  "tiers": {
-    "1": {
-      "name": "近郊",
-      "fuel": 1,
-      "rarityWeight": {
-        "common": 20,
-        "rare": 3,
-        "endangered": 0.6,
-        "legendary": 0.05
-      },
-      "wraithMult": 1.0
-    },
-    "2": {
-      "name": "中段",
-      "fuel": 2,
-      "rarityWeight": {
-        "common": 12,
-        "rare": 6,
-        "endangered": 2,
-        "legendary": 0.3
-      },
-      "wraithMult": 1.2
-    },
-    "3": {
-      "name": "遠方",
-      "fuel": 3,
-      "rarityWeight": {
-        "common": 8,
-        "rare": 7,
-        "endangered": 4,
-        "legendary": 1
-      },
-      "wraithMult": 1.4
-    },
-    "4": {
-      "name": "極地",
-      "fuel": 5,
-      "rarityWeight": {
-        "common": 4,
-        "rare": 6,
-        "endangered": 6,
-        "legendary": 3
-      },
-      "wraithMult": 1.7
-    }
-  },
-  "undiscoveredBonus": 1.6,
-  "trades": [
-    {
-      "id": "rare_animal",
-      "name": "用廢鐵換一隻稀有物種",
-      "give": {
-        "scrap": 12
-      },
-      "get": {
-        "species": "rare"
-      }
-    },
-    {
-      "id": "buy_fuel",
-      "name": "買煤炭",
-      "give": {
-        "coins": 60
-      },
-      "get": {
-        "fuel": 5
-      }
-    },
-    {
-      "id": "sell_feed",
-      "name": "賣飼料",
-      "give": {
-        "feed": 8
-      },
-      "get": {
-        "coins": 40
-      }
-    },
-    {
-      "id": "buy_feed",
-      "name": "用廢鐵換飼料",
-      "give": {
-        "scrap": 5
-      },
-      "get": {
-        "feed": 6
-      }
-    }
-  ],
-  "researchPerNewSpecies": 3,
-  "gearSlots": {
-    "weapon": "武器",
-    "body": "衣服",
-    "pack": "背包",
-    "tool": "採集工具",
-    "feet": "鞋子"
-  },
-  "breeding": {
-    "adultMinutes": 120,
-    "gestationMinutes": 45,
-    "chancePerMin": 0.04,
-    "minHappy": 70,
-    "cooldownMinutes": 90,
-    "starUpChance": 0.25,
-    "starDownChance": 0.1,
-    "inbreedPenalty": 1,
-    "maxStars": 5,
-    "rescueStars": {
-      "common": [
-        1,
-        2
-      ],
-      "rare": [
-        2,
-        3
-      ],
-      "endangered": [
-        2,
-        4
-      ],
-      "legendary": [
-        3,
-        5
-      ]
-    },
-    "litter": {
-      "mammal": [
-        1,
-        1
-      ],
-      "bird": [
-        1,
-        2
-      ],
-      "reptile": [
-        1,
-        3
-      ],
-      "aquatic": [
-        2,
-        3
-      ],
-      "insect": [
-        2,
-        4
-      ]
-    },
-    "releaseResearch": 3,
-    "releaseCoins": 15
-  },
-  "terrain": {
-    "resolution": 1,
-    "min": -3,
-    "max": 8,
-    "waterLevel": -0.35,
-    "brushStrength": 2.2,
-    "paints": [
-      {
-        "id": "snow",
-        "name": "雪地",
-        "color": "#e3eef6"
-      },
-      {
-        "id": "grass",
-        "name": "草地",
-        "color": "#6f8f5a"
-      },
-      {
-        "id": "dirt",
-        "name": "泥土",
-        "color": "#7a5a3e"
-      },
-      {
-        "id": "sand",
-        "name": "沙地",
-        "color": "#d9c08a"
-      },
-      {
-        "id": "rock",
-        "name": "岩地",
-        "color": "#7d8086"
-      },
-      {
-        "id": "stone",
-        "name": "石板",
-        "color": "#a8acb0"
-      }
-    ]
-  },
-  "ops": {
-    "startStaff": {
-      "keeper": 1
-    },
-    "sickChancePerMin": 0.0015,
-    "sickHealthLossPerMin": 4,
-    "healthRegenPerMin": 2,
-    "conditionDecayPerMin": 0.12,
-    "brokenBelow": 25,
-    "litterPerVisitorMin": 0.004,
-    "theftLoss": 0.12,
-    "ticketDefault": 10,
-    "ticketMin": 0,
-    "ticketMax": 40,
-    "priceElasticity": 0.035,
-    "coinsPerVisitorTicketMin": 0.0167,
-    "ratingWeights": {
-      "welfare": 0.3,
-      "satisfaction": 0.25,
-      "diversity": 0.2,
-      "conservation": 0.15,
-      "cleanliness": 0.1
-    },
-    "diversityFull": 40,
-    "conservationFull": 8
-  },
-  "speciesResearch": {
-    "costs": [
-      5,
-      15,
-      40
-    ],
-    "rarityMult": {
-      "common": 1,
-      "rare": 1.5,
-      "endangered": 2.5,
-      "legendary": 4
-    },
-    "happinessPerLevel": 5,
-    "attractPerLevel": 0.1
-  },
-  "conservation": {
-    "rarities": [
-      "endangered",
-      "legendary"
-    ],
-    "bornTarget": 2,
-    "releaseTarget": 1,
-    "reward": {
-      "endangered": {
-        "research": 40,
-        "coins": 300
-      },
-      "legendary": {
-        "research": 100,
-        "coins": 800
-      }
-    }
+  "legendary": {
+   "name": "傳說",
+   "color": "#e9c46a",
+   "weight": 1,
+   "minDist": 110
   }
+ },
+ "categories": {
+  "mammal": {
+   "name": "哺乳類"
+  },
+  "bird": {
+   "name": "鳥類"
+  },
+  "reptile": {
+   "name": "兩棲爬蟲"
+  },
+  "aquatic": {
+   "name": "水生"
+  },
+  "insect": {
+   "name": "昆蟲"
+  }
+ },
+ "zoo": {
+  "gridSize": 28,
+  "tile": 2,
+  "startCoins": 100,
+  "offlineCapMinutes": 480,
+  "foodDecayPerMin": 1.5,
+  "feedRefillAt": 70,
+  "feedRefillAmount": 30,
+  "happinessPerMin": 20,
+  "coinPerAttractPerMin": 0.5,
+  "visitorPerAttract": 3,
+  "demolishRefund": 0.5,
+  "autosaveSeconds": 30,
+  "researchPerSpeciesPerMin": 0.05,
+  "propRefund": 0.5
+ },
+ "tiers": {
+  "1": {
+   "name": "近郊",
+   "fuel": 1,
+   "rarityWeight": {
+    "common": 20,
+    "rare": 3,
+    "endangered": 0.6,
+    "legendary": 0.05
+   },
+   "wraithMult": 1.0
+  },
+  "2": {
+   "name": "中段",
+   "fuel": 2,
+   "rarityWeight": {
+    "common": 12,
+    "rare": 6,
+    "endangered": 2,
+    "legendary": 0.3
+   },
+   "wraithMult": 1.2
+  },
+  "3": {
+   "name": "遠方",
+   "fuel": 3,
+   "rarityWeight": {
+    "common": 8,
+    "rare": 7,
+    "endangered": 4,
+    "legendary": 1
+   },
+   "wraithMult": 1.4
+  },
+  "4": {
+   "name": "極地",
+   "fuel": 5,
+   "rarityWeight": {
+    "common": 4,
+    "rare": 6,
+    "endangered": 6,
+    "legendary": 3
+   },
+   "wraithMult": 1.7
+  }
+ },
+ "undiscoveredBonus": 1.6,
+ "trades": [
+  {
+   "id": "rare_animal",
+   "name": "用廢鐵換一隻稀有物種",
+   "give": {
+    "scrap": 12
+   },
+   "get": {
+    "species": "rare"
+   }
+  },
+  {
+   "id": "buy_fuel",
+   "name": "買煤炭",
+   "give": {
+    "coins": 60
+   },
+   "get": {
+    "fuel": 5
+   }
+  },
+  {
+   "id": "sell_feed",
+   "name": "賣飼料",
+   "give": {
+    "feed": 8
+   },
+   "get": {
+    "coins": 40
+   }
+  },
+  {
+   "id": "buy_feed",
+   "name": "用廢鐵換飼料",
+   "give": {
+    "scrap": 5
+   },
+   "get": {
+    "feed": 6
+   }
+  }
+ ],
+ "researchPerNewSpecies": 3,
+ "gearSlots": {
+  "weapon": "武器",
+  "body": "衣服",
+  "pack": "背包",
+  "tool": "採集工具",
+  "feet": "鞋子"
+ },
+ "breeding": {
+  "adultMinutes": 120,
+  "gestationMinutes": 45,
+  "chancePerMin": 0.04,
+  "minHappy": 70,
+  "cooldownMinutes": 90,
+  "starUpChance": 0.25,
+  "starDownChance": 0.1,
+  "inbreedPenalty": 1,
+  "maxStars": 5,
+  "rescueStars": {
+   "common": [
+    1,
+    2
+   ],
+   "rare": [
+    2,
+    3
+   ],
+   "endangered": [
+    2,
+    4
+   ],
+   "legendary": [
+    3,
+    5
+   ]
+  },
+  "litter": {
+   "mammal": [
+    1,
+    1
+   ],
+   "bird": [
+    1,
+    2
+   ],
+   "reptile": [
+    1,
+    3
+   ],
+   "aquatic": [
+    2,
+    3
+   ],
+   "insect": [
+    2,
+    4
+   ]
+  },
+  "releaseResearch": 3,
+  "releaseCoins": 15
+ },
+ "terrain": {
+  "resolution": 1,
+  "min": -3,
+  "max": 8,
+  "waterLevel": -0.35,
+  "brushStrength": 2.2,
+  "paints": [
+   {
+    "id": "snow",
+    "name": "雪地",
+    "color": "#e3eef6"
+   },
+   {
+    "id": "grass",
+    "name": "草地",
+    "color": "#6f8f5a"
+   },
+   {
+    "id": "dirt",
+    "name": "泥土",
+    "color": "#7a5a3e"
+   },
+   {
+    "id": "sand",
+    "name": "沙地",
+    "color": "#d9c08a"
+   },
+   {
+    "id": "rock",
+    "name": "岩地",
+    "color": "#7d8086"
+   },
+   {
+    "id": "stone",
+    "name": "石板",
+    "color": "#a8acb0"
+   }
+  ]
+ },
+ "ops": {
+  "startStaff": {
+   "keeper": 1
+  },
+  "sickChancePerMin": 0.0015,
+  "sickHealthLossPerMin": 4,
+  "healthRegenPerMin": 2,
+  "conditionDecayPerMin": 0.12,
+  "brokenBelow": 25,
+  "litterPerVisitorMin": 0.004,
+  "theftLoss": 0.12,
+  "ticketDefault": 10,
+  "ticketMin": 0,
+  "ticketMax": 40,
+  "priceElasticity": 0.035,
+  "coinsPerVisitorTicketMin": 0.0167,
+  "ratingWeights": {
+   "welfare": 0.3,
+   "satisfaction": 0.25,
+   "diversity": 0.2,
+   "conservation": 0.15,
+   "cleanliness": 0.1
+  },
+  "diversityFull": 40,
+  "conservationFull": 8
+ },
+ "speciesResearch": {
+  "costs": [
+   5,
+   15,
+   40
+  ],
+  "rarityMult": {
+   "common": 1,
+   "rare": 1.5,
+   "endangered": 2.5,
+   "legendary": 4
+  },
+  "happinessPerLevel": 5,
+  "attractPerLevel": 0.1
+ },
+ "conservation": {
+  "rarities": [
+   "endangered",
+   "legendary"
+  ],
+  "bornTarget": 2,
+  "releaseTarget": 1,
+  "reward": {
+   "endangered": {
+    "research": 40,
+    "coins": 300
+   },
+   "legendary": {
+    "research": 100,
+    "coins": 800
+   }
+  }
+ },
+ "aging": {
+  "_comment": "遊戲分鐘（等於現實分鐘）。壽命 = 類別基礎 × 稀有度 × 物種 lifespanMult × 研究加成 × 星等加成",
+  "lifespanMinutes": {
+   "mammal": 4320,
+   "bird": 3600,
+   "reptile": 5760,
+   "aquatic": 2880,
+   "insect": 1080
+  },
+  "rarityMult": {
+   "common": 1,
+   "rare": 1.15,
+   "endangered": 1.3,
+   "legendary": 1.6
+  },
+  "starBonusPerStar": 0.05,
+  "elderAt": 0.75,
+  "elderHappyPenalty": 8,
+  "elderAttractMult": 0.85,
+  "deathChancePerMin": 0.012,
+  "sickDeathMult": 2.5,
+  "rescueAgeRange": [
+   0,
+   0.45
+  ],
+  "memorialMax": 60
+ }
 }

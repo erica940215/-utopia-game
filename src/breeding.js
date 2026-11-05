@@ -9,7 +9,7 @@ function rollStars(sp){ const r=BR().rescueStars[sp.rarity]||[1,2]; return r[0]+
 function newIndividual(speciesId,habitat,extra){
   const z=save.zoo, sp=DATA.speciesById[speciesId];
   return Object.assign({ id:'a'+(z.nextUid++), species:speciesId, habitat, sex:Math.random()<0.5?'M':'F', stars:rollStars(sp),
-    born:(z.clock||0)-BR().adultMinutes, parents:[], gen:0, food:80, happy:60, breed:true }, extra||{});
+    born:(z.clock||0)-BR().adultMinutes-rescueAge(sp), parents:[], gen:0, food:80, happy:60, breed:true }, extra||{});
 }
 function migrateAnimals(){
   const z=save.zoo; z.clock=z.clock||0; z.stored=z.stored||[];
@@ -54,8 +54,8 @@ function breedingStep(min){
   }
   // 受孕
   for(const f of z.animals){
-    if(f.sex!=='F'||f.preg||!f.breed||!isAdult(f)||(f.happy??0)<B.minHappy||(f.cooldownUntil||0)>z.clock) continue;
-    const mates=z.animals.filter(m=>m.sex==='M'&&m.habitat===f.habitat&&m.species===f.species&&m.breed&&isAdult(m)&&(m.happy??0)>=B.minHappy);
+    if(f.sex!=='F'||f.preg||!f.breed||!isAdult(f)||isElder(f)||(f.happy??0)<B.minHappy||(f.cooldownUntil||0)>z.clock) continue;
+    const mates=z.animals.filter(m=>m.sex==='M'&&m.habitat===f.habitat&&m.species===f.species&&m.breed&&isAdult(m)&&!isElder(m)&&(m.happy??0)>=B.minHappy);
     if(!mates.length) continue;
     const unrelated=mates.filter(m=>!related(f,m));
     const m=(unrelated.length?unrelated:mates)[Math.floor(Math.random()*(unrelated.length||mates.length))];
@@ -77,4 +77,35 @@ function releaseAnimal(a){
   save.zoo.research=(save.zoo.research||0)+research; save.zoo.coins+=coins;
   save.zoo.released=(save.zoo.released||0)+1; consOnRelease(a);
   return {research,coins};
+}
+
+/* ---------- 壽命與老化（數值在 config.aging） ---------- */
+const AG=()=>DATA.config.aging;
+let zooDeathLog=[];
+const agingOff=()=>!!(save.zoo&&save.zoo.noAging);
+function lifespanOf(a){
+  const sp=DATA.speciesById[a.species]||{category:'mammal',rarity:'common'}, A=AG();
+  return (A.lifespanMinutes[sp.category]||4320)*(A.rarityMult[sp.rarity]||1)*(sp.lifespanMult||1)*RF().lifespanMult*(1+A.starBonusPerStar*((a.stars||2)-3));
+}
+function rescueAge(sp){ const A=AG(), r=A.rescueAgeRange, base=(A.lifespanMinutes[sp.category]||4320)*(A.rarityMult[sp.rarity]||1)*(sp.lifespanMult||1);
+  return Math.max(0, base*(r[0]+Math.random()*(r[1]-r[0]))-BR().adultMinutes); }
+const ageOf=a=>(save.zoo.clock||0)-a.born;
+const lifeFrac=a=>ageOf(a)/lifespanOf(a);
+const isElder=a=>!agingOff()&&lifeFrac(a)>=AG().elderAt;
+const stageOf=a=>!isAdult(a)?'幼體':isElder(a)?'老年':'成年';
+const elderPenalty=a=>isElder(a)?AG().elderHappyPenalty*RF().elderPenaltyMult:0;
+const elderAttract=a=>isElder(a)?AG().elderAttractMult:1;
+function agingStep(min){
+  if(agingOff()||min<=0) return;
+  const z=save.zoo, A=AG();
+  const dies=a=>lifeFrac(a)>=1 && Math.random()<A.deathChancePerMin*min*(a.sick?A.sickDeathMult:1);
+  const gone=[];
+  z.animals=z.animals.filter(a=>{ if(dies(a)){ gone.push(a); return false; } return true; });
+  z.stored=(z.stored||[]).filter(a=>{ if(dies(a)){ gone.push(a); return false; } return true; });
+  for(const a of gone){
+    z.deaths=(z.deaths||0)+1; zooDeathLog.push(a);
+    z.memorial=z.memorial||[];
+    z.memorial.unshift({id:a.id,species:a.species,sex:a.sex,stars:a.stars,gen:a.gen,age:Math.round(ageOf(a)),at:Date.now()});
+    if(z.memorial.length>A.memorialMax) z.memorial.length=A.memorialMax;
+  }
 }
