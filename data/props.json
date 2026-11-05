@@ -1,0 +1,431 @@
+[
+ {
+  "id": "pine",
+  "name": "雲杉",
+  "cat": "nature",
+  "kind": "pine",
+  "cost": {
+   "coins": 8
+  },
+  "size": [
+   1.5,
+   1.5
+  ]
+ },
+ {
+  "id": "broadleaf",
+  "name": "闊葉樹",
+  "cat": "nature",
+  "kind": "broadleaf",
+  "cost": {
+   "coins": 10
+  },
+  "size": [
+   2,
+   2
+  ]
+ },
+ {
+  "id": "birch",
+  "name": "白樺",
+  "cat": "nature",
+  "kind": "birch",
+  "cost": {
+   "coins": 10
+  },
+  "size": [
+   1,
+   1
+  ]
+ },
+ {
+  "id": "palm",
+  "name": "棕櫚",
+  "cat": "nature",
+  "kind": "palm",
+  "cost": {
+   "coins": 14
+  },
+  "size": [
+   1.5,
+   1.5
+  ]
+ },
+ {
+  "id": "bamboo",
+  "name": "竹叢",
+  "cat": "nature",
+  "kind": "bamboo",
+  "cost": {
+   "coins": 10
+  },
+  "size": [
+   1.5,
+   1.5
+  ]
+ },
+ {
+  "id": "bush",
+  "name": "灌木",
+  "cat": "nature",
+  "kind": "bush",
+  "cost": {
+   "coins": 4
+  },
+  "size": [
+   1,
+   1
+  ]
+ },
+ {
+  "id": "flowers",
+  "name": "野花",
+  "cat": "nature",
+  "kind": "flowers",
+  "cost": {
+   "coins": 3
+  },
+  "size": [
+   1,
+   1
+  ]
+ },
+ {
+  "id": "grass",
+  "name": "草叢",
+  "cat": "nature",
+  "kind": "grass",
+  "cost": {
+   "coins": 2
+  },
+  "size": [
+   1,
+   1
+  ]
+ },
+ {
+  "id": "rock_s",
+  "name": "小岩石",
+  "cat": "nature",
+  "kind": "rock_s",
+  "cost": {
+   "coins": 4
+  },
+  "size": [
+   1,
+   1
+  ]
+ },
+ {
+  "id": "rock_l",
+  "name": "大岩石",
+  "cat": "nature",
+  "kind": "rock_l",
+  "cost": {
+   "coins": 10
+  },
+  "size": [
+   2.5,
+   2.5
+  ]
+ },
+ {
+  "id": "log",
+  "name": "倒木",
+  "cat": "nature",
+  "kind": "log",
+  "cost": {
+   "coins": 5
+  },
+  "size": [
+   3,
+   1
+  ]
+ },
+ {
+  "id": "stump",
+  "name": "樹樁",
+  "cat": "nature",
+  "kind": "stump",
+  "cost": {
+   "coins": 3
+  },
+  "size": [
+   1,
+   1
+  ]
+ },
+ {
+  "id": "bench",
+  "name": "長椅",
+  "cat": "decor",
+  "kind": "bench",
+  "cost": {
+   "coins": 8
+  },
+  "size": [
+   2,
+   1
+  ]
+ },
+ {
+  "id": "lamp",
+  "name": "路燈",
+  "cat": "decor",
+  "kind": "lamp",
+  "cost": {
+   "coins": 10
+  },
+  "size": [
+   0.5,
+   0.5
+  ]
+ },
+ {
+  "id": "bin",
+  "name": "垃圾桶",
+  "cat": "decor",
+  "kind": "bin",
+  "cost": {
+   "coins": 4
+  },
+  "size": [
+   0.6,
+   0.6
+  ]
+ },
+ {
+  "id": "sign",
+  "name": "指示牌",
+  "cat": "decor",
+  "kind": "sign",
+  "cost": {
+   "coins": 6
+  },
+  "size": [
+   1,
+   0.4
+  ]
+ },
+ {
+  "id": "info_board",
+  "name": "解說牌",
+  "cat": "decor",
+  "kind": "info_board",
+  "cost": {
+   "coins": 12
+  },
+  "size": [
+   1.6,
+   0.4
+  ]
+ },
+ {
+  "id": "flowerbed",
+  "name": "花圃",
+  "cat": "decor",
+  "kind": "flowerbed",
+  "cost": {
+   "coins": 10
+  },
+  "size": [
+   2,
+   2
+  ]
+ },
+ {
+  "id": "fountain",
+  "name": "噴水池",
+  "cat": "decor",
+  "kind": "fountain",
+  "cost": {
+   "coins": 40
+  },
+  "size": [
+   3,
+   3
+  ]
+ },
+ {
+  "id": "statue",
+  "name": "企鵝雕像",
+  "cat": "decor",
+  "kind": "statue",
+  "cost": {
+   "coins": 30
+  },
+  "size": [
+   1.5,
+   1.5
+  ]
+ },
+ {
+  "id": "parasol",
+  "name": "遮陽桌",
+  "cat": "decor",
+  "kind": "parasol",
+  "cost": {
+   "coins": 14
+  },
+  "size": [
+   2,
+   2
+  ]
+ },
+ {
+  "id": "wall",
+  "name": "牆",
+  "cat": "build",
+  "kind": "wall",
+  "cost": {
+   "coins": 6
+  },
+  "size": [
+   2,
+   0.2
+  ]
+ },
+ {
+  "id": "wall_window",
+  "name": "窗牆",
+  "cat": "build",
+  "kind": "wall_window",
+  "cost": {
+   "coins": 8
+  },
+  "size": [
+   2,
+   0.2
+  ]
+ },
+ {
+  "id": "wall_door",
+  "name": "門牆",
+  "cat": "build",
+  "kind": "wall_door",
+  "cost": {
+   "coins": 8
+  },
+  "size": [
+   2,
+   0.2
+  ]
+ },
+ {
+  "id": "wall_glass",
+  "name": "玻璃牆",
+  "cat": "build",
+  "kind": "wall_glass",
+  "cost": {
+   "coins": 10
+  },
+  "size": [
+   2,
+   0.1
+  ]
+ },
+ {
+  "id": "pillar",
+  "name": "柱子",
+  "cat": "build",
+  "kind": "pillar",
+  "cost": {
+   "coins": 4
+  },
+  "size": [
+   0.4,
+   0.4
+  ]
+ },
+ {
+  "id": "floor",
+  "name": "地板",
+  "cat": "build",
+  "kind": "floor",
+  "cost": {
+   "coins": 4
+  },
+  "size": [
+   2,
+   2
+  ]
+ },
+ {
+  "id": "roof_flat",
+  "name": "平屋頂",
+  "cat": "build",
+  "kind": "roof_flat",
+  "cost": {
+   "coins": 6
+  },
+  "size": [
+   2,
+   2
+  ]
+ },
+ {
+  "id": "roof_slope",
+  "name": "斜屋頂",
+  "cat": "build",
+  "kind": "roof_slope",
+  "cost": {
+   "coins": 8
+  },
+  "size": [
+   2,
+   2
+  ]
+ },
+ {
+  "id": "stairs",
+  "name": "階梯",
+  "cat": "build",
+  "kind": "stairs",
+  "cost": {
+   "coins": 8
+  },
+  "size": [
+   2,
+   2
+  ]
+ },
+ {
+  "id": "fence_wood",
+  "name": "木柵欄",
+  "cat": "build",
+  "kind": "fence_wood",
+  "cost": {
+   "coins": 3
+  },
+  "size": [
+   2,
+   0.2
+  ]
+ },
+ {
+  "id": "fence_stone",
+  "name": "石牆",
+  "cat": "build",
+  "kind": "fence_stone",
+  "cost": {
+   "coins": 6
+  },
+  "size": [
+   2,
+   0.4
+  ]
+ },
+ {
+  "id": "fence_glass",
+  "name": "玻璃圍欄",
+  "cat": "build",
+  "kind": "fence_glass",
+  "cost": {
+   "coins": 8
+  },
+  "size": [
+   2,
+   0.1
+  ]
+ }
+]

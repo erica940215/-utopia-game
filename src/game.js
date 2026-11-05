@@ -9,13 +9,14 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
    ========================================================= */
 const DATA = {};
 async function loadData(){
-  const names = ['config','species','items','equipment','stations','buildings','map','upgrades'];
+  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props'];
   const res = await Promise.all(names.map(n => fetch(`data/${n}.json`).then(r => { if(!r.ok) throw new Error(n); return r.json(); })));
   names.forEach((n,i) => DATA[n] = res[i]);
   DATA.speciesById = Object.fromEntries(DATA.species.map(s => [s.id, s]));
   DATA.itemsById = Object.fromEntries(DATA.items.map(s => [s.id, s]));
   DATA.equipById = Object.fromEntries(DATA.equipment.map(s => [s.id, s]));
   DATA.stationById = Object.fromEntries(DATA.stations.map(s => [s.id, s]));
+  DATA.propById = Object.fromEntries(DATA.props.map(s => [s.id, s]));
   DATA.upgradeById = Object.fromEntries(DATA.upgrades.map(s => [s.id, s]));
   DATA.mapById = Object.fromEntries(DATA.map.map(s => [s.id, s]));
   DATA.buildingById = Object.fromEntries(DATA.buildings.map(s => [s.id, s]));
@@ -694,6 +695,7 @@ function wireAuth(){
 /*@@MAP@@*/
 /*@@WORKSHOP@@*/
 /*@@BREEDING@@*/
+/*@@CREATIVE@@*/
 /*@@CONTROLS@@*/
 /* =========================================================
    8. 主迴圈

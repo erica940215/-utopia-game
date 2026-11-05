@@ -1,5 +1,5 @@
 {
-  "version": 5,
+  "version": 6,
   "expedition": {
     "runSeconds": 300,
     "stormWarnSeconds": 60,
@@ -94,7 +94,8 @@
     "visitorPerAttract": 3,
     "demolishRefund": 0.5,
     "autosaveSeconds": 30,
-    "researchPerSpeciesPerMin": 0.05
+    "researchPerSpeciesPerMin": 0.05,
+    "propRefund": 0.5
   },
   "tiers": {
     "1": {
@@ -245,5 +246,44 @@
     },
     "releaseResearch": 3,
     "releaseCoins": 15
+  },
+  "terrain": {
+    "resolution": 1,
+    "min": -3,
+    "max": 8,
+    "waterLevel": -0.35,
+    "brushStrength": 2.2,
+    "paints": [
+      {
+        "id": "snow",
+        "name": "雪地",
+        "color": "#e3eef6"
+      },
+      {
+        "id": "grass",
+        "name": "草地",
+        "color": "#6f8f5a"
+      },
+      {
+        "id": "dirt",
+        "name": "泥土",
+        "color": "#7a5a3e"
+      },
+      {
+        "id": "sand",
+        "name": "沙地",
+        "color": "#d9c08a"
+      },
+      {
+        "id": "rock",
+        "name": "岩地",
+        "color": "#7d8086"
+      },
+      {
+        "id": "stone",
+        "name": "石板",
+        "color": "#a8acb0"
+      }
+    ]
   }
 }

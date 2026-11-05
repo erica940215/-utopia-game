@@ -9,7 +9,7 @@ root = pathlib.Path(__file__).parent
 src = root / 'src'
 style = (src / 'style.css').read_text()
 markup = (src / 'markup.html').read_text()
-js = (src / 'game.js').read_text().replace('/*@@ZOO@@*/', (src / 'zoo.js').read_text()).replace('/*@@MAP@@*/', (src / 'map.js').read_text()).replace('/*@@WORKSHOP@@*/', (src / 'workshop.js').read_text()).replace('/*@@CONTROLS@@*/', (src / 'controls.js').read_text()).replace('/*@@BREEDING@@*/', (src / 'breeding.js').read_text())
+js = (src / 'game.js').read_text().replace('/*@@ZOO@@*/', (src / 'zoo.js').read_text()).replace('/*@@MAP@@*/', (src / 'map.js').read_text()).replace('/*@@WORKSHOP@@*/', (src / 'workshop.js').read_text()).replace('/*@@CONTROLS@@*/', (src / 'controls.js').read_text()).replace('/*@@BREEDING@@*/', (src / 'breeding.js').read_text()).replace('/*@@CREATIVE@@*/', (src / 'creative.js').read_text())
 
 HEAD = '''<title>烏托邦</title>
 <meta name="claude:viewport-fit-sides" content="cover">

@@ -43,8 +43,8 @@ function buildZooBase(){
   zooBaseBuilt=true;
   const side=GN()*TS();
   const snowG=new THREE.Mesh(new THREE.PlaneGeometry(400,400),M(0xe6eff5)); snowG.rotation.x=-Math.PI/2; snowG.position.y=-0.05; zooScene.add(snowG);
-  const plot=new THREE.Mesh(new THREE.PlaneGeometry(side,side),M(0xcfdce4)); plot.rotation.x=-Math.PI/2; plot.position.y=-0.02; zooScene.add(plot);
-  const grid=new THREE.GridHelper(side,GN(),0x90a4b2,0xa9bac6); grid.position.y=0.005; grid.material.transparent=true; grid.material.opacity=0.45; zooScene.add(grid);
+  buildTerrainMesh();
+  zGrid=new THREE.GridHelper(side,GN(),0x90a4b2,0xa9bac6); zGrid.position.y=0.06; zGrid.material.transparent=true; zGrid.material.opacity=0.45; zGrid.visible=false; zooScene.add(zGrid);
   // 圍牆（入口處留缺口）
   const wall=M(0x6b7178), cap=M(0xf2f6fa), h=2.2, half=side/2;
   const gx0=(Math.floor(GN()/2)-1-GN()/2)*TS(), gx1=gx0+2*TS();
@@ -70,6 +70,7 @@ function buildZooBase(){
     g.position.set(x,0,z); zooScene.add(g);
   }
   zooRoot=new THREE.Group(); zooScene.add(zooRoot);
+  zPropRoot=new THREE.Group(); zooScene.add(zPropRoot);
   // 預覽框與選取框
   zGhost=new THREE.Mesh(new THREE.BoxGeometry(1,0.3,1),new THREE.MeshBasicMaterial({color:0x7cc8e8,transparent:true,opacity:0.45,depthWrite:false}));
   zGhost.visible=false; zooScene.add(zGhost);
@@ -80,7 +81,7 @@ let zGhost=null, zSelBox=null;
 
 function makeBuildingMesh(b){
   const d=bdef(b.type), c=tileCenter(b), W=d.size[0]*TS(), D=d.size[1]*TS(), g=new THREE.Group();
-  g.position.set(c.x,0,c.z); g.userData.uid=b.uid;
+  g.position.set(c.x,ZH(c.x,c.z),c.z); g.userData.uid=b.uid;
   if(d.kind==='path'){ const p=box(W,0.08,D,hex(d.color)); p.position.y=0.04; g.add(p); }
   else if(d.kind==='habitat'){
     const gr=box(W-0.2,0.1,D-0.2,hex(d.ground)); gr.position.y=0.05; g.add(gr);
@@ -111,7 +112,7 @@ function rebuildZoo(){
   for(const g of zooBMeshes.values()) zooRoot.remove(g);
   zooBMeshes.clear();
   for(const b of save.zoo.buildings){ const g=makeBuildingMesh(b); zooRoot.add(g); zooBMeshes.set(b.uid,g); }
-  rebuildZooAnimals(); updateSelBox();
+  refreshTerrain(); rebuildProps(); rebuildZooAnimals(); updateSelBox();
 }
 function rebuildZooAnimals(){
   for(const a of zooAnimals) zooRoot.remove(a.mesh);
@@ -121,7 +122,7 @@ function rebuildZooAnimals(){
     const sp=DATA.speciesById[a.species]; if(!sp) continue;
     const m=makeModel(sp); const c=tileCenter(hb), d=bdef(hb.type);
     const hw=d.size[0]*TS()/2-0.8, hd=d.size[1]*TS()/2-0.8;
-    m.position.set(c.x+(Math.random()*2-1)*hw,0.1,c.z+(Math.random()*2-1)*hd); m.scale.setScalar(isAdult(a)?1.3:0.7);
+    m.position.set(c.x+(Math.random()*2-1)*hw,ZH(c.x,c.z)+0.1,c.z+(Math.random()*2-1)*hd); m.scale.setScalar(isAdult(a)?1.3:0.7);
     zooRoot.add(m);
     zooAnimals.push({mesh:m,a,c,hw,hd,tx:m.position.x,tz:m.position.z,hop:Math.random()*6,wait:Math.random()*3});
   }
@@ -130,7 +131,7 @@ function updateSelBox(){
   const b=zSelUid&&findB(zSelUid);
   if(!b){ zSelBox.visible=false; return; }
   const d=bdef(b.type), c=tileCenter(b);
-  zSelBox.visible=true; zSelBox.scale.set(d.size[0]*TS()+0.2,1.4,d.size[1]*TS()+0.2); zSelBox.position.set(c.x,0.7,c.z);
+  zSelBox.visible=true; zSelBox.rotation.y=0; zSelBox.scale.set(d.size[0]*TS()+0.2,1.4,d.size[1]*TS()+0.2); zSelBox.position.set(c.x,ZH(c.x,c.z)+0.7,c.z);
 }
 
 /* ---------- 模擬：需求、溫度、門票 ---------- */
@@ -185,7 +186,7 @@ function catchUp(){
 
 /* ---------- 進出園區 ---------- */
 function enterZoo(){
-  ensureZoo(); migrateAnimals();
+  ensureZoo(); migrateAnimals(); ensureTerrain();
   if(!zooBaseBuilt) buildZooBase();
   rebuildZoo();
   const away=catchUp();
@@ -214,10 +215,17 @@ function updateZooHud(){
   $('zPool').textContent=avail?`待安置 ${avail}`:'';
 }
 function renderZooTools(){
-  const tools=[{id:'select',name:'選取',sub:'查看・放動物'},{id:'demolish',name:'拆除',sub:`退還 ${Math.round(ZC().demolishRefund*100)}%`}]
-    .concat(DATA.buildings.filter(b=>b.buildable!==false).map(b=>({id:b.id,name:b.name,sub:costText(b.cost),cost:b.cost})));
-  $('zTools').innerHTML=tools.map(t=>`<button type="button" class="ztool${zTool===t.id?' on':''}${t.cost&&!affordable(t.cost)?' poor':''}" data-tool="${t.id}"><b>${esc(t.name)}</b><span>${esc(t.sub)}</span></button>`).join('');
-  $('zTools').querySelectorAll('.ztool').forEach(el=>el.onclick=()=>{ zTool=el.dataset.tool; zGhost.visible=false; if(zTool!=='select'){ zSelUid=null; updateSelBox(); $('zPanel').hidden=true; } renderZooTools(); });
+  const tools=zTab==='facility'?[{id:'select',name:'選取',sub:'查看・放動物'},{id:'demolish',name:'拆除',sub:`退還 ${Math.round(ZC().demolishRefund*100)}%`}]
+    .concat(DATA.buildings.filter(b=>b.buildable!==false).map(b=>({id:b.id,name:b.name,sub:costText(b.cost),cost:b.cost})))
+    :[{id:'select',name:'選取',sub:'調整物件'},{id:'demolish',name:'拆除',sub:'物件與設施'},...creativeTools()];
+  $('zTools').innerHTML=`<div class="ztabs">${Z_TABS.map(([id,n])=>`<button type="button" class="ztab${zTab===id?' on':''}" data-ztab="${id}">${n}</button>`).join('')}<span class="zopts">${creativeOptions()}</span></div>
+    <div class="ztoolrow">${tools.map(t=>`<button type="button" class="ztool${zTool===t.id?' on':''}${t.cost&&!affordable(t.cost)?' poor':''}" data-tool="${t.id}">${t.swatch?`<i class="sw" style="background:${t.swatch}"></i>`:''}<b>${esc(t.name)}</b><span>${esc(t.sub)}</span></button>`).join('')}</div>`;
+  $('zTools').querySelectorAll('[data-ztab]').forEach(el=>el.onclick=()=>{ zTab=el.dataset.ztab; zTool='select'; zGhost.visible=false; renderZooTools(); });
+  $('zTools').querySelectorAll('.ztool').forEach(el=>el.onclick=()=>{ zTool=el.dataset.tool; zGhost.visible=false; zMoveUid=null;
+    if(zTool!=='select'){ zSelUid=null; zSelProp=null; zSelBox.visible=false; $('zPanel').hidden=true; }
+    if(zGrid) zGrid.visible=!!bdef(zTool)||zGrid.visible&&zTab==='facility';
+    renderZooTools(); });
+  wireCreativeOptions();
 }
 function openHabitatPanel(b){
   const d=bdef(b.type), z=save.zoo, inside=z.animals.filter(a=>a.habitat===b.uid), T=habitatTemp(b), fed=habitatFed(b);
@@ -259,14 +267,20 @@ function openHabitatPanel(b){
 /* ---------- 點擊與鏡頭 ---------- */
 const zRay=new THREE.Raycaster(), zNdc=new THREE.Vector2(), zPlane=new THREE.Plane(new THREE.Vector3(0,1,0),0), zHit=new THREE.Vector3();
 function screenToTile(cx,cy){
-  const r=canvas.getBoundingClientRect();
-  zNdc.set((cx-r.left)/r.width*2-1,-(cy-r.top)/r.height*2+1);
-  zRay.setFromCamera(zNdc,zooCam);
-  if(!zRay.ray.intersectPlane(zPlane,zHit)) return null;
+  const h=groundHit(cx,cy); if(!h) return null; zHit.copy(h);
   return { x:Math.floor(zHit.x/TS()+GN()/2), z:Math.floor(zHit.z/TS()+GN()/2) };
 }
 function placeOffset(d,t){ return { x:t.x-Math.floor((d.size[0]-1)/2), z:t.z-Math.floor((d.size[1]-1)/2) }; }
 function zooTap(cx,cy){
+  if(zMoveUid){ moveProp(cx,cy); return; }
+  if(zTool.startsWith('t_')) return;
+  if(zTool.startsWith('p_')){ placeProp(cx,cy); return; }
+  if(zTool==='select'||zTool==='demolish'){
+    const p=pickProp(cx,cy);
+    if(p&&zTool==='select'){ zSelUid=null; zSelProp=p.uid; selPropBox(p); openPropPanel(p); return; }
+    if(p&&zTool==='demolish'){ const d=pdef(p.type); save.zoo.props=save.zoo.props.filter(x=>x.uid!==p.uid); const g=zPropMeshes.get(p.uid); if(g){ zPropRoot.remove(g); zPropMeshes.delete(p.uid); }
+      const refund={}; for(const [k,v] of Object.entries(d.cost)) refund[k]=Math.floor(v*(ZC().propRefund||0.5)); pay(refund,1); persist(); updateZooHud(); toast(`拆除${d.name}`); return; }
+  }
   const t=screenToTile(cx,cy); if(!t) return;
   const z=save.zoo, uid=occupancy().get(t.x+','+t.z);
   if(zTool==='select'){
@@ -300,6 +314,7 @@ function zooTap(cx,cy){
   pay(d.cost,-1);
   const b={uid:z.nextUid++,type:d.id,x:p.x,z:p.z,rot:0};
   z.buildings.push(b);
+  { const c=tileCenter(b), hw=d.size[0]*TS()/2, hd=d.size[1]*TS()/2; flattenRect(c.x-hw,c.z-hd,c.x+hw,c.z+hd,1.5); afterTerrainEdit(); }
   const g=makeBuildingMesh(b); zooRoot.add(g); zooBMeshes.set(b.uid,g);
   simulate(0); updateZooHud(); renderZooTools(); persist();
   if(d.kind==='habitat'){ zTool='select'; zSelUid=b.uid; updateSelBox(); renderZooTools(); openHabitatPanel(b); }
@@ -310,11 +325,14 @@ function updateGhost(cx,cy){
   const t=screenToTile(cx,cy); if(!t){ zGhost.visible=false; return; }
   const p=placeOffset(d,t), ok=canPlace(d,p.x,p.z)&&affordable(d.cost);
   zGhost.visible=true; zGhost.scale.set(d.size[0]*TS(),1,d.size[1]*TS());
-  zGhost.position.set((p.x+d.size[0]/2-GN()/2)*TS(),0.15,(p.z+d.size[1]/2-GN()/2)*TS());
+  { const gx=(p.x+d.size[0]/2-GN()/2)*TS(), gz=(p.z+d.size[1]/2-GN()/2)*TS(); zGhost.position.set(gx,ZH(gx,gz)+0.15,gz); }
   zGhost.material.color.setHex(ok?0x7cc8e8:0xff5d5d);
 }
 const zPtrs=new Map(); let zDrag=0, zPinch=0;
-canvas.addEventListener('pointerdown',e=>{ if(state!=='zoo') return; zPtrs.set(e.pointerId,{x:e.clientX,y:e.clientY}); zDrag=0; if(zPtrs.size===2){ const [a,b]=[...zPtrs.values()]; zPinch=Math.hypot(a.x-b.x,a.y-b.y); } });
+canvas.addEventListener('pointerdown',e=>{ if(state!=='zoo') return; zPtrs.set(e.pointerId,{x:e.clientX,y:e.clientY}); zDrag=0;
+  if(zPtrs.size===1&&zTool.startsWith('t_')&&e.button!==2){ const h=groundHit(e.clientX,e.clientY); if(h) zBrushing={x:h.x,z:h.z,target:ZH(h.x,h.z),tool:zTool}; }
+  if(zPtrs.size===2){ zBrushing=null; const [a,b]=[...zPtrs.values()]; zPinch=Math.hypot(a.x-b.x,a.y-b.y); } });
+canvas.addEventListener('contextmenu',e=>{ if(state==='zoo') e.preventDefault(); });
 canvas.addEventListener('pointermove',e=>{
   if(state!=='zoo') return;
   const p=zPtrs.get(e.pointerId);
@@ -322,14 +340,16 @@ canvas.addEventListener('pointermove',e=>{
   const dx=e.clientX-p.x, dy=e.clientY-p.y; p.x=e.clientX; p.y=e.clientY;
   if(zPtrs.size===1){
     zDrag+=Math.abs(dx)+Math.abs(dy);
+    if(zBrushing){ const h=groundHit(e.clientX,e.clientY); if(h){ zBrushing.x=h.x; zBrushing.z=h.z; } return; }
     if(zDrag>6){ const k=zooCamT.d*0.0022; zooCamT.x-=dx*k; zooCamT.z-=dy*k; const lim=GN()*TS()/2; zooCamT.x=Math.max(-lim,Math.min(lim,zooCamT.x)); zooCamT.z=Math.max(-lim,Math.min(lim+6,zooCamT.z)); }
     if(e.pointerType==='mouse') updateGhost(e.clientX,e.clientY);
   } else if(zPtrs.size===2){
     const [a,b]=[...zPtrs.values()], dd=Math.hypot(a.x-b.x,a.y-b.y);
     if(zPinch) zooCamT.d=Math.max(14,Math.min(80,zooCamT.d*zPinch/dd)); zPinch=dd; zDrag=99;
+    const k=zooCamT.d*0.0011; zooCamT.x-=dx*k; zooCamT.z-=dy*k;
   }
 });
-const zUp=e=>{ if(!zPtrs.has(e.pointerId)) return; const single=zPtrs.size===1; zPtrs.delete(e.pointerId); if(state==='zoo'&&single&&zDrag<=6) zooTap(e.clientX,e.clientY); if(zPtrs.size<2) zPinch=0; };
+const zUp=e=>{ if(!zPtrs.has(e.pointerId)) return; if(zBrushing){ zBrushing=null; afterTerrainEdit(); persist(); zPtrs.delete(e.pointerId); return; } const single=zPtrs.size===1; zPtrs.delete(e.pointerId); if(state==='zoo'&&single&&zDrag<=6) zooTap(e.clientX,e.clientY); if(zPtrs.size<2) zPinch=0; };
 canvas.addEventListener('pointerup',zUp); canvas.addEventListener('pointercancel',e=>zPtrs.delete(e.pointerId));
 canvas.addEventListener('wheel',e=>{ if(state!=='zoo') return; e.preventDefault(); zooCamT.d=Math.max(14,Math.min(80,zooCamT.d*(1+Math.sign(e.deltaY)*0.1))); },{passive:false});
 
@@ -352,14 +372,18 @@ function zooUpdate(dt){
     if(zooBirthLog.length){ const names=[...new Set(zooBirthLog.map(a=>DATA.speciesById[a.species].name))]; toast(`出生了：${names.join('、')}寶寶 ×${zooBirthLog.length}`); zooBirthLog=[]; rebuildZooAnimals(); persist(); const b=zSelUid&&findB(zSelUid); if(b&&!$('zPanel').hidden&&bdef(b.type).kind==='habitat') openHabitatPanel(b); } }
   zSaveT+=dt; if(zSaveT>=ZC().autosaveSeconds){ zSaveT=0; persist(); }
   zHudT+=dt; if(zHudT>=0.5){ zHudT=0; updateZooHud(); }
+  if(zBrushing&&state==='zoo'){ applyBrush(zBrushing.x,zBrushing.z,zBrushing.tool,dt); refreshTerrain(); }
+  if(state==='zoo'){ const px=(keys.KeyD||keys.ArrowRight?1:0)-(keys.KeyA||keys.ArrowLeft?1:0), pz=(keys.KeyS||keys.ArrowDown?1:0)-(keys.KeyW||keys.ArrowUp?1:0);
+    if(px||pz){ const lim=GN()*TS()/2; zooCamT.x=Math.max(-lim,Math.min(lim,zooCamT.x+px*zooCamT.d*0.6*dt)); zooCamT.z=Math.max(-lim,Math.min(lim+6,zooCamT.z+pz*zooCamT.d*0.6*dt)); } }
   for(const g of zooBMeshes.values()) if(g.userData.glow) g.userData.glow.material.opacity=heatersOn()?0.55+Math.sin(clock.elapsedTime*3)*0.15:0;
   for(const z of zooAnimals){
     const m=z.mesh;
-    if(z.wait>0){ z.wait-=dt; m.position.y=0.1; continue; }
+    const gy=ZH(m.position.x,m.position.z);
+    if(z.wait>0){ z.wait-=dt; m.position.y=gy+0.1; continue; }
     const dx=z.tx-m.position.x, dz=z.tz-m.position.z, d=Math.hypot(dx,dz);
     if(d<0.2){ z.tx=z.c.x+(Math.random()*2-1)*z.hw; z.tz=z.c.z+(Math.random()*2-1)*z.hd; z.wait=1+Math.random()*4; continue; }
     const s=Math.min(d,dt*1.4); m.position.x+=dx/d*s; m.position.z+=dz/d*s; m.rotation.y=Math.atan2(dx,dz);
-    z.hop+=dt*10; m.position.y=0.1+Math.abs(Math.sin(z.hop))*0.12;
+    z.hop+=dt*10; m.position.y=gy+0.1+Math.abs(Math.sin(z.hop))*0.12;
   }
   if(state==='zoowalk'){
     let ix=(keys.KeyD?1:0)-(keys.KeyA?1:0)+joy.x, iz=(keys.KeyS?1:0)-(keys.KeyW?1:0)+joy.y;
@@ -368,9 +392,9 @@ function zooUpdate(dt){
     player.pos.x+=(ix*cy+iz*sy)*sp*dt; player.pos.z+=(-ix*sy+iz*cy)*sp*dt;
     const lim=GN()*TS()/2-0.6; player.pos.x=Math.max(-lim,Math.min(lim,player.pos.x)); player.pos.z=Math.max(-lim,Math.min(lim+4,player.pos.z));
     if(il>0.1) player.bob+=dt*8;
-    camera.position.set(player.pos.x,1.65+(il>0.1?Math.sin(player.bob)*0.05:0),player.pos.z); camera.rotation.set(player.pitch,player.yaw,0);
+    camera.position.set(player.pos.x,Math.max(ZH(player.pos.x,player.pos.z),TRN().waterLevel)+1.65+(il>0.1?Math.sin(player.bob)*0.05:0),player.pos.z); camera.rotation.set(player.pitch,player.yaw,0);
   } else {
-    zooCam.position.set(zooCamT.x,zooCamT.d*0.82,zooCamT.z+zooCamT.d*0.58); zooCam.lookAt(zooCamT.x,0,zooCamT.z);
+    const cy=ZH(zooCamT.x,zooCamT.z); zooCam.position.set(zooCamT.x,cy+zooCamT.d*0.82,zooCamT.z+zooCamT.d*0.58); zooCam.lookAt(zooCamT.x,cy,zooCamT.z);
   }
 }
 
