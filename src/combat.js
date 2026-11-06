@@ -83,7 +83,7 @@ function meleeAttack(){
     if(d<reach&&(dx*fx+dz*fz)/Math.max(d,0.01)>0.35){ w.hp-=dmg; w.hit=0.25; w.g.position.x+=dx/d*1.2; w.g.position.z+=dz/d*1.2; n++;
       if(w.hp<=0){ world.remove(w.g); wraiths.splice(j,1); toast(`${w.def?w.def.name:'霜影'}被打倒了`); } } }
   if(boss&&!boss.dead){ const dx=boss.g.position.x-player.pos.x, dz=boss.g.position.z-player.pos.z, d=Math.hypot(dx,dz);
-    if(d<reach+boss.def.size*0.8){ boss.hp-=dmg; boss.hit=0.2; boss.aggro=true; n++; if(boss.hp<=0) defeatBoss(); } }
+    if(d<reach+boss.def.size*0.8){ boss.hp-=dmg; boss.hit=0.2; boss.aggro=true; n++; coopSend('boss',{d:dmg}); if(boss.hp<=0) defeatBoss(); } }
   $('cross').classList.add('swing'); setTimeout(()=>$('cross').classList.remove('swing'),120);
   if(!melee&&!n) toast('沒子彈了，只能用槍托敲。回熱區補彈藥');
 }
@@ -220,7 +220,7 @@ const loreRead=()=>(save.lore=save.lore||{});
 const paperMat=new THREE.MeshBasicMaterial({color:0xf4ecd8});
 function placeNote(x,z,rare){
   const pool=DATA.lore.filter(l=>!loreRead()[l.id]&&!!l.rare===!!rare&&!interactables.some(i=>i.type==='note'&&i.lore.id===l.id));
-  const l=pool.length?pool[Math.floor(rng()*pool.length)]:null; if(!l) return;
+  const r=rng(), l=pool.length?pool[Math.floor(r*pool.length)]:null; if(!l) return;
   const y=heightAt(x,z), g=new THREE.Group(); g.position.set(x,y,z);
   const post=box(0.1,1,0.1,M(0x4a3a30)); post.position.y=0.5; g.add(post);
   const p=box(0.5,0.35,0.04,paperMat); p.position.set(0,1.05,0.06); p.rotation.x=-0.3; g.add(p);

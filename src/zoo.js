@@ -156,7 +156,7 @@ function updateSelBox(){
 /* ---------- 模擬：需求、溫度、門票 ---------- */
 function heatersOn(){ return zooStats.heatOn; }
 function habitatTemp(b){
-  const d=bdef(b.type); let t=d.baseTemp==='auto'?autoTemp(b):(d.baseTemp||0);
+  const d=bdef(b.type); let t=(d.baseTemp==='auto'?autoTemp(b):(d.baseTemp||0))+(d.baseTemp==='auto'?0:worldTempOffset(b));
   if(heatersOn()) for(const h of save.zoo.buildings){ const hd=bdef(h.type); if(hd.kind==='heater' && isWorking(h) && tileDist(h,b)<=hd.radius+Math.max(...d.size)/2) t+=hd.heat; }
   return t;
 }
@@ -171,7 +171,7 @@ function simulate(min){
     while(zoo.fuelDebt>=1 && (save.resources.fuel||0)>0){ save.resources.fuel--; zoo.fuelDebt--; }
     zooStats.heatOn=(save.resources.fuel||0)>0 || zoo.fuelDebt<1;
   } else zooStats.heatOn=true;
-  ensureOps(); ensureResearch(); envDirty(); const rf=RF(), SR=DATA.config.speciesResearch; opsBeforeAnimals(min);
+  worldStep(); ensureOps(); ensureResearch(); envDirty(); const rf=RF(), SR=DATA.config.speciesResearch; opsBeforeAnimals(min);
   const temps=new Map(), fed=new Map(), counts=new Map();
   for(const a of zoo.animals){ const k=a.habitat+'|'+a.species; counts.set(k,(counts.get(k)||0)+1); }
   let attract=0;
@@ -195,7 +195,7 @@ function catchUp(){
   const zoo=save.zoo, Z=ZC();
   let m=Math.min(Z.offlineCapMinutes,Math.max(0,(Date.now()-(zoo.lastTick||Date.now()))/60000));
   // 只有生涯在離線時繼續運作；沙盒與挑戰離開時暫停（挑戰中去遠征 20 分鐘內仍會計時）
-  if(modeOf()==='sandbox' || (modeOf()==='challenge' && m>20)) m=0;
+  if(modeOf()==='sandbox' || modeOf()==='visit' || (modeOf()==='challenge' && m>20)) m=0;
   if(m<0.05){ simulate(0); return null; }
   const c0=zoo.coins, f0=save.resources.feed||0, total=m, b0=zooBirthLog.length, d0=zooDeathLog.length;
   while(m>0){ const s=Math.min(1,m); simulate(s); m-=s; }
@@ -212,7 +212,7 @@ function enterZoo(){
   zooActive=true; state='zoo'; zTool='select'; zSelUid=null; updateSelBox();
   screenEl.hidden=true; $('hud').hidden=true; $('touch').hidden=true; $('touch').classList.remove('walk');
   $('zooUI').hidden=false; $('zWalkExit').hidden=true; $('zMain').hidden=false; $('zPanel').hidden=true; challengeHud();
-  $('zModeTag').textContent=MODE_NAME[modeOf()]; $('zModeTag').hidden=modeOf()==='career';
+  $('zModeTag').textContent=modeOf()==='visit'?`參觀：${visitName}`:MODE_NAME[modeOf()]; $('zModeTag').hidden=modeOf()==='career'; $('zParks').hidden=modeOf()!=='career'; $('zShare').hidden=modeOf()==='visit';
   if(document.exitPointerLock) document.exitPointerLock();
   renderZooTools(); updateZooHud();
   if(away && away.minutes>=1) toast(`離開的 ${away.minutes} 分鐘裡：門票 +${away.coins} 金幣，吃掉飼料 ${away.feed}${away.births?`，出生了 ${away.births} 隻寶寶`:''}${away.deaths?`，有 ${away.deaths} 隻動物壽終正寢`:''}`);
@@ -228,7 +228,7 @@ function leaveZooForExpedition(node){
 /* ---------- 介面 ---------- */
 function updateZooHud(){
   const z=save.zoo;
-  $('zRes').innerHTML=`<span class="zstar"><i>評價</i><b>${'★'.repeat(opsStats.rating)}</b></span>`+[['金幣',Math.floor(z.coins)],['研究',Math.floor(z.research||0)],...DATA.items.map(i=>[i.name,Math.floor(save.resources[i.id]||0)]),['遊客',zooStats.visitors]]
+  $('zRes').innerHTML=worldChip()+`<span class="zstar"><i>評價</i><b>${'★'.repeat(opsStats.rating)}</b></span>`+[['金幣',Math.floor(z.coins)],['研究',Math.floor(z.research||0)],...DATA.items.map(i=>[i.name,Math.floor(save.resources[i.id]||0)]),['遊客',zooStats.visitors]]
     .map(([n,v])=>`<span><i>${esc(n)}</i><b class="num">${v}</b></span>`).join('')
     +(zooStats.heatOn?'':'<span class="warnchip">煤炭用完，暖爐停了</span>')+(opsStats.unpaid?'<span class="warnchip">金幣不夠發薪水</span>':'')+(opsStats.coverage<0.8?'<span class="warnchip">飼育員不足</span>':'')+((z.escaped||[]).length?`<span class="warnchip">${z.escaped.length} 隻動物逃走了，保全正在找</span>`:'');
   const avail=Object.values(z.unplaced).reduce((a,b)=>a+b,0);
@@ -400,7 +400,7 @@ function zooUpdate(dt){
   zHudT+=dt; if(zHudT>=0.5){ zHudT=0; updateZooHud(); }
   zAchT=(zAchT||0)+dt; if(zAchT>=5){ zAchT=0; checkAchievements(); }
   zChT=(zChT||0)+dt; if(zChT>=1){ zChT=0; challengeHud(); checkChallenge(); }
-  updatePeople(dt); updateTram(dt); updateBubbles(dt);
+  updatePeople(dt); updateTram(dt); updateBubbles(dt); updateWorldVisual(dt);
   if(zBrushing&&state==='zoo'){ applyBrush(zBrushing.x,zBrushing.z,zBrushing.tool,dt); refreshTerrain(); }
   if(state==='zoo'){ const px=(keys.KeyD||keys.ArrowRight?1:0)-(keys.KeyA||keys.ArrowLeft?1:0), pz=(keys.KeyS||keys.ArrowDown?1:0)-(keys.KeyW||keys.ArrowUp?1:0);
     if(px||pz){ const lim=GN()*TS()/2; zooCamT.x=Math.max(-lim,Math.min(lim,zooCamT.x+px*zooCamT.d*0.6*dt)); zooCamT.z=Math.max(-lim,Math.min(lim+6,zooCamT.z+pz*zooCamT.d*0.6*dt)); } }
@@ -434,6 +434,8 @@ $('zDex').onclick=()=>{ $('zooUI').hidden=true; showDex(); };
 $('zGo').onclick=()=>showMap();
 $('zMode').onclick=()=>{ persist(); showModeSelect(); };
 $('zLab').onclick=()=>{ $('zooUI').hidden=true; showLab(); };
+$('zParks').onclick=()=>{ $('zooUI').hidden=true; showParks(); };
+$('zShare').onclick=()=>{ $('zooUI').hidden=true; showShare(); };
 $('zMarket').onclick=()=>{ $('zooUI').hidden=true; showMarket(); };
 $('zOps').onclick=()=>{ $('zooUI').hidden=true; showOps(); };
 $('zShop').onclick=()=>{ $('zooUI').hidden=true; showWorkshop(); };

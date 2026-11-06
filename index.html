@@ -322,6 +322,11 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
 .fin{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:4px 16px;font-size:13px}
 .fin label{display:flex;justify-content:space-between;gap:10px}
 .fin .neg{color:var(--danger)}
+
+/* 世界、分享、多人 */
+.wchip{font-size:12px;color:var(--frost);background:rgba(124,200,232,.14);border:1px solid var(--line);border-radius:999px;padding:2px 10px;white-space:nowrap}
+.sharebox{width:100%;min-height:70px;font:12px/1.4 var(--font-num,monospace);background:rgba(0,0,0,.25);color:var(--frost);border:1px solid var(--line);border-radius:6px;padding:8px;resize:vertical;word-break:break-all}
+.coopin{width:80px;font:inherit;text-transform:uppercase;background:rgba(0,0,0,.25);color:var(--frost);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
 </style></head>
 <body>
 <canvas id="c"></canvas>
@@ -378,6 +383,8 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
       <button type="button" class="zbtn" id="zLab">研究所</button>
       <button type="button" class="zbtn" id="zOps">營運</button>
       <button type="button" class="zbtn" id="zMarket">交易中心</button>
+      <button type="button" class="zbtn" id="zParks">園區</button>
+      <button type="button" class="zbtn" id="zShare">分享</button>
       <button type="button" class="zbtn" id="zShop">工坊</button>
       <button type="button" class="zbtn" id="zDex">圖鑑・倉庫</button>
       <button type="button" class="zbtn" id="zCtrl">操作設定</button>
@@ -691,7 +698,7 @@ function speciesPool(node,cats){
 function pickSpecies(node,cats){
   const pool=speciesPool(node,cats); if(!pool.length) return null;
   const tw=DATA.config.tiers[node.tier]?DATA.config.tiers[node.tier].rarityWeight:{common:1,rare:1,endangered:1,legendary:1}, bonus=DATA.config.undiscoveredBonus||1;
-  return pickWeighted(pool,s=>(tw[s.rarity]||0.01)*(save.collection[s.id]?1:bonus));
+  return pickWeighted(pool,s=>(tw[s.rarity]||0.01)*(save.collection[s.id]||coop?1:bonus));
 }
 function buildStation(node, seed){
   const st=DATA.stationById[node.type]||DATA.stationById.ruins;
@@ -840,9 +847,11 @@ const bagCount=()=>Object.values(bag).reduce((a,b)=>a+b,0);
 const zeroItems=()=>Object.fromEntries(DATA.items.map(i=>[i.id,0]));
 function distToTrain(x,z){ const cz=Math.max(TRAIN_Z0,Math.min(TRAIN_Z1,z)); return Math.hypot(x,z-cz); }
 
-function startExpedition(node){
+function startExpedition(node,seed){
   node=node||DATA.mapById.old_town;
-  buildStation(node,(Date.now()^((save.runs+1)*7919))>>>0);
+  const sd=seed??((Date.now()^((save.runs+1)*7919))>>>0);
+  if(coop&&coop.host) coopSend('start',{node,seed:sd});
+  buildStation(node,sd);
   bag=zeroItems(); haul=zeroItems(); rescued=[]; container=[];
   ensureProgress(); STATS=computeStats();
   weapon=effWeapon(save.gear.equipped.weapon||'flare_gun'); ammo=weapon.ammo; foodBuffs=[]; runElapsed=0; fireCd=0; fireHeld=false;
@@ -956,7 +965,7 @@ function interact(dt){
     if(actPressed&&!full){
       const take=Math.min(it.amount,CFG().bagCapacity-bagCount());
       bag[it.item.id]+=take; it.amount-=take; toast(`取得 ${it.item.name} ×${take}`);
-      if(it.amount<=0){ it.done=true; world.remove(it.group); }
+      if(it.amount<=0){ it.done=true; world.remove(it.group); coopSend('take',{t:'crate',x:it.pos.x,z:it.pos.z}); }
     }
   } else if(it.type==='vault'){
     pt.textContent=`[${key}] 打開碉堡寶箱`; if(actPressed) openVaultChest(it);
@@ -977,7 +986,7 @@ function interact(dt){
       else if(it.thaw>0){ it.thaw=Math.max(0,it.thaw-dt); it.ice.scale.setScalar(1-it.thaw*0.9); }
       pg.style.width=Math.min(100,it.thaw*100)+'%';
       if(it.thaw>=1){
-        it.done=true; it.group.remove(it.ice); it.group.remove(it.marker);
+        it.done=true; it.group.remove(it.ice); it.group.remove(it.marker); coopSend('take',{t:'ice',x:it.pos.x,z:it.pos.z});
         const an=it.animal; it.group.remove(an); an.position.copy(it.pos); world.add(an); freezeAnim(an,false); setAnim(an,'walk');
         followers.push({mesh:an,species:sp,origin:it.pos.clone(),rot:an.rotation.y,hop:Math.random()*6});
         toast(`${sp.name} 救出來了！帶牠回火車`);
@@ -990,7 +999,7 @@ function interact(dt){
       pt.textContent=it.kind==='hole'?`長按 [${key}] 釣魚（${rar.name}）`:`長按 [${key}] 捕捉 ${sp.name}（${rar.name}${save.collection[sp.id]?'':'・新物種'}）`;
       if(actHeld) it.prog+=dt*(CFG().catchSpeed||1)/it.secs; else it.prog=Math.max(0,it.prog-dt);
       pg.style.width=Math.min(100,it.prog*100)+'%';
-      if(it.prog>=1){ it.done=true; world.remove(it.group); container.push(sp.id); toast(`${it.kind==='hole'?'釣到':'抓到'} ${sp.name}（${rar.name}${save.collection[sp.id]?'':'・新物種'}）`); }
+      if(it.prog>=1){ it.done=true; world.remove(it.group); coopSend('take',{t:'catch',x:it.pos.x,z:it.pos.z}); container.push(sp.id); toast(`${it.kind==='hole'?'釣到':'抓到'} ${sp.name}（${rar.name}${save.collection[sp.id]?'':'・新物種'}）`); }
     }
   } else if(it.type==='depart'){
     pt.textContent=`[${key}] 登車出發`;
@@ -1078,6 +1087,7 @@ function showDex(){
       <span class="savechip ${store.mode==='cloud'?'cloud':''}">${store.mode==='cloud'?'雲端存檔・可跨裝置':'本機存檔'}・已遠征 ${save.runs} 次</span>
     </div>
     ${sb?authHtml():''}
+    <div class="sec"><div class="sec-title"><span>多人合作遠征</span></div><div class="auth" id="coopBox"></div></div>
     <div class="sec"><div class="sec-title"><span>倉庫</span></div>
       <div class="ledger">${DATA.items.map(i=>`<div><b class="num">${save.resources[i.id]||0}</b><span>${esc(i.name)}</span></div>`).join('')}<div><b class="num">${Object.values(save.collection).reduce((a,b)=>a+b,0)}</b><span>生物</span></div></div>
     </div>
@@ -1097,6 +1107,7 @@ function showDex(){
   $('goExp').onclick=()=>showMap();
   $('backZoo').onclick=()=>{ screenEl.hidden=true; state='zoo'; $('zooUI').hidden=false; };
   if(sb) wireAuth();
+  renderCoopBox();
   screenEl.querySelectorAll('.dextab').forEach(el=>el.onclick=()=>{ dexCat=el.dataset.cat; showDex(); });
   screenEl.querySelectorAll('.dexcell').forEach(el=>el.onclick=()=>{
     const sp=DATA.speciesById[el.dataset.sp], r=DATA.config.rarity[sp.rarity];
@@ -1280,7 +1291,7 @@ function updateSelBox(){
 /* ---------- 模擬：需求、溫度、門票 ---------- */
 function heatersOn(){ return zooStats.heatOn; }
 function habitatTemp(b){
-  const d=bdef(b.type); let t=d.baseTemp==='auto'?autoTemp(b):(d.baseTemp||0);
+  const d=bdef(b.type); let t=(d.baseTemp==='auto'?autoTemp(b):(d.baseTemp||0))+(d.baseTemp==='auto'?0:worldTempOffset(b));
   if(heatersOn()) for(const h of save.zoo.buildings){ const hd=bdef(h.type); if(hd.kind==='heater' && isWorking(h) && tileDist(h,b)<=hd.radius+Math.max(...d.size)/2) t+=hd.heat; }
   return t;
 }
@@ -1295,7 +1306,7 @@ function simulate(min){
     while(zoo.fuelDebt>=1 && (save.resources.fuel||0)>0){ save.resources.fuel--; zoo.fuelDebt--; }
     zooStats.heatOn=(save.resources.fuel||0)>0 || zoo.fuelDebt<1;
   } else zooStats.heatOn=true;
-  ensureOps(); ensureResearch(); envDirty(); const rf=RF(), SR=DATA.config.speciesResearch; opsBeforeAnimals(min);
+  worldStep(); ensureOps(); ensureResearch(); envDirty(); const rf=RF(), SR=DATA.config.speciesResearch; opsBeforeAnimals(min);
   const temps=new Map(), fed=new Map(), counts=new Map();
   for(const a of zoo.animals){ const k=a.habitat+'|'+a.species; counts.set(k,(counts.get(k)||0)+1); }
   let attract=0;
@@ -1319,7 +1330,7 @@ function catchUp(){
   const zoo=save.zoo, Z=ZC();
   let m=Math.min(Z.offlineCapMinutes,Math.max(0,(Date.now()-(zoo.lastTick||Date.now()))/60000));
   // 只有生涯在離線時繼續運作；沙盒與挑戰離開時暫停（挑戰中去遠征 20 分鐘內仍會計時）
-  if(modeOf()==='sandbox' || (modeOf()==='challenge' && m>20)) m=0;
+  if(modeOf()==='sandbox' || modeOf()==='visit' || (modeOf()==='challenge' && m>20)) m=0;
   if(m<0.05){ simulate(0); return null; }
   const c0=zoo.coins, f0=save.resources.feed||0, total=m, b0=zooBirthLog.length, d0=zooDeathLog.length;
   while(m>0){ const s=Math.min(1,m); simulate(s); m-=s; }
@@ -1336,7 +1347,7 @@ function enterZoo(){
   zooActive=true; state='zoo'; zTool='select'; zSelUid=null; updateSelBox();
   screenEl.hidden=true; $('hud').hidden=true; $('touch').hidden=true; $('touch').classList.remove('walk');
   $('zooUI').hidden=false; $('zWalkExit').hidden=true; $('zMain').hidden=false; $('zPanel').hidden=true; challengeHud();
-  $('zModeTag').textContent=MODE_NAME[modeOf()]; $('zModeTag').hidden=modeOf()==='career';
+  $('zModeTag').textContent=modeOf()==='visit'?`參觀：${visitName}`:MODE_NAME[modeOf()]; $('zModeTag').hidden=modeOf()==='career'; $('zParks').hidden=modeOf()!=='career'; $('zShare').hidden=modeOf()==='visit';
   if(document.exitPointerLock) document.exitPointerLock();
   renderZooTools(); updateZooHud();
   if(away && away.minutes>=1) toast(`離開的 ${away.minutes} 分鐘裡：門票 +${away.coins} 金幣，吃掉飼料 ${away.feed}${away.births?`，出生了 ${away.births} 隻寶寶`:''}${away.deaths?`，有 ${away.deaths} 隻動物壽終正寢`:''}`);
@@ -1352,7 +1363,7 @@ function leaveZooForExpedition(node){
 /* ---------- 介面 ---------- */
 function updateZooHud(){
   const z=save.zoo;
-  $('zRes').innerHTML=`<span class="zstar"><i>評價</i><b>${'★'.repeat(opsStats.rating)}</b></span>`+[['金幣',Math.floor(z.coins)],['研究',Math.floor(z.research||0)],...DATA.items.map(i=>[i.name,Math.floor(save.resources[i.id]||0)]),['遊客',zooStats.visitors]]
+  $('zRes').innerHTML=worldChip()+`<span class="zstar"><i>評價</i><b>${'★'.repeat(opsStats.rating)}</b></span>`+[['金幣',Math.floor(z.coins)],['研究',Math.floor(z.research||0)],...DATA.items.map(i=>[i.name,Math.floor(save.resources[i.id]||0)]),['遊客',zooStats.visitors]]
     .map(([n,v])=>`<span><i>${esc(n)}</i><b class="num">${v}</b></span>`).join('')
     +(zooStats.heatOn?'':'<span class="warnchip">煤炭用完，暖爐停了</span>')+(opsStats.unpaid?'<span class="warnchip">金幣不夠發薪水</span>':'')+(opsStats.coverage<0.8?'<span class="warnchip">飼育員不足</span>':'')+((z.escaped||[]).length?`<span class="warnchip">${z.escaped.length} 隻動物逃走了，保全正在找</span>`:'');
   const avail=Object.values(z.unplaced).reduce((a,b)=>a+b,0);
@@ -1524,7 +1535,7 @@ function zooUpdate(dt){
   zHudT+=dt; if(zHudT>=0.5){ zHudT=0; updateZooHud(); }
   zAchT=(zAchT||0)+dt; if(zAchT>=5){ zAchT=0; checkAchievements(); }
   zChT=(zChT||0)+dt; if(zChT>=1){ zChT=0; challengeHud(); checkChallenge(); }
-  updatePeople(dt); updateTram(dt); updateBubbles(dt);
+  updatePeople(dt); updateTram(dt); updateBubbles(dt); updateWorldVisual(dt);
   if(zBrushing&&state==='zoo'){ applyBrush(zBrushing.x,zBrushing.z,zBrushing.tool,dt); refreshTerrain(); }
   if(state==='zoo'){ const px=(keys.KeyD||keys.ArrowRight?1:0)-(keys.KeyA||keys.ArrowLeft?1:0), pz=(keys.KeyS||keys.ArrowDown?1:0)-(keys.KeyW||keys.ArrowUp?1:0);
     if(px||pz){ const lim=GN()*TS()/2; zooCamT.x=Math.max(-lim,Math.min(lim,zooCamT.x+px*zooCamT.d*0.6*dt)); zooCamT.z=Math.max(-lim,Math.min(lim+6,zooCamT.z+pz*zooCamT.d*0.6*dt)); } }
@@ -1558,6 +1569,8 @@ $('zDex').onclick=()=>{ $('zooUI').hidden=true; showDex(); };
 $('zGo').onclick=()=>showMap();
 $('zMode').onclick=()=>{ persist(); showModeSelect(); };
 $('zLab').onclick=()=>{ $('zooUI').hidden=true; showLab(); };
+$('zParks').onclick=()=>{ $('zooUI').hidden=true; showParks(); };
+$('zShare').onclick=()=>{ $('zooUI').hidden=true; showShare(); };
 $('zMarket').onclick=()=>{ $('zooUI').hidden=true; showMarket(); };
 $('zOps').onclick=()=>{ $('zooUI').hidden=true; showOps(); };
 $('zShop').onclick=()=>{ $('zooUI').hidden=true; showWorkshop(); };
@@ -2329,7 +2342,7 @@ function opsEconomy(attract,min){
   const sat=Math.min(100,0.35*viewing+0.25*needScore+0.2*z.clean+0.1*education+0.1*decor+tramSatBonus());
   opsStats.needs=needs; opsStats.satisfaction=sat; opsStats.parts.sat={viewing,needScore,clean:z.clean,education,decor};
   const priceF=Math.max(0.2,1-(z.ticket-O.ticketDefault)*O.priceElasticity*RF().priceElasticityMult);
-  const visitors=Math.round(attract*Z.visitorPerAttract*(0.5+sat/100)*priceF*(0.7+0.1*opsStats.rating)*RF().visitorMult*campaignMult());
+  const visitors=Math.round(attract*Z.visitorPerAttract*(0.5+sat/100)*priceF*(0.7+0.1*opsStats.rating)*RF().visitorMult*campaignMult()*worldVisitorMult());
   let ticket=visitors*z.ticket*O.coinsPerVisitorTicketMin;
   let spend=0;
   for(const b of z.buildings){ const d=bdef(b.type); if(d.kind==='facility'&&d.spendPerVisitorMin&&isWorking(b)) spend+=Math.min(visitors,d.serves)*d.spendPerVisitorMin; }
@@ -2552,12 +2565,13 @@ function showLab(msg){
    ========================================================= */
 let careerSave=null, activeSlot='career';
 function rootSave(){
+  if(activeSlot==='visit') return careerSave||save;
   if(activeSlot==='career'||!careerSave) return save;
   careerSave.slots=careerSave.slots||{}; careerSave.slots[activeSlot]=save; return careerSave;
 }
 const modeOf=()=>save.mode||'career';
 function switchSlot(slot,fresh){
-  if(activeSlot!=='career'&&careerSave){ careerSave.slots=careerSave.slots||{}; careerSave.slots[activeSlot]=save; }
+  if(activeSlot!=='career'&&activeSlot!=='visit'&&careerSave){ careerSave.slots=careerSave.slots||{}; careerSave.slots[activeSlot]=save; }
   activeSlot=slot;
   if(slot==='career'){ save=careerSave; }
   else{ careerSave.slots=careerSave.slots||{}; if(!careerSave.slots[slot]) careerSave.slots[slot]=fresh(); save=careerSave.slots[slot]; }
@@ -2584,7 +2598,7 @@ function newChallenge(ch){
   if(ch.start.staff) s.zoo.staff={...ch.start.staff};
   s.zoo.chStart=0; save=keep; return s;
 }
-const MODE_NAME={career:'生涯',sandbox:'沙盒',challenge:'挑戰'};
+const MODE_NAME={career:'生涯',sandbox:'沙盒',challenge:'挑戰',visit:'參觀'};
 
 /* 挑戰進度 */
 function challengeDef(){ return save.mode==='challenge'?DATA.challenges.find(c=>c.id===save.challenge):null; }
@@ -2687,7 +2701,7 @@ function placeBoss(node){
   let pool=speciesPool(node,cats).filter(s=>s.rarity===B.guard);
   if(!pool.length) pool=DATA.species.filter(s=>s.rarity===B.guard&&cats.includes(s.category)&&((s.model&&MODELS[s.model])||s.body));
   let guarded=null;
-  if(pool.length){ const sp=pickWeighted(pool,s=>save.collection[s.id]?1:(DATA.config.undiscoveredBonus||1)); guarded=placeIce(sp,lx+R(-2,2),lz+R(-2,2),R(0,6.28)); guarded.locked=true; }
+  if(pool.length){ const sp=pickWeighted(pool,s=>save.collection[s.id]||coop?1:(DATA.config.undiscoveredBonus||1)); guarded=placeIce(sp,lx+R(-2,2),lz+R(-2,2),R(0,6.28)); guarded.locked=true; }
   // 彈藥箱
   for(let k=0;k<2;k++){ const a=Math.atan2(lz,lx)+Math.PI+(k?0.5:-0.5), x=lx+Math.cos(a)*22, z=lz+Math.sin(a)*22; placeAmmoCache(x,z); }
   const m=makeBossMesh(B), y=heightAt(lx,lz); m.g.position.set(lx,y,lz); world.add(m.g);
@@ -2764,7 +2778,7 @@ function bossHitTest(f){
   if(!boss||boss.dead) return false;
   const s=boss.def.size; tmpV.copy(boss.g.position); tmpV.y+=1.4*s;
   if(f.m.position.distanceTo(tmpV)>(weapon.range||1.5)+0.7*s) return false;
-  boss.hp-=f.dmg||1; boss.hit=0.2; boss.aggro=true;
+  boss.hp-=f.dmg||1; boss.hit=0.2; boss.aggro=true; coopSend('boss',{d:f.dmg||1});
   if(boss.hp<=0) defeatBoss();
   return true;
 }
@@ -3031,7 +3045,7 @@ function meleeAttack(){
     if(d<reach&&(dx*fx+dz*fz)/Math.max(d,0.01)>0.35){ w.hp-=dmg; w.hit=0.25; w.g.position.x+=dx/d*1.2; w.g.position.z+=dz/d*1.2; n++;
       if(w.hp<=0){ world.remove(w.g); wraiths.splice(j,1); toast(`${w.def?w.def.name:'霜影'}被打倒了`); } } }
   if(boss&&!boss.dead){ const dx=boss.g.position.x-player.pos.x, dz=boss.g.position.z-player.pos.z, d=Math.hypot(dx,dz);
-    if(d<reach+boss.def.size*0.8){ boss.hp-=dmg; boss.hit=0.2; boss.aggro=true; n++; if(boss.hp<=0) defeatBoss(); } }
+    if(d<reach+boss.def.size*0.8){ boss.hp-=dmg; boss.hit=0.2; boss.aggro=true; n++; coopSend('boss',{d:dmg}); if(boss.hp<=0) defeatBoss(); } }
   $('cross').classList.add('swing'); setTimeout(()=>$('cross').classList.remove('swing'),120);
   if(!melee&&!n) toast('沒子彈了，只能用槍托敲。回熱區補彈藥');
 }
@@ -3168,7 +3182,7 @@ const loreRead=()=>(save.lore=save.lore||{});
 const paperMat=new THREE.MeshBasicMaterial({color:0xf4ecd8});
 function placeNote(x,z,rare){
   const pool=DATA.lore.filter(l=>!loreRead()[l.id]&&!!l.rare===!!rare&&!interactables.some(i=>i.type==='note'&&i.lore.id===l.id));
-  const l=pool.length?pool[Math.floor(rng()*pool.length)]:null; if(!l) return;
+  const r=rng(), l=pool.length?pool[Math.floor(r*pool.length)]:null; if(!l) return;
   const y=heightAt(x,z), g=new THREE.Group(); g.position.set(x,y,z);
   const post=box(0.1,1,0.1,M(0x4a3a30)); post.position.y=0.5; g.add(post);
   const p=box(0.5,0.35,0.04,paperMat); p.position.set(0,1.05,0.06); p.rotation.x=-0.3; g.add(p);
@@ -3541,6 +3555,178 @@ function wireAssign(b){ const z=save.zoo;
     if(d>0&&used>=staffCount('keeper')) return; z.assign[b.uid]=Math.max(0,(z.assign[b.uid]||0)+d); if(!z.assign[b.uid]) delete z.assign[b.uid]; simulate(0); persist(); openHabitatPanel(b); }); }
 
 /* =========================================================
+   世界：晝夜・天氣・季節、多座園區、分享動物園（參觀模式）、多人合作遠征
+   數值在 config.world；分享在自己的網站用 Supabase 短網址，其他地方用分享代碼
+   ========================================================= */
+const WLD=()=>DATA.config.world;
+/* ---------- 晝夜、季節、天氣 ---------- */
+function worldTime(){
+  const W=WLD(), c=(save.zoo&&save.zoo.clock)||0, day=Math.floor(c/W.dayMinutes), frac=(c/W.dayMinutes)%1;
+  const season=W.seasons[Math.floor(day/W.seasonDays)%W.seasons.length];
+  return {day,frac,hour:frac*24,season,night:frac*24<W.dawn||frac*24>=W.dusk};
+}
+function weatherNow(){ const z=save.zoo, W=WLD(); return W.weathers.find(w=>w.id===(z.weather&&z.weather.id))||W.weathers[0]; }
+function worldStep(){
+  const z=save.zoo, W=WLD(), t=worldTime();
+  if(!z.weather||z.clock>=z.weather.until){
+    const list=W.weathers.filter(w=>!w.seasons||w.seasons.includes(t.season.id));
+    let r=Math.random()*list.reduce((s,w)=>s+w.weight,0), pick=list[0]; for(const w of list){ r-=w.weight; if(r<=0){ pick=w; break; } }
+    z.weather={id:pick.id,until:z.clock+W.weatherMinutes[0]+Math.random()*(W.weatherMinutes[1]-W.weatherMinutes[0])};
+  }
+}
+function worldTempOffset(b){ if(bdef(b.type).house) return 0; return worldTime().season.temp+weatherNow().temp+(worldTime().night?WLD().nightTemp:0); }
+function worldVisitorMult(){ const t=worldTime(); return t.season.visit*weatherNow().visit*(t.night?WLD().nightVisitors:1); }
+function worldChip(){ const t=worldTime(), w=weatherNow(), h=Math.floor(t.hour), m=Math.floor((t.hour%1)*60);
+  return `<span class="wchip">${t.season.name}・第 ${t.day+1} 天 ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}${t.night?' 夜':''}・${w.name}</span>`; }
+let zSnow=null, zHemi=null;
+const DAY_SKY=new THREE.Color(0xb7ccdc), NIGHT_SKY=new THREE.Color(0x1a2433), STORM=new THREE.Color(0xd8e0e6);
+function updateWorldVisual(dt){
+  if(!save.zoo||!WLD()) return;
+  if(!zHemi) zHemi=zooScene.children.find(o=>o.isHemisphereLight);
+  const t=worldTime(), w=weatherNow();
+  // 白天亮度：日出日落之間平滑過渡
+  const W=WLD(), h=t.hour, k=h<W.dawn-1||h>W.dusk+1?0:h<W.dawn+1?(h-(W.dawn-1))/2:h>W.dusk-1?((W.dusk+1)-h)/2:1;
+  const sky=NIGHT_SKY.clone().lerp(DAY_SKY,k); if(w.id==='blizzard'||w.id==='fog') sky.lerp(STORM,0.5*k+0.2);
+  zooScene.background.copy(sky); zooScene.fog.color.copy(sky);
+  zooScene.fog.near=w.id==='fog'?30:w.id==='blizzard'?40:110; zooScene.fog.far=w.id==='fog'?110:w.id==='blizzard'?140:230;
+  if(zHemi) zHemi.intensity=0.25+0.6*k; zsun.intensity=0.08+0.67*k*(w.id==='clear'?1:0.6);
+  // 下雪粒子
+  if(!zSnow){ const n=1500, g=new THREE.BufferGeometry(), p=new Float32Array(n*3); for(let i=0;i<n;i++){ p[i*3]=(Math.random()-0.5)*90; p[i*3+1]=Math.random()*40; p[i*3+2]=(Math.random()-0.5)*90; }
+    g.setAttribute('position',new THREE.BufferAttribute(p,3)); zSnow=new THREE.Points(g,new THREE.PointsMaterial({color:0xffffff,size:0.25,transparent:true,opacity:0.85,depthWrite:false})); zooScene.add(zSnow); }
+  const snowing=w.id==='snow'||w.id==='blizzard'; zSnow.visible=snowing;
+  if(snowing){ const p=zSnow.geometry.attributes.position.array, sp=w.id==='blizzard'?9:3, wind=w.id==='blizzard'?6:0.6;
+    for(let i=0;i<p.length;i+=3){ p[i+1]-=dt*sp; p[i]+=dt*wind; if(p[i+1]<0){ p[i+1]+=40; } if(p[i]>45) p[i]-=90; }
+    zSnow.geometry.attributes.position.needsUpdate=true; }
+}
+
+/* ---------- 多座園區（生涯模式） ---------- */
+function ensureParks(){ save.parks=save.parks||{active:'main',zoos:{},open:['main']}; return save.parks; }
+const parkName=id=>id==='main'?'烏托邦站':(WLD().parks.find(p=>p.id===id)||{}).name||id;
+function switchPark(id){
+  const P=ensureParks(); if(P.active===id) return;
+  P.zoos[P.active]=save.zoo; save.zoo=P.zoos[id]||null; delete P.zoos[id]; P.active=id;
+  if(!save.zoo){ ensureZoo(); save.zoo.unplaced={}; save.zoo.coins=WLD().newParkCoins; }
+  zooBaseBuilt&&clearPeople(); persist(); enterZoo(); toast(`來到${parkName(id)}`);
+}
+function showParks(msg){
+  const P=ensureParks(), z=save.zoo; state='parks'; screenEl.hidden=false;
+  const others=P.open.filter(id=>id!==P.active), stored=z.stored||[];
+  screenEl.innerHTML=`<div class="hub">
+    <div class="hub-head"><h1><small>NETWORK · 避難所網路</small>園區</h1><span class="savechip">目前在：${esc(parkName(P.active))}</span></div>
+    ${msg?`<div class="dexinfo">${esc(msg)}</div>`:''}
+    <p class="zp-empty">每座園區有自己的建築、動物和金幣；倉庫物資、圖鑑、火車共用。沒在看的園區會暫停，回去時補算最多 8 小時。遠征救回的動物會送到目前所在的園區。</p>
+    <div class="shoplist">${['main',...WLD().parks.map(p=>p.id)].map(id=>{ const open=P.open.includes(id), def=WLD().parks.find(p=>p.id===id), zz=id===P.active?z:P.zoos[id];
+      return `<div class="shopcard${id===P.active?' on':''}"><div class="sc-main"><b>${esc(parkName(id))}</b><span>${open?`動物 ${zz?zz.animals.length:0} 隻・金幣 ${zz?Math.floor(zz.coins):0}`:esc(def.desc)}</span></div>
+        ${id===P.active?'<span class="sc-max">目前所在</span>':open?`<button type="button" class="zmini add" data-park="${id}">前往</button>`
+        :`<button type="button" class="zmini add" data-open="${id}" ${affordable(def.cost)&&opsStats.rating>=def.needRating?'':'disabled'}>開設：${esc(costText(def.cost))}・需要 ${def.needRating} 星</button>`}</div>`; }).join('')}</div>
+    ${others.length?`<div class="sec-title"><span>調動倉庫裡的動物</span></div><div class="shoplist">${stored.length?stored.map(a=>`<div class="shopcard"><div class="sc-main"><b>${a.sex==='M'?'♂':'♀'} ${esc(nameOf(a))}</b></div>${others.map(o=>`<button type="button" class="zmini" data-move="${a.id}:${o}">送到${esc(parkName(o))}</button>`).join('')}</div>`).join('')
+      :'<p class="zp-empty">倉庫是空的。在棲地面板按「移出」，再回來這裡調動。</p>'}</div>
+      <div class="sec-title"><span>調度金幣</span></div><div class="zp-btns">${others.map(o=>`<button type="button" class="zmini" data-coin="${o}" ${z.coins>=1000?'':'disabled'}>送 1000 金幣到${esc(parkName(o))}</button>`).join('')}</div>`:''}
+    <button class="btn ghost" id="parkBack" type="button">回到園區</button></div>`;
+  screenEl.querySelectorAll('[data-park]').forEach(el=>el.onclick=()=>switchPark(el.dataset.park));
+  screenEl.querySelectorAll('[data-open]').forEach(el=>el.onclick=()=>{ const d=WLD().parks.find(p=>p.id===el.dataset.open); if(!affordable(d.cost)) return; pay(d.cost,-1); P.open.push(d.id); switchPark(d.id); });
+  screenEl.querySelectorAll('[data-move]').forEach(el=>el.onclick=()=>{ const [aid,to]=el.dataset.move.split(':'), i=z.stored.findIndex(a=>a.id===aid); if(i<0||!P.zoos[to]) return;
+    const a=z.stored.splice(i,1)[0], tz=P.zoos[to]; a.id='a'+(tz.nextUid++); tz.stored=tz.stored||[]; tz.stored.push(a); persist(); showParks(`${DATA.speciesById[a.species].name} 送到${parkName(to)}了`); });
+  screenEl.querySelectorAll('[data-coin]').forEach(el=>el.onclick=()=>{ const to=el.dataset.coin; if(z.coins<1000||!P.zoos[to]) return; z.coins-=1000; P.zoos[to].coins+=1000; persist(); showParks(`送了 1000 金幣到${parkName(to)}`); });
+  $('parkBack').onclick=()=>{ screenEl.hidden=true; state='zoo'; $('zooUI').hidden=false; updateZooHud(); };
+}
+
+/* ---------- 分享動物園 ---------- */
+function shareSnapshot(){
+  const z=save.zoo;
+  return {v:1,name:(save.parks?parkName(save.parks.active):'烏托邦站'),rating:opsStats.rating,
+    zoo:{buildings:z.buildings.map(b=>({uid:b.uid,type:b.type,x:b.x,z:b.z,rot:b.rot||0,fence:b.fence})),props:z.props||[],terrain:z.terrain,ticket:z.ticket,
+      animals:z.animals.map(a=>({species:a.species,sex:a.sex,stars:a.stars,habitat:a.habitat,genes:a.genes}))}};
+}
+const b64u={enc:u8=>{ let s=''; for(let i=0;i<u8.length;i+=0x8000) s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000)); return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); },
+  dec:t=>{ const s=atob(t.replace(/-/g,'+').replace(/_/g,'/')); const u=new Uint8Array(s.length); for(let i=0;i<s.length;i++) u[i]=s.charCodeAt(i); return u; }};
+async function encodeShare(obj){
+  const raw=new TextEncoder().encode(JSON.stringify(obj));
+  if(window.CompressionStream){ const buf=await new Response(new Blob([raw]).stream().pipeThrough(new CompressionStream('deflate'))).arrayBuffer(); return 'z1.'+b64u.enc(new Uint8Array(buf)); }
+  return 'j1.'+b64u.enc(raw);
+}
+async function decodeShare(code){
+  code=code.trim(); const kind=code.slice(0,3), u=b64u.dec(code.slice(3));
+  if(kind==='z1.'){ const buf=await new Response(new Blob([u]).stream().pipeThrough(new DecompressionStream('deflate'))).arrayBuffer(); return JSON.parse(new TextDecoder().decode(buf)); }
+  return JSON.parse(new TextDecoder().decode(u));
+}
+async function showShare(){
+  state='share'; screenEl.hidden=false; screenEl.innerHTML='<div class="loading">產生分享內容…</div>';
+  const snap=shareSnapshot(), code=await encodeShare(snap);
+  const base=location.origin&&location.origin!=='null'?location.origin+location.pathname:'';
+  screenEl.innerHTML=`<div class="hub">
+    <div class="hub-head"><h1><small>SHARE · 分享動物園</small>分享</h1></div>
+    <p class="zp-empty">朋友打開連結或貼上代碼，就能參觀你的動物園（只能看，不會影響你的存檔）。</p>
+    ${sb?`<div class="sec-title"><span>短網址</span></div><div class="zp-btns"><button type="button" class="zmini add" id="shShort" ${sbUser?'':'disabled'}>${sbUser?'產生短網址':'登入後才能產生短網址'}</button></div><div class="dexinfo" id="shShortOut" hidden></div>`:''}
+    ${base?`<div class="sec-title"><span>完整連結</span></div><textarea class="sharebox" readonly id="shLink">${esc(base+'#zoo='+code)}</textarea><button type="button" class="zmini" id="shCopyL">複製連結</button>`:''}
+    <div class="sec-title"><span>分享代碼</span><b>${Math.round(code.length/1024)} KB</b></div><textarea class="sharebox" readonly id="shCode">${esc(code)}</textarea><button type="button" class="zmini" id="shCopy">複製代碼</button>
+    <div class="sec-title"><span>參觀別人的動物園</span></div><textarea class="sharebox" id="shIn" placeholder="把朋友給的代碼或連結貼在這裡"></textarea><button type="button" class="zmini add" id="shVisit">去參觀</button>
+    <button class="btn ghost" id="shBack" type="button">回到園區</button></div>`;
+  const copy=(id,btn)=>{ const t=$(id); t.select(); try{ navigator.clipboard.writeText(t.value).then(()=>{ $(btn).textContent='已複製'; },()=>{ document.execCommand('copy'); $(btn).textContent='已複製'; }); }catch(e){ try{ document.execCommand('copy'); $(btn).textContent='已複製'; }catch(_){} } };
+  if($('shCopyL')) $('shCopyL').onclick=()=>copy('shLink','shCopyL');
+  $('shCopy').onclick=()=>copy('shCode','shCopy');
+  $('shVisit').onclick=async()=>{ let v=$('shIn').value.trim(); const m=v.match(/#zoo=([^&\s]+)/)||v.match(/[?&]visit=([0-9a-f-]{36})/i);
+    try{ if(m&&m[0].includes('visit=')){ await visitById(m[1]); return; } enterVisit(await decodeShare(m?m[1]:v)); }catch(e){ toast('代碼看不懂，確認有完整貼上'); } };
+  const ss=$('shShort'); if(ss) ss.onclick=async()=>{ ss.disabled=true; ss.textContent='上傳中…';
+    const {data,error}=await sb.from('shared_zoos').insert({name:snap.name,data:snap}).select('id').single();
+    const out=$('shShortOut'); out.hidden=false; out.textContent=error?`上傳失敗：${error.message}`:`${base}?visit=${data.id}`; ss.textContent='產生短網址'; ss.disabled=false; };
+  $('shBack').onclick=()=>{ screenEl.hidden=true; state='zoo'; $('zooUI').hidden=false; updateZooHud(); };
+}
+async function visitById(id){ const {data,error}=await sb.from('shared_zoos').select('data').eq('id',id).single(); if(error||!data) throw error||new Error('not found'); enterVisit(data.data); }
+let visitName='';
+function enterVisit(snap){
+  if(!snap||!snap.zoo) throw new Error('bad');
+  if(activeSlot!=='visit'){ if(activeSlot!=='career'&&careerSave){ careerSave.slots=careerSave.slots||{}; careerSave.slots[activeSlot]=save; } }
+  activeSlot='visit'; visitName=snap.name||'朋友';
+  const s=emptySave(); s.mode='visit'; save=s;
+  const z=snap.zoo; save.zoo={buildings:z.buildings,props:z.props||[],terrain:z.terrain,ticket:z.ticket,animals:[],unplaced:{},coins:0,fuelDebt:0,lastTick:Date.now(),nextUid:100000,clock:600};
+  ensureOps(); save.zoo.staff={keeper:9,vet:3,mechanic:3,janitor:4,security:3,educator:2}; save.zoo.noAging=true;
+  for(const a of z.animals){ const ind=newIndividual(a.species,a.habitat,{sex:a.sex,stars:a.stars,genes:a.genes,happy:80,food:90}); save.zoo.animals.push(ind); }
+  zooBaseBuilt&&clearPeople(); enterZoo(); toast(`正在參觀「${visitName}」，按「模式」回到自己的動物園`);
+}
+
+/* ---------- 多人合作遠征（只在自己的網站，用 Supabase Realtime） ---------- */
+let coop=null;   // {code, ch, host, id, name, peers:Map}
+const coopId=Math.random().toString(36).slice(2,10);
+function coopName(){ return (sbUser&&sbUser.email&&sbUser.email.split('@')[0])||('列車長'+coopId.slice(0,3)); }
+function coopJoin(code,host){
+  if(!sb) return; coopLeave();
+  const ch=sb.channel('coop-'+code,{config:{broadcast:{self:false},presence:{key:coopId}}});
+  coop={code,ch,host,peers:new Map()};
+  ch.on('broadcast',{event:'start'},({payload})=>{ if(coop.host) return; const n=payload.node; toast(`隊長出發去${n.name}了，跟上！`); if(state==='zoo'||state==='dex'||state==='map') { zooActive=false; $('zooUI').hidden=true; $('zPanel').hidden=true; screenEl.hidden=true; startExpedition(n,payload.seed); } });
+  ch.on('broadcast',{event:'pos'},({payload})=>coopPeer(payload));
+  ch.on('broadcast',{event:'take'},({payload})=>{ if(state!=='play') return; const it=interactables.find(i=>!i.done&&i.type===payload.t&&Math.hypot(i.pos.x-payload.x,i.pos.z-payload.z)<0.6); if(it){ it.done=true; world.remove(it.group); } });
+  ch.on('broadcast',{event:'boss'},({payload})=>{ if(boss&&!boss.dead&&state==='play'){ boss.hp-=payload.d; boss.hit=0.2; if(boss.hp<=0) defeatBoss(); } });
+  ch.on('presence',{event:'sync'},()=>{ const st=ch.presenceState(); coop.members=Object.values(st).map(v=>v[0]); if(state==='dex') renderCoopBox(); });
+  ch.subscribe(async s=>{ if(s==='SUBSCRIBED'){ await ch.track({id:coopId,name:coopName(),host:!!host}); toast(host?`房間 ${code} 建好了，把房號告訴朋友`:`加入了房間 ${code}`); } });
+}
+function coopLeave(){ if(coop){ try{ sb.removeChannel(coop.ch); }catch(e){} for(const p of coop.peers.values()) p.g.parent&&p.g.parent.remove(p.g); } coop=null; }
+function coopSend(event,payload){ if(coop) coop.ch.send({type:'broadcast',event,payload}); }
+let coopPosT=0;
+function coopTick(dt){
+  if(!coop||state!=='play') return; coopPosT-=dt;
+  if(coopPosT<=0){ coopPosT=0.1; coopSend('pos',{id:coopId,name:coopName(),x:player.pos.x,z:player.pos.z,yaw:player.yaw,node:curNode&&curNode.id}); }
+  for(const p of coop.peers.values()){ if(!p.g.parent&&world&&p.node===(curNode&&curNode.id)) world.add(p.g); p.g.position.lerp(p.to,Math.min(1,dt*10)); p.g.position.y=heightAt(p.g.position.x,p.g.position.z); p.g.visible=p.node===(curNode&&curNode.id); }
+}
+function coopPeer(m){
+  let p=coop.peers.get(m.id);
+  if(!p){ const g=new THREE.Group(); const b=cyl(0.3,0.35,1.2,0x2a5ad8,10); b.position.y=0.9; g.add(b); const h=sph(0.25,0xe8c0a0); h.position.y=1.75; g.add(h);
+    let label=null; try{ label=bubbleSprite(m.name,true); label.position.y=2.5; label.scale.set(2.4,0.45,1); g.add(label); }catch(e){}
+    p={g,to:new THREE.Vector3()}; coop.peers.set(m.id,p); }
+  p.node=m.node; p.to.set(m.x,0,m.z); p.g.rotation.y=m.yaw;
+}
+function renderCoopBox(){
+  const el=$('coopBox'); if(!el) return;
+  if(!sb){ el.innerHTML='<span class="auth-note">多人合作需要在遊戲網站上玩（Claude 裡的版本不能連線）。</span>'; return; }
+  el.innerHTML=coop?`<span class="auth-note">房間 <b class="num">${esc(coop.code)}</b>・${coop.host?'你是隊長，你出發時隊友會一起去同一站':'等隊長出發'}・成員：${(coop.members||[]).map(m=>esc(m.name)).join('、')||'連線中…'}</span><button type="button" class="zmini" id="coopLeave">離開房間</button>
+      <span class="auth-note">同一站的地圖、物資和冰封生物都一樣；被隊友撿走的東西會消失；Boss 血量共用。各自救回的動物進各自的園區。</span>`
+    :`<button type="button" class="zmini add" id="coopNew">建立房間</button><input id="coopCode" maxlength="4" placeholder="房號" class="coopin"><button type="button" class="zmini" id="coopGo">加入</button>`;
+  const n=$('coopNew'); if(n) n.onclick=()=>{ coopJoin(Math.random().toString(36).slice(2,6).toUpperCase(),true); renderCoopBox(); };
+  const g=$('coopGo'); if(g) g.onclick=()=>{ const c=$('coopCode').value.trim().toUpperCase(); if(c.length===4){ coopJoin(c,false); renderCoopBox(); } };
+  const l=$('coopLeave'); if(l) l.onclick=()=>{ coopLeave(); renderCoopBox(); };
+}
+
+/* =========================================================
    觸控操作設定：搖桿與按鈕可以調整大小、拖曳位置
    設定只存在這台裝置（localStorage）
    ========================================================= */
@@ -3663,7 +3849,7 @@ function update(dt){
     if(w.hit>0){ w.hit-=dt; w.mat.emissive.setHex(0x553311); } else w.mat.emissive.setHex(0x0a1a2a);
     if(d<1.5&&!inHeat){ player.temp-=W.touchDrainPerSec*(w.def?w.def.touchMult:1)*(CFG().wraithTouchMult||1)*dt; hurtT=0.3; player.pos.x+=dx/d*dt*3; player.pos.z+=dz/d*dt*3; }
   }
-  updateBoss(dt,inHeat,timeLeft<=0); updateEnemyShots(dt); updateFood(dt); updateVault();
+  updateBoss(dt,inHeat,timeLeft<=0); coopTick(dt); updateEnemyShots(dt); updateFood(dt); updateVault();
   if(hurtT>0) hurtT-=dt; $('hurt').style.opacity=hurtT>0?1:0;
   for(let i=flares.length-1;i>=0;i--){
     const f=flares[i]; f.life-=dt; f.v.y-=(f.grav??6)*dt; f.m.position.addScaledVector(f.v,dt);
@@ -3700,6 +3886,8 @@ loop();
   if(terrainTex&&terrainTex[0]&&groundMesh){ const t=terrainTex[0].clone(); t.needsUpdate=true; t.wrapS=t.wrapT=THREE.RepeatWrapping; t.repeat.set(140,140); groundMesh.material.map=t; groundMesh.material.color.setHex(0xffffff); groundMesh.material.needsUpdate=true; }
   buildStation(DATA.mapById.old_town,12345);
   await initSave(); careerSave=save; activeSlot='career';
+  const hz=location.hash.match(/#zoo=([^&]+)/), qv=location.search.match(/[?&]visit=([0-9a-f-]{36})/i);
+  try{ if(qv&&sb){ await visitById(qv[1]); return; } if(hz){ enterVisit(await decodeShare(hz[1])); return; } }catch(e){ toast('分享的動物園讀取失敗'); }
   showModeSelect();
 })();
 })();

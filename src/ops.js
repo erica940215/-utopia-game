@@ -66,7 +66,7 @@ function opsEconomy(attract,min){
   const sat=Math.min(100,0.35*viewing+0.25*needScore+0.2*z.clean+0.1*education+0.1*decor+tramSatBonus());
   opsStats.needs=needs; opsStats.satisfaction=sat; opsStats.parts.sat={viewing,needScore,clean:z.clean,education,decor};
   const priceF=Math.max(0.2,1-(z.ticket-O.ticketDefault)*O.priceElasticity*RF().priceElasticityMult);
-  const visitors=Math.round(attract*Z.visitorPerAttract*(0.5+sat/100)*priceF*(0.7+0.1*opsStats.rating)*RF().visitorMult*campaignMult());
+  const visitors=Math.round(attract*Z.visitorPerAttract*(0.5+sat/100)*priceF*(0.7+0.1*opsStats.rating)*RF().visitorMult*campaignMult()*worldVisitorMult());
   let ticket=visitors*z.ticket*O.coinsPerVisitorTicketMin;
   let spend=0;
   for(const b of z.buildings){ const d=bdef(b.type); if(d.kind==='facility'&&d.spendPerVisitorMin&&isWorking(b)) spend+=Math.min(visitors,d.serves)*d.spendPerVisitorMin; }

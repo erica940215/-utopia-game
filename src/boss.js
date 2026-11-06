@@ -42,7 +42,7 @@ function placeBoss(node){
   let pool=speciesPool(node,cats).filter(s=>s.rarity===B.guard);
   if(!pool.length) pool=DATA.species.filter(s=>s.rarity===B.guard&&cats.includes(s.category)&&((s.model&&MODELS[s.model])||s.body));
   let guarded=null;
-  if(pool.length){ const sp=pickWeighted(pool,s=>save.collection[s.id]?1:(DATA.config.undiscoveredBonus||1)); guarded=placeIce(sp,lx+R(-2,2),lz+R(-2,2),R(0,6.28)); guarded.locked=true; }
+  if(pool.length){ const sp=pickWeighted(pool,s=>save.collection[s.id]||coop?1:(DATA.config.undiscoveredBonus||1)); guarded=placeIce(sp,lx+R(-2,2),lz+R(-2,2),R(0,6.28)); guarded.locked=true; }
   // 彈藥箱
   for(let k=0;k<2;k++){ const a=Math.atan2(lz,lx)+Math.PI+(k?0.5:-0.5), x=lx+Math.cos(a)*22, z=lz+Math.sin(a)*22; placeAmmoCache(x,z); }
   const m=makeBossMesh(B), y=heightAt(lx,lz); m.g.position.set(lx,y,lz); world.add(m.g);
@@ -119,7 +119,7 @@ function bossHitTest(f){
   if(!boss||boss.dead) return false;
   const s=boss.def.size; tmpV.copy(boss.g.position); tmpV.y+=1.4*s;
   if(f.m.position.distanceTo(tmpV)>(weapon.range||1.5)+0.7*s) return false;
-  boss.hp-=f.dmg||1; boss.hit=0.2; boss.aggro=true;
+  boss.hp-=f.dmg||1; boss.hit=0.2; boss.aggro=true; coopSend('boss',{d:f.dmg||1});
   if(boss.hp<=0) defeatBoss();
   return true;
 }

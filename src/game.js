@@ -291,7 +291,7 @@ function speciesPool(node,cats){
 function pickSpecies(node,cats){
   const pool=speciesPool(node,cats); if(!pool.length) return null;
   const tw=DATA.config.tiers[node.tier]?DATA.config.tiers[node.tier].rarityWeight:{common:1,rare:1,endangered:1,legendary:1}, bonus=DATA.config.undiscoveredBonus||1;
-  return pickWeighted(pool,s=>(tw[s.rarity]||0.01)*(save.collection[s.id]?1:bonus));
+  return pickWeighted(pool,s=>(tw[s.rarity]||0.01)*(save.collection[s.id]||coop?1:bonus));
 }
 function buildStation(node, seed){
   const st=DATA.stationById[node.type]||DATA.stationById.ruins;
@@ -440,9 +440,11 @@ const bagCount=()=>Object.values(bag).reduce((a,b)=>a+b,0);
 const zeroItems=()=>Object.fromEntries(DATA.items.map(i=>[i.id,0]));
 function distToTrain(x,z){ const cz=Math.max(TRAIN_Z0,Math.min(TRAIN_Z1,z)); return Math.hypot(x,z-cz); }
 
-function startExpedition(node){
+function startExpedition(node,seed){
   node=node||DATA.mapById.old_town;
-  buildStation(node,(Date.now()^((save.runs+1)*7919))>>>0);
+  const sd=seed??((Date.now()^((save.runs+1)*7919))>>>0);
+  if(coop&&coop.host) coopSend('start',{node,seed:sd});
+  buildStation(node,sd);
   bag=zeroItems(); haul=zeroItems(); rescued=[]; container=[];
   ensureProgress(); STATS=computeStats();
   weapon=effWeapon(save.gear.equipped.weapon||'flare_gun'); ammo=weapon.ammo; foodBuffs=[]; runElapsed=0; fireCd=0; fireHeld=false;
@@ -556,7 +558,7 @@ function interact(dt){
     if(actPressed&&!full){
       const take=Math.min(it.amount,CFG().bagCapacity-bagCount());
       bag[it.item.id]+=take; it.amount-=take; toast(`取得 ${it.item.name} ×${take}`);
-      if(it.amount<=0){ it.done=true; world.remove(it.group); }
+      if(it.amount<=0){ it.done=true; world.remove(it.group); coopSend('take',{t:'crate',x:it.pos.x,z:it.pos.z}); }
     }
   } else if(it.type==='vault'){
     pt.textContent=`[${key}] 打開碉堡寶箱`; if(actPressed) openVaultChest(it);
@@ -577,7 +579,7 @@ function interact(dt){
       else if(it.thaw>0){ it.thaw=Math.max(0,it.thaw-dt); it.ice.scale.setScalar(1-it.thaw*0.9); }
       pg.style.width=Math.min(100,it.thaw*100)+'%';
       if(it.thaw>=1){
-        it.done=true; it.group.remove(it.ice); it.group.remove(it.marker);
+        it.done=true; it.group.remove(it.ice); it.group.remove(it.marker); coopSend('take',{t:'ice',x:it.pos.x,z:it.pos.z});
         const an=it.animal; it.group.remove(an); an.position.copy(it.pos); world.add(an); freezeAnim(an,false); setAnim(an,'walk');
         followers.push({mesh:an,species:sp,origin:it.pos.clone(),rot:an.rotation.y,hop:Math.random()*6});
         toast(`${sp.name} 救出來了！帶牠回火車`);
@@ -590,7 +592,7 @@ function interact(dt){
       pt.textContent=it.kind==='hole'?`長按 [${key}] 釣魚（${rar.name}）`:`長按 [${key}] 捕捉 ${sp.name}（${rar.name}${save.collection[sp.id]?'':'・新物種'}）`;
       if(actHeld) it.prog+=dt*(CFG().catchSpeed||1)/it.secs; else it.prog=Math.max(0,it.prog-dt);
       pg.style.width=Math.min(100,it.prog*100)+'%';
-      if(it.prog>=1){ it.done=true; world.remove(it.group); container.push(sp.id); toast(`${it.kind==='hole'?'釣到':'抓到'} ${sp.name}（${rar.name}${save.collection[sp.id]?'':'・新物種'}）`); }
+      if(it.prog>=1){ it.done=true; world.remove(it.group); coopSend('take',{t:'catch',x:it.pos.x,z:it.pos.z}); container.push(sp.id); toast(`${it.kind==='hole'?'釣到':'抓到'} ${sp.name}（${rar.name}${save.collection[sp.id]?'':'・新物種'}）`); }
     }
   } else if(it.type==='depart'){
     pt.textContent=`[${key}] 登車出發`;
@@ -678,6 +680,7 @@ function showDex(){
       <span class="savechip ${store.mode==='cloud'?'cloud':''}">${store.mode==='cloud'?'雲端存檔・可跨裝置':'本機存檔'}・已遠征 ${save.runs} 次</span>
     </div>
     ${sb?authHtml():''}
+    <div class="sec"><div class="sec-title"><span>多人合作遠征</span></div><div class="auth" id="coopBox"></div></div>
     <div class="sec"><div class="sec-title"><span>倉庫</span></div>
       <div class="ledger">${DATA.items.map(i=>`<div><b class="num">${save.resources[i.id]||0}</b><span>${esc(i.name)}</span></div>`).join('')}<div><b class="num">${Object.values(save.collection).reduce((a,b)=>a+b,0)}</b><span>生物</span></div></div>
     </div>
@@ -697,6 +700,7 @@ function showDex(){
   $('goExp').onclick=()=>showMap();
   $('backZoo').onclick=()=>{ screenEl.hidden=true; state='zoo'; $('zooUI').hidden=false; };
   if(sb) wireAuth();
+  renderCoopBox();
   screenEl.querySelectorAll('.dextab').forEach(el=>el.onclick=()=>{ dexCat=el.dataset.cat; showDex(); });
   screenEl.querySelectorAll('.dexcell').forEach(el=>el.onclick=()=>{
     const sp=DATA.speciesById[el.dataset.sp], r=DATA.config.rarity[sp.rarity];
@@ -736,6 +740,7 @@ function wireAuth(){
 /*@@COMBAT@@*/
 /*@@CARE@@*/
 /*@@BIZ@@*/
+/*@@WORLD@@*/
 /*@@CONTROLS@@*/
 /* =========================================================
    8. 主迴圈
@@ -817,7 +822,7 @@ function update(dt){
     if(w.hit>0){ w.hit-=dt; w.mat.emissive.setHex(0x553311); } else w.mat.emissive.setHex(0x0a1a2a);
     if(d<1.5&&!inHeat){ player.temp-=W.touchDrainPerSec*(w.def?w.def.touchMult:1)*(CFG().wraithTouchMult||1)*dt; hurtT=0.3; player.pos.x+=dx/d*dt*3; player.pos.z+=dz/d*dt*3; }
   }
-  updateBoss(dt,inHeat,timeLeft<=0); updateEnemyShots(dt); updateFood(dt); updateVault();
+  updateBoss(dt,inHeat,timeLeft<=0); coopTick(dt); updateEnemyShots(dt); updateFood(dt); updateVault();
   if(hurtT>0) hurtT-=dt; $('hurt').style.opacity=hurtT>0?1:0;
   for(let i=flares.length-1;i>=0;i--){
     const f=flares[i]; f.life-=dt; f.v.y-=(f.grav??6)*dt; f.m.position.addScaledVector(f.v,dt);
@@ -854,6 +859,8 @@ loop();
   if(terrainTex&&terrainTex[0]&&groundMesh){ const t=terrainTex[0].clone(); t.needsUpdate=true; t.wrapS=t.wrapT=THREE.RepeatWrapping; t.repeat.set(140,140); groundMesh.material.map=t; groundMesh.material.color.setHex(0xffffff); groundMesh.material.needsUpdate=true; }
   buildStation(DATA.mapById.old_town,12345);
   await initSave(); careerSave=save; activeSlot='career';
+  const hz=location.hash.match(/#zoo=([^&]+)/), qv=location.search.match(/[?&]visit=([0-9a-f-]{36})/i);
+  try{ if(qv&&sb){ await visitById(qv[1]); return; } if(hz){ enterVisit(await decodeShare(hz[1])); return; } }catch(e){ toast('分享的動物園讀取失敗'); }
   showModeSelect();
 })();
 })();

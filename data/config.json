@@ -1,5 +1,5 @@
 {
- "version": 11,
+ "version": 12,
  "expedition": {
   "runSeconds": 300,
   "stormWarnSeconds": 60,
@@ -617,5 +617,109 @@
    "endangered": 20,
    "legendary": 50
   }
+ },
+ "world": {
+  "_comment": "遊戲時間 1 分鐘 = 現實 1 分鐘。dayMinutes 是一天的長度",
+  "dayMinutes": 30,
+  "seasonDays": 3,
+  "dawn": 6,
+  "dusk": 20,
+  "nightVisitors": 0.35,
+  "nightTemp": -4,
+  "seasons": [
+   {
+    "id": "spring",
+    "name": "春",
+    "temp": 0,
+    "visit": 1.05
+   },
+   {
+    "id": "summer",
+    "name": "夏",
+    "temp": 5,
+    "visit": 1.15
+   },
+   {
+    "id": "autumn",
+    "name": "秋",
+    "temp": -1,
+    "visit": 1
+   },
+   {
+    "id": "winter",
+    "name": "冬",
+    "temp": -8,
+    "visit": 0.75
+   }
+  ],
+  "weathers": [
+   {
+    "id": "clear",
+    "name": "晴",
+    "weight": 6,
+    "temp": 0,
+    "visit": 1
+   },
+   {
+    "id": "cloudy",
+    "name": "多雲",
+    "weight": 4,
+    "temp": -1,
+    "visit": 0.95
+   },
+   {
+    "id": "snow",
+    "name": "下雪",
+    "weight": 4,
+    "temp": -3,
+    "visit": 0.85
+   },
+   {
+    "id": "fog",
+    "name": "起霧",
+    "weight": 2,
+    "temp": -1,
+    "visit": 0.9
+   },
+   {
+    "id": "blizzard",
+    "name": "暴風雪",
+    "weight": 1.5,
+    "temp": -8,
+    "visit": 0.4,
+    "seasons": [
+     "autumn",
+     "winter"
+    ]
+   }
+  ],
+  "weatherMinutes": [
+   12,
+   35
+  ],
+  "newParkCoins": 800,
+  "parks": [
+   {
+    "id": "north",
+    "name": "北境分園",
+    "desc": "森林邊的第二座避難所",
+    "cost": {
+     "coins": 5000,
+     "scrap": 60
+    },
+    "needRating": 3
+   },
+   {
+    "id": "south",
+    "name": "南方分園",
+    "desc": "溫泉旁的第三座避難所",
+    "cost": {
+     "coins": 15000,
+     "scrap": 120,
+     "research": 80
+    },
+    "needRating": 4
+   }
+  ]
  }
 }
