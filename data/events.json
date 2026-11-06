@@ -1,0 +1,200 @@
+{
+ "chance": 0.45,
+ "events": [
+  {
+   "id": "snow_rails",
+   "title": "鐵軌被雪埋住了",
+   "text": "前方的鐵軌整段被雪蓋住，火車慢了下來。",
+   "options": [
+    {
+     "label": "多燒煤炭硬衝過去",
+     "cost": {
+      "fuel": 1
+     },
+     "result": "鍋爐全開，火車把雪推開了。"
+    },
+    {
+     "label": "下車鏟雪",
+     "effects": {
+      "timeDelta": -40
+     },
+     "result": "鏟了好一陣子，抵達時暴風雪會早 40 秒來。"
+    }
+   ]
+  },
+  {
+   "id": "broken_track",
+   "title": "斷軌",
+   "text": "有一段鐵軌斷了，旁邊散著舊鐵件。",
+   "options": [
+    {
+     "label": "用廢鐵修好",
+     "cost": {
+      "scrap": 6
+     },
+     "result": "修好了，繼續前進。"
+    },
+    {
+     "label": "繞一段舊支線",
+     "cost": {
+      "fuel": 1
+     },
+     "effects": {
+      "timeDelta": -20
+     },
+     "result": "繞遠路多花了煤炭和時間。"
+    }
+   ]
+  },
+  {
+   "id": "trader",
+   "title": "流浪商人",
+   "text": "一個拉著雪橇的商人揮手要你停車。",
+   "options": [
+    {
+     "label": "用飼料換金幣（飼料 8 → 金幣 70）",
+     "cost": {
+      "feed": 8
+     },
+     "gain": {
+      "coins": 70
+     },
+     "result": "交易完成。"
+    },
+    {
+     "label": "用金幣換煤炭（金幣 50 → 煤炭 3）",
+     "cost": {
+      "coins": 50
+     },
+     "gain": {
+      "fuel": 3
+     },
+     "result": "交易完成。"
+    },
+    {
+     "label": "不停車",
+     "result": "你揮揮手，火車繼續往前。"
+    }
+   ]
+  },
+  {
+   "id": "frozen_by_rails",
+   "title": "鐵軌旁的冰塊",
+   "text": "你看到鐵軌旁有一塊冰，裡面好像封著一隻動物。",
+   "options": [
+    {
+     "label": "停車救牠（花一點時間）",
+     "effects": {
+      "timeDelta": -25
+     },
+     "gain": {
+      "species": "common"
+     },
+     "result": "救上車了！"
+    },
+    {
+     "label": "趕路要緊",
+     "result": "冰塊慢慢消失在後方。"
+    }
+   ]
+  },
+  {
+   "id": "ambush",
+   "title": "霜影埋伏",
+   "text": "一群霜影從雪堆裡衝出來撲向車廂！",
+   "options": [
+    {
+     "label": "用砲塔掃射",
+     "need": {
+      "turrets": 1
+     },
+     "gain": {
+      "research": 4
+     },
+     "result": "砲塔把牠們打散了，還收集到一些研究資料。"
+    },
+    {
+     "label": "加速甩開",
+     "cost": {
+      "fuel": 1
+     },
+     "result": "火車衝了出去。"
+    },
+    {
+     "label": "硬撐過去",
+     "effects": {
+      "trainHpDelta": -35
+     },
+     "result": "車廂被抓得坑坑疤疤，這趟火車耐久會少 35。"
+    }
+   ]
+  },
+  {
+   "id": "blizzard",
+   "title": "暴風雪逼近",
+   "text": "遠方的天空變成灰白色，暴風雪正在接近。",
+   "options": [
+    {
+     "label": "全速前進",
+     "cost": {
+      "fuel": 1
+     },
+     "effects": {
+      "timeDelta": 20
+     },
+     "result": "搶在暴風雪前抵達，多了 20 秒。"
+    },
+    {
+     "label": "照常行駛",
+     "effects": {
+      "timeDelta": -30
+     },
+     "result": "抵達時暴風雪已經不遠了。"
+    }
+   ]
+  },
+  {
+   "id": "fire_low",
+   "title": "爐火快熄了",
+   "text": "司爐喊著鍋爐溫度在下降。",
+   "options": [
+    {
+     "label": "添煤",
+     "cost": {
+      "fuel": 1
+     },
+     "result": "爐火又旺起來了。"
+    },
+    {
+     "label": "省著用",
+     "effects": {
+      "heatDelta": -3
+     },
+     "result": "這趟熱區半徑會少 3 m。"
+    }
+   ]
+  },
+  {
+   "id": "wreck",
+   "title": "翻覆的貨車",
+   "text": "路邊有一列翻覆的舊貨車。",
+   "options": [
+    {
+     "label": "停車搜刮",
+     "effects": {
+      "timeDelta": -30
+     },
+     "gain": {
+      "scrap": 8,
+      "feed": 4
+     },
+     "result": "找到一些廢鐵和飼料。"
+    },
+    {
+     "label": "不停",
+     "result": "火車經過殘骸。"
+    }
+   ]
+  }
+ ]
+}

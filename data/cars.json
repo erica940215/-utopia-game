@@ -1,0 +1,297 @@
+{
+ "_comment": "火車車廂與車廂模組。effects 會加總到遠征數值（名稱以 Mult 結尾的相乘，其餘相加）",
+ "cars": [
+  {
+   "id": "cargo",
+   "name": "貨運車廂",
+   "desc": "堆物資的車廂，背包上限提高",
+   "model": "box",
+   "slots": 3,
+   "cost": {
+    "scrap": 20,
+    "coins": 80
+   },
+   "effects": {
+    "bagCapacity": 4
+   }
+  },
+  {
+   "id": "animal",
+   "name": "動物車廂",
+   "desc": "有隔間的車廂，可以多帶生物一起走",
+   "model": "wood",
+   "slots": 3,
+   "cost": {
+    "scrap": 25,
+    "coins": 120
+   },
+   "effects": {
+    "followCapacity": 1
+   }
+  },
+  {
+   "id": "tank",
+   "name": "水槽溫室車廂",
+   "desc": "養魚和昆蟲的車廂，容器上限提高",
+   "model": "coal",
+   "slots": 3,
+   "cost": {
+    "scrap": 25,
+    "coins": 120
+   },
+   "effects": {
+    "containerCapacity": 2
+   }
+  },
+  {
+   "id": "turret",
+   "name": "砲塔車廂",
+   "desc": "車頂裝了一座自動砲塔，會打靠近火車的霜影",
+   "model": "coal",
+   "slots": 2,
+   "cost": {
+    "scrap": 40,
+    "coins": 200
+   },
+   "effects": {
+    "turrets": 1
+   }
+  },
+  {
+   "id": "armor",
+   "name": "裝甲車廂",
+   "desc": "厚鋼板包覆，火車耐久大幅提高",
+   "model": "box",
+   "slots": 2,
+   "cost": {
+    "scrap": 45,
+    "coins": 150
+   },
+   "effects": {
+    "trainHp": 80
+   }
+  },
+  {
+   "id": "kitchen",
+   "name": "廚房車廂",
+   "desc": "可以在火車上烹飪，把食材做成料理",
+   "model": "wood",
+   "slots": 3,
+   "cost": {
+    "scrap": 20,
+    "feed": 15,
+    "coins": 100
+   },
+   "effects": {
+    "kitchen": 1
+   }
+  },
+  {
+   "id": "lab",
+   "name": "研究車廂",
+   "desc": "在路上整理採集到的資料，每次遠征多拿研究點數",
+   "model": "box",
+   "slots": 3,
+   "cost": {
+    "scrap": 30,
+    "coins": 250
+   },
+   "effects": {
+    "researchPerRun": 5
+   }
+  },
+  {
+   "id": "bunk",
+   "name": "宿舍車廂",
+   "desc": "溫暖的床鋪，在熱區回溫更快",
+   "model": "wood",
+   "slots": 3,
+   "cost": {
+    "scrap": 20,
+    "coins": 90
+   },
+   "effects": {
+    "heatRegenMult": 1.3
+   }
+  }
+ ],
+ "modules": [
+  {
+   "id": "stove",
+   "name": "小暖爐",
+   "desc": "熱區半徑 +1 m",
+   "cost": {
+    "scrap": 8,
+    "fuel": 2
+   },
+   "effects": {
+    "heatRadius": 1
+   }
+  },
+  {
+   "id": "shelf",
+   "name": "儲物架",
+   "desc": "背包 +2",
+   "cost": {
+    "scrap": 6
+   },
+   "effects": {
+    "bagCapacity": 2
+   },
+   "cars": [
+    "cargo",
+    "bunk",
+    "lab"
+   ]
+  },
+  {
+   "id": "cage",
+   "name": "保溫籠",
+   "desc": "跟隨生物 +1",
+   "cost": {
+    "scrap": 12,
+    "coins": 60
+   },
+   "effects": {
+    "followCapacity": 1
+   },
+   "cars": [
+    "animal"
+   ]
+  },
+  {
+   "id": "aquarium",
+   "name": "魚缸",
+   "desc": "容器 +1",
+   "cost": {
+    "scrap": 10,
+    "coins": 40
+   },
+   "effects": {
+    "containerCapacity": 1
+   },
+   "cars": [
+    "tank"
+   ]
+  },
+  {
+   "id": "auto_turret",
+   "name": "自動砲塔",
+   "desc": "再多一座砲塔",
+   "cost": {
+    "scrap": 30,
+    "coins": 150
+   },
+   "effects": {
+    "turrets": 1
+   },
+   "cars": [
+    "turret",
+    "armor"
+   ]
+  },
+  {
+   "id": "plating",
+   "name": "鋼板",
+   "desc": "火車耐久 +30",
+   "cost": {
+    "scrap": 15
+   },
+   "effects": {
+    "trainHp": 30
+   }
+  },
+  {
+   "id": "searchlight",
+   "name": "探照燈",
+   "desc": "霜影出現的間隔變長 15%",
+   "cost": {
+    "scrap": 12,
+    "coins": 50
+   },
+   "effects": {
+    "wraithSpawnMult": 0.85
+   }
+  },
+  {
+   "id": "medkit",
+   "name": "急救箱",
+   "desc": "倒下後被拖回來時體溫多 15",
+   "cost": {
+    "scrap": 6,
+    "feed": 4
+   },
+   "effects": {
+    "respawnBonus": 15
+   }
+  },
+  {
+   "id": "cookstove",
+   "name": "爐灶",
+   "desc": "料理效果時間 +50%",
+   "cost": {
+    "scrap": 10,
+    "fuel": 2
+   },
+   "effects": {
+    "foodDurationMult": 1.5
+   },
+   "cars": [
+    "kitchen"
+   ]
+  },
+  {
+   "id": "desk",
+   "name": "研究桌",
+   "desc": "每次遠征研究 +3",
+   "cost": {
+    "scrap": 10,
+    "coins": 80
+   },
+   "effects": {
+    "researchPerRun": 3
+   },
+   "cars": [
+    "lab"
+   ]
+  },
+  {
+   "id": "bed",
+   "name": "雙層床",
+   "desc": "熱區回溫 +15%",
+   "cost": {
+    "scrap": 8
+   },
+   "effects": {
+    "heatRegenMult": 1.15
+   },
+   "cars": [
+    "bunk"
+   ]
+  }
+ ],
+ "defense": {
+  "baseHp": 100,
+  "firstRaidAt": 80,
+  "raidEvery": 75,
+  "raidSize": [
+   2,
+   4
+  ],
+  "raidTouchDamage": 2.5,
+  "turretRange": 24,
+  "turretCooldown": 1.1,
+  "turretDamage": 1,
+  "brokenLossFraction": 0.5
+ },
+ "start": [
+  {
+   "type": "cargo",
+   "mods": []
+  },
+  {
+   "type": "animal",
+   "mods": []
+  }
+ ]
+}

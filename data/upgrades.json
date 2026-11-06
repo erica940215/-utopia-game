@@ -185,5 +185,44 @@
     "text": "可做火焰噴射器"
    }
   ]
+ },
+ {
+  "id": "coupler",
+  "name": "連結器",
+  "desc": "能加掛更多車廂",
+  "levels": [
+   {
+    "cost": {
+     "scrap": 30,
+     "coins": 150
+    },
+    "effects": {
+     "carSlots": 3
+    },
+    "text": "最多 3 節車廂"
+   },
+   {
+    "cost": {
+     "scrap": 60,
+     "coins": 400,
+     "research": 20
+    },
+    "effects": {
+     "carSlots": 4
+    },
+    "text": "最多 4 節車廂"
+   },
+   {
+    "cost": {
+     "scrap": 100,
+     "coins": 900,
+     "research": 50
+    },
+    "effects": {
+     "carSlots": 5
+    },
+    "text": "最多 5 節車廂"
+   }
+  ]
  }
 ]

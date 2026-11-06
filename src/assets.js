@@ -97,7 +97,7 @@ function staticAsset(file,opt){ const g=assetCache[file]; if(!g) return null; re
 let terrainTex=null;
 function preloadCore(){
   const A=DATA.assets; if(!A||!THREE.GLTFLoader) return Promise.resolve();
-  const files=[A.train.loco,...A.train.cars,...A.nature.snowTrees,...A.nature.snowRocks];
+  const files=[A.train.loco,...A.train.cars,'kenney-train/train-carriage-wood',...A.nature.snowTrees,...A.nature.snowRocks];
   const timeout=new Promise(r=>setTimeout(r,9000));
   const tex=new Promise(res=>{ try{ const L=new THREE.TextureLoader(); let n=0; terrainTex=A.terrain.map(u=>L.load(u,()=>{ if(++n===A.terrain.length) res(); },undefined,()=>{ if(++n===A.terrain.length) res(); }));
       terrainTex.forEach(t=>{ t.wrapS=t.wrapT=THREE.RepeatWrapping; }); }catch(e){ res(); } });
@@ -111,7 +111,7 @@ function upgradeTrain(){
   for(const c of [...trainGroup.children]) c.visible=false;
   const s=A.train.scale;
   const place=(g,z)=>{ const o=instAsset(g,{scale:s}).obj; o.position.z+=z; trainGroup.add(o); return o; };
-  place(loco,29.5); place(cars[0],17.5); place(cars[1],5);
+  place(loco,29.5); place(cars[0],17.5).userData.baseCar=true; place(cars[1],5).userData.baseCar=true;
 }
 
 /* 測試用：讓自動測試檢查場景與已載入的素材 */

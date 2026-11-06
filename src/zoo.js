@@ -211,7 +211,7 @@ function enterZoo(){
 function leaveZooForExpedition(node){
   simulate(0); persist();
   zooActive=false; $('zooUI').hidden=true; $('zPanel').hidden=true;
-  startExpedition(node);
+  travelEvent(node,()=>startExpedition(node));
 }
 
 /* ---------- 介面 ---------- */

@@ -277,3 +277,16 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
 #bossBar .bbar{height:9px;margin-top:3px;background:rgba(0,0,0,.45);border:1px solid rgba(159,232,255,.5);border-radius:5px;overflow:hidden}
 #bossBar .bbar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#7fe8ff,#e9f9ff);transition:width .15s linear}
 .bossline{color:var(--ember);font-weight:700}
+
+/* 火車防守與車廂 */
+#trainHp{font-size:12px;color:var(--frost-dim)}
+#trainHp.warn{color:var(--danger);font-weight:700}
+#trainHp.hit{color:#ff6a6a}
+.carcard{border:1px solid var(--line);background:var(--panel);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.carslots{display:flex;gap:6px;flex-wrap:wrap}
+.carslot{appearance:none;font:inherit;font-size:12px;color:var(--frost-dim);background:transparent;border:1px dashed var(--line);border-radius:6px;padding:6px 10px;cursor:pointer;min-height:36px}
+.carslot.on{border-style:solid;color:var(--frost);border-color:var(--ice)}
+.carslot.sel{outline:2px solid var(--ember)}
+.evopts{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.evopts .btn{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left}
+.evopts .btn small{font-size:12px;opacity:.75}

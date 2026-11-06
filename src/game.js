@@ -9,7 +9,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
    ========================================================= */
 const DATA = {};
 async function loadData(){
-  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets','staff','achievements','research','challenges','bosses'];
+  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets','staff','achievements','research','challenges','bosses','cars','events'];
   const res = await Promise.all(names.map(n => fetch(`data/${n}.json`).then(r => { if(!r.ok) throw new Error(n); return r.json(); })));
   names.forEach((n,i) => DATA[n] = res[i]);
   DATA.speciesById = Object.fromEntries(DATA.species.map(s => [s.id, s]));
@@ -138,7 +138,7 @@ function heightAt(x,z){
 }
 
 /* 火車 */
-const TRAIN_Z0=-6, TRAIN_Z1=35;
+let TRAIN_Z0=-6; const TRAIN_Z1=35;
 const DEPART=new THREE.Vector3(2.7,0,26);
 const colliders=[];
 let trainGroup=null;
@@ -445,7 +445,8 @@ function startExpedition(node){
   bag=zeroItems(); haul=zeroItems(); rescued=[]; container=[];
   ensureProgress(); STATS=computeStats();
   weapon=DATA.equipById[save.gear.equipped.weapon]||DATA.equipById.flare_gun; ammo=weapon.ammo; fireCd=0; fireHeld=false;
-  timeLeft=CFG().runSeconds; collapses=0; nextSpawn=DATA.config.wraith.firstSpawnAt; sprint=false;
+  STATS.heatRadius+=runMods.heatDelta||0; rebuildTrainCars(); initTrainDefense();
+  timeLeft=CFG().runSeconds+(runMods.timeDelta||0); collapses=0; nextSpawn=DATA.config.wraith.firstSpawnAt; sprint=false;
   player.pos.set(4.5,0,8); player.yaw=-Math.PI/2; player.pitch=0; player.temp=TMP().max;
   buildBagHud();
   zooActive=false; $('zooUI').hidden=true;
@@ -617,7 +618,7 @@ function collapse(){
   followers=[]; collapses++;
   const lostC=container.length; container=[];
   if(timeLeft<=0){ finish(true); return; }
-  player.pos.set(4.5,0,8); player.temp=T.respawnTemp; timeLeft=Math.max(5,timeLeft-T.collapseTimePenalty);
+  player.pos.set(4.5,0,8); player.temp=T.respawnTemp+(CFG().respawnBonus||0); timeLeft=Math.max(5,timeLeft-T.collapseTimePenalty);
   toast(`你失溫倒下，被列車員拖回來。掉了 ${dropN} 件物資${lost?`，${lost} 隻生物跑回原地`:''}${lostC?`，容器裡的 ${lostC} 隻生物也跑掉了`:''}`);
 }
 
@@ -626,7 +627,7 @@ function finish(failed){
   state='result'; $('rotateHint').hidden=true; if(document.exitPointerLock) document.exitPointerLock();
   $('hud').hidden=true; $('touch').hidden=true;
   const newOnes=rescued.filter(id=>!save.collection[id]);
-  ensureZoo(); save.zoo.research=(save.zoo.research||0)+new Set(newOnes).size*(DATA.config.researchPerNewSpecies||0);
+  ensureZoo(); save.zoo.research=(save.zoo.research||0)+new Set(newOnes).size*(DATA.config.researchPerNewSpecies||0)+(STATS&&STATS.researchPerRun||0);
   save.runs++;
   save.map=save.map||{visited:['utopia']}; if(curNode&&curNode.type!=='stall'&&!save.map.visited.includes(curNode.id)) save.map.visited.push(curNode.id);
   for(const k in haul) save.resources[k]=(save.resources[k]||0)+haul[k];
@@ -635,11 +636,11 @@ function finish(failed){
   const bossHtml=bossSettle();
   persist();
   const total=Object.values(haul).reduce((a,b)=>a+b,0);
-  const grade=failed?'列車在暴風雪中被迫出發':rescued.length>=4?'傳奇救援':rescued.length>=2?'順利歸隊':'勉強撐過';
+  const grade=trainBrokenRun?'火車被攻破了':failed?'列車在暴風雪中被迫出發':rescued.length>=4?'傳奇救援':rescued.length>=2?'順利歸隊':'勉強撐過';
   screenEl.hidden=false;
   screenEl.innerHTML=`<div class="card">
     <h1><small>EXPEDITION ${String(save.runs).padStart(2,'0')} · ${esc(curNode?curNode.name:'')}</small>${grade}</h1>
-    ${failed?'<p>你在暴風雪中失溫，列車員把你拖上車後只能鳴笛離開。</p>':''}
+    ${trainBrokenRun?`<p>霜影攻破了火車，只能丟下一半的物資逃走。</p>`:failed?'<p>你在暴風雪中失溫，列車員把你拖上車後只能鳴笛離開。</p>':''}${STATS&&STATS.researchPerRun?`<p>研究車廂整理了資料：研究 +${STATS.researchPerRun}</p>`:''}
     <div class="ledger">${DATA.items.map(i=>`<div><b class="num">${haul[i.id]}</b><span>${esc(i.name)}</span></div>`).join('')}<div><b class="num">${rescued.length}</b><span>生物</span></div></div>
     ${rescued.length?`<div class="tags">${rescued.map(id=>`<span>${esc(DATA.speciesById[id].name)}${newOnes.includes(id)?'・新':''}</span>`).join('')}</div>`:'<p>這趟沒有救到生物。</p>'}
     ${bossHtml}
@@ -724,6 +725,7 @@ function wireAuth(){
 /*@@RESEARCH@@*/
 /*@@MODES@@*/
 /*@@BOSS@@*/
+/*@@TRAIN@@*/
 /*@@CONTROLS@@*/
 /* =========================================================
    8. 主迴圈
@@ -769,7 +771,7 @@ function update(dt){
 
   const inHeat=distToTrain(player.pos.x,player.pos.z)<C.heatRadius;
   if(inHeat){
-    player.temp=Math.min(T.max,player.temp+T.heatRegenPerSec*dt);
+    player.temp=Math.min(T.max,player.temp+T.heatRegenPerSec*(C.heatRegenMult||1)*dt);
     if(bagCount()>0){ const n=bagCount(); depositAll(); toast(`存入車廂 ${n} 單位物資`); }
     if(container.length){ const n=boardContainer(); toast(`${n} 隻生物從容器移進車廂`); }
     if(followers.length){ const names=boardFollowers(); toast(`${names.join('、')} 安全上車了`); }
@@ -789,9 +791,11 @@ function update(dt){
   if(elapsed>nextSpawn){
     const max=timeLeft<=0?W.stormMax:W.baseMax+Math.floor(elapsed/W.addMaxEverySeconds);
     if(wraiths.length<max) spawnWraith();
-    nextSpawn=elapsed+(timeLeft<=0?W.stormSpawnInterval:W.spawnInterval);
+    nextSpawn=elapsed+(timeLeft<=0?W.stormSpawnInterval:W.spawnInterval)*(C.wraithSpawnMult||1);
   }
+  updateTrainDefense(dt,elapsed); if(state!=='play') return;
   for(const w of wraiths){
+    if(w.raid){ raidStep(w,dt); continue; }
     const g=w.g; w.phase+=dt;
     const dx=player.pos.x-g.position.x, dz=player.pos.z-g.position.z, d=Math.max(0.01,Math.hypot(dx,dz));
     if(d<W.chaseRange&&!inHeat){ const s=(timeLeft<=0?W.stormSpeed:W.speed)*(w.spd||1)*dt; g.position.x+=dx/d*s; g.position.z+=dz/d*s; }

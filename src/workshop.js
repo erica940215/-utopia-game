@@ -21,6 +21,7 @@ function computeStats(){
     if(g.sprintSpeed) s.sprintSpeed=Math.max(s.sprintSpeed,g.sprintSpeed);
     if(g.walkSpeed) s.walkSpeed=Math.max(s.walkSpeed,g.walkSpeed);
   }
+  applyTrainEffects(s);
   const rf=RF(); s.drainMult*=rf.expDrainMult; s.wraithTouchMult*=rf.expWraithMult; s.containerCapacity+=rf.expContainerBonus;
   return s;
 }
@@ -37,6 +38,8 @@ function showWorkshop(msg){
         <span>${lv?`目前：${esc(u.levels[lv-1].text)}`:'目前：基本配備'}${next?`　→ 下一級：${esc(next.text)}`:''}</span></div>
         ${next?`<button type="button" class="zmini add" data-up="${u.id}" ${affordable(next.cost)?'':'disabled'}>${esc(costText(next.cost))}</button>`:'<span class="sc-max">已滿級</span>'}</div>`;
     }).join('');
+  } else if(shopTab==='cars'){
+    body=trainTabHtml(st);
   } else {
     const slots=DATA.config.gearSlots;
     body=Object.keys(slots).map(slot=>{
@@ -58,6 +61,7 @@ function showWorkshop(msg){
     <div class="zres">${wallet}</div>
     <div class="dextabs" role="tablist">
       <button type="button" role="tab" class="dextab${shopTab==='train'?' on':''}" data-tab="train" aria-selected="${shopTab==='train'}">火車升級</button>
+      <button type="button" role="tab" class="dextab${shopTab==='cars'?' on':''}" data-tab="cars" aria-selected="${shopTab==='cars'}">車廂編組</button>
       <button type="button" role="tab" class="dextab${shopTab==='gear'?' on':''}" data-tab="gear" aria-selected="${shopTab==='gear'}">武器與裝備</button>
     </div>
     <div class="statline">背包 ${st.bagCapacity}・跟隨 ${st.followCapacity}・容器 ${st.containerCapacity}・熱區 ${st.heatRadius} m・體溫流失 ${Math.round(st.drainMult*100)}%・可去：${esc(DATA.config.tiers[st.maxTier].name)}</div>
@@ -66,7 +70,8 @@ function showWorkshop(msg){
     <p class="zp-empty">研究點數來自園區：每多養一種不同的物種，研究就累積得越快；圖鑑每新增一種也會加研究。</p>
     <button class="btn ghost" id="shopBack" type="button">回到園區</button>
   </div>`;
-  screenEl.querySelectorAll('[data-tab]').forEach(el=>el.onclick=()=>{ shopTab=el.dataset.tab; showWorkshop(); });
+  screenEl.querySelectorAll('[data-tab]').forEach(el=>el.onclick=()=>{ shopTab=el.dataset.tab; carPick=null; showWorkshop(); });
+  if(shopTab==='cars') wireTrainTab();
   screenEl.querySelectorAll('[data-up]').forEach(el=>el.onclick=()=>{
     const u=DATA.upgradeById[el.dataset.up], lv=upLevel(u.id), next=u.levels[lv];
     if(!next||!affordable(next.cost)) return;
