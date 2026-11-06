@@ -118,7 +118,7 @@ function spawnMinion(at){
 function bossHitTest(f){
   if(!boss||boss.dead) return false;
   const s=boss.def.size; tmpV.copy(boss.g.position); tmpV.y+=1.4*s;
-  if(f.m.position.distanceTo(tmpV)>weapon.range+0.7*s) return false;
+  if(f.m.position.distanceTo(tmpV)>(weapon.range||1.5)+0.7*s) return false;
   boss.hp-=f.dmg||1; boss.hit=0.2; boss.aggro=true;
   if(boss.hp<=0) defeatBoss();
   return true;

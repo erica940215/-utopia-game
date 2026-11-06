@@ -40,6 +40,8 @@ function showWorkshop(msg){
     }).join('');
   } else if(shopTab==='cars'){
     body=trainTabHtml(st);
+  } else if(shopTab==='food'){
+    body=foodTabHtml(st);
   } else {
     const slots=DATA.config.gearSlots;
     body=Object.keys(slots).map(slot=>{
@@ -51,7 +53,7 @@ function showWorkshop(msg){
         else if(owned) btn=`<button type="button" class="zmini add" data-equip="${g.id}">裝備</button>`;
         else if(lockedW) btn=`<span class="sc-max">需要工作台 Lv${g.requires}</span>`;
         else btn=`<button type="button" class="zmini add" data-craft="${g.id}" ${affordable(g.cost)?'':'disabled'}>製作：${esc(costText(g.cost))}</button>`;
-        return `<div class="shopcard${on?' on':''}"><div class="sc-main"><b>${esc(g.name)}</b><span>${esc(g.text)}</span></div>${btn}</div>`;
+        return `<div class="shopcard${on?' on':''}"><div class="sc-main"><b>${esc(g.name)}</b><span>${esc(g.text)}</span>${slot==='weapon'&&owned&&DATA.weaponmods.some(m=>m.for.includes(g.id))?weaponModsHtml(g):''}</div>${btn}</div>`;
       }).join('');
     }).join('');
   }
@@ -62,6 +64,7 @@ function showWorkshop(msg){
     <div class="dextabs" role="tablist">
       <button type="button" role="tab" class="dextab${shopTab==='train'?' on':''}" data-tab="train" aria-selected="${shopTab==='train'}">火車升級</button>
       <button type="button" role="tab" class="dextab${shopTab==='cars'?' on':''}" data-tab="cars" aria-selected="${shopTab==='cars'}">車廂編組</button>
+      <button type="button" role="tab" class="dextab${shopTab==='food'?' on':''}" data-tab="food" aria-selected="${shopTab==='food'}">廚房</button>
       <button type="button" role="tab" class="dextab${shopTab==='gear'?' on':''}" data-tab="gear" aria-selected="${shopTab==='gear'}">武器與裝備</button>
     </div>
     <div class="statline">背包 ${st.bagCapacity}・跟隨 ${st.followCapacity}・容器 ${st.containerCapacity}・熱區 ${st.heatRadius} m・體溫流失 ${Math.round(st.drainMult*100)}%・可去：${esc(DATA.config.tiers[st.maxTier].name)}</div>
@@ -72,6 +75,8 @@ function showWorkshop(msg){
   </div>`;
   screenEl.querySelectorAll('[data-tab]').forEach(el=>el.onclick=()=>{ shopTab=el.dataset.tab; carPick=null; showWorkshop(); });
   if(shopTab==='cars') wireTrainTab();
+  if(shopTab==='food') wireFoodTab();
+  if(shopTab==='gear') wireWeaponMods();
   screenEl.querySelectorAll('[data-up]').forEach(el=>el.onclick=()=>{
     const u=DATA.upgradeById[el.dataset.up], lv=upLevel(u.id), next=u.levels[lv];
     if(!next||!affordable(next.cost)) return;

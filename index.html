@@ -302,6 +302,15 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
 .evopts{display:flex;flex-direction:column;gap:8px;margin-top:10px}
 .evopts .btn{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left}
 .evopts .btn small{font-size:12px;opacity:.75}
+
+/* 戰鬥與探索 */
+#btnEat{right:calc(max(24px,env(safe-area-inset-right,0px)) + 100px);bottom:calc(env(safe-area-inset-bottom,0px) + 104px);width:50px;height:50px;font-size:13px}
+#touch.walk #btnEat{display:none}
+#touch.edit #btnEat{display:grid}
+#buffTag{font-size:11px;color:#9fe8a8;margin-top:2px;max-width:220px}
+#cross.swing{width:22px;height:22px;margin:-11px 0 0 -11px;background:transparent;border:2px solid var(--ember)}
+.modrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.lore p{line-height:1.7}
 </style></head>
 <body>
 <canvas id="c"></canvas>
@@ -312,6 +321,7 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
     <div id="tempTxt" class="num">36.8°C</div>
     <div class="bar"><i id="tempFill"></i></div>
     <div id="heatTag" hidden>◆ 鍋爐熱區・回溫中</div>
+    <div id="buffTag" hidden></div>
   </div>
   <div class="corner tc">
     <div id="arrow"></div>
@@ -343,6 +353,7 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
   <button id="btnRun" class="tbtn" type="button">奔跑</button>
   <button id="btnAct" class="tbtn" type="button">互動</button>
   <button id="btnFire" class="tbtn" type="button">開火</button>
+  <button id="btnEat" class="tbtn" type="button">吃</button>
 </div>
 
 <div id="rotateHint" hidden>把手機轉成橫向，視野更大</div>
@@ -386,7 +397,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
    ========================================================= */
 const DATA = {};
 async function loadData(){
-  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets','staff','achievements','research','challenges','bosses','cars','events'];
+  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets','staff','achievements','research','challenges','bosses','cars','events','enemies','weaponmods','food','biomes','lore'];
   const res = await Promise.all(names.map(n => fetch(`data/${n}.json`).then(r => { if(!r.ok) throw new Error(n); return r.json(); })));
   names.forEach((n,i) => DATA[n] = res[i]);
   DATA.speciesById = Object.fromEntries(DATA.species.map(s => [s.id, s]));
@@ -675,7 +686,8 @@ function buildStation(node, seed){
   curNode=node; curStation=st; warmZones=[]; lakeInfo=null;
   if(world) scene.remove(world);
   world=new THREE.Group(); scene.add(world);
-  colliders.length=1; interactables=[]; wraiths=[]; flares=[]; followers=[]; boss=null; bossPending=null;
+  colliders.length=1; interactables=[]; wraiths=[]; flares=[]; followers=[]; boss=null; bossPending=null; eShots=[]; vault=null;
+  const biome=applyBiome(node);
   rng=mulberry32(seed);
   const wallMat=M(0x5b6068), woodMat=M(0x4a3a30), snowCap=M(0xf2f6fa);
   const avoid=(x,z)=>(lakeInfo&&Math.hypot(x-lakeInfo.x,z-lakeInfo.z)<lakeInfo.r+3)||warmZones.some(w=>Math.hypot(x-w.x,z-w.z)<w.r+2);
@@ -720,7 +732,8 @@ function buildStation(node, seed){
   }
   for(let i=0;i<st.looseCrates;i++){ const a=R(0,Math.PI*2), r=R(18,110), x=Math.cos(a)*r, z=Math.sin(a)*r; if(farFromTrain(x,z,2)&&!avoid(x,z)) addCrate(x,z); }
   const trunk=M(0x2b2420), pine=M(0x23362f);
-  for(let i=0;i<st.trees;i++){
+  biomeExtras(biome,avoid);
+  for(let i=0;i<Math.round(st.trees*biome.treesMult);i++){
     const a=R(0,Math.PI*2), r=R(15,190), x=Math.cos(a)*r, z=Math.sin(a)*r;
     if(!farFromTrain(x,z,1)||avoid(x,z)) continue;
     const y=heightAt(x,z);
@@ -759,7 +772,7 @@ function buildStation(node, seed){
     else { const a=R(0,6.28), r=R(20,110); x=Math.cos(a)*r; z=Math.sin(a)*r; }
     placeCatch(sp,C,x,z);
   }
-  placeBoss(node);
+  placeBoss(node); placeVault(node,avoid); if(node.type!=='settlement') placeNotes(avoid);
 }
 function placeCatch(sp,C,x,z){
   const y=heightAt(x,z), g=new THREE.Group(); g.position.set(x,y,z);
@@ -792,17 +805,16 @@ function addCrate(x,z){
 /* 霜影 */
 const wraithBody=new THREE.MeshLambertMaterial({color:0x101722,transparent:true,opacity:0.82,emissive:0x0a1a2a});
 const wraithEye=new THREE.MeshBasicMaterial({color:0x7fe8ff});
-function spawnWraith(){
+function spawnWraith(forceType,single){
   const a=Math.random()*Math.PI*2, r=38+Math.random()*20, x=player.pos.x+Math.cos(a)*r, z=player.pos.z+Math.sin(a)*r;
   if(distToTrain(x,z)<CFG().heatRadius+8) return;
-  const g=new THREE.Group();
-  const mat=wraithBody.clone();
-  const b=sph(0.6,mat); b.scale.y=1.3; b.position.y=1.5; g.add(b);
-  const tail=new THREE.Mesh(new THREE.ConeGeometry(0.55,1.4,10),mat); tail.rotation.x=Math.PI; tail.position.y=0.6; g.add(tail);
-  for(const s of [-1,1]){ const e=sph(0.08,wraithEye); e.position.set(s*0.2,1.7,0.48); g.add(e); }
-  g.position.set(x,heightAt(x,z),z); world.add(g);
+  const def=forceType?enemyById(forceType):pickEnemyType(), n=single?1:def.group;
   const wm=(curNode&&DATA.config.tiers[curNode.tier])?DATA.config.tiers[curNode.tier].wraithMult:1;
-  wraiths.push({g,mat,hp:Math.ceil(DATA.config.wraith.hp*wm),spd:Math.sqrt(wm),hit:0,phase:Math.random()*6});
+  for(let k=0;k<n;k++){
+    const {g,mat}=makeEnemyMesh(def), px=x+(k?R(-3,3):0), pz=z+(k?R(-3,3):0);
+    g.position.set(px,heightAt(px,pz),pz); world.add(g);
+    wraiths.push({g,mat,def,hp:Math.ceil(def.hp*wm),spd:Math.sqrt(wm)*def.speedMult,hit:0,phase:Math.random()*6});
+  }
 }
 
 /* =========================================================
@@ -821,7 +833,7 @@ function startExpedition(node){
   buildStation(node,(Date.now()^((save.runs+1)*7919))>>>0);
   bag=zeroItems(); haul=zeroItems(); rescued=[]; container=[];
   ensureProgress(); STATS=computeStats();
-  weapon=DATA.equipById[save.gear.equipped.weapon]||DATA.equipById.flare_gun; ammo=weapon.ammo; fireCd=0; fireHeld=false;
+  weapon=effWeapon(save.gear.equipped.weapon||'flare_gun'); ammo=weapon.ammo; foodBuffs=[]; runElapsed=0; fireCd=0; fireHeld=false;
   STATS.heatRadius+=runMods.heatDelta||0; rebuildTrainCars(); initTrainDefense();
   timeLeft=CFG().runSeconds+(runMods.timeDelta||0); collapses=0; nextSpawn=DATA.config.wraith.firstSpawnAt; sprint=false;
   player.pos.set(4.5,0,8); player.yaw=-Math.PI/2; player.pitch=0; player.temp=TMP().max;
@@ -840,7 +852,7 @@ async function goLandscape(){
 /* 輸入 */
 const keys={}; let actHeld=false, actPressed=false, locked=false, noLock=false;
 const joy={x:0,y:0,id:null};
-addEventListener('keydown',e=>{ keys[e.code]=true; if(e.code==='KeyE'){ if(!actHeld) actPressed=true; actHeld=true; } if(e.code.startsWith('Shift')) sprint=true; });
+addEventListener('keydown',e=>{ keys[e.code]=true; if(e.code==='KeyE'){ if(!actHeld) actPressed=true; actHeld=true; } if(e.code==='KeyQ'&&!e.repeat) eatFood(); if(e.code.startsWith('Shift')) sprint=true; });
 addEventListener('keyup',e=>{ keys[e.code]=false; if(e.code==='KeyE') actHeld=false; if(e.code.startsWith('Shift')) sprint=false; });
 const canvas=$('c');
 function tryLock(){ if(noLock||!canvas.requestPointerLock){ noLock=true; return; } try{ const p=canvas.requestPointerLock(); if(p&&p.catch) p.catch(()=>{noLock=true;}); }catch(e){ noLock=true; } }
@@ -863,13 +875,14 @@ btnAct.addEventListener('pointerdown',e=>{ e.preventDefault(); if(state==='ctrle
 ['pointerup','pointercancel','pointerleave'].forEach(ev=>btnAct.addEventListener(ev,()=>{ actHeld=false; }));
 btnFire.addEventListener('pointerdown',e=>{ e.preventDefault(); if(state==='ctrledit') return; fireHeld=true; fire(); });
 ['pointerup','pointercancel','pointerleave'].forEach(ev=>btnFire.addEventListener(ev,()=>{ fireHeld=false; }));
+$('btnEat').addEventListener('pointerdown',e=>{ e.preventDefault(); if(state==='ctrledit') return; eatFood(); });
 btnRun.addEventListener('pointerdown',e=>{ e.preventDefault(); if(state==='ctrledit') return; sprint=!sprint; btnRun.classList.toggle('on',sprint); });
 
 const flareMat=new THREE.MeshBasicMaterial({color:0xffb064});
 let fireCd=0, fireHeld=false;
 function fire(){
   if(state!=='play'||fireCd>0) return;
-  if(ammo<=0){ if(!weapon.auto||Math.random()<0.05) toast(`${weapon.name}沒彈藥了，回火車補充`); return; }
+  if(weapon.melee||ammo<=0){ meleeAttack(); return; }
   ammo--; fireCd=weapon.cooldown||0.2;
   const base=new THREE.Vector3(0,0,-1).applyEuler(camera.rotation), n=weapon.pellets||1, sp=weapon.spread||0, flame=!!weapon.auto;
   for(let k=0;k<n;k++){
@@ -877,7 +890,7 @@ function fire(){
     const m=sph(flame?0.18:0.13,flareMat);
     const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:DOT,color:flame?0xff6a1a:0xff9a3c,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending})); glow.scale.set(flame?2.2:1.6,flame?2.2:1.6,1); m.add(glow);
     m.position.copy(camera.position).addScaledVector(dir,0.6); world.add(m);
-    flares.push({m,v:dir.multiplyScalar(weapon.projectileSpeed),life:weapon.life||1.6,dmg:weapon.damage,grav:flame?0:6});
+    flares.push({m,v:dir.multiplyScalar(weapon.projectileSpeed),life:weapon.life||1.6,dmg:weapon.damage,grav:weapon.grav??(flame?0:6)});
   }
 }
 
@@ -901,7 +914,7 @@ function hud(inHeat){
   $('bFol').textContent=`${followers.length}/${CFG().followCapacity}`;
   $('bCon').textContent=`${container.length}/${CFG().containerCapacity}`;
   $('sRes').textContent=Object.values(haul).reduce((a,b)=>a+b,0); $('sAni').textContent=rescued.length;
-  $('ammo').textContent=`${weapon.name} ${ammo}`;
+  $('ammo').textContent=weapon.melee?weapon.name:`${weapon.name} ${ammo}`;
   const st=$('storm');
   if(timeLeft>0){ st.textContent='暴風雪 '+fmt(timeLeft); st.className='num'+(timeLeft<CFG().stormWarnSeconds?' warn':''); }
   else { st.textContent='暴風雪來了・快登車'; st.className='num warn'; }
@@ -933,6 +946,10 @@ function interact(dt){
       bag[it.item.id]+=take; it.amount-=take; toast(`取得 ${it.item.name} ×${take}`);
       if(it.amount<=0){ it.done=true; world.remove(it.group); }
     }
+  } else if(it.type==='vault'){
+    pt.textContent=`[${key}] 打開碉堡寶箱`; if(actPressed) openVaultChest(it);
+  } else if(it.type==='note'){
+    pt.textContent=`[${key}] 撿起日誌`; if(actPressed) readNote(it);
   } else if(it.type==='ammo'){
     pt.textContent=ammo>=weapon.ammo?'彈藥是滿的':`[${key}] 補充彈藥`;
     if(actPressed&&ammo<weapon.ammo){ ammo=weapon.ammo; it.done=true; world.remove(it.group); toast(`${weapon.name}彈藥補滿了`); }
@@ -944,7 +961,7 @@ function interact(dt){
     else{
       const known=save.collection[sp.id]?'':'・新物種';
       pt.textContent=`長按 [${key}] 融冰救援 ${sp.name}（${rar.name}${known}）`;
-      if(actHeld){ it.thaw+=dt/1.8; it.ice.scale.setScalar(Math.max(0.05,1-it.thaw*0.9)); }
+      if(actHeld){ it.thaw+=dt/1.8*(CFG().thawMult||1); it.ice.scale.setScalar(Math.max(0.05,1-it.thaw*0.9)); }
       else if(it.thaw>0){ it.thaw=Math.max(0,it.thaw-dt); it.ice.scale.setScalar(1-it.thaw*0.9); }
       pg.style.width=Math.min(100,it.thaw*100)+'%';
       if(it.thaw>=1){
@@ -1057,6 +1074,7 @@ function showDex(){
     <div class="soon">水生與昆蟲要等冰湖、溫室站點開放後才能取得（第三階段）。</div>
     <div class="keys">${isTouch?`<kbd>左側搖桿</kbd><span>移動</span><kbd>右半邊拖曳</kbd><span>轉視角</span><kbd>互動</kbd><span>搜刮・長按融冰・登車出發</span><kbd>信號槍</kbd><span>驅散霜影</span>`
       :`<kbd>WASD</kbd><span>移動</span><kbd>滑鼠</kbd><span>轉視角（點畫面鎖定游標）</span><kbd>Shift</kbd><span>奔跑（更耗體溫）</span><kbd>E</kbd><span>搜刮・長按融冰・登車出發</span><kbd>左鍵</kbd><span>信號槍</span>`}</div>
+    ${loreHtml()}
     <details class="credits"><summary>製作群與素材授權</summary>
       <p>動物模型：0 A.D. © <a href="https://www.wildfiregames.com/" target="_blank" rel="noopener">Wildfire Games</a>，以 <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC-BY-SA 3.0</a> 授權（模型經過格式轉換）。</p>
       <p>動物、魚、樹木與岩石：<a href="https://quaternius.com" target="_blank" rel="noopener">Quaternius</a>（CC0）。火車：<a href="https://kenney.nl" target="_blank" rel="noopener">Kenney</a>（CC0）。地形材質：<a href="https://ambientcg.com" target="_blank" rel="noopener">ambientCG</a>（CC0）。</p>
@@ -1673,6 +1691,8 @@ function showWorkshop(msg){
     }).join('');
   } else if(shopTab==='cars'){
     body=trainTabHtml(st);
+  } else if(shopTab==='food'){
+    body=foodTabHtml(st);
   } else {
     const slots=DATA.config.gearSlots;
     body=Object.keys(slots).map(slot=>{
@@ -1684,7 +1704,7 @@ function showWorkshop(msg){
         else if(owned) btn=`<button type="button" class="zmini add" data-equip="${g.id}">裝備</button>`;
         else if(lockedW) btn=`<span class="sc-max">需要工作台 Lv${g.requires}</span>`;
         else btn=`<button type="button" class="zmini add" data-craft="${g.id}" ${affordable(g.cost)?'':'disabled'}>製作：${esc(costText(g.cost))}</button>`;
-        return `<div class="shopcard${on?' on':''}"><div class="sc-main"><b>${esc(g.name)}</b><span>${esc(g.text)}</span></div>${btn}</div>`;
+        return `<div class="shopcard${on?' on':''}"><div class="sc-main"><b>${esc(g.name)}</b><span>${esc(g.text)}</span>${slot==='weapon'&&owned&&DATA.weaponmods.some(m=>m.for.includes(g.id))?weaponModsHtml(g):''}</div>${btn}</div>`;
       }).join('');
     }).join('');
   }
@@ -1695,6 +1715,7 @@ function showWorkshop(msg){
     <div class="dextabs" role="tablist">
       <button type="button" role="tab" class="dextab${shopTab==='train'?' on':''}" data-tab="train" aria-selected="${shopTab==='train'}">火車升級</button>
       <button type="button" role="tab" class="dextab${shopTab==='cars'?' on':''}" data-tab="cars" aria-selected="${shopTab==='cars'}">車廂編組</button>
+      <button type="button" role="tab" class="dextab${shopTab==='food'?' on':''}" data-tab="food" aria-selected="${shopTab==='food'}">廚房</button>
       <button type="button" role="tab" class="dextab${shopTab==='gear'?' on':''}" data-tab="gear" aria-selected="${shopTab==='gear'}">武器與裝備</button>
     </div>
     <div class="statline">背包 ${st.bagCapacity}・跟隨 ${st.followCapacity}・容器 ${st.containerCapacity}・熱區 ${st.heatRadius} m・體溫流失 ${Math.round(st.drainMult*100)}%・可去：${esc(DATA.config.tiers[st.maxTier].name)}</div>
@@ -1705,6 +1726,8 @@ function showWorkshop(msg){
   </div>`;
   screenEl.querySelectorAll('[data-tab]').forEach(el=>el.onclick=()=>{ shopTab=el.dataset.tab; carPick=null; showWorkshop(); });
   if(shopTab==='cars') wireTrainTab();
+  if(shopTab==='food') wireFoodTab();
+  if(shopTab==='gear') wireWeaponMods();
   screenEl.querySelectorAll('[data-up]').forEach(el=>el.onclick=()=>{
     const u=DATA.upgradeById[el.dataset.up], lv=upLevel(u.id), next=u.levels[lv];
     if(!next||!affordable(next.cost)) return;
@@ -2692,7 +2715,7 @@ function spawnMinion(at){
 function bossHitTest(f){
   if(!boss||boss.dead) return false;
   const s=boss.def.size; tmpV.copy(boss.g.position); tmpV.y+=1.4*s;
-  if(f.m.position.distanceTo(tmpV)>weapon.range+0.7*s) return false;
+  if(f.m.position.distanceTo(tmpV)>(weapon.range||1.5)+0.7*s) return false;
   boss.hp-=f.dmg||1; boss.hit=0.2; boss.aggro=true;
   if(boss.hp<=0) defeatBoss();
   return true;
@@ -2876,11 +2899,253 @@ function wireTrainTab(){
 }
 
 /* =========================================================
+   戰鬥與探索：敵人種類、武器與改裝、料理、地下碉堡、場景種類、日誌
+   資料：enemies.json、weaponmods.json、food.json、biomes.json、lore.json；武器在 equipment.json
+   ========================================================= */
+const enemyById=id=>DATA.enemies.find(e=>e.id===id);
+function pickEnemyType(){
+  const t=String((curNode&&curNode.tier)||1), list=DATA.enemies.filter(e=>e.weights[t]);
+  let r=Math.random()*list.reduce((s,e)=>s+e.weights[t],0);
+  for(const e of list){ r-=e.weights[t]; if(r<=0) return e; } return list[0]||DATA.enemies[0];
+}
+function makeEnemyMesh(def){
+  const g=new THREE.Group(), mat=new THREE.MeshLambertMaterial({color:hex(def.color),transparent:true,opacity:0.86,emissive:0x0a1a2a});
+  const eye=new THREE.MeshBasicMaterial({color:hex(def.eye)});
+  const eyes=(y,z,s)=>{ for(const k of [-1,1]){ const e=sph(0.07*s,eye); e.position.set(k*0.18*s,y,z); g.add(e); } };
+  if(def.look==='hound'){
+    const b=sph(0.45,mat); b.scale.set(0.8,0.7,1.6); b.position.y=0.75; g.add(b);
+    const h=sph(0.3,mat); h.position.set(0,0.95,0.75); g.add(h); eyes(1.0,1.0,1);
+    for(const [x,z] of [[-.25,.45],[.25,.45],[-.25,-.45],[.25,-.45]]){ const l=new THREE.Mesh(new THREE.ConeGeometry(0.09,0.6,6),mat); l.rotation.x=Math.PI; l.position.set(x,0.3,z); g.add(l); }
+  } else if(def.look==='revenant'||def.look==='soldier'||def.look==='brute'){
+    const s=def.look==='brute'?1.6:1;
+    const t=box(0.6*s,0.9*s,0.35*s,mat); t.position.y=1.25*s; g.add(t);
+    const h=sph(0.22*s,mat); h.position.y=1.9*s; g.add(h); eyes(1.92*s,0.19*s,s);
+    for(const k of [-1,1]){ const a=box(0.16*s,0.8*s,0.16*s,mat); a.position.set(k*0.42*s,1.2*s,def.look==='revenant'?0.25:0); if(def.look==='revenant') a.rotation.x=-1.1; g.add(a);
+      const l=box(0.2*s,0.8*s,0.2*s,mat); l.position.set(k*0.17*s,0.4*s,0); g.add(l); }
+    if(def.look==='soldier'){ const gun=box(0.08,0.08,0.8,M(0x15181d)); gun.position.set(0.42,1.3,0.4); g.add(gun); }
+    if(def.look==='brute'){ const ice=new THREE.MeshPhongMaterial({color:0xcff2ff,shininess:90,emissive:0x1d4a66}); for(const k of [-1,1]){ const sp=new THREE.Mesh(new THREE.ConeGeometry(0.15,0.6,6),ice); sp.position.set(k*0.5*s,1.8*s,0); g.add(sp); } }
+  } else {
+    const b=sph(0.6,mat); b.scale.y=1.3; b.position.y=1.5; g.add(b);
+    const tail=new THREE.Mesh(new THREE.ConeGeometry(0.55,1.4,10),mat); tail.rotation.x=Math.PI; tail.position.y=0.6; g.add(tail); eyes(1.7,0.48,1);
+  }
+  return {g,mat};
+}
+const enemyHitY=w=>w.def&&w.def.look==='hound'?0.8:w.def&&w.def.look==='brute'?2:1.3;
+/* 遠程敵人的冰刺 */
+let eShots=[];
+const shardMat=new THREE.MeshBasicMaterial({color:0xc8f4ff});
+function enemyRanged(w,d,dx,dz,dt,inHeat){
+  const R=w.def.ranged, g=w.g; w.rcd=(w.rcd??R.every*Math.random())-dt;
+  if(d<R.keep){ g.position.x-=dx/d*dt*2.5; g.position.z-=dz/d*dt*2.5; }
+  if(d<R.range&&!inHeat&&w.rcd<=0){
+    w.rcd=R.every; const from=g.position.clone().setY(g.position.y+1.4), to=player.pos.clone().setY(player.pos.y+1.3), dir=to.sub(from).normalize();
+    const m=new THREE.Mesh(new THREE.ConeGeometry(0.08,0.5,5),shardMat); m.position.copy(from); m.lookAt(from.clone().add(dir)); m.rotateX(Math.PI/2); world.add(m);
+    eShots.push({m,v:dir.multiplyScalar(R.speed),life:2,drain:R.drain});
+  }
+  return d<R.range;   // 在射程內就不再往前衝
+}
+function updateEnemyShots(dt){
+  for(let i=eShots.length-1;i>=0;i--){
+    const s=eShots[i]; s.life-=dt; s.m.position.addScaledVector(s.v,dt);
+    const hit=Math.hypot(s.m.position.x-player.pos.x,s.m.position.z-player.pos.z)<0.8&&Math.abs(s.m.position.y-(player.pos.y+1.2))<1.2;
+    if(hit){ player.temp-=s.drain*(CFG().wraithTouchMult||1); hurtT=0.4; }
+    if(hit||s.life<=0){ world.remove(s.m); eShots.splice(i,1); }
+  }
+}
+
+/* ---------- 武器改裝 ---------- */
+const wmodById=id=>DATA.weaponmods.find(m=>m.id===id);
+function effWeapon(id){
+  const w={...(DATA.equipById[id]||DATA.equipById.flare_gun)};
+  const mods=(save.gear.mods&&save.gear.mods[id])||[];
+  for(const mid of mods){ const m=wmodById(mid); if(!m) continue;
+    for(const [k,v] of Object.entries(m.mult||{})) if(w[k]!=null) w[k]*=v;
+    for(const [k,v] of Object.entries(m.add||{})) w[k]=(w[k]||0)+v; }
+  w.ammo=Math.round(w.ammo); return w;
+}
+function weaponModsHtml(g){
+  const mods=(save.gear.mods&&save.gear.mods[g.id])||[], avail=DATA.weaponmods.filter(m=>m.for.includes(g.id)&&!mods.includes(m.id));
+  return `<div class="modrow">${[0,1].map(i=>mods[i]?`<button type="button" class="carslot on" data-wmdel="${g.id}:${i}">${esc(wmodById(mods[i]).name)} ✕</button>`:'<span class="carslot">空改裝位</span>').join('')}</div>
+    ${mods.length<2&&avail.length?`<div class="modrow">${avail.map(m=>`<button type="button" class="zmini" data-wm="${g.id}:${m.id}" ${affordable(m.cost)?'':'disabled'} title="${esc(m.desc)}">${esc(m.name)}：${esc(m.desc)}（${esc(costText(m.cost))}）</button>`).join('')}</div>`:''}`;
+}
+function wireWeaponMods(){
+  save.gear.mods=save.gear.mods||{};
+  screenEl.querySelectorAll('[data-wm]').forEach(el=>el.onclick=()=>{ const [w,m]=el.dataset.wm.split(':'), d=wmodById(m); if(!affordable(d.cost)) return;
+    pay(d.cost,-1); (save.gear.mods[w]=save.gear.mods[w]||[]).push(m); persist(); showWorkshop(`${DATA.equipById[w].name}裝上了${d.name}`); });
+  screenEl.querySelectorAll('[data-wmdel]').forEach(el=>el.onclick=()=>{ const [w,i]=el.dataset.wmdel.split(':'); save.gear.mods[w].splice(+i,1); persist(); showWorkshop('拆下改裝零件了（不退還材料）'); });
+}
+/* 近戰：冰斧，或沒子彈時用槍托敲 */
+function meleeAttack(){
+  const melee=!!weapon.melee, dmg=melee?weapon.damage:0.5, reach=melee?weapon.reach:2.2;
+  fireCd=melee?weapon.cooldown:0.7;
+  const fx=-Math.sin(player.yaw), fz=-Math.cos(player.yaw); let n=0;
+  for(let j=wraiths.length-1;j>=0;j--){ const w=wraiths[j], dx=w.g.position.x-player.pos.x, dz=w.g.position.z-player.pos.z, d=Math.hypot(dx,dz);
+    if(d<reach&&(dx*fx+dz*fz)/Math.max(d,0.01)>0.35){ w.hp-=dmg; w.hit=0.25; w.g.position.x+=dx/d*1.2; w.g.position.z+=dz/d*1.2; n++;
+      if(w.hp<=0){ world.remove(w.g); wraiths.splice(j,1); toast(`${w.def?w.def.name:'霜影'}被打倒了`); } } }
+  if(boss&&!boss.dead){ const dx=boss.g.position.x-player.pos.x, dz=boss.g.position.z-player.pos.z, d=Math.hypot(dx,dz);
+    if(d<reach+boss.def.size*0.8){ boss.hp-=dmg; boss.hit=0.2; boss.aggro=true; n++; if(boss.hp<=0) defeatBoss(); } }
+  $('cross').classList.add('swing'); setTimeout(()=>$('cross').classList.remove('swing'),120);
+  if(!melee&&!n) toast('沒子彈了，只能用槍托敲。回熱區補彈藥');
+}
+
+/* ---------- 料理 ---------- */
+const FOOD=()=>DATA.food;
+let foodBuffs=[], runElapsed=0;
+const foodStock=()=>(save.food=save.food||{});
+const foodCount=()=>Object.values(foodStock()).reduce((a,b)=>a+b,0);
+function eatFood(){
+  if(state!=='play') return;
+  const r=FOOD().recipes.find(r=>foodStock()[r.id]>0);
+  if(!r){ toast('身上沒有料理。有廚房車廂的話，可以在工坊做料理'); return; }
+  if(foodBuffs.some(b=>b.id===r.id)){ toast(`${r.name}的效果還在`); return; }
+  foodStock()[r.id]--;
+  const map={walkSpeedMult:'walkSpeed',sprintSpeedMult:'sprintSpeed',catchSpeedMult:'catchSpeed'}, applied=[];
+  for(const [k,v] of Object.entries(r.effects)){ const key=map[k]||k; const before=STATS[key]??1; STATS[key]=before*v; applied.push([key,before]); }
+  foodBuffs.push({id:r.id,name:r.name,until:runElapsed+r.seconds*(STATS.foodDurationMult||1),applied});
+  toast(`吃了${r.name}：${r.desc}`);
+}
+function updateFood(dt){
+  runElapsed+=dt;
+  for(let i=foodBuffs.length-1;i>=0;i--){ const b=foodBuffs[i]; if(runElapsed<b.until) continue;
+    for(const [k,v] of b.applied) STATS[k]=v; foodBuffs.splice(i,1); toast(`${b.name}的效果消失了`); }
+  const el=$('buffTag'); el.hidden=!foodBuffs.length&&!foodCount();
+  el.textContent=(foodBuffs.length?foodBuffs.map(b=>`${b.name} ${Math.ceil(b.until-runElapsed)}s`).join('・'):'')+(foodCount()?`${foodBuffs.length?'・':''}料理 ${foodCount()}（${isTouch?'吃':'Q'}）`:'');
+}
+function foodTabHtml(st){
+  if(!st.kitchen) return '<p class="zp-empty">要先在「車廂編組」加掛廚房車廂，才能做料理。</p>';
+  const F=FOOD(), carry=foodCount();
+  return `<div class="statline">身上的料理 ${carry}/${F.maxCarry}。遠征時按 ${isTouch?'「吃」':'Q'} 吃掉最上面那一種，效果是暫時的。</div>`+
+    F.recipes.map(r=>`<div class="shopcard"><div class="sc-main"><b>${esc(r.name)} <em class="num">×${foodStock()[r.id]||0}</em></b><span>${esc(r.desc)}・持續 ${Math.round(r.seconds*(st.foodDurationMult||1))} 秒</span></div>
+      <button type="button" class="zmini add" data-cook="${r.id}" ${affordable(r.cost)&&carry<F.maxCarry?'':'disabled'}>做：${esc(costText(r.cost))}</button></div>`).join('');
+}
+function wireFoodTab(){
+  screenEl.querySelectorAll('[data-cook]').forEach(el=>el.onclick=()=>{ const r=FOOD().recipes.find(x=>x.id===el.dataset.cook);
+    if(!affordable(r.cost)||foodCount()>=FOOD().maxCarry) return; pay(r.cost,-1); foodStock()[r.id]=(foodStock()[r.id]||0)+1; persist(); showWorkshop(`做好了${r.name}`); });
+}
+
+/* ---------- 場景種類 ---------- */
+const biomeOf=node=>DATA.biomes.find(b=>b.id===(node&&node.biome))||DATA.biomes[0];
+function applyBiome(node){
+  const b=biomeOf(node); SKY.set(b.sky); scene.fog.color.copy(SKY); scene.background=SKY.clone();
+  if(groundMesh) groundMesh.material.color.set(b.ground);
+  return b;
+}
+function biomeExtras(b,avoid){
+  const out=[], n={village:9,mining:8,port:10,spikes:22}[b.style]||0;
+  for(let i=0,t=0;i<n&&t<300;t++){
+    const a=R(0,Math.PI*2), r=R(22,120), x=Math.cos(a)*r, z=Math.sin(a)*r;
+    if(!farFromTrain(x,z,5)||avoid(x,z)||out.some(o=>Math.hypot(o.x-x,o.z-z)<12)) continue;
+    out.push({x,z}); i++;
+    const y=heightAt(x,z), col=(w,d)=>colliders.push({x0:x-w/2,x1:x+w/2,z0:z-d/2,z1:z+d/2});
+    if(b.style==='village'){
+      const w=R(5,7), d=R(5,8), h=R(2.6,3.4), wall=M(rng()<0.5?0x6b4a36:0x8a7a68), roof=M(0x3a2a24);
+      const body=box(w,h,d,wall); body.position.set(x,y+h/2-0.2,z); world.add(body);
+      const rf=new THREE.Mesh(new THREE.ConeGeometry(Math.max(w,d)*0.75,2,4),roof); rf.rotation.y=Math.PI/4; rf.position.set(x,y+h+0.8,z); rf.scale.set(w/Math.max(w,d),1,d/Math.max(w,d)); world.add(rf);
+      const snow=new THREE.Mesh(new THREE.ConeGeometry(Math.max(w,d)*0.77,0.5,4),M(0xf2f6fa)); snow.rotation.y=Math.PI/4; snow.position.set(x,y+h+1.65,z); snow.scale.copy(rf.scale); world.add(snow);
+      const win=new THREE.MeshBasicMaterial({color:rng()<0.4?0xffb064:0x2a3038}); const wn=box(0.9,0.8,0.05,win); wn.position.set(x,y+h*0.6,z+d/2+0.03); world.add(wn);
+      col(w,d); addCrate(x+w/2+1,z+R(-1,1));
+    } else if(b.style==='mining'){
+      if(rng()<0.35){ const tower=M(0x3a3028); for(const [sx,sz] of [[-1,-1],[1,-1],[-1,1],[1,1]]){ const p=box(0.3,9,0.3,tower); p.position.set(x+sx*1.6,y+4.5,z+sz*1.6); world.add(p); }
+        const wh=new THREE.Mesh(new THREE.TorusGeometry(1.2,0.12,6,16),tower); wh.position.set(x,y+9.2,z); world.add(wh); col(3.6,3.6); }
+      else { const pile=new THREE.Mesh(new THREE.ConeGeometry(R(2,3.5),R(1.5,3),7),M(0x2a2a2e)); pile.position.set(x,y+1,z); world.add(pile); col(4,4);
+        const cart=box(1.4,0.8,2,M(0x5a4a3a)); cart.position.set(x+3.5,y+0.6,z); world.add(cart); colliders.push({x0:x+2.8,x1:x+4.2,z0:z-1,z1:z+1});
+        const coal=box(1.2,0.3,1.8,M(0x15161a)); coal.position.set(x+3.5,y+1.1,z); world.add(coal); addCrate(x+R(-3,3),z+3); }
+    } else if(b.style==='port'){
+      const cols=[0x8a3a2a,0x2a5a7a,0x6a7a3a,0x9a7a2a];
+      for(let k=0;k<RI(1,3);k++){ const c=box(2.5,2.6,6,M(cols[Math.floor(rng()*4)])); c.position.set(x,y+1.3+k*2.6,z); world.add(c); }
+      col(2.6,6.1); if(rng()<0.6) addCrate(x+2.2,z+R(-2,2));
+    } else if(b.style==='spikes'){
+      const ice=new THREE.MeshPhongMaterial({color:0xbfe8ff,transparent:true,opacity:0.8,shininess:90,emissive:0x1d4a66});
+      for(let k=0;k<RI(2,5);k++){ const h=R(2,8), sp=new THREE.Mesh(new THREE.ConeGeometry(R(0.4,1.2),h,6),ice); sp.position.set(x+R(-2,2),y+h/2-0.3,z+R(-2,2)); sp.rotation.z=R(-0.25,0.25); world.add(sp); }
+      col(3,3);
+    }
+  }
+}
+
+/* ---------- 地下碉堡 ---------- */
+let vault=null;
+function placeVault(node,avoid){
+  vault=null;
+  if(!node.vault||rng()>node.vault) return;
+  let vx=null,vz=null;
+  for(let t=0;t<200;t++){ const a=R(0,Math.PI*2), r=R(50,105), x=Math.cos(a)*r, z=Math.sin(a)*r;
+    if(farFromTrain(x,z,14)&&!avoid(x,z)&&!(boss&&Math.hypot(boss.lair.x-x,boss.lair.z-z)<30)){ vx=x; vz=z; break; } }
+  if(vx==null) return;
+  const W=14, D=22, H=3.2, y=heightAt(vx,vz), con=M(0x55595e), dark=M(0x2a2c30);
+  const wall=(cx,cz,w,d)=>{ const m=box(w,H,d,con); m.position.set(cx,y+H/2-0.2,cz); world.add(m); colliders.push({x0:cx-w/2,x1:cx+w/2,z0:cz-d/2,z1:cz+d/2}); };
+  // 外牆（南側留門）
+  wall(vx,vz-D/2,W,0.5); wall(vx-W/2,vz,0.5,D); wall(vx+W/2,vz,0.5,D);
+  wall(vx-W/4-1,vz+D/2,W/2-2,0.5); wall(vx+W/4+1,vz+D/2,W/2-2,0.5);
+  // 內牆
+  wall(vx-W/4-1.5,vz+2,W/2-3,0.4); wall(vx+W/4+1.5,vz-4,W/2-3,0.4);
+  const roof=box(W+0.6,0.4,D+0.6,dark); roof.position.set(vx,y+H,vz); world.add(roof);
+  const sign=box(3,0.8,0.1,new THREE.MeshBasicMaterial({color:0xff9a3c})); sign.position.set(vx,y+H+0.7,vz+D/2+0.1); world.add(sign);
+  const lamp=new THREE.PointLight(0xff6a3a,1.2,16,1.5); lamp.position.set(vx,y+H-0.6,vz-4); world.add(lamp);
+  const lamp2=new THREE.PointLight(0xff6a3a,0.8,12,1.5); lamp2.position.set(vx,y+H-0.6,vz+6); world.add(lamp2);
+  for(const [dx,dz] of [[-4,-8],[4,-8],[-4,6],[4,0],[0,-2]]){ addCrate(vx+dx,vz+dz); const it=interactables[interactables.length-1]; it.amount*=2; }
+  // 寶箱
+  const cg=new THREE.Group(); cg.position.set(vx,y,vz-9);
+  const chest=box(1.4,0.9,0.9,M(0x3a4a5a)); chest.position.y=0.45; cg.add(chest);
+  const trim=box(1.46,0.12,0.96,M(0xe9c46a)); trim.position.y=0.8; cg.add(trim);
+  const mk=addMarker(cg,new THREE.MeshBasicMaterial({color:0xe9c46a}),1.6); world.add(cg);
+  interactables.push({type:'vault',pos:new THREE.Vector3(vx,y,vz-9),group:cg,marker:mk});
+  placeNote(vx+3,vz+8,true);
+  vault={x:vx,z:vz,W,D,woke:false};
+}
+const inVault=()=>vault&&Math.abs(player.pos.x-vault.x)<vault.W/2&&Math.abs(player.pos.z-vault.z)<vault.D/2;
+function updateVault(){
+  if(!vault||vault.woke) return;
+  if(Math.hypot(player.pos.x-vault.x,player.pos.z-vault.z)<20){
+    vault.woke=true; toast('碉堡裡有東西在動……');
+    const keep=player.pos.clone();
+    for(const [type,dx,dz] of [['revenant',-3,-6],['revenant',3,-6],['revenant',0,4],['soldier',0,-8]]){
+      const x=vault.x+dx, z=vault.z+dz; player.pos.set(x+60,0,z); const k=wraiths.length; spawnWraith(type,true);
+      if(wraiths.length>k){ const w=wraiths[wraiths.length-1]; w.g.position.set(x,heightAt(x,z),z); }
+    }
+    player.pos.copy(keep);
+  }
+}
+function openVaultChest(it){
+  it.done=true; world.remove(it.group);
+  const reward={research:15,scrap:12,coins:120}; pay(reward,1);
+  // 隨機送一個這把武器還沒有的改裝零件
+  const cand=DATA.weaponmods.filter(m=>m.for.includes(weapon.id)&&!((save.gear.mods||{})[weapon.id]||[]).includes(m.id));
+  let extra='';
+  if(cand.length&&(((save.gear.mods||{})[weapon.id]||[]).length<2)){ const m=cand[Math.floor(Math.random()*cand.length)]; save.gear.mods=save.gear.mods||{}; (save.gear.mods[weapon.id]=save.gear.mods[weapon.id]||[]).push(m.id); extra=`，還有一個${m.name}（已裝到${weapon.name}上）`; }
+  toast(`打開碉堡寶箱：${costText(reward)}${extra}`);
+}
+
+/* ---------- 日誌 ---------- */
+const loreRead=()=>(save.lore=save.lore||{});
+const paperMat=new THREE.MeshBasicMaterial({color:0xf4ecd8});
+function placeNote(x,z,rare){
+  const pool=DATA.lore.filter(l=>!loreRead()[l.id]&&!!l.rare===!!rare&&!interactables.some(i=>i.type==='note'&&i.lore.id===l.id));
+  const l=pool.length?pool[Math.floor(rng()*pool.length)]:null; if(!l) return;
+  const y=heightAt(x,z), g=new THREE.Group(); g.position.set(x,y,z);
+  const post=box(0.1,1,0.1,M(0x4a3a30)); post.position.y=0.5; g.add(post);
+  const p=box(0.5,0.35,0.04,paperMat); p.position.set(0,1.05,0.06); p.rotation.x=-0.3; g.add(p);
+  const mk=addMarker(g,paperMat,1.6); world.add(g);
+  interactables.push({type:'note',lore:l,pos:new THREE.Vector3(x,y,z),group:g,marker:mk});
+}
+function placeNotes(avoid){
+  const n=RI(1,2);
+  for(let i=0,t=0;i<n&&t<100;t++){ const a=R(0,Math.PI*2), r=R(20,90), x=Math.cos(a)*r, z=Math.sin(a)*r; if(farFromTrain(x,z,3)&&!avoid(x,z)){ placeNote(x,z,false); i++; } }
+}
+function readNote(it){
+  it.done=true; world.remove(it.group); loreRead()[it.lore.id]=Date.now();
+  toast(`撿到日誌「${it.lore.title}」：${it.lore.text}`); toastT=7;
+}
+function loreHtml(){
+  const L=DATA.lore, got=L.filter(l=>loreRead()[l.id]);
+  return `<details class="credits lore"><summary>冰原日誌 ${got.length}/${L.length}</summary>${got.length?got.sort((a,b)=>L.indexOf(a)-L.indexOf(b)).map(l=>`<p><b>${esc(l.title)}</b>　${esc(l.text)}</p>`).join(''):'<p>在遠征的站點和碉堡裡可以撿到日誌，慢慢拼出這個世界為什麼結冰。</p>'}</details>`;
+}
+
+/* =========================================================
    觸控操作設定：搖桿與按鈕可以調整大小、拖曳位置
    設定只存在這台裝置（localStorage）
    ========================================================= */
-const CTRL_IDS={stick:'搖桿',btnFire:'開火',btnAct:'互動',btnRun:'奔跑'};
-const CTRL_BASE={stick:120,btnFire:78,btnAct:66,btnRun:56};
+const CTRL_IDS={stick:'搖桿',btnFire:'開火',btnAct:'互動',btnRun:'奔跑',btnEat:'吃'};
+const CTRL_BASE={stick:120,btnFire:78,btnAct:66,btnRun:56,btnEat:50};
 let ctrlCfg={size:{},pos:{}};
 try{ const t=localStorage.getItem('utopia-controls'); if(t) ctrlCfg=Object.assign({size:{},pos:{}},JSON.parse(t)); }catch(e){}
 function saveCtrl(){ try{ localStorage.setItem('utopia-controls',JSON.stringify(ctrlCfg)); }catch(e){} }
@@ -2969,7 +3234,7 @@ function update(dt){
     ammoTick+=dt; if(ammoTick>weapon.refillSeconds&&ammo<weapon.ammo){ ammo++; ammoTick=0; }
     if(curNode&&curNode.type==='stall'&&haul.fuel+bag.fuel>=(curNode.need||0)&&!curNode.told){ curNode.told=true; toast(`煤炭夠了，可以繼續前往${curNode.destName}`); }
   } else {
-    const warm=warmZones.some(w=>Math.hypot(player.pos.x-w.x,player.pos.z-w.z)<w.r)?(curStation.warmDrainMult||1):1;
+    const warm=warmZones.some(w=>Math.hypot(player.pos.x-w.x,player.pos.z-w.z)<w.r)?(curStation.warmDrainMult||1):inVault()?0.6:1;
     player.temp-=warm*(CFG().drainMult||1)*(timeLeft<=0?T.stormDrainPerSec:T.drainPerSec+(sprint&&moving?T.sprintExtraDrain:0)+followers.length*T.perFollowerDrain)*dt;
   }
   followers.forEach((f,i)=>{
@@ -2989,23 +3254,25 @@ function update(dt){
     if(w.raid){ raidStep(w,dt); continue; }
     const g=w.g; w.phase+=dt;
     const dx=player.pos.x-g.position.x, dz=player.pos.z-g.position.z, d=Math.max(0.01,Math.hypot(dx,dz));
-    if(d<W.chaseRange&&!inHeat){ const s=(timeLeft<=0?W.stormSpeed:W.speed)*(w.spd||1)*dt; g.position.x+=dx/d*s; g.position.z+=dz/d*s; }
+    const holding=w.def&&w.def.ranged&&!inHeat&&enemyRanged(w,d,dx,dz,dt,inHeat);
+    if(holding){}
+    else if(d<W.chaseRange&&!inHeat){ const s=(timeLeft<=0?W.stormSpeed:W.speed)*(w.spd||1)*dt; g.position.x+=dx/d*s; g.position.z+=dz/d*s; }
     else { g.position.x+=Math.sin(w.phase*0.5)*dt; g.position.z+=Math.cos(w.phase*0.4)*dt; }
     if(distToTrain(g.position.x,g.position.z)<C.heatRadius+1){ g.position.x-=dx/d*dt*4; g.position.z-=dz/d*dt*4; }
-    g.rotation.y=Math.atan2(dx,dz); g.position.y=heightAt(g.position.x,g.position.z)+Math.sin(w.phase*2)*0.25;
+    g.rotation.y=Math.atan2(dx,dz); g.position.y=heightAt(g.position.x,g.position.z)+(w.def&&w.def.look!=='wraith'?0:Math.sin(w.phase*2)*0.25);
     if(w.hit>0){ w.hit-=dt; w.mat.emissive.setHex(0x553311); } else w.mat.emissive.setHex(0x0a1a2a);
-    if(d<1.5&&!inHeat){ player.temp-=W.touchDrainPerSec*(CFG().wraithTouchMult||1)*dt; hurtT=0.3; player.pos.x+=dx/d*dt*3; player.pos.z+=dz/d*dt*3; }
+    if(d<1.5&&!inHeat){ player.temp-=W.touchDrainPerSec*(w.def?w.def.touchMult:1)*(CFG().wraithTouchMult||1)*dt; hurtT=0.3; player.pos.x+=dx/d*dt*3; player.pos.z+=dz/d*dt*3; }
   }
-  updateBoss(dt,inHeat,timeLeft<=0);
+  updateBoss(dt,inHeat,timeLeft<=0); updateEnemyShots(dt); updateFood(dt); updateVault();
   if(hurtT>0) hurtT-=dt; $('hurt').style.opacity=hurtT>0?1:0;
   for(let i=flares.length-1;i>=0;i--){
     const f=flares[i]; f.life-=dt; f.v.y-=(f.grav??6)*dt; f.m.position.addScaledVector(f.v,dt);
     let hit=bossHitTest(f);
     if(!hit) for(let j=wraiths.length-1;j>=0;j--){
       const w=wraiths[j];
-      if(f.m.position.distanceTo(tmpV.copy(w.g.position).setY(w.g.position.y+1.3))<weapon.range){
+      if(f.m.position.distanceTo(tmpV.copy(w.g.position).setY(w.g.position.y+enemyHitY(w)))<(weapon.range||1.5)){
         hit=true; w.hp-=f.dmg||1; w.hit=0.25;
-        if(w.hp<=0){ world.remove(w.g); wraiths.splice(j,1); toast('霜影被驅散了'); }
+        if(w.hp<=0){ world.remove(w.g); wraiths.splice(j,1); toast(`${w.def?w.def.name:'霜影'}被打倒了`); }
         break;
       }
     }

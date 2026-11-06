@@ -1,0 +1,72 @@
+{
+ "_comment": "料理要在有廚房車廂時才能做；遠征中按 Q 或「吃」按鈕吃掉，效果持續 seconds 秒",
+ "recipes": [
+  {
+   "id": "hot_soup",
+   "name": "熱湯",
+   "desc": "體溫流失 -30%",
+   "cost": {
+    "feed": 3
+   },
+   "seconds": 70,
+   "effects": {
+    "drainMult": 0.7
+   }
+  },
+  {
+   "id": "skewer",
+   "name": "烤肉串",
+   "desc": "走路和奔跑速度 +20%",
+   "cost": {
+    "feed": 4,
+    "coins": 10
+   },
+   "seconds": 60,
+   "effects": {
+    "walkSpeedMult": 1.2,
+    "sprintSpeedMult": 1.2
+   }
+  },
+  {
+   "id": "ginger_tea",
+   "name": "薑茶",
+   "desc": "熱區回溫快 60%",
+   "cost": {
+    "feed": 2,
+    "coins": 8
+   },
+   "seconds": 90,
+   "effects": {
+    "heatRegenMult": 1.6
+   }
+  },
+  {
+   "id": "energy_bar",
+   "name": "能量棒",
+   "desc": "採集與融冰快 50%",
+   "cost": {
+    "feed": 3,
+    "scrap": 1
+   },
+   "seconds": 60,
+   "effects": {
+    "catchSpeedMult": 1.5,
+    "thawMult": 1.5
+   }
+  },
+  {
+   "id": "stew",
+   "name": "燉菜",
+   "desc": "霜影傷害 -40%",
+   "cost": {
+    "feed": 5,
+    "coins": 15
+   },
+   "seconds": 75,
+   "effects": {
+    "wraithTouchMult": 0.6
+   }
+  }
+ ],
+ "maxCarry": 3
+}

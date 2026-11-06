@@ -290,3 +290,12 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
 .evopts{display:flex;flex-direction:column;gap:8px;margin-top:10px}
 .evopts .btn{display:flex;justify-content:space-between;align-items:center;gap:10px;text-align:left}
 .evopts .btn small{font-size:12px;opacity:.75}
+
+/* 戰鬥與探索 */
+#btnEat{right:calc(max(24px,env(safe-area-inset-right,0px)) + 100px);bottom:calc(env(safe-area-inset-bottom,0px) + 104px);width:50px;height:50px;font-size:13px}
+#touch.walk #btnEat{display:none}
+#touch.edit #btnEat{display:grid}
+#buffTag{font-size:11px;color:#9fe8a8;margin-top:2px;max-width:220px}
+#cross.swing{width:22px;height:22px;margin:-11px 0 0 -11px;background:transparent;border:2px solid var(--ember)}
+.modrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.lore p{line-height:1.7}

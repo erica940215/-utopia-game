@@ -27,7 +27,8 @@
    "utopia",
    "greenhouse_ruins",
    "bird_reserve"
-  ]
+  ],
+  "biome": "forest"
  },
  {
   "id": "old_town",
@@ -45,7 +46,9 @@
    "utopia",
    "settlement",
    "savanna"
-  ]
+  ],
+  "biome": "village",
+  "vault": 0.5
  },
  {
   "id": "frozen_lake",
@@ -63,7 +66,8 @@
    "utopia",
    "settlement",
    "south_port"
-  ]
+  ],
+  "biome": "tundra"
  },
  {
   "id": "greenhouse_ruins",
@@ -79,7 +83,8 @@
   "links": [
    "north_forest",
    "rainforest_domes"
-  ]
+  ],
+  "biome": "tundra"
  },
  {
   "id": "bird_reserve",
@@ -95,7 +100,9 @@
    "north_forest",
    "rainforest_domes",
    "settlement"
-  ]
+  ],
+  "biome": "forest",
+  "vault": 0.4
  },
  {
   "id": "settlement",
@@ -127,7 +134,9 @@
    "settlement",
    "south_port",
    "deep_lake"
-  ]
+  ],
+  "biome": "savanna",
+  "vault": 0.6
  },
  {
   "id": "rainforest_domes",
@@ -146,7 +155,8 @@
    "greenhouse_ruins",
    "bird_reserve",
    "polar_core"
-  ]
+  ],
+  "biome": "tundra"
  },
  {
   "id": "south_port",
@@ -164,7 +174,9 @@
    "frozen_lake",
    "savanna",
    "polar_core"
-  ]
+  ],
+  "biome": "port",
+  "vault": 0.7
  },
  {
   "id": "deep_lake",
@@ -180,7 +192,9 @@
   "links": [
    "savanna",
    "polar_core"
-  ]
+  ],
+  "biome": "mining",
+  "vault": 0.6
  },
  {
   "id": "polar_core",
@@ -194,6 +208,8 @@
    "rainforest_domes",
    "south_port",
    "deep_lake"
-  ]
+  ],
+  "biome": "polar",
+  "vault": 1
  }
 ]

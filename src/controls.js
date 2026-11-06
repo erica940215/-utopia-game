@@ -2,8 +2,8 @@
    觸控操作設定：搖桿與按鈕可以調整大小、拖曳位置
    設定只存在這台裝置（localStorage）
    ========================================================= */
-const CTRL_IDS={stick:'搖桿',btnFire:'開火',btnAct:'互動',btnRun:'奔跑'};
-const CTRL_BASE={stick:120,btnFire:78,btnAct:66,btnRun:56};
+const CTRL_IDS={stick:'搖桿',btnFire:'開火',btnAct:'互動',btnRun:'奔跑',btnEat:'吃'};
+const CTRL_BASE={stick:120,btnFire:78,btnAct:66,btnRun:56,btnEat:50};
 let ctrlCfg={size:{},pos:{}};
 try{ const t=localStorage.getItem('utopia-controls'); if(t) ctrlCfg=Object.assign({size:{},pos:{}},JSON.parse(t)); }catch(e){}
 function saveCtrl(){ try{ localStorage.setItem('utopia-controls',JSON.stringify(ctrlCfg)); }catch(e){} }

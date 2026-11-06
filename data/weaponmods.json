@@ -1,0 +1,131 @@
+[
+ {
+  "id": "scope",
+  "name": "瞄準鏡",
+  "desc": "散射 -60%、彈速 +30%",
+  "cost": {
+   "scrap": 12,
+   "coins": 60
+  },
+  "mult": {
+   "spread": 0.4,
+   "projectileSpeed": 1.3
+  },
+  "for": [
+   "flare_gun",
+   "shotgun",
+   "rifle",
+   "machine_gun"
+  ]
+ },
+ {
+  "id": "ext_mag",
+  "name": "擴充彈匣",
+  "desc": "彈藥 +50%",
+  "cost": {
+   "scrap": 15,
+   "coins": 70
+  },
+  "mult": {
+   "ammo": 1.5
+  },
+  "for": [
+   "flare_gun",
+   "shotgun",
+   "rifle",
+   "machine_gun",
+   "flamethrower"
+  ]
+ },
+ {
+  "id": "heavy_barrel",
+  "name": "重槍管",
+  "desc": "傷害 +35%、射速 -15%",
+  "cost": {
+   "scrap": 20,
+   "coins": 90,
+   "research": 10
+  },
+  "mult": {
+   "damage": 1.35,
+   "cooldown": 1.15
+  },
+  "for": [
+   "flare_gun",
+   "shotgun",
+   "rifle",
+   "machine_gun"
+  ]
+ },
+ {
+  "id": "fast_loader",
+  "name": "快速裝填",
+  "desc": "在熱區補彈快 40%",
+  "cost": {
+   "scrap": 10,
+   "coins": 50
+  },
+  "mult": {
+   "refillSeconds": 0.6
+  },
+  "for": [
+   "flare_gun",
+   "shotgun",
+   "rifle",
+   "machine_gun",
+   "flamethrower"
+  ]
+ },
+ {
+  "id": "choke",
+  "name": "收束器",
+  "desc": "獵槍散射 -45%、多 2 顆彈丸",
+  "cost": {
+   "scrap": 14,
+   "coins": 60
+  },
+  "mult": {
+   "spread": 0.55
+  },
+  "add": {
+   "pellets": 2
+  },
+  "for": [
+   "shotgun"
+  ]
+ },
+ {
+  "id": "nozzle",
+  "name": "加壓噴嘴",
+  "desc": "火焰射程 +60%",
+  "cost": {
+   "scrap": 18,
+   "coins": 80,
+   "research": 10
+  },
+  "mult": {
+   "life": 1.6
+  },
+  "for": [
+   "flamethrower"
+  ]
+ },
+ {
+  "id": "serrated",
+  "name": "鋸齒刃",
+  "desc": "近戰傷害 +50%、攻擊範圍 +0.6 m",
+  "cost": {
+   "scrap": 10,
+   "coins": 40
+  },
+  "mult": {
+   "damage": 1.5
+  },
+  "add": {
+   "reach": 0.6
+  },
+  "for": [
+   "ice_axe"
+  ]
+ }
+]

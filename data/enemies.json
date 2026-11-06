@@ -1,0 +1,96 @@
+[
+ {
+  "id": "wraith",
+  "name": "霜影",
+  "desc": "飄在雪裡的影子，碰到會讓體溫驟降",
+  "look": "wraith",
+  "color": "#101722",
+  "eye": "#7fe8ff",
+  "hp": 2,
+  "speedMult": 1,
+  "touchMult": 1,
+  "group": 1,
+  "weights": {
+   "1": 10,
+   "2": 8,
+   "3": 6,
+   "4": 5
+  }
+ },
+ {
+  "id": "revenant",
+  "name": "霜屍",
+  "desc": "成群出現的近戰怪物，走得慢但數量多",
+  "look": "revenant",
+  "color": "#3a3530",
+  "eye": "#ffb070",
+  "hp": 1,
+  "speedMult": 0.75,
+  "touchMult": 0.8,
+  "group": 3,
+  "weights": {
+   "1": 4,
+   "2": 6,
+   "3": 6,
+   "4": 6
+  }
+ },
+ {
+  "id": "hound",
+  "name": "冰獵犬",
+  "desc": "跑得很快的四足霜影，咬一下不痛但很難甩掉",
+  "look": "hound",
+  "color": "#1c2a36",
+  "eye": "#9fe8ff",
+  "hp": 1,
+  "speedMult": 1.8,
+  "touchMult": 0.6,
+  "group": 2,
+  "weights": {
+   "1": 2,
+   "2": 4,
+   "3": 5,
+   "4": 5
+  }
+ },
+ {
+  "id": "soldier",
+  "name": "腐化士兵",
+  "desc": "比較聰明，會保持距離朝你丟冰刺",
+  "look": "soldier",
+  "color": "#2e3a2e",
+  "eye": "#c8ff7a",
+  "hp": 3,
+  "speedMult": 0.9,
+  "touchMult": 0.8,
+  "group": 1,
+  "weights": {
+   "2": 3,
+   "3": 4,
+   "4": 5
+  },
+  "ranged": {
+   "keep": 13,
+   "range": 26,
+   "every": 2.6,
+   "speed": 26,
+   "drain": 9
+  }
+ },
+ {
+  "id": "brute",
+  "name": "冰甲巨漢",
+  "desc": "全身冰甲，非常耐打，撞到很痛",
+  "look": "brute",
+  "color": "#24303c",
+  "eye": "#ff8a8a",
+  "hp": 7,
+  "speedMult": 0.6,
+  "touchMult": 1.8,
+  "group": 1,
+  "weights": {
+   "3": 2,
+   "4": 3
+  }
+ }
+]

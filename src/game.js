@@ -9,7 +9,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
    ========================================================= */
 const DATA = {};
 async function loadData(){
-  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets','staff','achievements','research','challenges','bosses','cars','events'];
+  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets','staff','achievements','research','challenges','bosses','cars','events','enemies','weaponmods','food','biomes','lore'];
   const res = await Promise.all(names.map(n => fetch(`data/${n}.json`).then(r => { if(!r.ok) throw new Error(n); return r.json(); })));
   names.forEach((n,i) => DATA[n] = res[i]);
   DATA.speciesById = Object.fromEntries(DATA.species.map(s => [s.id, s]));
@@ -298,7 +298,8 @@ function buildStation(node, seed){
   curNode=node; curStation=st; warmZones=[]; lakeInfo=null;
   if(world) scene.remove(world);
   world=new THREE.Group(); scene.add(world);
-  colliders.length=1; interactables=[]; wraiths=[]; flares=[]; followers=[]; boss=null; bossPending=null;
+  colliders.length=1; interactables=[]; wraiths=[]; flares=[]; followers=[]; boss=null; bossPending=null; eShots=[]; vault=null;
+  const biome=applyBiome(node);
   rng=mulberry32(seed);
   const wallMat=M(0x5b6068), woodMat=M(0x4a3a30), snowCap=M(0xf2f6fa);
   const avoid=(x,z)=>(lakeInfo&&Math.hypot(x-lakeInfo.x,z-lakeInfo.z)<lakeInfo.r+3)||warmZones.some(w=>Math.hypot(x-w.x,z-w.z)<w.r+2);
@@ -343,7 +344,8 @@ function buildStation(node, seed){
   }
   for(let i=0;i<st.looseCrates;i++){ const a=R(0,Math.PI*2), r=R(18,110), x=Math.cos(a)*r, z=Math.sin(a)*r; if(farFromTrain(x,z,2)&&!avoid(x,z)) addCrate(x,z); }
   const trunk=M(0x2b2420), pine=M(0x23362f);
-  for(let i=0;i<st.trees;i++){
+  biomeExtras(biome,avoid);
+  for(let i=0;i<Math.round(st.trees*biome.treesMult);i++){
     const a=R(0,Math.PI*2), r=R(15,190), x=Math.cos(a)*r, z=Math.sin(a)*r;
     if(!farFromTrain(x,z,1)||avoid(x,z)) continue;
     const y=heightAt(x,z);
@@ -382,7 +384,7 @@ function buildStation(node, seed){
     else { const a=R(0,6.28), r=R(20,110); x=Math.cos(a)*r; z=Math.sin(a)*r; }
     placeCatch(sp,C,x,z);
   }
-  placeBoss(node);
+  placeBoss(node); placeVault(node,avoid); if(node.type!=='settlement') placeNotes(avoid);
 }
 function placeCatch(sp,C,x,z){
   const y=heightAt(x,z), g=new THREE.Group(); g.position.set(x,y,z);
@@ -415,17 +417,16 @@ function addCrate(x,z){
 /* 霜影 */
 const wraithBody=new THREE.MeshLambertMaterial({color:0x101722,transparent:true,opacity:0.82,emissive:0x0a1a2a});
 const wraithEye=new THREE.MeshBasicMaterial({color:0x7fe8ff});
-function spawnWraith(){
+function spawnWraith(forceType,single){
   const a=Math.random()*Math.PI*2, r=38+Math.random()*20, x=player.pos.x+Math.cos(a)*r, z=player.pos.z+Math.sin(a)*r;
   if(distToTrain(x,z)<CFG().heatRadius+8) return;
-  const g=new THREE.Group();
-  const mat=wraithBody.clone();
-  const b=sph(0.6,mat); b.scale.y=1.3; b.position.y=1.5; g.add(b);
-  const tail=new THREE.Mesh(new THREE.ConeGeometry(0.55,1.4,10),mat); tail.rotation.x=Math.PI; tail.position.y=0.6; g.add(tail);
-  for(const s of [-1,1]){ const e=sph(0.08,wraithEye); e.position.set(s*0.2,1.7,0.48); g.add(e); }
-  g.position.set(x,heightAt(x,z),z); world.add(g);
+  const def=forceType?enemyById(forceType):pickEnemyType(), n=single?1:def.group;
   const wm=(curNode&&DATA.config.tiers[curNode.tier])?DATA.config.tiers[curNode.tier].wraithMult:1;
-  wraiths.push({g,mat,hp:Math.ceil(DATA.config.wraith.hp*wm),spd:Math.sqrt(wm),hit:0,phase:Math.random()*6});
+  for(let k=0;k<n;k++){
+    const {g,mat}=makeEnemyMesh(def), px=x+(k?R(-3,3):0), pz=z+(k?R(-3,3):0);
+    g.position.set(px,heightAt(px,pz),pz); world.add(g);
+    wraiths.push({g,mat,def,hp:Math.ceil(def.hp*wm),spd:Math.sqrt(wm)*def.speedMult,hit:0,phase:Math.random()*6});
+  }
 }
 
 /* =========================================================
@@ -444,7 +445,7 @@ function startExpedition(node){
   buildStation(node,(Date.now()^((save.runs+1)*7919))>>>0);
   bag=zeroItems(); haul=zeroItems(); rescued=[]; container=[];
   ensureProgress(); STATS=computeStats();
-  weapon=DATA.equipById[save.gear.equipped.weapon]||DATA.equipById.flare_gun; ammo=weapon.ammo; fireCd=0; fireHeld=false;
+  weapon=effWeapon(save.gear.equipped.weapon||'flare_gun'); ammo=weapon.ammo; foodBuffs=[]; runElapsed=0; fireCd=0; fireHeld=false;
   STATS.heatRadius+=runMods.heatDelta||0; rebuildTrainCars(); initTrainDefense();
   timeLeft=CFG().runSeconds+(runMods.timeDelta||0); collapses=0; nextSpawn=DATA.config.wraith.firstSpawnAt; sprint=false;
   player.pos.set(4.5,0,8); player.yaw=-Math.PI/2; player.pitch=0; player.temp=TMP().max;
@@ -463,7 +464,7 @@ async function goLandscape(){
 /* 輸入 */
 const keys={}; let actHeld=false, actPressed=false, locked=false, noLock=false;
 const joy={x:0,y:0,id:null};
-addEventListener('keydown',e=>{ keys[e.code]=true; if(e.code==='KeyE'){ if(!actHeld) actPressed=true; actHeld=true; } if(e.code.startsWith('Shift')) sprint=true; });
+addEventListener('keydown',e=>{ keys[e.code]=true; if(e.code==='KeyE'){ if(!actHeld) actPressed=true; actHeld=true; } if(e.code==='KeyQ'&&!e.repeat) eatFood(); if(e.code.startsWith('Shift')) sprint=true; });
 addEventListener('keyup',e=>{ keys[e.code]=false; if(e.code==='KeyE') actHeld=false; if(e.code.startsWith('Shift')) sprint=false; });
 const canvas=$('c');
 function tryLock(){ if(noLock||!canvas.requestPointerLock){ noLock=true; return; } try{ const p=canvas.requestPointerLock(); if(p&&p.catch) p.catch(()=>{noLock=true;}); }catch(e){ noLock=true; } }
@@ -486,13 +487,14 @@ btnAct.addEventListener('pointerdown',e=>{ e.preventDefault(); if(state==='ctrle
 ['pointerup','pointercancel','pointerleave'].forEach(ev=>btnAct.addEventListener(ev,()=>{ actHeld=false; }));
 btnFire.addEventListener('pointerdown',e=>{ e.preventDefault(); if(state==='ctrledit') return; fireHeld=true; fire(); });
 ['pointerup','pointercancel','pointerleave'].forEach(ev=>btnFire.addEventListener(ev,()=>{ fireHeld=false; }));
+$('btnEat').addEventListener('pointerdown',e=>{ e.preventDefault(); if(state==='ctrledit') return; eatFood(); });
 btnRun.addEventListener('pointerdown',e=>{ e.preventDefault(); if(state==='ctrledit') return; sprint=!sprint; btnRun.classList.toggle('on',sprint); });
 
 const flareMat=new THREE.MeshBasicMaterial({color:0xffb064});
 let fireCd=0, fireHeld=false;
 function fire(){
   if(state!=='play'||fireCd>0) return;
-  if(ammo<=0){ if(!weapon.auto||Math.random()<0.05) toast(`${weapon.name}沒彈藥了，回火車補充`); return; }
+  if(weapon.melee||ammo<=0){ meleeAttack(); return; }
   ammo--; fireCd=weapon.cooldown||0.2;
   const base=new THREE.Vector3(0,0,-1).applyEuler(camera.rotation), n=weapon.pellets||1, sp=weapon.spread||0, flame=!!weapon.auto;
   for(let k=0;k<n;k++){
@@ -500,7 +502,7 @@ function fire(){
     const m=sph(flame?0.18:0.13,flareMat);
     const glow=new THREE.Sprite(new THREE.SpriteMaterial({map:DOT,color:flame?0xff6a1a:0xff9a3c,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending})); glow.scale.set(flame?2.2:1.6,flame?2.2:1.6,1); m.add(glow);
     m.position.copy(camera.position).addScaledVector(dir,0.6); world.add(m);
-    flares.push({m,v:dir.multiplyScalar(weapon.projectileSpeed),life:weapon.life||1.6,dmg:weapon.damage,grav:flame?0:6});
+    flares.push({m,v:dir.multiplyScalar(weapon.projectileSpeed),life:weapon.life||1.6,dmg:weapon.damage,grav:weapon.grav??(flame?0:6)});
   }
 }
 
@@ -524,7 +526,7 @@ function hud(inHeat){
   $('bFol').textContent=`${followers.length}/${CFG().followCapacity}`;
   $('bCon').textContent=`${container.length}/${CFG().containerCapacity}`;
   $('sRes').textContent=Object.values(haul).reduce((a,b)=>a+b,0); $('sAni').textContent=rescued.length;
-  $('ammo').textContent=`${weapon.name} ${ammo}`;
+  $('ammo').textContent=weapon.melee?weapon.name:`${weapon.name} ${ammo}`;
   const st=$('storm');
   if(timeLeft>0){ st.textContent='暴風雪 '+fmt(timeLeft); st.className='num'+(timeLeft<CFG().stormWarnSeconds?' warn':''); }
   else { st.textContent='暴風雪來了・快登車'; st.className='num warn'; }
@@ -556,6 +558,10 @@ function interact(dt){
       bag[it.item.id]+=take; it.amount-=take; toast(`取得 ${it.item.name} ×${take}`);
       if(it.amount<=0){ it.done=true; world.remove(it.group); }
     }
+  } else if(it.type==='vault'){
+    pt.textContent=`[${key}] 打開碉堡寶箱`; if(actPressed) openVaultChest(it);
+  } else if(it.type==='note'){
+    pt.textContent=`[${key}] 撿起日誌`; if(actPressed) readNote(it);
   } else if(it.type==='ammo'){
     pt.textContent=ammo>=weapon.ammo?'彈藥是滿的':`[${key}] 補充彈藥`;
     if(actPressed&&ammo<weapon.ammo){ ammo=weapon.ammo; it.done=true; world.remove(it.group); toast(`${weapon.name}彈藥補滿了`); }
@@ -567,7 +573,7 @@ function interact(dt){
     else{
       const known=save.collection[sp.id]?'':'・新物種';
       pt.textContent=`長按 [${key}] 融冰救援 ${sp.name}（${rar.name}${known}）`;
-      if(actHeld){ it.thaw+=dt/1.8; it.ice.scale.setScalar(Math.max(0.05,1-it.thaw*0.9)); }
+      if(actHeld){ it.thaw+=dt/1.8*(CFG().thawMult||1); it.ice.scale.setScalar(Math.max(0.05,1-it.thaw*0.9)); }
       else if(it.thaw>0){ it.thaw=Math.max(0,it.thaw-dt); it.ice.scale.setScalar(1-it.thaw*0.9); }
       pg.style.width=Math.min(100,it.thaw*100)+'%';
       if(it.thaw>=1){
@@ -680,6 +686,7 @@ function showDex(){
     <div class="soon">水生與昆蟲要等冰湖、溫室站點開放後才能取得（第三階段）。</div>
     <div class="keys">${isTouch?`<kbd>左側搖桿</kbd><span>移動</span><kbd>右半邊拖曳</kbd><span>轉視角</span><kbd>互動</kbd><span>搜刮・長按融冰・登車出發</span><kbd>信號槍</kbd><span>驅散霜影</span>`
       :`<kbd>WASD</kbd><span>移動</span><kbd>滑鼠</kbd><span>轉視角（點畫面鎖定游標）</span><kbd>Shift</kbd><span>奔跑（更耗體溫）</span><kbd>E</kbd><span>搜刮・長按融冰・登車出發</span><kbd>左鍵</kbd><span>信號槍</span>`}</div>
+    ${loreHtml()}
     <details class="credits"><summary>製作群與素材授權</summary>
       <p>動物模型：0 A.D. © <a href="https://www.wildfiregames.com/" target="_blank" rel="noopener">Wildfire Games</a>，以 <a href="https://creativecommons.org/licenses/by-sa/3.0/" target="_blank" rel="noopener">CC-BY-SA 3.0</a> 授權（模型經過格式轉換）。</p>
       <p>動物、魚、樹木與岩石：<a href="https://quaternius.com" target="_blank" rel="noopener">Quaternius</a>（CC0）。火車：<a href="https://kenney.nl" target="_blank" rel="noopener">Kenney</a>（CC0）。地形材質：<a href="https://ambientcg.com" target="_blank" rel="noopener">ambientCG</a>（CC0）。</p>
@@ -726,6 +733,7 @@ function wireAuth(){
 /*@@MODES@@*/
 /*@@BOSS@@*/
 /*@@TRAIN@@*/
+/*@@COMBAT@@*/
 /*@@CONTROLS@@*/
 /* =========================================================
    8. 主迴圈
@@ -778,7 +786,7 @@ function update(dt){
     ammoTick+=dt; if(ammoTick>weapon.refillSeconds&&ammo<weapon.ammo){ ammo++; ammoTick=0; }
     if(curNode&&curNode.type==='stall'&&haul.fuel+bag.fuel>=(curNode.need||0)&&!curNode.told){ curNode.told=true; toast(`煤炭夠了，可以繼續前往${curNode.destName}`); }
   } else {
-    const warm=warmZones.some(w=>Math.hypot(player.pos.x-w.x,player.pos.z-w.z)<w.r)?(curStation.warmDrainMult||1):1;
+    const warm=warmZones.some(w=>Math.hypot(player.pos.x-w.x,player.pos.z-w.z)<w.r)?(curStation.warmDrainMult||1):inVault()?0.6:1;
     player.temp-=warm*(CFG().drainMult||1)*(timeLeft<=0?T.stormDrainPerSec:T.drainPerSec+(sprint&&moving?T.sprintExtraDrain:0)+followers.length*T.perFollowerDrain)*dt;
   }
   followers.forEach((f,i)=>{
@@ -798,23 +806,25 @@ function update(dt){
     if(w.raid){ raidStep(w,dt); continue; }
     const g=w.g; w.phase+=dt;
     const dx=player.pos.x-g.position.x, dz=player.pos.z-g.position.z, d=Math.max(0.01,Math.hypot(dx,dz));
-    if(d<W.chaseRange&&!inHeat){ const s=(timeLeft<=0?W.stormSpeed:W.speed)*(w.spd||1)*dt; g.position.x+=dx/d*s; g.position.z+=dz/d*s; }
+    const holding=w.def&&w.def.ranged&&!inHeat&&enemyRanged(w,d,dx,dz,dt,inHeat);
+    if(holding){}
+    else if(d<W.chaseRange&&!inHeat){ const s=(timeLeft<=0?W.stormSpeed:W.speed)*(w.spd||1)*dt; g.position.x+=dx/d*s; g.position.z+=dz/d*s; }
     else { g.position.x+=Math.sin(w.phase*0.5)*dt; g.position.z+=Math.cos(w.phase*0.4)*dt; }
     if(distToTrain(g.position.x,g.position.z)<C.heatRadius+1){ g.position.x-=dx/d*dt*4; g.position.z-=dz/d*dt*4; }
-    g.rotation.y=Math.atan2(dx,dz); g.position.y=heightAt(g.position.x,g.position.z)+Math.sin(w.phase*2)*0.25;
+    g.rotation.y=Math.atan2(dx,dz); g.position.y=heightAt(g.position.x,g.position.z)+(w.def&&w.def.look!=='wraith'?0:Math.sin(w.phase*2)*0.25);
     if(w.hit>0){ w.hit-=dt; w.mat.emissive.setHex(0x553311); } else w.mat.emissive.setHex(0x0a1a2a);
-    if(d<1.5&&!inHeat){ player.temp-=W.touchDrainPerSec*(CFG().wraithTouchMult||1)*dt; hurtT=0.3; player.pos.x+=dx/d*dt*3; player.pos.z+=dz/d*dt*3; }
+    if(d<1.5&&!inHeat){ player.temp-=W.touchDrainPerSec*(w.def?w.def.touchMult:1)*(CFG().wraithTouchMult||1)*dt; hurtT=0.3; player.pos.x+=dx/d*dt*3; player.pos.z+=dz/d*dt*3; }
   }
-  updateBoss(dt,inHeat,timeLeft<=0);
+  updateBoss(dt,inHeat,timeLeft<=0); updateEnemyShots(dt); updateFood(dt); updateVault();
   if(hurtT>0) hurtT-=dt; $('hurt').style.opacity=hurtT>0?1:0;
   for(let i=flares.length-1;i>=0;i--){
     const f=flares[i]; f.life-=dt; f.v.y-=(f.grav??6)*dt; f.m.position.addScaledVector(f.v,dt);
     let hit=bossHitTest(f);
     if(!hit) for(let j=wraiths.length-1;j>=0;j--){
       const w=wraiths[j];
-      if(f.m.position.distanceTo(tmpV.copy(w.g.position).setY(w.g.position.y+1.3))<weapon.range){
+      if(f.m.position.distanceTo(tmpV.copy(w.g.position).setY(w.g.position.y+enemyHitY(w)))<(weapon.range||1.5)){
         hit=true; w.hp-=f.dmg||1; w.hit=0.25;
-        if(w.hp<=0){ world.remove(w.g); wraiths.splice(j,1); toast('霜影被驅散了'); }
+        if(w.hp<=0){ world.remove(w.g); wraiths.splice(j,1); toast(`${w.def?w.def.name:'霜影'}被打倒了`); }
         break;
       }
     }

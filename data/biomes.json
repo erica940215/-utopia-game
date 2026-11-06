@@ -1,0 +1,58 @@
+[
+ {
+  "id": "tundra",
+  "name": "雪原",
+  "ground": "#ffffff",
+  "sky": "#9fb2c2",
+  "treesMult": 1,
+  "style": "ruins"
+ },
+ {
+  "id": "forest",
+  "name": "針葉林",
+  "ground": "#e6eee8",
+  "sky": "#93a9a8",
+  "treesMult": 2.2,
+  "style": "ruins"
+ },
+ {
+  "id": "village",
+  "name": "雪中村莊",
+  "ground": "#f2f2ee",
+  "sky": "#a7b4c0",
+  "treesMult": 0.8,
+  "style": "village"
+ },
+ {
+  "id": "mining",
+  "name": "礦區營地",
+  "ground": "#cfd2d4",
+  "sky": "#8e979e",
+  "treesMult": 0.4,
+  "style": "mining"
+ },
+ {
+  "id": "port",
+  "name": "結冰港口",
+  "ground": "#e2ebf2",
+  "sky": "#8fa5b8",
+  "treesMult": 0.3,
+  "style": "port"
+ },
+ {
+  "id": "savanna",
+  "name": "冰封莽原",
+  "ground": "#ece6d8",
+  "sky": "#b0aa9c",
+  "treesMult": 0.5,
+  "style": "ruins"
+ },
+ {
+  "id": "polar",
+  "name": "極地冰原",
+  "ground": "#eef7ff",
+  "sky": "#b8cbe0",
+  "treesMult": 0.1,
+  "style": "spikes"
+ }
+]
