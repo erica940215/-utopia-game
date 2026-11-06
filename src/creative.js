@@ -194,11 +194,12 @@ function openPropPanel(p){
 function selPropBox(p){ const d=pdef(p.type), g=zPropMeshes.get(p.uid); zSelBox.visible=true; zSelBox.scale.set(d.size[0]+0.3,Math.max(1,3),d.size[1]+0.3); zSelBox.rotation.y=p.rot||0; zSelBox.position.set(p.x,ZH(p.x,p.z)+(p.y||0)+1.5,p.z); }
 
 /* ---------- 工具列分頁 ---------- */
-const Z_TABS=[['facility','設施'],['terrain','地形'],['nature','自然'],['enrich','豐富化'],['decor','裝飾'],['build','建築構件']];
+const Z_TABS=[['facility','設施'],['terrain','地形'],['nature','自然'],['enrich','豐富化'],['decor','裝飾'],['build','建築構件'],['blueprint','藍圖']];
 function creativeTools(){
   if(zTab==='terrain') return [
     {id:'t_raise',name:'抬高',sub:'按住塗抹'},{id:'t_lower',name:'降低',sub:'低於水位就變水'},{id:'t_flat',name:'整平',sub:'以起點高度'},{id:'t_smooth',name:'平滑',sub:'柔化地形'},
     ...TRN().paints.map((p,i)=>({id:'t_paint_'+i,name:p.name,sub:'上色',swatch:p.color}))];
+  if(zTab==='blueprint') return bpTools();
   return DATA.props.filter(p=>p.cat===zTab).map(p=>({id:'p_'+p.id,name:p.name,sub:costText(p.cost),cost:p.cost}));
 }
 function creativeOptions(){

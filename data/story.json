@@ -1,0 +1,264 @@
+{
+ "_comment": "生涯模式的劇情章節。第一章就是新手教學。stat 對應 storyStat()",
+ "chapters": [
+  {
+   "name": "抵達烏托邦",
+   "intro": [
+    "冰原上最後一座車站，被你改成了避難所。",
+    "先把動物園的基礎蓋起來：步道、棲地、飼料站。點畫面上方的任務提示可以看說明。"
+   ],
+   "steps": [
+    {
+     "stat": "paths",
+     "target": 3,
+     "text": "從入口鋪 3 格步道",
+     "hint": "下方「設施」分頁選「步道」，在入口前面點地面或按住拖曳",
+     "reward": {
+      "coins": 30
+     }
+    },
+    {
+     "stat": "habitats",
+     "target": 1,
+     "text": "蓋一座棲地",
+     "hint": "「設施」分頁選寒帶棲地，或用「畫棲地」自己圍一個",
+     "reward": {
+      "coins": 60
+     }
+    },
+    {
+     "stat": "animals",
+     "target": 1,
+     "text": "把一隻動物放進棲地",
+     "hint": "點棲地，在面板裡按「放入」",
+     "reward": {
+      "coins": 40
+     }
+    },
+    {
+     "stat": "feeders",
+     "target": 1,
+     "text": "在棲地旁蓋飼料站",
+     "hint": "飼料站半徑內的棲地會自動餵食",
+     "reward": {
+      "feed": 20
+     }
+    },
+    {
+     "stat": "runs",
+     "target": 1,
+     "text": "出發遠征一次",
+     "hint": "按右上「出發遠征」選一站；在冰原上長按融冰救動物，走回火車熱區就會上車",
+     "reward": {
+      "fuel": 5,
+      "wood": 6
+     }
+    },
+    {
+     "stat": "upgrades",
+     "target": 1,
+     "text": "在工坊升級火車或做一件裝備",
+     "hint": "「工坊」裡升級鍋爐可以去更遠的地方",
+     "reward": {
+      "scrap": 10
+     }
+    },
+    {
+     "stat": "staff",
+     "target": 2,
+     "text": "再雇一位員工",
+     "hint": "「營運」→「員工」，清潔人員能維持整潔",
+     "reward": {
+      "coins": 80
+     }
+    }
+   ],
+   "reward": {
+    "coins": 200,
+    "research": 10
+   }
+  },
+  {
+   "name": "第一批遊客",
+   "intro": [
+    "消息傳開了，倖存者開始來看動物。",
+    "讓他們吃得飽、有廁所可以上，園區評價就會慢慢升上來。"
+   ],
+   "steps": [
+    {
+     "stat": "restaurant",
+     "target": 1,
+     "text": "蓋一間餐廳",
+     "reward": {
+      "coins": 60
+     }
+    },
+    {
+     "stat": "restroom",
+     "target": 1,
+     "text": "蓋一間廁所",
+     "reward": {
+      "coins": 40
+     }
+    },
+    {
+     "stat": "visitors",
+     "target": 30,
+     "text": "同時有 30 位遊客",
+     "hint": "更多動物、更開心的動物會吸引更多人",
+     "reward": {
+      "coins": 120
+     }
+    },
+    {
+     "stat": "rating",
+     "target": 2,
+     "text": "園區評價達到 2 星",
+     "reward": {
+      "research": 10
+     }
+    }
+   ],
+   "reward": {
+    "coins": 300
+   }
+  },
+  {
+   "name": "冰原深處",
+   "intro": [
+    "近郊的動物差不多都救回來了。",
+    "升級鍋爐、加掛車廂，帶好繃帶和彈藥，往更遠的地方出發。"
+   ],
+   "steps": [
+    {
+     "stat": "cars",
+     "target": 3,
+     "text": "加掛到 3 節車廂",
+     "hint": "先在工坊升級「連結器」",
+     "reward": {
+      "wood": 10
+     }
+    },
+    {
+     "stat": "crafted",
+     "target": 3,
+     "text": "在工坊或車上製作 3 次",
+     "hint": "「工坊」→「製作」，繃帶、彈藥都很實用",
+     "reward": {
+      "cloth": 6
+     }
+    },
+    {
+     "stat": "tier2",
+     "target": 1,
+     "text": "抵達一個中段的站點",
+     "reward": {
+      "coins": 150
+     }
+    },
+    {
+     "stat": "rare",
+     "target": 3,
+     "text": "圖鑑收集 3 種稀有以上的動物",
+     "reward": {
+      "research": 20
+     }
+    }
+   ],
+   "reward": {
+    "coins": 400,
+    "research": 20
+   }
+  },
+  {
+   "name": "繁殖與保育",
+   "intro": [
+    "光是救援還不夠。",
+    "讓動物在烏托邦繁殖，再把園區出生的孩子送回野外，冰原才有機會復原。"
+   ],
+   "steps": [
+    {
+     "stat": "freehab",
+     "target": 1,
+     "text": "用「畫棲地」圍一座自訂棲地",
+     "reward": {
+      "coins": 100
+     }
+    },
+    {
+     "stat": "births",
+     "target": 3,
+     "text": "園區出生 3 隻寶寶",
+     "reward": {
+      "research": 20
+     }
+    },
+    {
+     "stat": "techs",
+     "target": 3,
+     "text": "在研究所完成 3 項技術",
+     "reward": {
+      "coins": 150
+     }
+    },
+    {
+     "stat": "released",
+     "target": 1,
+     "text": "野放一隻動物",
+     "reward": {
+      "research": 20
+     }
+    }
+   ],
+   "reward": {
+    "coins": 500,
+    "research": 40
+   }
+  },
+  {
+   "name": "霜影之王",
+   "intro": [
+    "日誌裡提到，所有霜影都往極地深處聚集。",
+    "找到牠們的首領，把冰原的威脅解決掉。"
+   ],
+   "steps": [
+    {
+     "stat": "bosses",
+     "target": 1,
+     "text": "擊敗一個霜影首領",
+     "reward": {
+      "research": 40
+     }
+    },
+    {
+     "stat": "species",
+     "target": 30,
+     "text": "圖鑑收集 30 種",
+     "reward": {
+      "coins": 300
+     }
+    },
+    {
+     "stat": "rating",
+     "target": 4,
+     "text": "園區評價達到 4 星",
+     "reward": {
+      "research": 40
+     }
+    },
+    {
+     "stat": "bosses",
+     "target": 3,
+     "text": "擊敗全部 3 個首領",
+     "reward": {
+      "coins": 1000
+     }
+    }
+   ],
+   "reward": {
+    "coins": 2000,
+    "research": 100
+   }
+  }
+ ]
+}

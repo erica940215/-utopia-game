@@ -82,7 +82,7 @@ function showWorkshop(msg){
   screenEl.querySelectorAll('[data-tab]').forEach(el=>el.onclick=()=>{ shopTab=el.dataset.tab; carPick=null; showWorkshop(); });
   if(shopTab==='cars') wireTrainTab();
   if(shopTab==='food') wireFoodTab();
-  const craft=(id,n)=>{ const r=DATA.recipes.recipes.find(x=>x.id===id), g=Object.fromEntries(Object.entries(r.give).map(([k,v])=>[k,v*n])); if(!affordable(g)) return; pay(g,-1); pay(Object.fromEntries(Object.entries(r.get).map(([k,v])=>[k,v*n])),1); persist(); showWorkshop(`做好了 ${r.name}${n>1?' ×'+n:''}`); };
+  const craft=(id,n)=>{ const r=DATA.recipes.recipes.find(x=>x.id===id), g=Object.fromEntries(Object.entries(r.give).map(([k,v])=>[k,v*n])); if(!affordable(g)) return; pay(g,-1); pay(Object.fromEntries(Object.entries(r.get).map(([k,v])=>[k,v*n])),1); save.stats=save.stats||{}; save.stats.crafted=(save.stats.crafted||0)+n; persist(); showWorkshop(`做好了 ${r.name}${n>1?' ×'+n:''}`); };
   screenEl.querySelectorAll('[data-rc]').forEach(el=>el.onclick=()=>craft(el.dataset.rc,1));
   screenEl.querySelectorAll('[data-rc5]').forEach(el=>el.onclick=()=>craft(el.dataset.rc5,5));
   if(shopTab==='gear') wireWeaponMods();

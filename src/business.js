@@ -147,6 +147,7 @@ const cpAfford=c=>affordable(Object.fromEntries(Object.entries(c).filter(([k])=>
 function cpPay(c,sign){ const rest={...c}; if(rest.cp){ save.zoo.cp+=sign*rest.cp; delete rest.cp; } pay(rest,sign); }
 const cpText=c=>Object.entries(c).map(([k,v])=>k==='cp'?`保育點數 ${v}`:`${resName(k)} ${v}`).join('・');
 function sellPrice(a){ const B=BIZ(), sp=DATA.speciesById[a.species], pr=B.prices[sp.rarity]; return {coins:Math.round(pr.coins*B.sellRatio*(0.6+a.stars*0.2)),cp:Math.round((pr.cp||1)*B.sellRatio*a.stars)}; }
+let mkTab='npc';
 function showMarket(msg){
   ensureBiz(); refreshMarket(); state='market';
   const z=save.zoo, offers=z.market.offers, stored=z.stored||[];
@@ -155,6 +156,8 @@ function showMarket(msg){
     <div class="hub-head"><h1><small>EXCHANGE · 動物交易中心</small>交易中心</h1><span class="savechip">保育點數 ${Math.floor(z.cp)}・金幣 ${Math.floor(z.coins)}</span></div>
     ${msg?`<div class="dexinfo">${esc(msg)}</div>`:''}
     <p class="zp-empty">跟其他避難所交換動物。保育點數來自野放、保育計畫和瀕危動物出生。名單約每 ${BIZ().marketRefreshMinutes} 分鐘更新一次。</p>
+    <div class="dextabs" role="tablist"><button type="button" role="tab" class="dextab${mkTab==='npc'?' on':''}" data-mk="npc">避難所交換</button><button type="button" role="tab" class="dextab${mkTab==='players'?' on':''}" data-mk="players">玩家市場</button></div>
+    <div id="mkPlayers"${mkTab==='players'?'':' hidden'}><p class="zp-empty">讀取中…</p></div><div id="mkNpc"${mkTab==='npc'?'':' hidden'}>
     <div class="sec-title"><span>可以領養的動物</span><button type="button" class="zmini" id="mkRefresh" ${(z.cp||0)>=BIZ().refreshCostCp?'':'disabled'}>花 ${BIZ().refreshCostCp} 保育點數換一批</button></div>
     <div class="shoplist">${offers.map(o=>{ const sp=DATA.speciesById[o.species], r=DATA.config.rarity[sp.rarity];
       return `<div class="shopcard"><div class="sc-main"><b>${o.sex==='M'?'♂':'♀'} ${esc(sp.name)} <span class="stars">${'★'.repeat(o.stars)}</span> <em style="color:${r.color}">${esc(r.name)}</em></b><span>${esc(sp.zone||'')}・適溫 ${sp.tempRange[0]}～${sp.tempRange[1]}°C${save.collection[sp.id]?'':'・圖鑑新物種'}</span></div>
@@ -162,7 +165,9 @@ function showMarket(msg){
     <div class="sec-title"><span>送出倉庫裡的動物</span></div>
     <div class="shoplist">${stored.length?stored.map(a=>{ const p=sellPrice(a); return `<div class="shopcard"><div class="sc-main"><b>${a.sex==='M'?'♂':'♀'} ${esc(nameOf(a))} <span class="stars">${'★'.repeat(a.stars)}</span></b><span>${esc(genesTxt(a))}</span></div><button type="button" class="zmini" data-sell="${a.id}">換 ${esc(cpText(p))}</button></div>`; }).join('')
       :'<p class="zp-empty">倉庫是空的。在棲地面板按「移出」，動物就會進倉庫，可以在這裡送出。</p>'}</div>
-    <button class="btn ghost" id="mkBack" type="button">回到園區</button></div>`;
+    </div><button class="btn ghost" id="mkBack" type="button">回到園區</button></div>`;
+  screenEl.querySelectorAll('[data-mk]').forEach(el=>el.onclick=()=>{ mkTab=el.dataset.mk; showMarket(); });
+  if(mkTab==='players') marketHtml().then(h=>{ const b=$('mkPlayers'); if(b&&state==='market'){ b.innerHTML=h; wireMarket(); } });
   screenEl.querySelectorAll('[data-buy]').forEach(el=>el.onclick=()=>{ const i=z.market.offers.findIndex(o=>o.id===el.dataset.buy), o=z.market.offers[i]; if(!o||!cpAfford(o.cost)) return;
     cpPay(o.cost,-1); const a=newIndividual(o.species,null,{sex:o.sex,stars:o.stars}); a.genes=rollGenes(o.stars); z.stored.push(a); save.collection[o.species]=(save.collection[o.species]||0)+1; z.market.offers.splice(i,1); persist();
     showMarket(`領養了 ${DATA.speciesById[o.species].name}，牠在倉庫裡，打開棲地就能放進去`); });

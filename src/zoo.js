@@ -221,7 +221,7 @@ function enterZoo(){
   const away=catchUp();
   zooActive=true; state='zoo'; zTool='select'; zSelUid=null; updateSelBox();
   screenEl.hidden=true; $('hud').hidden=true; $('touch').hidden=true; $('touch').classList.remove('walk');
-  $('zooUI').hidden=false; $('zWalkExit').hidden=true; $('zMain').hidden=false; $('zPanel').hidden=true; challengeHud();
+  $('zooUI').hidden=false; $('zWalkExit').hidden=true; $('zMain').hidden=false; $('zPanel').hidden=true; challengeHud(); storyHud();
   $('zModeTag').textContent=modeOf()==='visit'?`參觀：${visitName}`:MODE_NAME[modeOf()]; $('zModeTag').hidden=modeOf()==='career'; $('zParks').hidden=modeOf()!=='career'; $('zShare').hidden=modeOf()==='visit'||modeOf()==='coop'; $('zGift').hidden=modeOf()!=='coop'; $('zGo').hidden=$('zShop').hidden=modeOf()==='visit'; if(modeOf()==='coop'){ czHud(); czSetInZoo(true); } $('zJoinExp').hidden=!czPendingExp;
   if(document.exitPointerLock) document.exitPointerLock();
   renderZooTools(); updateZooHud();
@@ -252,7 +252,7 @@ function renderZooTools(){
   $('zTools').innerHTML=`<div class="ztabs">${Z_TABS.map(([id,n])=>`<button type="button" class="ztab${zTab===id?' on':''}" data-ztab="${id}">${n}</button>`).join('')}<span class="zopts">${creativeOptions()}</span></div>
     <div class="ztoolrow">${tools.map(t=>`<button type="button" class="ztool${zTool===t.id?' on':''}${(t.cost&&!affordable(t.cost))||t.locked?' poor':''}" data-tool="${t.id}">${t.swatch?`<i class="sw" style="background:${t.swatch}"></i>`:''}<b>${esc(t.name)}</b><span>${esc(t.sub)}</span></button>`).join('')}</div>`;
   $('zTools').querySelectorAll('[data-ztab]').forEach(el=>el.onclick=()=>{ zTab=el.dataset.ztab; zTool='select'; zGhost.visible=false; renderZooTools(); });
-  $('zTools').querySelectorAll('.ztool').forEach(el=>el.onclick=()=>{ zTool=el.dataset.tool; zGhost.visible=false; zMoveUid=null; if(zDraw&&zTool!=='draw_hab') cancelDrawHab(); if(zTool==='draw_hab'){ zDraw={pts:[]}; renderDrawBar(); }
+  $('zTools').querySelectorAll('.ztool').forEach(el=>el.onclick=()=>{ zTool=el.dataset.tool; zGhost.visible=false; zMoveUid=null; if(zDraw&&zTool!=='draw_hab') cancelDrawHab(); if(zTool==='draw_hab'){ zDraw={pts:[]}; renderDrawBar(); } if(zTool==='bp_import'){ zTool='select'; bpImportPanel(); } if(zTool.startsWith('bpl_')){ const bp=blueprints().find(b=>'bpl_'+b.id===zTool); if(bp) bpPanel(bp); } if(zTool==='bp_save') bpSel=null;
     if(zTool!=='select'){ zSelUid=null; zSelProp=null; zSelBox.visible=false; $('zPanel').hidden=true; }
     if(zGrid) zGrid.visible=!!bdef(zTool)||zGrid.visible&&zTab==='facility';
     renderZooTools(); });
@@ -309,6 +309,7 @@ function zooTap(cx,cy){
   if(zMoveUid){ moveProp(cx,cy); return; }
   if(zTool.startsWith('t_')) return;
   if(zTool==='draw_hab'){ drawHabTap(cx,cy); return; }
+  if(zTool==='bp_save'||zTool.startsWith('bpl_')){ bpTap(cx,cy); return; }
   if(zTool.startsWith('p_')){ placeProp(cx,cy); return; }
   if(zTool==='select'||zTool==='demolish'){
     const p=pickProp(cx,cy);
@@ -416,6 +417,7 @@ function zooUpdate(dt){
   zHudT+=dt; if(zHudT>=0.5){ zHudT=0; updateZooHud(); }
   zAchT=(zAchT||0)+dt; if(zAchT>=5){ zAchT=0; checkAchievements(); }
   zChT=(zChT||0)+dt; if(zChT>=1){ zChT=0; challengeHud(); checkChallenge(); }
+  storyTick(dt);
   updatePeople(dt); updateTram(dt); updateBubbles(dt); updateWorldVisual(dt);
   if(zBrushing&&state==='zoo'){ applyBrush(zBrushing.x,zBrushing.z,zBrushing.tool,dt); refreshTerrain(); }
   if(state==='zoo'){ const px=(keys.KeyD||keys.ArrowRight?1:0)-(keys.KeyA||keys.ArrowLeft?1:0), pz=(keys.KeyS||keys.ArrowDown?1:0)-(keys.KeyW||keys.ArrowUp?1:0);
@@ -452,6 +454,9 @@ $('zGo').onclick=()=>showMap();
 $('zMode').onclick=()=>{ persist(); showModeSelect(); };
 $('zLab').onclick=()=>{ $('zooUI').hidden=true; showLab(); };
 $('zJoinExp').onclick=()=>czJoinPending();
+$('zPhoto').onclick=()=>enterPhoto();
+$('phShot').onclick=()=>takePhoto();
+$('phExit').onclick=()=>exitPhoto();
 $('zGift').onclick=()=>{ $('zooUI').hidden=true; showCoopGift(); };
 $('zParks').onclick=()=>{ $('zooUI').hidden=true; showParks(); };
 $('zShare').onclick=()=>{ $('zooUI').hidden=true; showShare(); };

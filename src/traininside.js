@@ -120,6 +120,6 @@ function showTrainCraft(msg){
     <div class="zres">${DATA.items.filter(i=>save.resources[i.id]>0).map(i=>`<span><i>${esc(i.name)}</i><b class="num">${Math.floor(save.resources[i.id]||0)}</b></span>`).join('')}</div>
     <p class="zp-empty">背包裡的東西要先帶回火車（走進熱區會自動存進車廂），才能拿來製作。</p>
     <div class="shoplist">${R.map(r=>`<div class="shopcard"><div class="sc-main"><b>${esc(r.name)}</b><span>${esc(costText(r.give))} → ${esc(costText(r.get))}</span></div><button type="button" class="zmini add" data-tc="${r.id}" ${affordable(r.give)?'':'disabled'}>製作</button></div>`).join('')}</div>`,()=>{
-    screenEl.querySelectorAll('[data-tc]').forEach(el=>el.onclick=()=>{ const r=R.find(x=>x.id===el.dataset.tc); if(!affordable(r.give)) return; pay(r.give,-1); pay(r.get,1); showTrainCraft(`做好了 ${r.name}`); });
+    screenEl.querySelectorAll('[data-tc]').forEach(el=>el.onclick=()=>{ const r=R.find(x=>x.id===el.dataset.tc); if(!affordable(r.give)) return; pay(r.give,-1); pay(r.get,1); save.stats=save.stats||{}; save.stats.crafted=(save.stats.crafted||0)+1; showTrainCraft(`做好了 ${r.name}`); });
   });
 }

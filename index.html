@@ -345,6 +345,14 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
 #btnHeal{right:calc(max(24px,env(safe-area-inset-right,0px)) + 160px);bottom:calc(env(safe-area-inset-bottom,0px) + 104px);width:50px;height:50px;font-size:13px}
 #touch.walk #btnHeal{display:none}
 #touch.edit #btnHeal{display:grid}
+
+/* 劇情、拍照 */
+.zstory{position:absolute;right:max(12px,env(safe-area-inset-right,0px));top:calc(env(safe-area-inset-top,0px) + 62px);background:var(--panel);border:1px solid rgba(124,200,232,.5);border-radius:6px;padding:6px 10px;display:flex;flex-direction:column;gap:2px;font-size:12px;max-width:min(260px,55vw);cursor:pointer}
+.zstory b{color:var(--ice);font-size:13px}
+.zstory span{color:var(--frost)}
+#zooUI.photo>*{display:none!important}
+#zooUI.photo>#photoBar{display:flex!important}
+.photobar{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 18px);transform:translateX(-50%);gap:10px}
 </style></head>
 <body>
 <canvas id="c"></canvas>
@@ -402,6 +410,7 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
     <div class="zacts" id="zMain">
       <span class="zpool num" id="zPool"></span>
       <button type="button" class="zbtn" id="zWalk">逛園</button>
+      <button type="button" class="zbtn" id="zPhoto">拍照</button>
       <button type="button" class="zbtn" id="zMode">模式</button>
       <button type="button" class="zbtn" id="zLab">研究所</button>
       <button type="button" class="zbtn" id="zOps">營運</button>
@@ -417,6 +426,8 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
     <button type="button" class="zbtn" id="zWalkExit" hidden>回到俯視</button>
   </div>
   <div class="zchal" id="zChal" hidden></div>
+  <div class="zstory" id="zStory" hidden></div>
+  <div class="photobar" id="photoBar" hidden><button type="button" class="btn" id="phShot">拍下</button><button type="button" class="btn ghost" id="phExit">離開拍照</button></div>
   <button type="button" class="btn zjoinexp" id="zJoinExp" hidden></button>
   <span class="zmodetag" id="zModeTag" hidden></span>
   <div class="zpanel" id="zPanel" hidden></div>
@@ -441,7 +452,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
    ========================================================= */
 const DATA = {};
 async function loadData(){
-  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets','staff','achievements','research','challenges','bosses','cars','events','enemies','weaponmods','food','biomes','lore','recipes','habitats'];
+  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets','staff','achievements','research','challenges','bosses','cars','events','enemies','weaponmods','food','biomes','lore','recipes','habitats','story'];
   const res = await Promise.all(names.map(n => fetch(`data/${n}.json`).then(r => { if(!r.ok) throw new Error(n); return r.json(); })));
   names.forEach((n,i) => DATA[n] = res[i]);
   DATA.speciesById = Object.fromEntries(DATA.species.map(s => [s.id, s]));
@@ -1427,7 +1438,7 @@ function enterZoo(){
   const away=catchUp();
   zooActive=true; state='zoo'; zTool='select'; zSelUid=null; updateSelBox();
   screenEl.hidden=true; $('hud').hidden=true; $('touch').hidden=true; $('touch').classList.remove('walk');
-  $('zooUI').hidden=false; $('zWalkExit').hidden=true; $('zMain').hidden=false; $('zPanel').hidden=true; challengeHud();
+  $('zooUI').hidden=false; $('zWalkExit').hidden=true; $('zMain').hidden=false; $('zPanel').hidden=true; challengeHud(); storyHud();
   $('zModeTag').textContent=modeOf()==='visit'?`參觀：${visitName}`:MODE_NAME[modeOf()]; $('zModeTag').hidden=modeOf()==='career'; $('zParks').hidden=modeOf()!=='career'; $('zShare').hidden=modeOf()==='visit'||modeOf()==='coop'; $('zGift').hidden=modeOf()!=='coop'; $('zGo').hidden=$('zShop').hidden=modeOf()==='visit'; if(modeOf()==='coop'){ czHud(); czSetInZoo(true); } $('zJoinExp').hidden=!czPendingExp;
   if(document.exitPointerLock) document.exitPointerLock();
   renderZooTools(); updateZooHud();
@@ -1458,7 +1469,7 @@ function renderZooTools(){
   $('zTools').innerHTML=`<div class="ztabs">${Z_TABS.map(([id,n])=>`<button type="button" class="ztab${zTab===id?' on':''}" data-ztab="${id}">${n}</button>`).join('')}<span class="zopts">${creativeOptions()}</span></div>
     <div class="ztoolrow">${tools.map(t=>`<button type="button" class="ztool${zTool===t.id?' on':''}${(t.cost&&!affordable(t.cost))||t.locked?' poor':''}" data-tool="${t.id}">${t.swatch?`<i class="sw" style="background:${t.swatch}"></i>`:''}<b>${esc(t.name)}</b><span>${esc(t.sub)}</span></button>`).join('')}</div>`;
   $('zTools').querySelectorAll('[data-ztab]').forEach(el=>el.onclick=()=>{ zTab=el.dataset.ztab; zTool='select'; zGhost.visible=false; renderZooTools(); });
-  $('zTools').querySelectorAll('.ztool').forEach(el=>el.onclick=()=>{ zTool=el.dataset.tool; zGhost.visible=false; zMoveUid=null; if(zDraw&&zTool!=='draw_hab') cancelDrawHab(); if(zTool==='draw_hab'){ zDraw={pts:[]}; renderDrawBar(); }
+  $('zTools').querySelectorAll('.ztool').forEach(el=>el.onclick=()=>{ zTool=el.dataset.tool; zGhost.visible=false; zMoveUid=null; if(zDraw&&zTool!=='draw_hab') cancelDrawHab(); if(zTool==='draw_hab'){ zDraw={pts:[]}; renderDrawBar(); } if(zTool==='bp_import'){ zTool='select'; bpImportPanel(); } if(zTool.startsWith('bpl_')){ const bp=blueprints().find(b=>'bpl_'+b.id===zTool); if(bp) bpPanel(bp); } if(zTool==='bp_save') bpSel=null;
     if(zTool!=='select'){ zSelUid=null; zSelProp=null; zSelBox.visible=false; $('zPanel').hidden=true; }
     if(zGrid) zGrid.visible=!!bdef(zTool)||zGrid.visible&&zTab==='facility';
     renderZooTools(); });
@@ -1515,6 +1526,7 @@ function zooTap(cx,cy){
   if(zMoveUid){ moveProp(cx,cy); return; }
   if(zTool.startsWith('t_')) return;
   if(zTool==='draw_hab'){ drawHabTap(cx,cy); return; }
+  if(zTool==='bp_save'||zTool.startsWith('bpl_')){ bpTap(cx,cy); return; }
   if(zTool.startsWith('p_')){ placeProp(cx,cy); return; }
   if(zTool==='select'||zTool==='demolish'){
     const p=pickProp(cx,cy);
@@ -1622,6 +1634,7 @@ function zooUpdate(dt){
   zHudT+=dt; if(zHudT>=0.5){ zHudT=0; updateZooHud(); }
   zAchT=(zAchT||0)+dt; if(zAchT>=5){ zAchT=0; checkAchievements(); }
   zChT=(zChT||0)+dt; if(zChT>=1){ zChT=0; challengeHud(); checkChallenge(); }
+  storyTick(dt);
   updatePeople(dt); updateTram(dt); updateBubbles(dt); updateWorldVisual(dt);
   if(zBrushing&&state==='zoo'){ applyBrush(zBrushing.x,zBrushing.z,zBrushing.tool,dt); refreshTerrain(); }
   if(state==='zoo'){ const px=(keys.KeyD||keys.ArrowRight?1:0)-(keys.KeyA||keys.ArrowLeft?1:0), pz=(keys.KeyS||keys.ArrowDown?1:0)-(keys.KeyW||keys.ArrowUp?1:0);
@@ -1658,6 +1671,9 @@ $('zGo').onclick=()=>showMap();
 $('zMode').onclick=()=>{ persist(); showModeSelect(); };
 $('zLab').onclick=()=>{ $('zooUI').hidden=true; showLab(); };
 $('zJoinExp').onclick=()=>czJoinPending();
+$('zPhoto').onclick=()=>enterPhoto();
+$('phShot').onclick=()=>takePhoto();
+$('phExit').onclick=()=>exitPhoto();
 $('zGift').onclick=()=>{ $('zooUI').hidden=true; showCoopGift(); };
 $('zParks').onclick=()=>{ $('zooUI').hidden=true; showParks(); };
 $('zShare').onclick=()=>{ $('zooUI').hidden=true; showShare(); };
@@ -1862,7 +1878,7 @@ function showWorkshop(msg){
   screenEl.querySelectorAll('[data-tab]').forEach(el=>el.onclick=()=>{ shopTab=el.dataset.tab; carPick=null; showWorkshop(); });
   if(shopTab==='cars') wireTrainTab();
   if(shopTab==='food') wireFoodTab();
-  const craft=(id,n)=>{ const r=DATA.recipes.recipes.find(x=>x.id===id), g=Object.fromEntries(Object.entries(r.give).map(([k,v])=>[k,v*n])); if(!affordable(g)) return; pay(g,-1); pay(Object.fromEntries(Object.entries(r.get).map(([k,v])=>[k,v*n])),1); persist(); showWorkshop(`做好了 ${r.name}${n>1?' ×'+n:''}`); };
+  const craft=(id,n)=>{ const r=DATA.recipes.recipes.find(x=>x.id===id), g=Object.fromEntries(Object.entries(r.give).map(([k,v])=>[k,v*n])); if(!affordable(g)) return; pay(g,-1); pay(Object.fromEntries(Object.entries(r.get).map(([k,v])=>[k,v*n])),1); save.stats=save.stats||{}; save.stats.crafted=(save.stats.crafted||0)+n; persist(); showWorkshop(`做好了 ${r.name}${n>1?' ×'+n:''}`); };
   screenEl.querySelectorAll('[data-rc]').forEach(el=>el.onclick=()=>craft(el.dataset.rc,1));
   screenEl.querySelectorAll('[data-rc5]').forEach(el=>el.onclick=()=>craft(el.dataset.rc5,5));
   if(shopTab==='gear') wireWeaponMods();
@@ -2192,11 +2208,12 @@ function openPropPanel(p){
 function selPropBox(p){ const d=pdef(p.type), g=zPropMeshes.get(p.uid); zSelBox.visible=true; zSelBox.scale.set(d.size[0]+0.3,Math.max(1,3),d.size[1]+0.3); zSelBox.rotation.y=p.rot||0; zSelBox.position.set(p.x,ZH(p.x,p.z)+(p.y||0)+1.5,p.z); }
 
 /* ---------- 工具列分頁 ---------- */
-const Z_TABS=[['facility','設施'],['terrain','地形'],['nature','自然'],['enrich','豐富化'],['decor','裝飾'],['build','建築構件']];
+const Z_TABS=[['facility','設施'],['terrain','地形'],['nature','自然'],['enrich','豐富化'],['decor','裝飾'],['build','建築構件'],['blueprint','藍圖']];
 function creativeTools(){
   if(zTab==='terrain') return [
     {id:'t_raise',name:'抬高',sub:'按住塗抹'},{id:'t_lower',name:'降低',sub:'低於水位就變水'},{id:'t_flat',name:'整平',sub:'以起點高度'},{id:'t_smooth',name:'平滑',sub:'柔化地形'},
     ...TRN().paints.map((p,i)=>({id:'t_paint_'+i,name:p.name,sub:'上色',swatch:p.color}))];
+  if(zTab==='blueprint') return bpTools();
   return DATA.props.filter(p=>p.cat===zTab).map(p=>({id:'p_'+p.id,name:p.name,sub:costText(p.cost),cost:p.cost}));
 }
 function creativeOptions(){
@@ -3617,6 +3634,7 @@ const cpAfford=c=>affordable(Object.fromEntries(Object.entries(c).filter(([k])=>
 function cpPay(c,sign){ const rest={...c}; if(rest.cp){ save.zoo.cp+=sign*rest.cp; delete rest.cp; } pay(rest,sign); }
 const cpText=c=>Object.entries(c).map(([k,v])=>k==='cp'?`保育點數 ${v}`:`${resName(k)} ${v}`).join('・');
 function sellPrice(a){ const B=BIZ(), sp=DATA.speciesById[a.species], pr=B.prices[sp.rarity]; return {coins:Math.round(pr.coins*B.sellRatio*(0.6+a.stars*0.2)),cp:Math.round((pr.cp||1)*B.sellRatio*a.stars)}; }
+let mkTab='npc';
 function showMarket(msg){
   ensureBiz(); refreshMarket(); state='market';
   const z=save.zoo, offers=z.market.offers, stored=z.stored||[];
@@ -3625,6 +3643,8 @@ function showMarket(msg){
     <div class="hub-head"><h1><small>EXCHANGE · 動物交易中心</small>交易中心</h1><span class="savechip">保育點數 ${Math.floor(z.cp)}・金幣 ${Math.floor(z.coins)}</span></div>
     ${msg?`<div class="dexinfo">${esc(msg)}</div>`:''}
     <p class="zp-empty">跟其他避難所交換動物。保育點數來自野放、保育計畫和瀕危動物出生。名單約每 ${BIZ().marketRefreshMinutes} 分鐘更新一次。</p>
+    <div class="dextabs" role="tablist"><button type="button" role="tab" class="dextab${mkTab==='npc'?' on':''}" data-mk="npc">避難所交換</button><button type="button" role="tab" class="dextab${mkTab==='players'?' on':''}" data-mk="players">玩家市場</button></div>
+    <div id="mkPlayers"${mkTab==='players'?'':' hidden'}><p class="zp-empty">讀取中…</p></div><div id="mkNpc"${mkTab==='npc'?'':' hidden'}>
     <div class="sec-title"><span>可以領養的動物</span><button type="button" class="zmini" id="mkRefresh" ${(z.cp||0)>=BIZ().refreshCostCp?'':'disabled'}>花 ${BIZ().refreshCostCp} 保育點數換一批</button></div>
     <div class="shoplist">${offers.map(o=>{ const sp=DATA.speciesById[o.species], r=DATA.config.rarity[sp.rarity];
       return `<div class="shopcard"><div class="sc-main"><b>${o.sex==='M'?'♂':'♀'} ${esc(sp.name)} <span class="stars">${'★'.repeat(o.stars)}</span> <em style="color:${r.color}">${esc(r.name)}</em></b><span>${esc(sp.zone||'')}・適溫 ${sp.tempRange[0]}～${sp.tempRange[1]}°C${save.collection[sp.id]?'':'・圖鑑新物種'}</span></div>
@@ -3632,7 +3652,9 @@ function showMarket(msg){
     <div class="sec-title"><span>送出倉庫裡的動物</span></div>
     <div class="shoplist">${stored.length?stored.map(a=>{ const p=sellPrice(a); return `<div class="shopcard"><div class="sc-main"><b>${a.sex==='M'?'♂':'♀'} ${esc(nameOf(a))} <span class="stars">${'★'.repeat(a.stars)}</span></b><span>${esc(genesTxt(a))}</span></div><button type="button" class="zmini" data-sell="${a.id}">換 ${esc(cpText(p))}</button></div>`; }).join('')
       :'<p class="zp-empty">倉庫是空的。在棲地面板按「移出」，動物就會進倉庫，可以在這裡送出。</p>'}</div>
-    <button class="btn ghost" id="mkBack" type="button">回到園區</button></div>`;
+    </div><button class="btn ghost" id="mkBack" type="button">回到園區</button></div>`;
+  screenEl.querySelectorAll('[data-mk]').forEach(el=>el.onclick=()=>{ mkTab=el.dataset.mk; showMarket(); });
+  if(mkTab==='players') marketHtml().then(h=>{ const b=$('mkPlayers'); if(b&&state==='market'){ b.innerHTML=h; wireMarket(); } });
   screenEl.querySelectorAll('[data-buy]').forEach(el=>el.onclick=()=>{ const i=z.market.offers.findIndex(o=>o.id===el.dataset.buy), o=z.market.offers[i]; if(!o||!cpAfford(o.cost)) return;
     cpPay(o.cost,-1); const a=newIndividual(o.species,null,{sex:o.sex,stars:o.stars}); a.genes=rollGenes(o.stars); z.stored.push(a); save.collection[o.species]=(save.collection[o.species]||0)+1; z.market.offers.splice(i,1); persist();
     showMarket(`領養了 ${DATA.speciesById[o.species].name}，牠在倉庫裡，打開棲地就能放進去`); });
@@ -4383,7 +4405,7 @@ function showTrainCraft(msg){
     <div class="zres">${DATA.items.filter(i=>save.resources[i.id]>0).map(i=>`<span><i>${esc(i.name)}</i><b class="num">${Math.floor(save.resources[i.id]||0)}</b></span>`).join('')}</div>
     <p class="zp-empty">背包裡的東西要先帶回火車（走進熱區會自動存進車廂），才能拿來製作。</p>
     <div class="shoplist">${R.map(r=>`<div class="shopcard"><div class="sc-main"><b>${esc(r.name)}</b><span>${esc(costText(r.give))} → ${esc(costText(r.get))}</span></div><button type="button" class="zmini add" data-tc="${r.id}" ${affordable(r.give)?'':'disabled'}>製作</button></div>`).join('')}</div>`,()=>{
-    screenEl.querySelectorAll('[data-tc]').forEach(el=>el.onclick=()=>{ const r=R.find(x=>x.id===el.dataset.tc); if(!affordable(r.give)) return; pay(r.give,-1); pay(r.get,1); showTrainCraft(`做好了 ${r.name}`); });
+    screenEl.querySelectorAll('[data-tc]').forEach(el=>el.onclick=()=>{ const r=R.find(x=>x.id===el.dataset.tc); if(!affordable(r.give)) return; pay(r.give,-1); pay(r.get,1); save.stats=save.stats||{}; save.stats.crafted=(save.stats.crafted||0)+1; showTrainCraft(`做好了 ${r.name}`); });
   });
 }
 
@@ -4676,6 +4698,135 @@ function waterRegulated(b){
 /* 展示箱只能一種 */
 function singleCheck(b){ const d=bdef(b.type); if(!d.single) return null; const n=new Set(save.zoo.animals.filter(a=>a.habitat===b.uid).map(a=>a.species)).size;
   return {k:'single',label:'展示箱只能放一種動物',ok:n<=1,pen:n<=1?0:FAC().singlePenalty}; }
+
+/* =========================================================
+   藍圖、玩家交易市場、拍照模式、劇情任務與新手教學
+   劇情在 data/story.json；市場資料在 Supabase 的 market_listings
+   ========================================================= */
+/* ---------- 藍圖：框選物件存起來，之後一次放下 ---------- */
+let bpSel=null;
+const blueprints=()=>(save.blueprints=save.blueprints||[]);
+function bpTools(){ return [{id:'bp_save',name:'框選存藍圖',sub:'點兩個對角'},{id:'bp_import',name:'匯入藍圖',sub:'貼上代碼'},...blueprints().map(b=>({id:'bpl_'+b.id,name:b.name,sub:costText(b.cost),cost:b.cost}))]; }
+function bpTap(cx,cy){
+  const h=groundHit(cx,cy); if(!h) return;
+  if(zTool==='bp_save'){
+    if(!bpSel){ bpSel={x:h.x,z:h.z}; toast('再點對角，框起要存的物件'); return; }
+    const x0=Math.min(bpSel.x,h.x), x1=Math.max(bpSel.x,h.x), z0=Math.min(bpSel.z,h.z), z1=Math.max(bpSel.z,h.z); bpSel=null;
+    const inside=(save.zoo.props||[]).filter(p=>p.x>=x0&&p.x<=x1&&p.z>=z0&&p.z<=z1);
+    if(!inside.length){ toast('框裡沒有物件'); return; }
+    const cx0=(x0+x1)/2, cz0=(z0+z1)/2, cost={};
+    for(const p of inside) for(const [k,v] of Object.entries(pdef(p.type).cost)) cost[k]=(cost[k]||0)+v;
+    const bp={id:Date.now().toString(36),name:`藍圖 ${blueprints().length+1}`,props:inside.map(p=>({type:p.type,dx:+(p.x-cx0).toFixed(2),dz:+(p.z-cz0).toFixed(2),y:p.y||0,rot:p.rot||0})),cost};
+    blueprints().push(bp); persist(); zTool='bpl_'+bp.id; renderZooTools(); bpPanel(bp); toast(`存成藍圖了（${inside.length} 個物件）`); return;
+  }
+  const bp=blueprints().find(b=>'bpl_'+b.id===zTool); if(!bp) return;
+  if(!affordable(bp.cost)){ toast(`不夠：需要 ${costText(bp.cost)}`); return; }
+  pay(bp.cost,-1); const c=Math.cos(zRot), s=Math.sin(zRot);
+  for(const q of bp.props){ const p={uid:save.zoo.nextUid++,type:q.type,x:h.x+q.dx*c+q.dz*s,z:h.z-q.dx*s+q.dz*c,y:q.y,rot:(q.rot||0)+zRot}; save.zoo.props.push(p); placePropMesh(p); }
+  updateZooHud(); persist(); toast(`放下${bp.name}`);
+}
+async function bpPanel(bp){
+  const code=await encodeShare({bp:{name:bp.name,props:bp.props,cost:bp.cost}});
+  $('zPanel').hidden=false;
+  $('zPanel').innerHTML=`<div class="zp-head"><div><b>${esc(bp.name)}</b><span>${bp.props.length} 個物件・${esc(costText(bp.cost))}・點地面放下，↺↻ 可以旋轉</span></div><button type="button" class="zclose" id="bpClose" aria-label="關閉">✕</button></div>
+    <div class="zp-btns"><input id="bpName" class="coopin wide" maxlength="16" value="${esc(bp.name)}"><button type="button" class="zmini" id="bpRen">改名</button><button type="button" class="zmini" id="bpDel">刪除</button></div>
+    <div class="zp-note">分享代碼（貼給朋友，他在「匯入藍圖」貼上就能用）<textarea class="sharebox" readonly id="bpCode">${esc(code)}</textarea></div>`;
+  $('bpClose').onclick=()=>{ $('zPanel').hidden=true; };
+  $('bpRen').onclick=()=>{ bp.name=$('bpName').value.trim().slice(0,16)||bp.name; persist(); renderZooTools(); bpPanel(bp); };
+  $('bpDel').onclick=()=>{ save.blueprints=blueprints().filter(b=>b!==bp); zTool='select'; persist(); renderZooTools(); $('zPanel').hidden=true; };
+}
+function bpImportPanel(){
+  $('zPanel').hidden=false;
+  $('zPanel').innerHTML=`<div class="zp-head"><div><b>匯入藍圖</b><span>貼上朋友給的藍圖代碼</span></div><button type="button" class="zclose" id="bpClose" aria-label="關閉">✕</button></div>
+    <textarea class="sharebox" id="bpIn"></textarea><div class="zp-btns"><button type="button" class="zmini add" id="bpGo">匯入</button></div>`;
+  $('bpClose').onclick=()=>{ $('zPanel').hidden=true; };
+  $('bpGo').onclick=async()=>{ try{ const d=await decodeShare($('bpIn').value); if(!d.bp||!Array.isArray(d.bp.props)) throw 0;
+    const props=d.bp.props.filter(q=>pdef(q.type)), cost={}; for(const q of props) for(const [k,v] of Object.entries(pdef(q.type).cost)) cost[k]=(cost[k]||0)+v;
+    const bp={id:Date.now().toString(36),name:(d.bp.name||'匯入的藍圖').slice(0,16),props,cost}; blueprints().push(bp); persist(); zTool='bpl_'+bp.id; renderZooTools(); bpPanel(bp); toast('匯入成功'); }
+    catch(e){ toast('代碼看不懂，確認有完整貼上'); } };
+}
+
+/* ---------- 玩家交易市場（自己的網站、登入後） ---------- */
+async function marketHtml(){
+  if(!sb) return '<p class="zp-empty">玩家市場要在遊戲網站上用（Claude 裡的版本不能連線）。</p>';
+  if(!sbUser) return '<p class="zp-empty">玩家市場要先登入：到「圖鑑・倉庫」輸入 Email 登入。</p>';
+  // 先領賣出的錢
+  try{ const {data}=await sb.rpc('claim_sales'); if(data&&data.length){ const sum=data.reduce((s,r)=>s+r.price,0); save.zoo.coins+=sum; persist(); toast(`賣出了 ${data.length} 隻動物，收到 ${sum} 金幣`); } }catch(e){}
+  let open=[], mine=[];
+  try{ const {data}=await sb.from('market_listings').select('id,seller,seller_name,species,animal,price,status,created_at').eq('status','open').order('created_at',{ascending:false}).limit(60); open=(data||[]).filter(r=>r.seller!==sbUser.id); mine=(data||[]).filter(r=>r.seller===sbUser.id); }catch(e){}
+  const row=(r,btn)=>{ const sp=DATA.speciesById[r.species], a=r.animal||{}; return `<div class="shopcard"><div class="sc-main"><b>${a.sex==='M'?'♂':'♀'} ${esc(sp?sp.name:r.species)} <span class="stars">${'★'.repeat(a.stars||1)}</span></b><span>${esc(r.seller_name||'玩家')}・${esc(genesTxt(a))}</span></div>${btn}</div>`; };
+  return `<div class="sec-title"><span>其他玩家上架的動物</span></div><div class="shoplist">${open.map(r=>row(r,`<button type="button" class="zmini add" data-pbuy="${r.id}" ${save.zoo.coins>=r.price?'':'disabled'}>${r.price} 金幣</button>`)).join('')||'<p class="zp-empty">目前沒有人上架。</p>'}</div>
+    <div class="sec-title"><span>我上架的</span></div><div class="shoplist">${mine.map(r=>row(r,`<button type="button" class="zmini" data-pcancel="${r.id}">下架（${r.price}）</button>`)).join('')||'<p class="zp-empty">還沒有上架動物。</p>'}</div>
+    <div class="sec-title"><span>上架倉庫裡的動物</span></div><div class="shoplist">${(save.zoo.stored||[]).map(a=>`<div class="shopcard"><div class="sc-main"><b>${a.sex==='M'?'♂':'♀'} ${esc(nameOf(a))} <span class="stars">${'★'.repeat(a.stars)}</span></b></div><div class="zp-btns"><input class="coopin" type="number" min="0" max="999999" value="${sellPrice(a).coins*2}" id="pp_${a.id}"><button type="button" class="zmini add" data-psell="${a.id}">上架</button></div></div>`).join('')||'<p class="zp-empty">倉庫是空的。在棲地面板按「移出」就會進倉庫。</p>'}</div>
+    <p class="zp-empty">賣出後，下次打開市場就會收到金幣。</p>`;
+}
+function wireMarket(){
+  screenEl.querySelectorAll('[data-pbuy]').forEach(el=>el.onclick=async()=>{ el.disabled=true; const {data,error}=await sb.rpc('buy_listing',{p_id:el.dataset.pbuy}); const r=data&&data[0];
+    if(error||!r){ toast('買不到，可能已經被別人買走'); showMarket(); return; } if(save.zoo.coins<r.price){ toast('金幣不夠'); return; }
+    save.zoo.coins-=r.price; const a={...r.animal,id:'a'+(save.zoo.nextUid++),habitat:null}; delete a.preg; save.zoo.stored.push(a); save.collection[r.species]=(save.collection[r.species]||0)+1; persist(); showMarket(`買到了 ${DATA.speciesById[r.species].name}，在倉庫裡`); });
+  screenEl.querySelectorAll('[data-pcancel]').forEach(el=>el.onclick=async()=>{ const {data}=await sb.rpc('cancel_listing',{p_id:el.dataset.pcancel}); const r=data&&data[0]; if(r){ const a={...r.animal,id:'a'+(save.zoo.nextUid++)}; save.zoo.stored.push(a); persist(); } showMarket('下架了，動物回到倉庫'); });
+  screenEl.querySelectorAll('[data-psell]').forEach(el=>el.onclick=async()=>{ const i=save.zoo.stored.findIndex(a=>a.id===el.dataset.psell); if(i<0) return; const price=Math.max(0,Math.min(999999,parseInt($('pp_'+el.dataset.psell).value,10)||0));
+    const a=save.zoo.stored[i]; el.disabled=true;
+    const {error}=await sb.from('market_listings').insert({seller_name:coopName(),species:a.species,animal:a,price}); if(error){ toast('上架失敗：'+error.message); el.disabled=false; return; }
+    save.zoo.stored.splice(i,1); persist(); showMarket(`${DATA.speciesById[a.species].name} 上架了，${price} 金幣`); });
+}
+
+/* ---------- 拍照模式 ---------- */
+function enterPhoto(){
+  $('zooUI').classList.add('photo'); $('photoBar').hidden=false; zGhost.visible=false; zSelBox.visible=false;
+}
+function exitPhoto(){ $('zooUI').classList.remove('photo'); $('photoBar').hidden=true; }
+function takePhoto(){
+  try{ renderer.render(zooScene,zooCam); const url=renderer.domElement.toDataURL('image/png'); const a=document.createElement('a'); a.href=url; a.download=`烏托邦-${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.png`; document.body.appendChild(a); a.click(); a.remove(); toast('拍好了，照片已下載'); }
+  catch(e){ toast('這裡沒辦法下載照片，可以直接用手機截圖'); }
+}
+
+/* ---------- 劇情任務與新手教學 ---------- */
+const STORY=()=>DATA.story;
+function storyStat(k){
+  const z=save.zoo, B=z?z.buildings:[], kind=k2=>B.filter(b=>{ const d=bdef(b.type); return d&&d.kind===k2; }).length;
+  switch(k){
+    case 'paths': return kind('path'); case 'habitats': return kind('habitat'); case 'feeders': return kind('feeder');
+    case 'animals': return z?z.animals.length:0; case 'runs': return save.runs||0;
+    case 'upgrades': return Object.values(save.upgrades||{}).reduce((a,b)=>a+b,0)+Math.max(0,((save.gear&&save.gear.owned)||[]).length-1);
+    case 'staff': return z?totalStaff():0; case 'visitors': return zooStats.visitors||0; case 'rating': return opsStats.rating||1;
+    case 'restaurant': return B.filter(b=>b.type==='restaurant').length; case 'restroom': return B.filter(b=>b.type==='restroom').length;
+    case 'tier2': return (save.map&&save.map.visited||[]).filter(id=>DATA.mapById[id]&&DATA.mapById[id].tier>=2).length;
+    case 'rare': return Object.keys(save.collection).filter(id=>DATA.speciesById[id]&&DATA.speciesById[id].rarity!=='common').length;
+    case 'crafted': return (save.stats&&save.stats.crafted)||0; case 'births': return z?z.births||0:0; case 'released': return z?z.released||0:0;
+    case 'techs': return Object.keys((z&&z.tech)||{}).length; case 'bosses': return bossesDefeated(); case 'species': return Object.keys(save.collection).length;
+    case 'cars': return ((save.train&&save.train.cars)||[]).length; case 'freehab': return B.filter(b=>b.poly).length;
+    default: return 0;
+  }
+}
+function storyState(){ save.story=save.story||{ch:0,step:0,seen:-1}; return save.story; }
+function storyCurrent(){ const s=storyState(), ch=STORY().chapters[s.ch]; return ch?{ch,step:ch.steps[s.step],s}:null; }
+let storyT=0;
+function storyTick(dt){
+  if(modeOf()!=='career'||!DATA.story) return; storyT+=dt; if(storyT<1.5) return; storyT=0;
+  const cur=storyCurrent(); if(!cur) { $('zStory').hidden=true; return; }
+  const {ch,s}=cur;
+  if(s.seen!==s.ch){ s.seen=s.ch; persist(); showStoryCard(ch); return; }
+  let done=0, rw={};
+  while(s.ch<STORY().chapters.length){ const C=STORY().chapters[s.ch], st=C.steps[s.step]; if(!st||storyStat(st.stat)<st.target) break;
+    for(const [k,v] of Object.entries(st.reward||{})) rw[k]=(rw[k]||0)+v; done++; s.step++;
+    if(s.step>=C.steps.length){ s.ch++; s.step=0; for(const [k,v] of Object.entries(C.reward||{})) rw[k]=(rw[k]||0)+v; toast(`完成章節「${C.name}」！`); break; } }
+  if(done){ pay(rw,1); persist(); if(Object.keys(rw).length) toast(`任務完成 ×${done}：${costText(rw)}`); }
+  storyHud();
+}
+function storyHud(){
+  const el=$('zStory'), cur=storyCurrent(); if(!el) return;
+  if(!cur||modeOf()!=='career'){ el.hidden=true; return; }
+  const {ch,step,s}=cur; el.hidden=false;
+  el.innerHTML=`<b>${esc(ch.name)} ${s.step+1}/${ch.steps.length}</b><span>${esc(step.text)}</span><span class="num">${Math.min(storyStat(step.stat),step.target)}/${step.target}</span>`;
+  el.onclick=()=>toast(step.hint||step.text);
+}
+function showStoryCard(ch){
+  state='story'; $('zooUI').hidden=true; screenEl.hidden=false;
+  screenEl.innerHTML=`<div class="card"><h1><small>CHAPTER ${STORY().chapters.indexOf(ch)+1}</small>${esc(ch.name)}</h1>${ch.intro.map(p=>`<p>${esc(p)}</p>`).join('')}
+    <div class="btns"><button class="btn" id="stGo" type="button">開始</button></div></div>`;
+  $('stGo').onclick=()=>{ screenEl.hidden=true; state='zoo'; $('zooUI').hidden=false; storyHud(); };
+}
 
 /* =========================================================
    觸控操作設定：搖桿與按鈕可以調整大小、拖曳位置
