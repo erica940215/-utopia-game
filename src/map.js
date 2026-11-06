@@ -53,7 +53,7 @@ function renderMapInfo(v,avail,fuel){
   box.innerHTML=`<b>${esc(n.name)}</b>
     <span>${esc(STYPE[n.type])}・${esc(tier.name)}・路程煤炭 ${cost}${v.has(n.id)?'・去過':''}</span>
     ${n.type==='settlement'?`<span>倖存者會拿物資和你交易，也能換到稀有物種。</span>`
-      :`<span>可能出現：${esc(zones)}（${esc(cats)}）</span>${prog?`<span>這裡的圖鑑 ${prog.got}/${prog.total}</span>`:''}`}
+      :`<span>可能出現：${esc(zones)}（${esc(cats)}）</span>${prog?`<span>這裡的圖鑑 ${prog.got}/${prog.total}</span>`:''}${bossForNode(n)?`<span class="warnline">⚠ 霜影首領「${esc(bossForNode(n).name)}」守在這裡${bossKills(bossForNode(n).id)?`・已擊敗 ${bossKills(bossForNode(n).id)} 次`:''}。牠身邊封著一隻${esc(DATA.config.rarity[bossForNode(n).guard].name)}生物，附近有彈藥箱。</span>`:''}`}
     ${tierOK&&!enough?`<span class="warnline">煤炭不夠時火車會停在半路的荒原，要下車找到煤炭才能繼續。</span>`:''}
     <button type="button" class="btn" id="mapGo" ${tierOK?'':'disabled'}>${label}</button>`;
   if(tierOK) $('mapGo').onclick=()=>{

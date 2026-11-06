@@ -271,3 +271,9 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
 .zchal span{color:var(--frost-dim)}
 .zchal span.ok{color:#7fd88a}
 .zmodetag{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 12px);transform:translateX(-50%);font-size:12px;color:#1a0d02;background:var(--ice);border-radius:999px;padding:2px 10px;font-weight:700}
+
+/* 霜影首領 */
+#bossBar{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 74px);transform:translateX(-50%);width:min(360px,60vw);text-align:center;font-size:13px;font-weight:700;color:#cfefff;text-shadow:0 1px 4px rgba(0,0,0,.8)}
+#bossBar .bbar{height:9px;margin-top:3px;background:rgba(0,0,0,.45);border:1px solid rgba(159,232,255,.5);border-radius:5px;overflow:hidden}
+#bossBar .bbar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#7fe8ff,#e9f9ff);transition:width .15s linear}
+.bossline{color:var(--ember);font-weight:700}

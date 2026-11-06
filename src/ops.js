@@ -97,7 +97,7 @@ function computeRating(){
 function achStat(k){
   const z=save.zoo;
   return {species:Object.keys(save.collection).length,births:z.births||0,released:z.released||0,visitors:zooStats.visitors||0,
-    rating:opsStats.rating,staff:totalStaff(),props:(z.props||[]).length,runs:save.runs||0,endangered:opsStats.endangered||0}[k]||0;
+    rating:opsStats.rating,staff:totalStaff(),props:(z.props||[]).length,runs:save.runs||0,endangered:opsStats.endangered||0,bosses:bossesDefeated()}[k]||0;
 }
 function checkAchievements(){
   if(modeOf()!=='career') return;

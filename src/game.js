@@ -9,7 +9,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
    ========================================================= */
 const DATA = {};
 async function loadData(){
-  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets','staff','achievements','research','challenges'];
+  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets','staff','achievements','research','challenges','bosses'];
   const res = await Promise.all(names.map(n => fetch(`data/${n}.json`).then(r => { if(!r.ok) throw new Error(n); return r.json(); })));
   names.forEach((n,i) => DATA[n] = res[i]);
   DATA.speciesById = Object.fromEntries(DATA.species.map(s => [s.id, s]));
@@ -298,7 +298,7 @@ function buildStation(node, seed){
   curNode=node; curStation=st; warmZones=[]; lakeInfo=null;
   if(world) scene.remove(world);
   world=new THREE.Group(); scene.add(world);
-  colliders.length=1; interactables=[]; wraiths=[]; flares=[]; followers=[];
+  colliders.length=1; interactables=[]; wraiths=[]; flares=[]; followers=[]; boss=null; bossPending=null;
   rng=mulberry32(seed);
   const wallMat=M(0x5b6068), woodMat=M(0x4a3a30), snowCap=M(0xf2f6fa);
   const avoid=(x,z)=>(lakeInfo&&Math.hypot(x-lakeInfo.x,z-lakeInfo.z)<lakeInfo.r+3)||warmZones.some(w=>Math.hypot(x-w.x,z-w.z)<w.r+2);
@@ -382,6 +382,7 @@ function buildStation(node, seed){
     else { const a=R(0,6.28), r=R(20,110); x=Math.cos(a)*r; z=Math.sin(a)*r; }
     placeCatch(sp,C,x,z);
   }
+  placeBoss(node);
 }
 function placeCatch(sp,C,x,z){
   const y=heightAt(x,z), g=new THREE.Group(); g.position.set(x,y,z);
@@ -554,6 +555,11 @@ function interact(dt){
       bag[it.item.id]+=take; it.amount-=take; toast(`取得 ${it.item.name} ×${take}`);
       if(it.amount<=0){ it.done=true; world.remove(it.group); }
     }
+  } else if(it.type==='ammo'){
+    pt.textContent=ammo>=weapon.ammo?'彈藥是滿的':`[${key}] 補充彈藥`;
+    if(actPressed&&ammo<weapon.ammo){ ammo=weapon.ammo; it.done=true; world.remove(it.group); toast(`${weapon.name}彈藥補滿了`); }
+  } else if(it.type==='ice'&&it.locked){
+    pt.textContent=`${it.species.name}被${boss?boss.def.name:'首領'}的寒氣封住了，先擊敗牠`;
   } else if(it.type==='ice'){
     const sp=it.species, rar=DATA.config.rarity[sp.rarity];
     if(followers.length>=CFG().followCapacity) pt.textContent=`同時最多帶 ${CFG().followCapacity} 隻，先送回火車`;
@@ -626,6 +632,7 @@ function finish(failed){
   for(const k in haul) save.resources[k]=(save.resources[k]||0)+haul[k];
   ensureZoo();
   for(const id of rescued){ save.collection[id]=(save.collection[id]||0)+1; save.zoo.unplaced[id]=(save.zoo.unplaced[id]||0)+1; }
+  const bossHtml=bossSettle();
   persist();
   const total=Object.values(haul).reduce((a,b)=>a+b,0);
   const grade=failed?'列車在暴風雪中被迫出發':rescued.length>=4?'傳奇救援':rescued.length>=2?'順利歸隊':'勉強撐過';
@@ -635,6 +642,7 @@ function finish(failed){
     ${failed?'<p>你在暴風雪中失溫，列車員把你拖上車後只能鳴笛離開。</p>':''}
     <div class="ledger">${DATA.items.map(i=>`<div><b class="num">${haul[i.id]}</b><span>${esc(i.name)}</span></div>`).join('')}<div><b class="num">${rescued.length}</b><span>生物</span></div></div>
     ${rescued.length?`<div class="tags">${rescued.map(id=>`<span>${esc(DATA.speciesById[id].name)}${newOnes.includes(id)?'・新':''}</span>`).join('')}</div>`:'<p>這趟沒有救到生物。</p>'}
+    ${bossHtml}
     <p>共帶回物資 ${total} 單位${collapses?`，途中倒下 ${collapses} 次`:''}${newOnes.length?`，圖鑑新增 ${new Set(newOnes).size} 種`:''}。</p>
     ${curNode&&curNode.type==='stall'?stallButtons():''}
     <button class="btn${curNode&&curNode.type==='stall'?' ghost':''}" id="toHub" type="button">回到烏托邦</button>
@@ -715,6 +723,7 @@ function wireAuth(){
 /*@@OPS@@*/
 /*@@RESEARCH@@*/
 /*@@MODES@@*/
+/*@@BOSS@@*/
 /*@@CONTROLS@@*/
 /* =========================================================
    8. 主迴圈
@@ -792,11 +801,12 @@ function update(dt){
     if(w.hit>0){ w.hit-=dt; w.mat.emissive.setHex(0x553311); } else w.mat.emissive.setHex(0x0a1a2a);
     if(d<1.5&&!inHeat){ player.temp-=W.touchDrainPerSec*(CFG().wraithTouchMult||1)*dt; hurtT=0.3; player.pos.x+=dx/d*dt*3; player.pos.z+=dz/d*dt*3; }
   }
+  updateBoss(dt,inHeat,timeLeft<=0);
   if(hurtT>0) hurtT-=dt; $('hurt').style.opacity=hurtT>0?1:0;
   for(let i=flares.length-1;i>=0;i--){
     const f=flares[i]; f.life-=dt; f.v.y-=(f.grav??6)*dt; f.m.position.addScaledVector(f.v,dt);
-    let hit=false;
-    for(let j=wraiths.length-1;j>=0;j--){
+    let hit=bossHitTest(f);
+    if(!hit) for(let j=wraiths.length-1;j>=0;j--){
       const w=wraiths[j];
       if(f.m.position.distanceTo(tmpV.copy(w.g.position).setY(w.g.position.y+1.3))<weapon.range){
         hit=true; w.hp-=f.dmg||1; w.hit=0.25;

@@ -146,5 +146,26 @@
   "reward": {
    "research": 80
   }
+ },
+ {
+  "id": "boss_first",
+  "name": "霜影剋星",
+  "desc": "擊敗 1 個霜影首領",
+  "stat": "bosses",
+  "target": 1,
+  "reward": {
+   "research": 30
+  }
+ },
+ {
+  "id": "boss_all",
+  "name": "冰原的終結者",
+  "desc": "擊敗全部 3 個霜影首領",
+  "stat": "bosses",
+  "target": 3,
+  "reward": {
+   "coins": 1000,
+   "research": 80
+  }
  }
 ]
