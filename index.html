@@ -4776,9 +4776,19 @@ function enterPhoto(){
   $('zooUI').classList.add('photo'); $('photoBar').hidden=false; zGhost.visible=false; zSelBox.visible=false;
 }
 function exitPhoto(){ $('zooUI').classList.remove('photo'); $('photoBar').hidden=true; }
-function takePhoto(){
-  try{ renderer.render(zooScene,zooCam); const url=renderer.domElement.toDataURL('image/png'); const a=document.createElement('a'); a.href=url; a.download=`烏托邦-${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.png`; document.body.appendChild(a); a.click(); a.remove(); toast('拍好了，照片已下載'); }
-  catch(e){ toast('這裡沒辦法下載照片，可以直接用手機截圖'); }
+async function takePhoto(){
+  const name=`烏托邦-${new Date().toISOString().slice(0,19).replace(/[:T]/g,'-')}.png`;
+  renderer.render(zooScene,zooCam);
+  const blob=await new Promise(r=>{ try{ renderer.domElement.toBlob(r,'image/png'); }catch(e){ r(null); } });
+  if(!blob){ toast('這裡沒辦法存照片，可以直接截圖'); return; }
+  // 在 Claude 裡要透過下載功能，會先問你要不要存
+  if(window.claude&&window.claude.use){
+    const dl=await window.claude.use('downloads');
+    if(!dl){ toast('這裡沒辦法存照片，可以直接截圖'); return; }
+    try{ await dl.save({filename:name,data:blob}); toast('照片存好了'); }catch(e){ if(e&&e.code!=='declined') toast('照片沒有存成功'); }
+    return;
+  }
+  const url=URL.createObjectURL(blob), a=document.createElement('a'); a.href=url; a.download=name; document.body.appendChild(a); a.click(); a.remove(); setTimeout(()=>URL.revokeObjectURL(url),2000); toast('拍好了，照片已下載');
 }
 
 /* ---------- 劇情任務與新手教學 ---------- */
