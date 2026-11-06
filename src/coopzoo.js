@@ -171,15 +171,16 @@ let czPendingExp=null;
 function coopAttachZoo(ch){
   coop={code:'zoo',ch,host:false,peers:new Map(),zoo:true};
   ch.on('broadcast',{event:'start'},({payload})=>{ if(state==='play'||state==='confirm') return;
-    czPendingExp={node:payload.node,seed:payload.seed,by:payload.by,until:performance.now()+90000};
+    czPendingExp={node:payload.node,seed:payload.seed,by:payload.by,at:payload.at,until:performance.now()+90000};
     const b=$('zJoinExp'); if(b){ b.hidden=false; b.textContent=`${payload.by||'隊友'} 出發去${payload.node.name}了，按這裡一起去`; } toast(`${payload.by||'隊友'} 出發去${payload.node.name}了，可以一起去！`); });
   ch.on('broadcast',{event:'pos'},({payload})=>coopPeer(payload));
   ch.on('broadcast',{event:'take'},({payload})=>{ if(state!=='play') return; const it=interactables.find(i=>!i.done&&i.type===payload.t&&Math.hypot(i.pos.x-payload.x,i.pos.z-payload.z)<0.6); if(it){ it.done=true; world.remove(it.group); } });
-  ch.on('broadcast',{event:'boss'},({payload})=>{ if(boss&&!boss.dead&&state==='play'){ boss.hp-=payload.d; boss.hit=0.2; if(boss.hp<=0) defeatBoss(); } });
+  ch.on('broadcast',{event:'boss'},({payload})=>{ if(netAuth&&boss&&!boss.dead&&state==='play') damageBoss(payload.d); });
+  netHandlers(ch);
 }
 function czJoinPending(){
   const p=czPendingExp; $('zJoinExp').hidden=true; if(!p||performance.now()>p.until){ toast('隊友已經出發太久了'); return; }
   czPendingExp=null; if(coop) coop.host=false; czSetInZoo(false);
-  simulate(0); persist(); zooActive=false; $('zooUI').hidden=true; $('zPanel').hidden=true; screenEl.hidden=true; startExpedition(p.node,p.seed);
+  simulate(0); persist(); zooActive=false; $('zooUI').hidden=true; $('zPanel').hidden=true; screenEl.hidden=true; startExpedition(p.node,p.seed,p.at);
 }
 function czSetInZoo(v){ const z=coopZoo; if(!z||!z.subscribed) return; if(!v&&z.host){ czBroadcast(true); czSaveDb(true); } z.ch.track({name:coopName(),inZoo:v}); }

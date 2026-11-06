@@ -64,10 +64,11 @@ function updateBoss(dt,inHeat,storm){
   if(!boss||boss.dead) { $('bossBar').hidden=true; return; }
   const b=boss, B=b.def, A=B.attacks, g=b.g, s=B.size;
   b.phase+=dt;
-  const dx=player.pos.x-g.position.x, dz=player.pos.z-g.position.z, d=Math.max(0.01,Math.hypot(dx,dz));
-  const fromLair=Math.hypot(player.pos.x-b.lair.x,player.pos.z-b.lair.z);
-  if(!b.aggro && fromLair<B.aggro && !inHeat){ b.aggro=true; if(!b.announced){ b.announced=true; toast(`${B.name}醒過來了！${B.desc}`); } }
-  if(b.aggro && (fromLair>B.leash || inHeat)){ b.aggro=false; b.windup=0; b.charging=0; }
+  const tg=netTarget(g.position), dx=tg.x-g.position.x, dz=tg.z-g.position.z, d=Math.max(0.01,Math.hypot(dx,dz));   // 追最近的玩家
+  const ldx=player.pos.x-g.position.x, ldz=player.pos.z-g.position.z, ld=Math.max(0.01,Math.hypot(ldx,ldz));
+  const fromLair=netMinDist(b.lair);
+  if(!b.aggro && fromLair<B.aggro && !tg.inHeat){ b.aggro=true; if(!b.announced){ b.announced=true; toast(`${B.name}醒過來了！${B.desc}`); } }
+  if(b.aggro && (fromLair>B.leash || tg.inHeat)){ b.aggro=false; b.windup=0; b.charging=0; }
   const spd=B.speed*b.spdMult*(storm?1.2:1);
   if(b.charging>0){
     b.charging-=dt; g.position.addScaledVector(b.chargeDir,A.charge.speed*dt);
@@ -97,11 +98,12 @@ function updateBoss(dt,inHeat,storm){
     b.ring.scale.set(r,r,r); b.ring.material.opacity=0.25+k*0.5;
     if(b.windup<=0){
       b.ring.material.opacity=0.9; setTimeout(()=>{ if(b.ring) b.ring.material.opacity=0; },180);
-      if(d<A.nova.radius && !inHeat){ player.temp-=A.nova.drain*(CFG().wraithTouchMult||1); hurtT=0.6; player.pos.x+=dx/d*2.5; player.pos.z+=dz/d*2.5; toast('被寒氣爆發打中了！'); }
+      coopSend('nova',{node:curNode.id,x:g.position.x,z:g.position.z,r:A.nova.radius,dr:A.nova.drain});
+      if(ld<A.nova.radius && !inHeat){ player.temp-=A.nova.drain*(CFG().wraithTouchMult||1); hurtT=0.6; player.pos.x+=ldx/ld*2.5; player.pos.z+=ldz/ld*2.5; toast('被寒氣爆發打中了！'); }
     }
   } else b.ring.material.opacity=0;
   // 碰撞
-  if(d<1.1*s && !inHeat){ player.temp-=B.touchDrain*(CFG().wraithTouchMult||1)*dt; hurtT=0.3; player.pos.x+=dx/d*dt*5; player.pos.z+=dz/d*dt*5; if(b.charging>0){ player.temp-=A.charge.hitDrain; b.charging=0; player.pos.x+=dx/d*3; player.pos.z+=dz/d*3; toast('被撞飛了！'); } }
+  if(ld<1.1*s && !inHeat){ player.temp-=B.touchDrain*(CFG().wraithTouchMult||1)*dt; hurtT=0.3; player.pos.x+=ldx/ld*dt*5; player.pos.z+=ldz/ld*dt*5; if(b.charging>0){ player.temp-=A.charge.hitDrain; b.charging=0; player.pos.x+=ldx/ld*3; player.pos.z+=ldz/ld*3; toast('被撞飛了！'); } }
   if(b.hit>0){ b.hit-=dt; b.mat.emissive.setHex(0x553311); } else b.mat.emissive.setHex(b.windup>0?0x2a4a6a:0x0a1a2a);
   // 血條
   const bar=$('bossBar'); bar.hidden=!(b.aggro||b.hp<b.max) || fromLair>B.leash+20;
@@ -110,7 +112,7 @@ function updateBoss(dt,inHeat,storm){
 function spawnMinion(at){
   if(wraiths.length>=12) return;
   const a=Math.random()*Math.PI*2, x=at.x+Math.cos(a)*4, z=at.z+Math.sin(a)*4;
-  const keep=player.pos.clone(); player.pos.set(x+60,0,z);   // spawnWraith 以玩家為中心，暫時借用位置
+  if(!netAuth) return; const keep=player.pos.clone(); player.pos.set(x+60,0,z);   // spawnWraith 以玩家為中心，暫時借用位置
   const n=wraiths.length; spawnWraith(); player.pos.copy(keep);
   if(wraiths.length>n){ const w=wraiths[wraiths.length-1]; w.g.position.set(x,heightAt(x,z),z); }
 }
@@ -119,8 +121,7 @@ function bossHitTest(f){
   if(!boss||boss.dead) return false;
   const s=boss.def.size; tmpV.copy(boss.g.position); tmpV.y+=1.4*s;
   if(f.m.position.distanceTo(tmpV)>(weapon.range||1.5)+0.7*s) return false;
-  boss.hp-=f.dmg||1; boss.hit=0.2; boss.aggro=true; coopSend('boss',{d:f.dmg||1});
-  if(boss.hp<=0) defeatBoss();
+  damageBoss(f.dmg||1);
   return true;
 }
 function defeatBoss(){

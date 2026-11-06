@@ -438,7 +438,7 @@ function spawnWraith(forceType,single){
   for(let k=0;k<n;k++){
     const {g,mat}=makeEnemyMesh(def), px=x+(k?R(-3,3):0), pz=z+(k?R(-3,3):0);
     g.position.set(px,heightAt(px,pz),pz); world.add(g);
-    wraiths.push({g,mat,def,hp:Math.ceil(def.hp*wm),spd:Math.sqrt(wm)*def.speedMult,hit:0,phase:Math.random()*6});
+    wraiths.push({g,mat,def,hp:Math.ceil(def.hp*wm),spd:Math.sqrt(wm)*def.speedMult,hit:0,phase:Math.random()*6,nid:coopId+':'+(netNid++)});
   }
 }
 
@@ -453,16 +453,17 @@ const bagCount=()=>Object.values(bag).reduce((a,b)=>a+b,0);
 const zeroItems=()=>Object.fromEntries(DATA.items.map(i=>[i.id,0]));
 function distToTrain(x,z){ const cz=Math.max(TRAIN_Z0,Math.min(TRAIN_Z1,z)); return Math.hypot(x,z-cz); }
 
-function startExpedition(node,seed){
-  node=node||DATA.mapById.old_town;
+function startExpedition(node,seed,startedAt){
+  node=node||DATA.mapById.old_town; netSince=startedAt||Date.now(); netAuth=true; netEst=null;
   const sd=seed??((Date.now()^((save.runs+1)*7919))>>>0);
-  if(coop&&coop.host) coopSend('start',{node,seed:sd,by:coopName()});
+  if(coop&&coop.host) coopSend('start',{node,seed:sd,by:coopName(),at:netSince});
   buildStation(node,sd);
   bag=zeroItems(); haul=zeroItems(); rescued=[]; container=[];
   ensureProgress(); STATS=computeStats();
   weapon=effWeapon(save.gear.equipped.weapon||'flare_gun'); ammo=weapon.ammo; foodBuffs=[]; runElapsed=0; fireCd=0; fireHeld=false;
   STATS.heatRadius+=runMods.heatDelta||0; rebuildTrainCars(); initTrainDefense();
-  timeLeft=CFG().runSeconds+(runMods.timeDelta||0); collapses=0; nextSpawn=DATA.config.wraith.firstSpawnAt; sprint=false;
+  timeLeft=Math.max(30,CFG().runSeconds+(runMods.timeDelta||0)-(startedAt?(Date.now()-startedAt)/1000:0)); collapses=0;
+  if(startedAt) netSince=Date.now();   // 晚到的人不搶著負責敵人 nextSpawn=DATA.config.wraith.firstSpawnAt; sprint=false;
   player.pos.set(4.5,0,8); player.yaw=-Math.PI/2; player.pitch=0; player.temp=TMP().max;
   buildBagHud();
   zooActive=false; $('zooUI').hidden=true;
@@ -645,6 +646,7 @@ function collapse(){
 
 /* 結算 → 寫入存檔 */
 function finish(failed){
+  coopSend('leave',{id:coopId});
   state='result'; $('rotateHint').hidden=true; if(document.exitPointerLock) document.exitPointerLock();
   $('hud').hidden=true; $('touch').hidden=true;
   const newOnes=rescued.filter(id=>!save.collection[id]);
@@ -756,6 +758,7 @@ function wireAuth(){
 /*@@WORLD@@*/
 /*@@COOPZOO@@*/
 /*@@PROFILES@@*/
+/*@@NETFIGHT@@*/
 /*@@CONTROLS@@*/
 /* =========================================================
    8. 主迴圈
@@ -818,26 +821,29 @@ function update(dt){
     m.position.y=heightAt(m.position.x,m.position.z)+(isAnimated(m)?0:Math.abs(Math.sin(f.hop))*0.12);
   });
   const elapsed=C.runSeconds-timeLeft;
-  if(elapsed>nextSpawn){
+  netComputeAuth();
+  if(netAuth&&elapsed>nextSpawn){
     const max=timeLeft<=0?W.stormMax:W.baseMax+Math.floor(elapsed/W.addMaxEverySeconds);
     if(wraiths.length<max) spawnWraith();
     nextSpawn=elapsed+(timeLeft<=0?W.stormSpawnInterval:W.spawnInterval)*(C.wraithSpawnMult||1);
   }
   updateTrainDefense(dt,elapsed); if(state!=='play') return;
-  for(const w of wraiths){
+  for(const w of [...wraiths]){
+    if(!netAuth){ netFollowEnemy(w,dt,inHeat); continue; }
     if(w.raid){ raidStep(w,dt); continue; }
     const g=w.g; w.phase+=dt;
-    const dx=player.pos.x-g.position.x, dz=player.pos.z-g.position.z, d=Math.max(0.01,Math.hypot(dx,dz));
-    const holding=w.def&&w.def.ranged&&!inHeat&&enemyRanged(w,d,dx,dz,dt,inHeat);
+    const tg=netTarget(g.position), dx=tg.x-g.position.x, dz=tg.z-g.position.z, d=Math.max(0.01,Math.hypot(dx,dz));
+    const holding=w.def&&w.def.ranged&&!tg.inHeat&&enemyRanged(w,d,dx,dz,dt,tg.inHeat,tg);
     if(holding){}
-    else if(d<W.chaseRange&&!inHeat){ const s=(timeLeft<=0?W.stormSpeed:W.speed)*(w.spd||1)*dt; g.position.x+=dx/d*s; g.position.z+=dz/d*s; }
+    else if(d<W.chaseRange&&!tg.inHeat){ const s=(timeLeft<=0?W.stormSpeed:W.speed)*(w.spd||1)*dt; g.position.x+=dx/d*s; g.position.z+=dz/d*s; }
     else { g.position.x+=Math.sin(w.phase*0.5)*dt; g.position.z+=Math.cos(w.phase*0.4)*dt; }
     if(distToTrain(g.position.x,g.position.z)<C.heatRadius+1){ g.position.x-=dx/d*dt*4; g.position.z-=dz/d*dt*4; }
     g.rotation.y=Math.atan2(dx,dz); g.position.y=heightAt(g.position.x,g.position.z)+(w.def&&w.def.look!=='wraith'?0:Math.sin(w.phase*2)*0.25);
     if(w.hit>0){ w.hit-=dt; w.mat.emissive.setHex(0x553311); } else w.mat.emissive.setHex(0x0a1a2a);
-    if(d<1.5&&!inHeat){ player.temp-=W.touchDrainPerSec*(w.def?w.def.touchMult:1)*(CFG().wraithTouchMult||1)*dt; hurtT=0.3; player.pos.x+=dx/d*dt*3; player.pos.z+=dz/d*dt*3; }
+    const ldx=player.pos.x-g.position.x, ldz=player.pos.z-g.position.z, ld=Math.max(0.01,Math.hypot(ldx,ldz));
+    if(ld<1.5&&!inHeat){ player.temp-=W.touchDrainPerSec*(w.def?w.def.touchMult:1)*(CFG().wraithTouchMult||1)*dt; hurtT=0.3; player.pos.x+=ldx/ld*dt*3; player.pos.z+=ldz/ld*dt*3; }
   }
-  updateBoss(dt,inHeat,timeLeft<=0); coopTick(dt); updateEnemyShots(dt); updateFood(dt); updateVault();
+  if(netAuth) updateBoss(dt,inHeat,timeLeft<=0); else netFollowBoss(dt,inHeat); coopTick(dt); netTick(dt); updateEnemyShots(dt); updateFood(dt); updateVault();
   if(hurtT>0) hurtT-=dt; $('hurt').style.opacity=hurtT>0?1:0;
   for(let i=flares.length-1;i>=0;i--){
     const f=flares[i]; f.life-=dt; f.v.y-=(f.grav??6)*dt; f.m.position.addScaledVector(f.v,dt);
@@ -845,8 +851,7 @@ function update(dt){
     if(!hit) for(let j=wraiths.length-1;j>=0;j--){
       const w=wraiths[j];
       if(f.m.position.distanceTo(tmpV.copy(w.g.position).setY(w.g.position.y+enemyHitY(w)))<(weapon.range||1.5)){
-        hit=true; w.hp-=f.dmg||1; w.hit=0.25;
-        if(w.hp<=0){ world.remove(w.g); wraiths.splice(j,1); toast(`${w.def?w.def.name:'霜影'}被打倒了`); }
+        hit=true; damageEnemy(w,f.dmg||1);
         break;
       }
     }

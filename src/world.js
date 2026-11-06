@@ -137,12 +137,13 @@ const coopId=Math.random().toString(36).slice(2,10);
 function coopName(){ return (sbUser&&sbUser.email&&sbUser.email.split('@')[0])||('列車長'+coopId.slice(0,3)); }
 function coopJoin(code,host){
   if(!sb) return; if(coop&&coop.zoo) return; coopLeave();
-  const ch=sb.channel('coop-'+code,{config:{broadcast:{self:false},presence:{key:coopId}}});
+  const ch=sb.channel('coop-'+code,{config:{broadcast:{self:false,ack:false},presence:{key:coopId}}});
   coop={code,ch,host,peers:new Map()};
-  ch.on('broadcast',{event:'start'},({payload})=>{ if(coop.host) return; const n=payload.node; toast(`隊長出發去${n.name}了，跟上！`); if(state==='zoo'||state==='dex'||state==='map') { zooActive=false; $('zooUI').hidden=true; $('zPanel').hidden=true; screenEl.hidden=true; startExpedition(n,payload.seed); } });
+  ch.on('broadcast',{event:'start'},({payload})=>{ if(coop.host) return; const n=payload.node; toast(`隊長出發去${n.name}了，跟上！`); if(state==='zoo'||state==='dex'||state==='map') { zooActive=false; $('zooUI').hidden=true; $('zPanel').hidden=true; screenEl.hidden=true; startExpedition(n,payload.seed,payload.at); } });
   ch.on('broadcast',{event:'pos'},({payload})=>coopPeer(payload));
   ch.on('broadcast',{event:'take'},({payload})=>{ if(state!=='play') return; const it=interactables.find(i=>!i.done&&i.type===payload.t&&Math.hypot(i.pos.x-payload.x,i.pos.z-payload.z)<0.6); if(it){ it.done=true; world.remove(it.group); } });
-  ch.on('broadcast',{event:'boss'},({payload})=>{ if(boss&&!boss.dead&&state==='play'){ boss.hp-=payload.d; boss.hit=0.2; if(boss.hp<=0) defeatBoss(); } });
+  ch.on('broadcast',{event:'boss'},({payload})=>{ if(netAuth&&boss&&!boss.dead&&state==='play') damageBoss(payload.d); });
+  netHandlers(ch);
   ch.on('presence',{event:'sync'},()=>{ const st=ch.presenceState(); coop.members=Object.values(st).map(v=>v[0]); if(state==='dex') renderCoopBox(); });
   ch.subscribe(async s=>{ if(s==='SUBSCRIBED'){ await ch.track({id:coopId,name:coopName(),host:!!host}); toast(host?`房間 ${code} 建好了，把房號告訴朋友`:`加入了房間 ${code}`); } });
 }
@@ -151,7 +152,7 @@ function coopSend(event,payload){ if(coop) coop.ch.send({type:'broadcast',event,
 let coopPosT=0;
 function coopTick(dt){
   if(!coop||state!=='play') return; coopPosT-=dt; updateMatesHud();
-  if(coopPosT<=0){ coopPosT=0.1; coopSend('pos',{id:coopId,name:coopName(),x:player.pos.x,z:player.pos.z,yaw:player.yaw,node:curNode&&curNode.id}); }
+  if(coopPosT<=0){ coopPosT=0.1; coopSend('pos',{id:coopId,name:coopName(),x:player.pos.x,z:player.pos.z,yaw:player.yaw,node:curNode&&curNode.id,since:netSince}); }
   for(const p of coop.peers.values()){ if(!p.g.parent&&world&&p.node===(curNode&&curNode.id)) world.add(p.g); p.g.position.lerp(p.to,Math.min(1,dt*10)); p.g.position.y=heightAt(p.g.position.x,p.g.position.z); p.g.visible=p.node===(curNode&&curNode.id); }
   animateMates(dt);
 }
@@ -172,7 +173,7 @@ function coopPeer(m){
   let p=coop.peers.get(m.id);
   if(!p){ p={...makeMate(m.name,coop.peers.size),to:new THREE.Vector3(m.x,0,m.z),name:m.name}; p.g.position.copy(p.to); coop.peers.set(m.id,p); }
   const moved=Math.hypot(m.x-p.to.x,m.z-p.to.z);
-  p.node=m.node; p.to.set(m.x,0,m.z); p.g.rotation.y=m.yaw; p.speed=moved/0.1; p.seen=performance.now();
+  p.node=m.node; p.since=m.since; p.to.set(m.x,0,m.z); p.g.rotation.y=m.yaw; p.speed=moved/0.1; p.seen=performance.now();
 }
 function animateMates(dt){
   for(const p of coop.peers.values()){ if(!p.legs) continue; const sp=Math.min(1,(p.speed||0)/5); p.phase+=dt*(4+sp*8);

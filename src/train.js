@@ -76,13 +76,13 @@ function raidStep(w,dt){
 let trainHitT=0;
 function updateTrainDefense(dt,elapsed){
   const D=DEF();
-  if(elapsed>nextRaid){ spawnRaid(); nextRaid=elapsed+D.raidEvery*(timeLeft<=0?0.6:1); }
+  if(netAuth&&elapsed>nextRaid){ spawnRaid(); nextRaid=elapsed+D.raidEvery*(timeLeft<=0?0.6:1); }
   // 砲塔
   for(let i=0;i<turretCd.length;i++){
     turretCd[i]-=dt; if(turretCd[i]>0) continue;
     let best=null,bd=D.turretRange;
     for(const w of wraiths){ const dd=distToTrain(w.g.position.x,w.g.position.z); if(dd<bd){ bd=dd; best=w; } }
-    if(!best) continue; turretCd[i]=D.turretCooldown;
+    if(!best) continue; turretCd[i]=D.turretCooldown;   // 砲塔打中的傷害也走 damageEnemy
     const from=new THREE.Vector3(0,5,Math.max(TRAIN_Z0,Math.min(TRAIN_Z1,best.g.position.z))-i*2);
     const to=best.g.position.clone().setY(best.g.position.y+1.3), dir=to.sub(from).normalize();
     const m=sph(0.12,flareMat); m.position.copy(from); world.add(m);

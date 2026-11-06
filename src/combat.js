@@ -34,13 +34,14 @@ const enemyHitY=w=>w.def&&w.def.look==='hound'?0.8:w.def&&w.def.look==='brute'?2
 /* 遠程敵人的冰刺 */
 let eShots=[];
 const shardMat=new THREE.MeshBasicMaterial({color:0xc8f4ff});
-function enemyRanged(w,d,dx,dz,dt,inHeat){
+function enemyRanged(w,d,dx,dz,dt,inHeat,tg){
   const R=w.def.ranged, g=w.g; w.rcd=(w.rcd??R.every*Math.random())-dt;
   if(d<R.keep){ g.position.x-=dx/d*dt*2.5; g.position.z-=dz/d*dt*2.5; }
   if(d<R.range&&!inHeat&&w.rcd<=0){
-    w.rcd=R.every; const from=g.position.clone().setY(g.position.y+1.4), to=player.pos.clone().setY(player.pos.y+1.3), dir=to.sub(from).normalize();
+    w.rcd=R.every; const from=g.position.clone().setY(g.position.y+1.4), to=tg?new THREE.Vector3(tg.x,heightAt(tg.x,tg.z)+1.3,tg.z):player.pos.clone().setY(player.pos.y+1.3), dir=to.sub(from).normalize();
     const m=new THREE.Mesh(new THREE.ConeGeometry(0.08,0.5,5),shardMat); m.position.copy(from); m.lookAt(from.clone().add(dir)); m.rotateX(Math.PI/2); world.add(m);
     eShots.push({m,v:dir.multiplyScalar(R.speed),life:2,drain:R.drain});
+    if(coop&&netPeersHere().length){ const v=eShots[eShots.length-1].v; coopSend('shot',{node:curNode.id,p:[from.x,from.y,from.z],v:[v.x,v.y,v.z],dr:R.drain}); }
   }
   return d<R.range;   // 在射程內就不再往前衝
 }
@@ -80,10 +81,9 @@ function meleeAttack(){
   fireCd=melee?weapon.cooldown:0.7;
   const fx=-Math.sin(player.yaw), fz=-Math.cos(player.yaw); let n=0;
   for(let j=wraiths.length-1;j>=0;j--){ const w=wraiths[j], dx=w.g.position.x-player.pos.x, dz=w.g.position.z-player.pos.z, d=Math.hypot(dx,dz);
-    if(d<reach&&(dx*fx+dz*fz)/Math.max(d,0.01)>0.35){ w.hp-=dmg; w.hit=0.25; w.g.position.x+=dx/d*1.2; w.g.position.z+=dz/d*1.2; n++;
-      if(w.hp<=0){ world.remove(w.g); wraiths.splice(j,1); toast(`${w.def?w.def.name:'霜影'}被打倒了`); } } }
+    if(d<reach&&(dx*fx+dz*fz)/Math.max(d,0.01)>0.35){ if(netAuth){ w.g.position.x+=dx/d*1.2; w.g.position.z+=dz/d*1.2; } n++; damageEnemy(w,dmg); } }
   if(boss&&!boss.dead){ const dx=boss.g.position.x-player.pos.x, dz=boss.g.position.z-player.pos.z, d=Math.hypot(dx,dz);
-    if(d<reach+boss.def.size*0.8){ boss.hp-=dmg; boss.hit=0.2; boss.aggro=true; n++; coopSend('boss',{d:dmg}); if(boss.hp<=0) defeatBoss(); } }
+    if(d<reach+boss.def.size*0.8){ n++; damageBoss(dmg); } }
   $('cross').classList.add('swing'); setTimeout(()=>$('cross').classList.remove('swing'),120);
   if(!melee&&!n) toast('沒子彈了，只能用槍托敲。回熱區補彈藥');
 }
@@ -194,8 +194,8 @@ function placeVault(node,avoid){
 }
 const inVault=()=>vault&&Math.abs(player.pos.x-vault.x)<vault.W/2&&Math.abs(player.pos.z-vault.z)<vault.D/2;
 function updateVault(){
-  if(!vault||vault.woke) return;
-  if(Math.hypot(player.pos.x-vault.x,player.pos.z-vault.z)<20){
+  if(!vault||vault.woke||!netAuth) return;
+  if(netMinDist({x:vault.x,z:vault.z})<20){
     vault.woke=true; toast('碉堡裡有東西在動……');
     const keep=player.pos.clone();
     for(const [type,dx,dz] of [['revenant',-3,-6],['revenant',3,-6],['revenant',0,4],['soldier',0,-8]]){
