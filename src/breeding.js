@@ -79,7 +79,8 @@ function releaseAnimal(a){
   const research=Math.round(B.releaseResearch*(1+rar)*(a.stars/2)), coins=Math.round(B.releaseCoins*(1+rar)*(a.stars/2));
   save.zoo.research=(save.zoo.research||0)+research; save.zoo.coins+=coins;
   save.zoo.released=(save.zoo.released||0)+1; consOnRelease(a);
-  return {research,coins};
+  const cp=DATA.config.biz.cpRelease[sp.rarity]||1; earnCp(cp);
+  return {research,coins,cp};
 }
 
 /* ---------- 壽命與老化（數值在 config.aging） ---------- */

@@ -1,5 +1,5 @@
 {
- "version": 10,
+ "version": 11,
  "expedition": {
   "runSeconds": 300,
   "stormWarnSeconds": 60,
@@ -497,6 +497,125 @@
   "genes": {
    "mutation": 10,
    "inbreedLoss": 15
+  }
+ },
+ "biz": {
+  "_comment": "交易中心、水電、員工、遊客、行銷、貸款",
+  "trainBonus": 0.25,
+  "trainCost": [
+   {
+    "coins": 200
+   },
+   {
+    "coins": 500,
+    "research": 20
+   }
+  ],
+  "quitBelow": 30,
+  "quitChancePerMin": 0.02,
+  "wages": [
+   {
+    "name": "偏低（省錢）",
+    "mult": 0.8
+   },
+   {
+    "name": "一般",
+    "mult": 1
+   },
+   {
+    "name": "優渥（士氣高）",
+    "mult": 1.25
+   }
+  ],
+  "gatePower": 10,
+  "gateWater": 2,
+  "powerBillPerUnitMin": 0.01,
+  "outagePenalty": 12,
+  "dirtyWaterPenalty": 10,
+  "rideShare": 0.015,
+  "rideFare": 3,
+  "tramSatisfaction": 8,
+  "donationMaxBoxes": 8,
+  "donationPerVisitorMin": 0.002,
+  "refundBelow": 35,
+  "campaigns": [
+   {
+    "id": "flyer",
+    "name": "發傳單",
+    "cost": {
+     "coins": 120
+    },
+    "visitorMult": 1.15,
+    "minutes": 30
+   },
+   {
+    "id": "radio",
+    "name": "廣播節目",
+    "cost": {
+     "coins": 400
+    },
+    "visitorMult": 1.3,
+    "minutes": 45
+   },
+   {
+    "id": "festival",
+    "name": "冰原動物節",
+    "cost": {
+     "coins": 1200,
+     "feed": 20
+    },
+    "visitorMult": 1.6,
+    "minutes": 60
+   }
+  ],
+  "loans": [
+   {
+    "amount": 1000,
+    "interest": 0.15,
+    "minutes": 120
+   },
+   {
+    "amount": 3000,
+    "interest": 0.2,
+    "minutes": 240
+   },
+   {
+    "amount": 8000,
+    "interest": 0.25,
+    "minutes": 480
+   }
+  ],
+  "marketOffers": 6,
+  "marketRefreshMinutes": 60,
+  "refreshCostCp": 5,
+  "sellRatio": 0.6,
+  "prices": {
+   "common": {
+    "coins": 120
+   },
+   "rare": {
+    "coins": 300,
+    "cp": 5
+   },
+   "endangered": {
+    "coins": 700,
+    "cp": 20
+   },
+   "legendary": {
+    "coins": 2000,
+    "cp": 60
+   }
+  },
+  "cpRelease": {
+   "common": 1,
+   "rare": 3,
+   "endangered": 8,
+   "legendary": 20
+  },
+  "cpBirth": 3,
+  "cpConservation": {
+   "endangered": 20,
+   "legendary": 50
   }
  }
 }

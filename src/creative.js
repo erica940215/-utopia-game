@@ -127,6 +127,7 @@ function makeProp(type){
     case 'fence_wood': { for(const x of [-0.95,0,0.95]) add(box(0.1,1.1,0.1,wood),x,0.55,0); for(const y of [0.4,0.85]) add(box(2,0.1,0.05,wood),0,y,0); break; }
     case 'fence_stone': add(box(2,1.1,0.4,0x8a8a86),0,0.55,0); add(box(2.05,0.12,0.45,0xf2f6fa),0,1.15,0); break;
     case 'fence_glass': { add(box(2,1.1,0.06,glassM),0,0.6,0); add(box(2,0.06,0.1,dark),0,1.15,0); break; }
+    case 'donation_box': { add(box(0.12,0.9,0.12,dark),0,0.45,0); add(box(0.55,0.55,0.4,0x2a6a4a),0,1.15,0); add(box(0.3,0.04,0.05,0xe9c46a),0,1.43,0); break; }
     case 'scratch_post': { add(cyl(0.18,0.2,1.8,0xb89a6a,8),0,0.9,0); add(cyl(0.5,0.5,0.1,wood,10),0,0.05,0); for(let i=0;i<5;i++) add(cyl(0.2,0.2,0.08,0x8a7a5a,8),0,0.3+i*0.3,0); break; }
     case 'ball': add(sph(0.45,0xd84a3a),0,0.45,0); add(box(0.92,0.12,0.12,0xf2efe6),0,0.45,0); break;
     case 'hay_feeder': { for(const x of [-0.5,0.5]) add(box(0.1,1.8,0.1,wood),x,0.9,0); add(box(1.1,0.1,0.1,wood),0,1.8,0); add(sph(0.4,0xc8b060),0,1.3,0).scale.y=1.3; break; }

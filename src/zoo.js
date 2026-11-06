@@ -108,6 +108,17 @@ function makeBuildingMesh(b){
     if(d.service==='rest'){ const pad=box(W-0.3,0.15,D-0.3,0xa8a098); pad.position.y=0.08; g.add(pad); for(const [x,z] of [[-0.5,0],[0.5,0]]){ const bn=box(1.2,0.45,0.4,0x6a4a32); bn.position.set(x*W/2,0.3,z); g.add(bn); } const tr=sph(0.8,0x3f6f3a); tr.position.set(0,2,-D/2+0.5); g.add(tr); const tk=cyl(0.1,0.12,1.6,0x5a4030,6); tk.position.set(0,0.8,-D/2+0.5); g.add(tk); }
     else { const bd=box(W-0.4,hgt,D-0.4,0xe8e0d0); bd.position.y=hgt/2; g.add(bd); const rf=box(W,0.3,D,hex(d.color)); rf.position.y=hgt+0.15; g.add(rf); const sg=box(Math.min(1.6,W-0.6),0.4,0.06,hex(d.color)); sg.position.set(0,hgt-0.5,D/2-0.17); g.add(sg); const dr=box(0.7,1.4,0.05,0x3a2e2a); dr.position.set(0,0.7,D/2-0.18); g.add(dr); }
   }
+  else if(d.kind==='utility'){
+    if(b.type==='solar_panel'){ for(const x of [-0.5,0.5]){ const p=box(1.6,0.06,1.0,hex(d.color)); p.position.set(0,0.8,x*1.6); p.rotation.x=-0.5; g.add(p); const l=box(0.08,0.8,0.08,0x2b3038); l.position.set(0,0.4,x*1.6); g.add(l); } }
+    else { const bd=box(W-0.6,2,D-0.6,hex(d.color)); bd.position.y=1; g.add(bd); const st=cyl(0.25,0.3,2.2,0x2b3038,8); st.position.set(W/4,3,-D/4); g.add(st);
+      if(d.util==='water'){ const t=cyl(0.8,0.8,1.2,0x9fd2ea,14); t.position.set(-W/4,2.6,D/4); g.add(t); } }
+  }
+  else if(d.kind==='transport'){
+    const pl=box(W-0.2,0.5,D-0.2,0xa8a098); pl.position.y=0.25; g.add(pl);
+    for(const [x,z] of [[-1,-1],[1,-1],[-1,1],[1,1]]){ const p=box(0.15,3,0.15,0x4a4f56); p.position.set(x*(W/2-0.4),1.75,z*(D/2-0.4)); g.add(p); }
+    const rf=box(W,0.2,D,hex(d.color)); rf.position.y=4.3; g.add(rf);
+    const sg=box(1.4,0.4,0.06,0xf2efe6); sg.position.set(0,3.9,D/2-0.1); g.add(sg);
+  }
   else if(d.kind==='gate'){
     const pm=M(hex(d.color));
     for(const s of [-1,1]){ const p=box(0.6,3.4,0.6,pm); p.position.set(s*(W/2-0.3),1.7,0); g.add(p); }
@@ -120,7 +131,7 @@ function rebuildZoo(){
   for(const g of zooBMeshes.values()) zooRoot.remove(g);
   zooBMeshes.clear();
   for(const b of save.zoo.buildings){ const g=makeBuildingMesh(b); zooRoot.add(g); zooBMeshes.set(b.uid,g); }
-  refreshTerrain(); rebuildProps(); rebuildZooAnimals(); updateSelBox();
+  refreshTerrain(); rebuildProps(); rebuildZooAnimals(); updateSelBox(); rebuildTram();
 }
 function rebuildZooAnimals(){
   for(const a of zooAnimals) zooRoot.remove(a.mesh);
@@ -248,7 +259,7 @@ function openHabitatPanel(b){
   $('zPanel').innerHTML=`
     <div class="zp-head"><div><b>${esc(d.name)}</b><span>${T}°C・${inside.length}/${d.capacity} 隻・${fed?'有飼料站':'<em>附近沒有飼料站</em>'}</span></div><button type="button" class="zclose" id="zpClose" aria-label="關閉">✕</button></div>
     ${note?`<div class="zp-note">${note}</div>`:''}
-    ${habitatCareHtml(b)}
+    ${assignHtml(b)}${habitatCareHtml(b)}
     ${inside.length?inside.map(a=>{ const sp=DATA.speciesById[a.species], tOK=T>=sp.tempRange[0]&&T<=sp.tempRange[1], adult=isAdult(a);
       return `<div class="zp-row"><div class="zp-name"><b>${sexIcon(a)} ${esc(nameOf(a))} <span class="stars">${STAR_TXT(a.stars)}</span></b>
           <span class="genes">${genesTxt(a)}</span><span>${stageOf(a)==='老年'?'<em>老年</em>':stageOf(a)}${a.preg?'・懷孕中':''}${a.gen?`・第 ${a.gen} 代`:''}・適溫 ${sp.tempRange[0]}～${sp.tempRange[1]}°C${tOK?'':'・<em>溫度不合</em>'}</span></div>
@@ -262,7 +273,7 @@ function openHabitatPanel(b){
     <p class="zp-empty">同種、一公一母、都成年而且幸福度 ${BR().minHappy} 以上，就有機會懷孕。寶寶的星等接近父母的平均。${agingOff()?'':'動物會慢慢變老：老年動物不再繁殖、幸福度和吸引力稍微下降，壽命走完後會安詳離開。星等越高活得越久。'}</p>`;
   $('zPanel').hidden=false;
   const after=()=>{ rebuildZooAnimals(); simulate(0); openHabitatPanel(b); updateZooHud(); persist(); };
-  wireHabitatCare(b);
+  wireHabitatCare(b); wireAssign(b);
   $('zpClose').onclick=()=>{ $('zPanel').hidden=true; zSelUid=null; updateSelBox(); };
   $('zPanel').querySelectorAll('[data-in]').forEach(el=>el.onclick=()=>{ const id=el.dataset.in; z.unplaced[id]--; z.animals.push(newIndividual(id,b.uid)); after(); });
   $('zPanel').querySelectorAll('[data-st]').forEach(el=>el.onclick=()=>{ const i=z.stored.findIndex(a=>a.id===el.dataset.st); if(i<0) return; const a=z.stored.splice(i,1)[0]; a.habitat=b.uid; z.animals.push(a); after(); });
@@ -271,7 +282,7 @@ function openHabitatPanel(b){
   $('zPanel').querySelectorAll('[data-rel]').forEach(el=>el.onclick=()=>{
     if(el.dataset.confirm!=='1'){ el.dataset.confirm='1'; el.textContent='確定野放？'; el.classList.add('add'); return; }
     const i=z.animals.findIndex(a=>a.id===el.dataset.rel); if(i<0) return; const a=z.animals.splice(i,1)[0];
-    const r=releaseAnimal(a); toast(`${nameOf(a)} 回到野外了。保育成果：研究 +${r.research}、金幣 +${r.coins}`); after();
+    const r=releaseAnimal(a); toast(`${nameOf(a)} 回到野外了。保育成果：研究 +${r.research}、金幣 +${r.coins}、保育點數 +${r.cp}`); after();
   });
 }
 
@@ -389,7 +400,7 @@ function zooUpdate(dt){
   zHudT+=dt; if(zHudT>=0.5){ zHudT=0; updateZooHud(); }
   zAchT=(zAchT||0)+dt; if(zAchT>=5){ zAchT=0; checkAchievements(); }
   zChT=(zChT||0)+dt; if(zChT>=1){ zChT=0; challengeHud(); checkChallenge(); }
-  updatePeople(dt);
+  updatePeople(dt); updateTram(dt); updateBubbles(dt);
   if(zBrushing&&state==='zoo'){ applyBrush(zBrushing.x,zBrushing.z,zBrushing.tool,dt); refreshTerrain(); }
   if(state==='zoo'){ const px=(keys.KeyD||keys.ArrowRight?1:0)-(keys.KeyA||keys.ArrowLeft?1:0), pz=(keys.KeyS||keys.ArrowDown?1:0)-(keys.KeyW||keys.ArrowUp?1:0);
     if(px||pz){ const lim=GN()*TS()/2; zooCamT.x=Math.max(-lim,Math.min(lim,zooCamT.x+px*zooCamT.d*0.6*dt)); zooCamT.z=Math.max(-lim,Math.min(lim+6,zooCamT.z+pz*zooCamT.d*0.6*dt)); } }
@@ -423,6 +434,7 @@ $('zDex').onclick=()=>{ $('zooUI').hidden=true; showDex(); };
 $('zGo').onclick=()=>showMap();
 $('zMode').onclick=()=>{ persist(); showModeSelect(); };
 $('zLab').onclick=()=>{ $('zooUI').hidden=true; showLab(); };
+$('zMarket').onclick=()=>{ $('zooUI').hidden=true; showMarket(); };
 $('zOps').onclick=()=>{ $('zooUI').hidden=true; showOps(); };
 $('zShop').onclick=()=>{ $('zooUI').hidden=true; showWorkshop(); };
 $('zCtrl').hidden=!isTouch; $('zCtrl').onclick=()=>{ $('zooUI').hidden=true; startCtrlEdit(); };

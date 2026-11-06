@@ -145,7 +145,8 @@
   "ground": "#5a7a4a",
   "fence": "#c9d6dd",
   "house": true,
-  "indoor": true
+  "indoor": true,
+  "power": 3
  },
  {
   "id": "reptile_house",
@@ -168,7 +169,8 @@
   "ground": "#6a5a3a",
   "fence": "#9aa3ab",
   "house": true,
-  "indoor": true
+  "indoor": true,
+  "power": 3
  },
  {
   "id": "pond",
@@ -212,7 +214,8 @@
   "ground": "#4d6b4a",
   "fence": "#c9d6dd",
   "house": true,
-  "indoor": true
+  "indoor": true,
+  "power": 3
  },
  {
   "id": "feeder",
@@ -261,7 +264,8 @@
    "scrap": 12,
    "coins": 80
   },
-  "color": "#c86a3a"
+  "color": "#c86a3a",
+  "power": 2
  },
  {
   "id": "shop",
@@ -278,7 +282,8 @@
    "scrap": 10,
    "coins": 70
   },
-  "color": "#3a7ac8"
+  "color": "#3a7ac8",
+  "power": 2
  },
  {
   "id": "restroom",
@@ -294,7 +299,8 @@
    "scrap": 6,
    "coins": 30
   },
-  "color": "#8a9aa6"
+  "color": "#8a9aa6",
+  "power": 2
  },
  {
   "id": "rest_area",
@@ -310,7 +316,8 @@
    "scrap": 4,
    "coins": 25
   },
-  "color": "#6a8a4a"
+  "color": "#6a8a4a",
+  "power": 2
  },
  {
   "id": "large_feeder",
@@ -352,7 +359,8 @@
   "fence": "#c9d6dd",
   "house": true,
   "requires": "climate_dome_tech",
-  "groundPaint": "grass"
+  "groundPaint": "grass",
+  "power": 3
  },
  {
   "id": "aquarium",
@@ -376,7 +384,73 @@
   "water": true,
   "house": true,
   "requires": "aquarium_tech",
-  "indoor": true
+  "indoor": true,
+  "power": 3
+ },
+ {
+  "id": "power_plant",
+  "name": "燃煤發電機",
+  "kind": "utility",
+  "util": "power",
+  "supply": 25,
+  "fuelPerMin": 0.03,
+  "size": [
+   2,
+   2
+  ],
+  "cost": {
+   "scrap": 20,
+   "coins": 120
+  },
+  "color": "#3a3a3e"
+ },
+ {
+  "id": "solar_panel",
+  "name": "太陽能板",
+  "kind": "utility",
+  "util": "power",
+  "supply": 8,
+  "size": [
+   2,
+   2
+  ],
+  "cost": {
+   "scrap": 25,
+   "coins": 200
+  },
+  "color": "#2a4a7a"
+ },
+ {
+  "id": "water_plant",
+  "name": "水處理廠",
+  "kind": "utility",
+  "util": "water",
+  "supply": 6,
+  "power": 2,
+  "size": [
+   2,
+   2
+  ],
+  "cost": {
+   "scrap": 18,
+   "coins": 110
+  },
+  "color": "#3a7a9a"
+ },
+ {
+  "id": "tram_station",
+  "name": "小火車站",
+  "kind": "transport",
+  "power": 4,
+  "size": [
+   2,
+   2
+  ],
+  "cost": {
+   "scrap": 20,
+   "coins": 150
+  },
+  "color": "#c8402a"
  },
  {
   "id": "gate",

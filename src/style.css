@@ -305,3 +305,8 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
 .needs .ok{color:#7fd88a}
 .needs .bad{color:var(--danger)}
 .zp-name .genes{font-size:11px;color:var(--frost-dim)}
+
+/* 園區經營 */
+.fin{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:4px 16px;font-size:13px}
+.fin label{display:flex;justify-content:space-between;gap:10px}
+.fin .neg{color:var(--danger)}

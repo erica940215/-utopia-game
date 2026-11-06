@@ -14,6 +14,7 @@ function ensureOps(){
   z.clean=z.clean??100; z.births=z.births||0; z.ach=z.ach||{};
   for(const b of z.buildings) if(b.cond==null) b.cond=100;
   for(const a of z.animals) if(a.health==null) a.health=100;
+  ensureBiz();
 }
 
 /* 每次模擬：先處理員工（薪水、照護覆蓋、維修、清潔、醫療），再算動物需求 */
@@ -21,21 +22,22 @@ function opsBeforeAnimals(min){
   const z=save.zoo, O=OPS(), S=DATA.staffById;
   // 薪水
   const salary=Object.entries(z.staff).reduce((s,[id,n])=>s+(S[id]?S[id].salaryPerMin*n:0),0);
-  opsStats.salary=salary; z.coins-=salary*min;
+  opsStats.salary=salary; z.coins-=salary*(z.wage||1)*min;
   opsStats.unpaid=z.coins<0; if(z.coins<0) z.coins=0;
   const eff=opsStats.unpaid?0.5:1;
   // 飼育員覆蓋率
   const need=z.animals.length;
-  opsStats.coverage=need?Math.min(1,staffCount('keeper')*S.keeper.capacity*RF().keeperCapacityMult*eff/need):1;
+  opsStats.coverage=need?Math.min(1,staffPower('keeper')*S.keeper.capacity*RF().keeperCapacityMult*eff/need):1;
+  computeHabCov(); moraleStep(min); utilityStep(min);
   // 設施耗損與技工維修
   const wear=z.buildings.filter(b=>{ const k=bdef(b.type).kind; return k!=='path'&&k!=='gate'; });
   for(const b of wear) b.cond=Math.max(0,(b.cond??100)-O.conditionDecayPerMin*min);
-  let repair=staffCount('mechanic')*S.mechanic.repairPerMin*RF().repairMult*eff*min;
+  let repair=staffPower('mechanic')*S.mechanic.repairPerMin*RF().repairMult*eff*min;
   for(const b of wear.slice().sort((a,b)=>a.cond-b.cond)){ if(repair<=0) break; const r=Math.min(repair,100-b.cond); b.cond+=r; repair-=r; }
   // 清潔
-  z.clean=Math.max(0,Math.min(100,z.clean-(zooStats.visitors||0)*O.litterPerVisitorMin*min+staffCount('janitor')*S.janitor.cleanPerMin*RF().cleanMult*eff*min));
+  z.clean=Math.max(0,Math.min(100,z.clean-(zooStats.visitors||0)*O.litterPerVisitorMin*min+staffPower('janitor')*S.janitor.cleanPerMin*RF().cleanMult*eff*min));
   // 生病與獸醫
-  let cure=staffCount('vet')*S.vet.curePerMin*eff*min;
+  let cure=staffPower('vet')*S.vet.curePerMin*eff*min;
   for(const a of z.animals){
     if(!a.sick&&Math.random()<O.sickChancePerMin*RF().sickChanceMult*geneSickMult(a)*min*(a.food<30?3:1)) a.sick=true;
     if(a.sick&&cure>=1){ a.sick=false; cure-=1; }
@@ -44,12 +46,12 @@ function opsBeforeAnimals(min){
   }
 }
 function animalOpsPenalty(a,b){
-  return (1-opsStats.coverage)*25+(100-(a.health??100))*0.3+(isWorking(b)?0:12);
+  return (1-habitatCoverage(b))*25+(100-(a.health??100))*0.3+(isWorking(b)?0:12)+utilityPenalty(a,b);
 }
 
 /* 遊客、門票、消費、研究 */
 function facilityCoverage(service,visitors){
-  const serves=save.zoo.buildings.filter(b=>{ const d=bdef(b.type); return d.kind==='facility'&&d.service===service&&isWorking(b); }).reduce((s,b)=>s+bdef(b.type).serves,0);
+  const serves=save.zoo.buildings.filter(b=>{ const d=bdef(b.type); return d.kind==='facility'&&d.service===service&&isWorking(b); }).reduce((s,b)=>s+bdef(b.type).serves,0)*bizStats.power.ratio;
   return visitors<=0?1:Math.min(1,serves/visitors);
 }
 function opsEconomy(attract,min){
@@ -58,21 +60,22 @@ function opsEconomy(attract,min){
   const viewing=z.animals.length?z.animals.reduce((s,a)=>s+(a.happy??60),0)/z.animals.length:20;
   const needs={food:facilityCoverage('food',prevV),restroom:facilityCoverage('restroom',prevV),rest:facilityCoverage('rest',prevV),shop:facilityCoverage('shop',prevV)};
   const boards=(z.props||[]).filter(p=>p.type==='info_board').length;
-  const education=Math.min(100,staffCount('educator')*DATA.staffById.educator.satisfaction*4+boards*6);
+  const education=Math.min(100,staffPower('educator')*DATA.staffById.educator.satisfaction*4+boards*6);
   const decor=Math.min(100,(z.props||[]).length*2);
   const needScore=(needs.food+needs.restroom+needs.rest)/3*100;
-  const sat=0.35*viewing+0.25*needScore+0.2*z.clean+0.1*education+0.1*decor;
+  const sat=Math.min(100,0.35*viewing+0.25*needScore+0.2*z.clean+0.1*education+0.1*decor+tramSatBonus());
   opsStats.needs=needs; opsStats.satisfaction=sat; opsStats.parts.sat={viewing,needScore,clean:z.clean,education,decor};
   const priceF=Math.max(0.2,1-(z.ticket-O.ticketDefault)*O.priceElasticity*RF().priceElasticityMult);
-  const visitors=Math.round(attract*Z.visitorPerAttract*(0.5+sat/100)*priceF*(0.7+0.1*opsStats.rating)*RF().visitorMult);
+  const visitors=Math.round(attract*Z.visitorPerAttract*(0.5+sat/100)*priceF*(0.7+0.1*opsStats.rating)*RF().visitorMult*campaignMult());
   let ticket=visitors*z.ticket*O.coinsPerVisitorTicketMin;
   let spend=0;
   for(const b of z.buildings){ const d=bdef(b.type); if(d.kind==='facility'&&d.spendPerVisitorMin&&isWorking(b)) spend+=Math.min(visitors,d.serves)*d.spendPerVisitorMin; }
-  opsStats.theft=staffCount('security')*DATA.staffById.security.capacity<visitors&&visitors>20;
+  opsStats.theft=staffPower('security')*DATA.staffById.security.capacity<visitors&&visitors>20;
   const mult=opsStats.theft?1-O.theftLoss:1;
   opsStats.income={ticket:ticket*mult,spend:spend*mult};
   zooStats.visitors=visitors; zooStats.coinsPerMin=(ticket+spend)*mult;
   z.coins+=zooStats.coinsPerMin*min;
+  bizEconomy(visitors,ticket*mult,min);
   const distinct=new Set(z.animals.map(a=>a.species)).size;
   zooStats.researchPerMin=distinct*(Z.researchPerSpeciesPerMin||0)*(1+staffCount('educator')*DATA.staffById.educator.researchBonus);
   z.research=(z.research||0)+zooStats.researchPerMin*min;
@@ -154,6 +157,7 @@ function showOps(msg){
       return `<div class="shopcard"><div class="sc-main"><b>${esc(s.name)} <em class="num">×${n}</em></b><span>${esc(s.desc)}</span><span>薪水每人每分鐘 ${s.salaryPerMin} 金幣・雇用費 ${s.hireCost}</span></div>
         <div class="zp-btns"><button type="button" class="zmini add" data-hire="${s.id}" ${z.coins>=s.hireCost?'':'disabled'}>雇用</button><button type="button" class="zmini" data-fire="${s.id}" ${n?'':'disabled'}>解雇</button></div></div>`; }).join('');
     const broken=z.buildings.filter(b=>!isWorking(b)).length, sick=z.animals.filter(a=>a.sick).length;
+    body=staffExtraHtml()+body;
     body=`<div class="statline">每分鐘薪水 ${opsStats.salary.toFixed(1)} 金幣・照護覆蓋 ${Math.round(opsStats.coverage*100)}%・生病動物 ${sick} 隻・損壞設施 ${broken} 座・整潔 ${Math.round(z.clean)}%${opsStats.unpaid?'・<em>金幣不足，員工效率減半</em>':''}</div>`+body;
   } else if(opsTab==='visitors'){
     const p=opsStats.parts.sat||{}, n=opsStats.needs||{};
@@ -168,12 +172,15 @@ function showOps(msg){
         <label>教育（教育人員、解說牌）${bar100(p.education)}</label>
         <label>造景（自由擺放物件）${bar100(p.decor)}</label>
       </div>
-      <p class="zp-empty">票價越高，來的人越少。餐廳、廁所、休息區在「設施」分頁建造；遊客越多，需要的數量越多。</p>`;
+      <div class="sec-title"><span>遊客在想什麼</span></div><div class="needs">${bizStats.thoughts.map(t=>`<span class="${t.good?'ok':'bad'}">「${esc(t.t)}」</span>`).join('')||'<span>大家都還好</span>'}</div>
+      <p class="zp-empty">滿意度低於 ${BIZ().refundBelow} 時，有些遊客會要求退票。放捐款箱（裝飾分頁）可以收捐款。票價越高，來的人越少。餐廳、廁所、休息區在「設施」分頁建造；遊客越多，需要的數量越多。</p>`;
   } else if(opsTab==='rating'){
     const r=opsStats.parts.rating||{}, names={welfare:'動物福利',satisfaction:'遊客滿意度',diversity:'物種多樣性',conservation:'保育成果',cleanliness:'整潔'};
     body=`<div class="rating"><span class="bigstars">${starsTxt(opsStats.rating)}</span><span class="num">總分 ${Math.round(opsStats.score)}／100</span></div>
       <div class="opsgrid">${Object.keys(names).map(k=>`<label>${names[k]}（權重 ${Math.round(O.ratingWeights[k]*100)}%）${bar100(r[k])}</label>`).join('')}</div>
       <p class="zp-empty">評價越高，遊客越多。保育成果看園區裡的瀕危與傳說級物種數量，以及野放的動物。</p>`;
+  } else if(opsTab==='finance'){
+    body=financeHtml();
   } else if(opsTab==='memorial'){
     const M=z.memorial||[];
     body=(modeOf()==='sandbox'?`<button type="button" class="zmini" id="agingTgl">動物老化：${z.noAging?'關':'開'}</button>`:'')+`<div class="statline">園區至今送走 ${z.deaths||0} 隻動物</div>`+(M.length?M.map(m=>{ const sp=DATA.speciesById[m.species]; return `<div class="shopcard"><div class="sc-main"><b>${m.sex==='M'?'♂':'♀'} ${esc(sp?sp.name:m.species)} #${esc(String(m.id).slice(1))} <span class="stars">${'★'.repeat(m.stars||1)}</span></b><span>${m.gen?`第 ${m.gen} 代・`:''}活了約 ${Math.round(m.age/60)} 小時・${new Date(m.at).toLocaleDateString('zh-TW')}</span></div></div>`; }).join(''):'<p class="zp-empty">紀念牆還是空的。動物壽命走完後，名字會留在這裡。</p>');
@@ -181,7 +188,7 @@ function showOps(msg){
     body=DATA.achievements.map(a=>{ const done=z.ach[a.id], v=achStat(a.stat);
       return `<div class="shopcard${done?' on':''}"><div class="sc-main"><b>${done?'✔ ':''}${esc(a.name)}</b><span>${esc(a.desc)}・獎勵 ${esc(costText(a.reward))}</span>${done?'':bar100(v/a.target*100)}</div><span class="sc-max num">${Math.min(v,a.target)}/${a.target}</span></div>`; }).join('');
   }
-  const tabs=[['staff','員工'],['visitors','遊客'],['rating','評價'],['ach','成就'],['memorial','紀念牆']];
+  const tabs=[['staff','員工'],['visitors','遊客'],['rating','評價'],['ach','成就'],['finance','財務'],['memorial','紀念牆']];
   screenEl.hidden=false;
   screenEl.innerHTML=`<div class="hub">
     <div class="hub-head"><h1><small>OPERATIONS · 園區營運</small>營運</h1><span class="savechip">${starsTxt(opsStats.rating)}・金幣 ${Math.floor(z.coins)}</span></div>
@@ -195,5 +202,6 @@ function showOps(msg){
   screenEl.querySelectorAll('[data-fire]').forEach(el=>el.onclick=()=>{ const id=el.dataset.fire; if(!z.staff[id]) return; z.staff[id]--; simulate(0); persist(); showOps(`解雇了一位${DATA.staffById[id].name}`); });
   const ti=$('ticketIn'); if(ti){ ti.oninput=e=>{ $('ticketOut').textContent=e.target.value+' 金幣'; }; ti.onchange=e=>{ z.ticket=parseInt(e.target.value,10); simulate(0); persist(); showOps(); }; }
   const ag=$('agingTgl'); if(ag) ag.onclick=()=>{ z.noAging=!z.noAging; persist(); showOps(z.noAging?'沙盒的動物不會變老':'沙盒的動物也會變老了'); };
+  wireBizOps();
   $('opsBack').onclick=()=>{ screenEl.hidden=true; state='zoo'; $('zooUI').hidden=false; updateZooHud(); };
 }

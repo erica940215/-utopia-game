@@ -23,12 +23,12 @@ function knowCost(sp){ const C=DATA.config.speciesResearch, lv=knowLevel(sp.id);
 /* 保育計畫：瀕危、傳說級物種各有一個計畫——園區出生 N 隻，再野放 1 隻園區出生的個體 */
 function consFor(id){ const z=save.zoo; z.cons[id]=z.cons[id]||{born:0,released:0,done:false}; return z.cons[id]; }
 function consEligible(sp){ return DATA.config.conservation.rarities.includes(sp.rarity); }
-function consOnBirth(baby){ ensureResearch(); const sp=DATA.speciesById[baby.species]; if(sp&&consEligible(sp)){ consFor(sp.id).born++; checkCons(sp); } }
+function consOnBirth(baby){ ensureResearch(); const sp=DATA.speciesById[baby.species]; if(sp&&consEligible(sp)){ consFor(sp.id).born++; earnCp(DATA.config.biz.cpBirth); checkCons(sp); } }
 function consOnRelease(a){ ensureResearch(); const sp=DATA.speciesById[a.species]; if(sp&&consEligible(sp)&&a.gen>0){ consFor(sp.id).released++; checkCons(sp); } }
 function checkCons(sp){
   const C=DATA.config.conservation, c=consFor(sp.id);
   if(c.done||c.born<C.bornTarget||c.released<C.releaseTarget) return;
-  c.done=true; const rw=C.reward[sp.rarity]; pay(rw,1);
+  c.done=true; const rw=C.reward[sp.rarity]; pay(rw,1); earnCp(DATA.config.biz.cpConservation[sp.rarity]||0);
   toast(`保育計畫完成：${sp.name}！獎勵 ${costText(rw)}`);
 }
 const consDoneCount=()=>Object.values((save.zoo&&save.zoo.cons)||{}).filter(c=>c.done).length;
