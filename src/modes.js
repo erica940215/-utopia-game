@@ -5,13 +5,14 @@
    ========================================================= */
 let careerSave=null, activeSlot='career';
 function rootSave(){
-  if(activeSlot==='visit') return careerSave||save;
+  if(activeSlot==='visit'||activeSlot==='coop') return careerSave||save;
   if(activeSlot==='career'||!careerSave) return save;
   careerSave.slots=careerSave.slots||{}; careerSave.slots[activeSlot]=save; return careerSave;
 }
 const modeOf=()=>save.mode||'career';
 function switchSlot(slot,fresh){
-  if(activeSlot!=='career'&&activeSlot!=='visit'&&careerSave){ careerSave.slots=careerSave.slots||{}; careerSave.slots[activeSlot]=save; }
+  if(activeSlot==='coop') leaveCoopZoo();
+  if(activeSlot!=='career'&&activeSlot!=='visit'&&activeSlot!=='coop'&&careerSave){ careerSave.slots=careerSave.slots||{}; careerSave.slots[activeSlot]=save; }
   activeSlot=slot;
   if(slot==='career'){ save=careerSave; }
   else{ careerSave.slots=careerSave.slots||{}; if(!careerSave.slots[slot]) careerSave.slots[slot]=fresh(); save=careerSave.slots[slot]; }
@@ -38,7 +39,7 @@ function newChallenge(ch){
   if(ch.start.staff) s.zoo.staff={...ch.start.staff};
   s.zoo.chStart=0; save=keep; return s;
 }
-const MODE_NAME={career:'生涯',sandbox:'沙盒',challenge:'挑戰',visit:'參觀'};
+const MODE_NAME={career:'生涯',sandbox:'沙盒',challenge:'挑戰',visit:'參觀',coop:'合營'};
 
 /* 挑戰進度 */
 function challengeDef(){ return save.mode==='challenge'?DATA.challenges.find(c=>c.id===save.challenge):null; }

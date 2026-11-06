@@ -66,7 +66,9 @@ function showParks(msg){
     ${others.length?`<div class="sec-title"><span>調動倉庫裡的動物</span></div><div class="shoplist">${stored.length?stored.map(a=>`<div class="shopcard"><div class="sc-main"><b>${a.sex==='M'?'♂':'♀'} ${esc(nameOf(a))}</b></div>${others.map(o=>`<button type="button" class="zmini" data-move="${a.id}:${o}">送到${esc(parkName(o))}</button>`).join('')}</div>`).join('')
       :'<p class="zp-empty">倉庫是空的。在棲地面板按「移出」，再回來這裡調動。</p>'}</div>
       <div class="sec-title"><span>調度金幣</span></div><div class="zp-btns">${others.map(o=>`<button type="button" class="zmini" data-coin="${o}" ${z.coins>=1000?'':'disabled'}>送 1000 金幣到${esc(parkName(o))}</button>`).join('')}</div>`:''}
+    <div class="sec-title"><span>合營園區（和朋友一起經營）</span></div><div id="czBox"><p class="zp-empty">讀取中…</p></div>
     <button class="btn ghost" id="parkBack" type="button">回到園區</button></div>`;
+  coopZooHtml().then(h=>{ const b=$('czBox'); if(b&&state==='parks'){ b.innerHTML=h; wireCoopZoo(); } });
   screenEl.querySelectorAll('[data-park]').forEach(el=>el.onclick=()=>switchPark(el.dataset.park));
   screenEl.querySelectorAll('[data-open]').forEach(el=>el.onclick=()=>{ const d=WLD().parks.find(p=>p.id===el.dataset.open); if(!affordable(d.cost)) return; pay(d.cost,-1); P.open.push(d.id); switchPark(d.id); });
   screenEl.querySelectorAll('[data-move]').forEach(el=>el.onclick=()=>{ const [aid,to]=el.dataset.move.split(':'), i=z.stored.findIndex(a=>a.id===aid); if(i<0||!P.zoos[to]) return;

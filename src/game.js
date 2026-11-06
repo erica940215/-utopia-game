@@ -88,6 +88,7 @@ async function initSave(){
   try{ const cloud=await makeCloudStore(); if(cloud){ store=cloud; const d=await store.load(); if(d&&d.version) save=Object.assign(emptySave(),d); } }catch(e){ store=LocalStore; }
 }
 function persist(){
+  if(activeSlot==='coop') czPersist();
   const root = (typeof rootSave==='function') ? rootSave() : save;
   root.updatedAt = new Date().toISOString();
   const snapshot = JSON.parse(JSON.stringify(root));
@@ -741,6 +742,7 @@ function wireAuth(){
 /*@@CARE@@*/
 /*@@BIZ@@*/
 /*@@WORLD@@*/
+/*@@COOPZOO@@*/
 /*@@CONTROLS@@*/
 /* =========================================================
    8. 主迴圈

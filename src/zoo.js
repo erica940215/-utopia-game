@@ -195,7 +195,7 @@ function catchUp(){
   const zoo=save.zoo, Z=ZC();
   let m=Math.min(Z.offlineCapMinutes,Math.max(0,(Date.now()-(zoo.lastTick||Date.now()))/60000));
   // 只有生涯在離線時繼續運作；沙盒與挑戰離開時暫停（挑戰中去遠征 20 分鐘內仍會計時）
-  if(modeOf()==='sandbox' || modeOf()==='visit' || (modeOf()==='challenge' && m>20)) m=0;
+  if(modeOf()==='sandbox' || modeOf()==='visit' || modeOf()==='coop' || (modeOf()==='challenge' && m>20)) m=0;
   if(m<0.05){ simulate(0); return null; }
   const c0=zoo.coins, f0=save.resources.feed||0, total=m, b0=zooBirthLog.length, d0=zooDeathLog.length;
   while(m>0){ const s=Math.min(1,m); simulate(s); m-=s; }
@@ -212,7 +212,7 @@ function enterZoo(){
   zooActive=true; state='zoo'; zTool='select'; zSelUid=null; updateSelBox();
   screenEl.hidden=true; $('hud').hidden=true; $('touch').hidden=true; $('touch').classList.remove('walk');
   $('zooUI').hidden=false; $('zWalkExit').hidden=true; $('zMain').hidden=false; $('zPanel').hidden=true; challengeHud();
-  $('zModeTag').textContent=modeOf()==='visit'?`參觀：${visitName}`:MODE_NAME[modeOf()]; $('zModeTag').hidden=modeOf()==='career'; $('zParks').hidden=modeOf()!=='career'; $('zShare').hidden=modeOf()==='visit';
+  $('zModeTag').textContent=modeOf()==='visit'?`參觀：${visitName}`:MODE_NAME[modeOf()]; $('zModeTag').hidden=modeOf()==='career'; $('zParks').hidden=modeOf()!=='career'; $('zShare').hidden=modeOf()==='visit'||modeOf()==='coop'; $('zGift').hidden=modeOf()!=='coop'; $('zGo').hidden=$('zShop').hidden=modeOf()==='coop'||modeOf()==='visit'; if(modeOf()==='coop') czHud();
   if(document.exitPointerLock) document.exitPointerLock();
   renderZooTools(); updateZooHud();
   if(away && away.minutes>=1) toast(`離開的 ${away.minutes} 分鐘裡：門票 +${away.coins} 金幣，吃掉飼料 ${away.feed}${away.births?`，出生了 ${away.births} 隻寶寶`:''}${away.deaths?`，有 ${away.deaths} 隻動物壽終正寢`:''}`);
@@ -393,7 +393,8 @@ function endZooWalk(){
 function zooUpdate(dt){
   if(toastT>0){ toastT-=dt; if(toastT<=0) $('toast').style.opacity=0; }
   if(state==='mode'||state==='chend') return;
-  zooAcc+=dt; if(zooAcc>=0.5){ simulate(zooAcc/60); zooAcc=0;
+  zooAcc+=dt; if(zooAcc>=0.5&&coopZoo&&!coopZoo.host) zooAcc=0;
+  if(zooAcc>=0.5){ simulate(zooAcc/60); zooAcc=0; if(coopZoo) czBroadcast(false);
     if(zooBirthLog.length){ const names=[...new Set(zooBirthLog.map(a=>DATA.speciesById[a.species].name))]; toast(`出生了：${names.join('、')}寶寶 ×${zooBirthLog.length}`); zooBirthLog=[]; rebuildZooAnimals(); persist(); const b=zSelUid&&findB(zSelUid); if(b&&!$('zPanel').hidden&&bdef(b.type).kind==='habitat') openHabitatPanel(b); }
     if(zooDeathLog.length){ toast(zooDeathLog.length===1?`${nameOf(zooDeathLog[0])} 年紀大了，安詳地離開了。牠的名字留在紀念牆上。`:`${zooDeathLog.length} 隻動物年老離開了，名字都留在紀念牆上。`); zooDeathLog=[]; rebuildZooAnimals(); persist(); const b=zSelUid&&findB(zSelUid); if(b&&!$('zPanel').hidden&&bdef(b.type).kind==='habitat') openHabitatPanel(b); } }
   zSaveT+=dt; if(zSaveT>=ZC().autosaveSeconds){ zSaveT=0; persist(); }
@@ -434,6 +435,7 @@ $('zDex').onclick=()=>{ $('zooUI').hidden=true; showDex(); };
 $('zGo').onclick=()=>showMap();
 $('zMode').onclick=()=>{ persist(); showModeSelect(); };
 $('zLab').onclick=()=>{ $('zooUI').hidden=true; showLab(); };
+$('zGift').onclick=()=>{ $('zooUI').hidden=true; showCoopGift(); };
 $('zParks').onclick=()=>{ $('zooUI').hidden=true; showParks(); };
 $('zShare').onclick=()=>{ $('zooUI').hidden=true; showShare(); };
 $('zMarket').onclick=()=>{ $('zooUI').hidden=true; showMarket(); };
