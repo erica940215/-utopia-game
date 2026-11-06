@@ -25,6 +25,7 @@ async function showProfiles(msg){
   screenEl.innerHTML=`<div class="hub">
     <div class="hub-head"><h1><small>SAVES · 記錄檔</small>記錄檔</h1><span class="savechip ${store.mode==='cloud'?'cloud':''}">${store.mode==='cloud'?'雲端存檔・可跨裝置':'本機存檔'}</span></div>
     ${msg?`<div class="dexinfo">${esc(msg)}</div>`:''}
+    ${sb?authHtml():''}
     <div class="sec-title"><span>單人記錄檔</span><b>${L.length}</b></div>
     <div class="shoplist">${L.map((p,i)=>{ const cur=p.id===saveProfile; return `<div class="shopcard${cur?' on':''}"><div class="sc-main"><b>${esc(profileLabel(p,i))}${cur?'（目前）':''}</b><span>已遠征 ${p.runs||0} 次${p.updatedAt?`・${new Date(p.updatedAt).toLocaleString('zh-TW')}`:''}${p.localOnly?'・只在這台裝置':''}</span></div>
       <div class="zp-btns">${cur?'':`<button type="button" class="zmini add" data-pload="${esc(p.id)}">載入</button>`}<button type="button" class="zmini" data-pren="${esc(p.id)}">改名</button>${cur||p.id==='p1'?'':`<button type="button" class="zmini" data-pdel="${esc(p.id)}">刪除</button>`}</div></div>`; }).join('')}</div>
@@ -40,5 +41,6 @@ async function showProfiles(msg){
     const id=el.dataset.pdel; await LocalStore.remove(id); try{ await store.remove(id); }catch(e){} showProfiles('刪除了'); });
   $('pNewBtn').onclick=()=>{ const name=($('pNew').value.trim()||`記錄檔 ${L.length+1}`).slice(0,16); loadProfile('p'+Date.now().toString(36),name); };
   $('pBack').onclick=()=>showModeSelect();
+  if(sb) wireAuth();
   coopZooHtml().then(h=>{ const b=$('czBox'); if(b&&state==='profiles'){ b.innerHTML=h; wireCoopZoo(); } });
 }

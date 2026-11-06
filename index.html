@@ -1197,7 +1197,7 @@ function showDex(){
   });
 }
 let dexCat='mammal';
-if(sb) sb.auth.onAuthStateChange(async (ev)=>{ if(ev==='SIGNED_IN' && !sbUser && (state==='dex'||state==='zoo')){ await initSave(); careerSave=save; activeSlot='career'; enterZoo(); } });
+if(sb) sb.auth.onAuthStateChange(async (ev)=>{ if(ev==='SIGNED_IN' && !sbUser && (state==='dex'||state==='zoo'||state==='mode'||state==='profiles')){ await initSave(); careerSave=save; activeSlot='career'; showModeSelect(); } });
 function authHtml(){
   if(sbUser) return `<div class="sec"><div class="auth"><span class="auth-note">已登入 ${esc(sbUser.email||'')}，進度會同步到雲端</span><button class="btn ghost" id="logout" type="button">登出</button></div></div>`;
   return `<div class="sec"><form class="auth" id="loginForm"><input id="email" type="email" required placeholder="輸入 Email 登入，跨裝置同步存檔" autocomplete="email"><button class="btn" type="submit">寄登入連結</button></form><span class="auth-note" id="authMsg">沒登入也能玩，進度會先存在這台裝置。</span></div>`;
@@ -1212,7 +1212,7 @@ function wireAuth(){
     msg.textContent=error?`寄送失敗：${error.message}`:`登入連結已寄到 ${email}，在這台裝置打開信件裡的連結就完成登入。`;
   });
   const lo=$('logout');
-  if(lo) lo.onclick=async()=>{ await sb.auth.signOut(); sbUser=null; store=LocalStore; enterZoo(); };
+  if(lo) lo.onclick=async()=>{ await sb.auth.signOut(); sbUser=null; store=LocalStore; careerSave=save; activeSlot='career'; showModeSelect(); };
 }
 
 /* =========================================================
@@ -2774,6 +2774,7 @@ function showModeSelect(){
   const sbx=careerSave&&careerSave.slots&&careerSave.slots.sandbox;
   screenEl.innerHTML=`<div class="hub">
     <div class="hub-head"><h1><small>UTOPIA · 冰原最後的避難所</small>烏托邦</h1><span class="savechip">記錄檔：${esc((careerSave&&careerSave.profileName)||(saveProfile==='p1'?'記錄檔 1':saveProfile))}</span></div>
+    ${sb?authHtml():`<p class="zp-empty">${store.mode==='cloud'?'已用你的 Claude 帳號自動存檔。':'本機存檔。'}要登入帳號、跨裝置或和朋友多人遊玩，請到遊戲網站。</p>`}
     <div class="zp-btns"><button type="button" class="zmini add" id="mProfiles">切換・新增記錄檔／多人記錄檔</button></div>
     <div class="modecards">
       <button type="button" class="modecard main" id="mCareer"><b>生涯模式</b><span>遠征救援、經營動物園、集滿圖鑑。已遠征 ${c.runs||0} 次・圖鑑 ${Object.keys(c.collection||{}).length} 種</span></button>
@@ -2786,6 +2787,7 @@ function showModeSelect(){
     <p class="zp-empty">沙盒和挑戰的進度分開存，不會影響生涯存檔。挑戰時間是遊戲內時間，跟現實時間一樣快。</p>
   </div>`;
   $('mProfiles').onclick=()=>showProfiles();
+  if(sb) wireAuth();
   $('mCareer').onclick=()=>{ switchSlot('career'); enterZoo(); };
   $('mSandbox').onclick=()=>{ switchSlot('sandbox',()=>newSandbox()); persist(); enterZoo(); };
   const nb=$('mSandboxNew'); if(nb) nb.onclick=()=>{ careerSave.slots.sandbox=null; switchSlot('sandbox',()=>newSandbox()); persist(); enterZoo(); };
@@ -4114,6 +4116,7 @@ async function showProfiles(msg){
   screenEl.innerHTML=`<div class="hub">
     <div class="hub-head"><h1><small>SAVES · 記錄檔</small>記錄檔</h1><span class="savechip ${store.mode==='cloud'?'cloud':''}">${store.mode==='cloud'?'雲端存檔・可跨裝置':'本機存檔'}</span></div>
     ${msg?`<div class="dexinfo">${esc(msg)}</div>`:''}
+    ${sb?authHtml():''}
     <div class="sec-title"><span>單人記錄檔</span><b>${L.length}</b></div>
     <div class="shoplist">${L.map((p,i)=>{ const cur=p.id===saveProfile; return `<div class="shopcard${cur?' on':''}"><div class="sc-main"><b>${esc(profileLabel(p,i))}${cur?'（目前）':''}</b><span>已遠征 ${p.runs||0} 次${p.updatedAt?`・${new Date(p.updatedAt).toLocaleString('zh-TW')}`:''}${p.localOnly?'・只在這台裝置':''}</span></div>
       <div class="zp-btns">${cur?'':`<button type="button" class="zmini add" data-pload="${esc(p.id)}">載入</button>`}<button type="button" class="zmini" data-pren="${esc(p.id)}">改名</button>${cur||p.id==='p1'?'':`<button type="button" class="zmini" data-pdel="${esc(p.id)}">刪除</button>`}</div></div>`; }).join('')}</div>
@@ -4129,6 +4132,7 @@ async function showProfiles(msg){
     const id=el.dataset.pdel; await LocalStore.remove(id); try{ await store.remove(id); }catch(e){} showProfiles('刪除了'); });
   $('pNewBtn').onclick=()=>{ const name=($('pNew').value.trim()||`記錄檔 ${L.length+1}`).slice(0,16); loadProfile('p'+Date.now().toString(36),name); };
   $('pBack').onclick=()=>showModeSelect();
+  if(sb) wireAuth();
   coopZooHtml().then(h=>{ const b=$('czBox'); if(b&&state==='profiles'){ b.innerHTML=h; wireCoopZoo(); } });
 }
 

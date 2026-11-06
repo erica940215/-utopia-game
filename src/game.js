@@ -754,7 +754,7 @@ function showDex(){
   });
 }
 let dexCat='mammal';
-if(sb) sb.auth.onAuthStateChange(async (ev)=>{ if(ev==='SIGNED_IN' && !sbUser && (state==='dex'||state==='zoo')){ await initSave(); careerSave=save; activeSlot='career'; enterZoo(); } });
+if(sb) sb.auth.onAuthStateChange(async (ev)=>{ if(ev==='SIGNED_IN' && !sbUser && (state==='dex'||state==='zoo'||state==='mode'||state==='profiles')){ await initSave(); careerSave=save; activeSlot='career'; showModeSelect(); } });
 function authHtml(){
   if(sbUser) return `<div class="sec"><div class="auth"><span class="auth-note">已登入 ${esc(sbUser.email||'')}，進度會同步到雲端</span><button class="btn ghost" id="logout" type="button">登出</button></div></div>`;
   return `<div class="sec"><form class="auth" id="loginForm"><input id="email" type="email" required placeholder="輸入 Email 登入，跨裝置同步存檔" autocomplete="email"><button class="btn" type="submit">寄登入連結</button></form><span class="auth-note" id="authMsg">沒登入也能玩，進度會先存在這台裝置。</span></div>`;
@@ -769,7 +769,7 @@ function wireAuth(){
     msg.textContent=error?`寄送失敗：${error.message}`:`登入連結已寄到 ${email}，在這台裝置打開信件裡的連結就完成登入。`;
   });
   const lo=$('logout');
-  if(lo) lo.onclick=async()=>{ await sb.auth.signOut(); sbUser=null; store=LocalStore; enterZoo(); };
+  if(lo) lo.onclick=async()=>{ await sb.auth.signOut(); sbUser=null; store=LocalStore; careerSave=save; activeSlot='career'; showModeSelect(); };
 }
 
 /*@@ZOO@@*/

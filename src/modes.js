@@ -83,6 +83,7 @@ function showModeSelect(){
   const sbx=careerSave&&careerSave.slots&&careerSave.slots.sandbox;
   screenEl.innerHTML=`<div class="hub">
     <div class="hub-head"><h1><small>UTOPIA · 冰原最後的避難所</small>烏托邦</h1><span class="savechip">記錄檔：${esc((careerSave&&careerSave.profileName)||(saveProfile==='p1'?'記錄檔 1':saveProfile))}</span></div>
+    ${sb?authHtml():`<p class="zp-empty">${store.mode==='cloud'?'已用你的 Claude 帳號自動存檔。':'本機存檔。'}要登入帳號、跨裝置或和朋友多人遊玩，請到遊戲網站。</p>`}
     <div class="zp-btns"><button type="button" class="zmini add" id="mProfiles">切換・新增記錄檔／多人記錄檔</button></div>
     <div class="modecards">
       <button type="button" class="modecard main" id="mCareer"><b>生涯模式</b><span>遠征救援、經營動物園、集滿圖鑑。已遠征 ${c.runs||0} 次・圖鑑 ${Object.keys(c.collection||{}).length} 種</span></button>
@@ -95,6 +96,7 @@ function showModeSelect(){
     <p class="zp-empty">沙盒和挑戰的進度分開存，不會影響生涯存檔。挑戰時間是遊戲內時間，跟現實時間一樣快。</p>
   </div>`;
   $('mProfiles').onclick=()=>showProfiles();
+  if(sb) wireAuth();
   $('mCareer').onclick=()=>{ switchSlot('career'); enterZoo(); };
   $('mSandbox').onclick=()=>{ switchSlot('sandbox',()=>newSandbox()); persist(); enterZoo(); };
   const nb=$('mSandboxNew'); if(nb) nb.onclick=()=>{ careerSave.slots.sandbox=null; switchSlot('sandbox',()=>newSandbox()); persist(); enterZoo(); };
