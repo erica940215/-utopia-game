@@ -361,19 +361,19 @@ function buildStation(node, seed){
   for(let i=0;i<Math.round(st.trees*biome.treesMult);i++){
     const a=R(0,Math.PI*2), r=R(15,190), x=Math.cos(a)*r, z=Math.sin(a)*r;
     if(!farFromTrain(x,z,1)||avoid(x,z)) continue;
-    const y=heightAt(x,z);
+    const y=heightAt(x,z), show=((i*37)%100)/100<Q().trees, addT=o=>{ if(show) world.add(o); };   // 畫質低時少畫一些樹，但亂數照樣消耗，多人地圖才會一致
     const assetPick=(list,o)=>{ const A=DATA.assets; if(!A) return null; const f=A.nature[list][Math.floor(rng()*A.nature[list].length)]; return staticAsset(f,o); };
     if(rng()<0.65){
       const h=R(3,6), at=assetPick('snowTrees',{height:h*1.15});
-      if(at){ at.rotation.y=R(0,6.28); const w=new THREE.Group(); w.add(at); w.position.set(x,y-0.1,z); w.rotation.y=R(0,6.28); world.add(w); colliders.push({x0:x-0.35,x1:x+0.35,z0:z-0.35,z1:z+0.35}); continue; }
+      if(at){ at.rotation.y=R(0,6.28); const w=new THREE.Group(); w.add(at); w.position.set(x,y-0.1,z); w.rotation.y=R(0,6.28); addT(w); colliders.push({x0:x-0.35,x1:x+0.35,z0:z-0.35,z1:z+0.35}); continue; }
       const g=new THREE.Group();
       const t=cyl(0.15,0.25,h,trunk,6); t.position.y=h/2; g.add(t);
       if(rng()<0.6){ const c=new THREE.Mesh(new THREE.ConeGeometry(R(1,1.6),h*0.8,7),pine); c.position.y=h*0.75; g.add(c); const s=new THREE.Mesh(new THREE.ConeGeometry(0.7,0.8,7),snowCap); s.position.y=h*1.1; g.add(s); }
-      g.position.set(x,y-0.2,z); world.add(g); colliders.push({x0:x-0.3,x1:x+0.3,z0:z-0.3,z1:z+0.3});
+      g.position.set(x,y-0.2,z); addT(g); colliders.push({x0:x-0.3,x1:x+0.3,z0:z-0.3,z1:z+0.3});
     } else {
       const s=R(0.6,1.8), ar=assetPick('snowRocks',{height:s*1.3});
-      if(ar){ const w=new THREE.Group(); w.add(ar); w.position.set(x,y-0.05,z); w.rotation.y=R(0,6.28); world.add(w); colliders.push({x0:x-s*0.7,x1:x+s*0.7,z0:z-s*0.7,z1:z+s*0.7}); continue; }
-      const rk=new THREE.Mesh(new THREE.DodecahedronGeometry(s,0),M(0x6a7078)); rk.position.set(x,y+s*0.3,z); rk.rotation.set(R(0,3),R(0,3),0); world.add(rk);
+      if(ar){ const w=new THREE.Group(); w.add(ar); w.position.set(x,y-0.05,z); w.rotation.y=R(0,6.28); addT(w); colliders.push({x0:x-s*0.7,x1:x+s*0.7,z0:z-s*0.7,z1:z+s*0.7}); continue; }
+      const rk=new THREE.Mesh(new THREE.DodecahedronGeometry(s,0),M(0x6a7078)); rk.position.set(x,y+s*0.3,z); rk.rotation.set(R(0,3),R(0,3),0); addT(rk);
       colliders.push({x0:x-s*0.8,x1:x+s*0.8,z0:z-s*0.8,z1:z+s*0.8});
     }
   }
@@ -759,6 +759,7 @@ function wireAuth(){
 /*@@COOPZOO@@*/
 /*@@PROFILES@@*/
 /*@@NETFIGHT@@*/
+/*@@PERF@@*/
 /*@@CONTROLS@@*/
 /* =========================================================
    8. 主迴圈
@@ -862,7 +863,7 @@ function update(dt){
   if(player.temp<=0) collapse();
   if(state==='play') hud(inHeat);
 }
-function loop(){ requestAnimationFrame(loop); const dt=Math.min(clock.getDelta(),0.05); update(dt); updateMixers(dt); if(zooActive) renderer.render(zooScene,state==='zoowalk'?camera:zooCam); else renderer.render(scene,camera); }
+function loop(){ requestAnimationFrame(loop); const dt=Math.min(clock.getDelta(),0.05); update(dt); updateMixersLod(dt); perfTick(dt); if(zooActive) renderer.render(zooScene,state==='zoowalk'?camera:zooCam); else renderer.render(scene,camera); }
 
 /* =========================================================
    9. 啟動
@@ -871,6 +872,7 @@ player.pos.set(6,0,12); player.yaw=-0.6; player.pitch=0.05;
 screenEl.innerHTML='<div class="loading">讀取存檔中…</div>';
 loop();
 (async()=>{
+  try{ applyQuality(); }catch(e){}
   try{ await loadData(); }
   catch(e){ screenEl.innerHTML='<div class="card"><h2>遊戲資料讀取失敗</h2><p>設定表沒有載入成功，請重新整理頁面再試一次。</p></div>'; return; }
   screenEl.innerHTML='<div class="loading">載入模型與材質…</div>';

@@ -127,7 +127,7 @@ function pathTargets(){
   return ps.length?ps:[{x:0,z:GN()*TS()/2-3}];
 }
 function updatePeople(dt){
-  const want=Math.min(36,Math.round((zooStats.visitors||0)/4));
+  const want=Math.min(Q().people,Math.round((zooStats.visitors||0)/4));
   const targets=pathTargets();
   while(zooPeople.length<want){ const p=makePerson(), t=targets[Math.floor(Math.random()*targets.length)]; p.position.set(t.x+(Math.random()-0.5),0,t.z+(Math.random()-0.5)); zooRoot.add(p); zooPeople.push({m:p,tx:p.position.x,tz:p.position.z,wait:Math.random()*3,ph:Math.random()*6}); }
   while(zooPeople.length>want){ const p=zooPeople.pop(); zooRoot.remove(p.m); }

@@ -36,7 +36,7 @@ function updateWorldVisual(dt){
   if(zHemi) zHemi.intensity=0.25+0.6*k; zsun.intensity=0.08+0.67*k*(w.id==='clear'?1:0.6);
   // 下雪粒子
   if(!zSnow){ const n=1500, g=new THREE.BufferGeometry(), p=new Float32Array(n*3); for(let i=0;i<n;i++){ p[i*3]=(Math.random()-0.5)*90; p[i*3+1]=Math.random()*40; p[i*3+2]=(Math.random()-0.5)*90; }
-    g.setAttribute('position',new THREE.BufferAttribute(p,3)); zSnow=new THREE.Points(g,new THREE.PointsMaterial({color:0xffffff,size:0.25,transparent:true,opacity:0.85,depthWrite:false})); zooScene.add(zSnow); }
+    g.setAttribute('position',new THREE.BufferAttribute(p,3)); zSnow=new THREE.Points(g,new THREE.PointsMaterial({color:0xffffff,size:0.25,transparent:true,opacity:0.85,depthWrite:false})); zooScene.add(zSnow); g.setDrawRange(0,Math.floor(n*Q().snow)); }
   const snowing=w.id==='snow'||w.id==='blizzard'; zSnow.visible=snowing;
   if(snowing){ const p=zSnow.geometry.attributes.position.array, sp=w.id==='blizzard'?9:3, wind=w.id==='blizzard'?6:0.6;
     for(let i=0;i<p.length;i+=3){ p[i+1]-=dt*sp; p[i]+=dt*wind; if(p[i+1]<0){ p[i+1]+=40; } if(p[i]>45) p[i]-=90; }

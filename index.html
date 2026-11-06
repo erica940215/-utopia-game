@@ -332,6 +332,9 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
 
 .zjoinexp{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 96px);transform:translateX(-50%);z-index:3;max-width:calc(100vw - 32px)}
 #mates{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;font-size:12px;color:#9fd0ff}
+
+.qbox{display:flex;flex-direction:column;gap:4px;margin:6px 0}
+.qbox select{font:inherit;background:rgba(0,0,0,.3);color:var(--frost);border:1px solid var(--line);border-radius:6px;padding:4px 6px;margin-left:6px}
 </style></head>
 <body>
 <canvas id="c"></canvas>
@@ -776,19 +779,19 @@ function buildStation(node, seed){
   for(let i=0;i<Math.round(st.trees*biome.treesMult);i++){
     const a=R(0,Math.PI*2), r=R(15,190), x=Math.cos(a)*r, z=Math.sin(a)*r;
     if(!farFromTrain(x,z,1)||avoid(x,z)) continue;
-    const y=heightAt(x,z);
+    const y=heightAt(x,z), show=((i*37)%100)/100<Q().trees, addT=o=>{ if(show) world.add(o); };   // 畫質低時少畫一些樹，但亂數照樣消耗，多人地圖才會一致
     const assetPick=(list,o)=>{ const A=DATA.assets; if(!A) return null; const f=A.nature[list][Math.floor(rng()*A.nature[list].length)]; return staticAsset(f,o); };
     if(rng()<0.65){
       const h=R(3,6), at=assetPick('snowTrees',{height:h*1.15});
-      if(at){ at.rotation.y=R(0,6.28); const w=new THREE.Group(); w.add(at); w.position.set(x,y-0.1,z); w.rotation.y=R(0,6.28); world.add(w); colliders.push({x0:x-0.35,x1:x+0.35,z0:z-0.35,z1:z+0.35}); continue; }
+      if(at){ at.rotation.y=R(0,6.28); const w=new THREE.Group(); w.add(at); w.position.set(x,y-0.1,z); w.rotation.y=R(0,6.28); addT(w); colliders.push({x0:x-0.35,x1:x+0.35,z0:z-0.35,z1:z+0.35}); continue; }
       const g=new THREE.Group();
       const t=cyl(0.15,0.25,h,trunk,6); t.position.y=h/2; g.add(t);
       if(rng()<0.6){ const c=new THREE.Mesh(new THREE.ConeGeometry(R(1,1.6),h*0.8,7),pine); c.position.y=h*0.75; g.add(c); const s=new THREE.Mesh(new THREE.ConeGeometry(0.7,0.8,7),snowCap); s.position.y=h*1.1; g.add(s); }
-      g.position.set(x,y-0.2,z); world.add(g); colliders.push({x0:x-0.3,x1:x+0.3,z0:z-0.3,z1:z+0.3});
+      g.position.set(x,y-0.2,z); addT(g); colliders.push({x0:x-0.3,x1:x+0.3,z0:z-0.3,z1:z+0.3});
     } else {
       const s=R(0.6,1.8), ar=assetPick('snowRocks',{height:s*1.3});
-      if(ar){ const w=new THREE.Group(); w.add(ar); w.position.set(x,y-0.05,z); w.rotation.y=R(0,6.28); world.add(w); colliders.push({x0:x-s*0.7,x1:x+s*0.7,z0:z-s*0.7,z1:z+s*0.7}); continue; }
-      const rk=new THREE.Mesh(new THREE.DodecahedronGeometry(s,0),M(0x6a7078)); rk.position.set(x,y+s*0.3,z); rk.rotation.set(R(0,3),R(0,3),0); world.add(rk);
+      if(ar){ const w=new THREE.Group(); w.add(ar); w.position.set(x,y-0.05,z); w.rotation.y=R(0,6.28); addT(w); colliders.push({x0:x-s*0.7,x1:x+s*0.7,z0:z-s*0.7,z1:z+s*0.7}); continue; }
+      const rk=new THREE.Mesh(new THREE.DodecahedronGeometry(s,0),M(0x6a7078)); rk.position.set(x,y+s*0.3,z); rk.rotation.set(R(0,3),R(0,3),0); addT(rk);
       colliders.push({x0:x-s*0.8,x1:x+s*0.8,z0:z-s*0.8,z1:z+s*0.8});
     }
   }
@@ -2200,7 +2203,7 @@ function loadZad(name){
   const raw=f=>new Promise((res,rej)=>new THREE.GLTFLoader().load(modelUrl(f),res,undefined,rej));
   const tex=def.tex?new Promise(res=>{ try{ new THREE.TextureLoader().load('models/'+def.tex,t=>{ t.flipY=false; res(t); },undefined,()=>res(null)); }catch(e){ res(null); } }):Promise.resolve(null);
   assetWait[key]=Promise.all([raw(def.mesh),tex,...Object.entries(def.anims||{}).map(([k,f])=>raw(f).then(g=>[k,g]).catch(()=>null))]).then(([g,t,...an])=>{
-    g.scene.traverse(o=>{ if(o.isMesh){ o.material=new THREE.MeshStandardMaterial({map:t||null,color:t?0xffffff:0x9a8a7a,roughness:0.9,metalness:0,skinning:!!o.isSkinnedMesh}); } });
+    g.scene.traverse(o=>{ if(o.isMesh){ o.material=(typeof Q==='function'&&Q().lambert)?new THREE.MeshLambertMaterial({map:t||null,color:t?0xffffff:0x9a8a7a,skinning:!!o.isSkinnedMesh}):new THREE.MeshStandardMaterial({map:t||null,color:t?0xffffff:0x9a8a7a,roughness:0.9,metalness:0,skinning:!!o.isSkinnedMesh}); } });
     const clips=[];
     for(const x of an){ if(!x) continue; const [k,ga]=x; for(const c of ga.animations){ const cl=c.clone(); cl.name=k; cl.tracks=cl.tracks.filter(tr=>g.scene.getObjectByName(tr.name.split('.')[0])); if(cl.tracks.length) clips.push(cl); break; } }
     g.animations=clips; g.scene.updateMatrixWorld(true);
@@ -2430,7 +2433,7 @@ function pathTargets(){
   return ps.length?ps:[{x:0,z:GN()*TS()/2-3}];
 }
 function updatePeople(dt){
-  const want=Math.min(36,Math.round((zooStats.visitors||0)/4));
+  const want=Math.min(Q().people,Math.round((zooStats.visitors||0)/4));
   const targets=pathTargets();
   while(zooPeople.length<want){ const p=makePerson(), t=targets[Math.floor(Math.random()*targets.length)]; p.position.set(t.x+(Math.random()-0.5),0,t.z+(Math.random()-0.5)); zooRoot.add(p); zooPeople.push({m:p,tx:p.position.x,tz:p.position.z,wait:Math.random()*3,ph:Math.random()*6}); }
   while(zooPeople.length>want){ const p=zooPeople.pop(); zooRoot.remove(p.m); }
@@ -3475,7 +3478,7 @@ function bubbleSprite(text,good){
   const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false})); s.scale.set(4,0.75,1); return s;
 }
 function updateBubbles(dt){
-  bubbleT-=dt;
+  bubbleT-=dt; if(!Q().bubbles){ for(const b of bubbles) b.p.m.remove(b.s); bubbles=[]; return; }
   for(let i=bubbles.length-1;i>=0;i--){ const b=bubbles[i]; b.life-=dt; if(b.life<=0||!b.p.m.parent){ b.p.m.remove(b.s); bubbles.splice(i,1); } }
   if(bubbleT>0||!zooPeople.length||!bizStats.thoughts.length) return;
   bubbleT=2.5; const p=zooPeople[Math.floor(Math.random()*zooPeople.length)], t=bizStats.thoughts[Math.floor(Math.random()*bizStats.thoughts.length)];
@@ -3624,7 +3627,7 @@ function updateWorldVisual(dt){
   if(zHemi) zHemi.intensity=0.25+0.6*k; zsun.intensity=0.08+0.67*k*(w.id==='clear'?1:0.6);
   // 下雪粒子
   if(!zSnow){ const n=1500, g=new THREE.BufferGeometry(), p=new Float32Array(n*3); for(let i=0;i<n;i++){ p[i*3]=(Math.random()-0.5)*90; p[i*3+1]=Math.random()*40; p[i*3+2]=(Math.random()-0.5)*90; }
-    g.setAttribute('position',new THREE.BufferAttribute(p,3)); zSnow=new THREE.Points(g,new THREE.PointsMaterial({color:0xffffff,size:0.25,transparent:true,opacity:0.85,depthWrite:false})); zooScene.add(zSnow); }
+    g.setAttribute('position',new THREE.BufferAttribute(p,3)); zSnow=new THREE.Points(g,new THREE.PointsMaterial({color:0xffffff,size:0.25,transparent:true,opacity:0.85,depthWrite:false})); zooScene.add(zSnow); g.setDrawRange(0,Math.floor(n*Q().snow)); }
   const snowing=w.id==='snow'||w.id==='blizzard'; zSnow.visible=snowing;
   if(snowing){ const p=zSnow.geometry.attributes.position.array, sp=w.id==='blizzard'?9:3, wind=w.id==='blizzard'?6:0.6;
     for(let i=0;i<p.length;i+=3){ p[i+1]-=dt*sp; p[i]+=dt*wind; if(p[i+1]<0){ p[i+1]+=40; } if(p[i]>45) p[i]-=90; }
@@ -4122,6 +4125,54 @@ function netFollowBoss(dt,inHeat){
 }
 
 /* =========================================================
+   效能：畫質等級（自動／低／中／高）、自動降解析度、遠處動畫降頻
+   ========================================================= */
+const QUALITY={
+  low :{name:'低',pr:1,   trees:0.45,snow:0.35,people:10,far:220,animDist:30, lambert:true, bubbles:false},
+  mid :{name:'中',pr:1.25,trees:0.75,snow:0.65,people:22,far:320,animDist:55, lambert:false,bubbles:true},
+  high:{name:'高',pr:1.75,trees:1,   snow:1,   people:36,far:400,animDist:110,lambert:false,bubbles:true}};
+let qSetting=(()=>{ try{ return localStorage.getItem('utopia-quality')||'auto'; }catch(e){ return 'auto'; } })();
+function autoQuality(){ if(!isTouch) return 'high'; const mem=navigator.deviceMemory||4, cores=navigator.hardwareConcurrency||4; return (mem<=3||cores<=4)?'low':'mid'; }
+let qLevel=qSetting==='auto'?autoQuality():qSetting, dynScale=1, fpsNow=60;
+const Q=()=>QUALITY[qLevel]||QUALITY.mid;
+function applyQuality(){
+  renderer.setPixelRatio(Math.max(0.5,Math.min(devicePixelRatio,Q().pr)*dynScale)); resize(); zooResize();
+  camera.far=Q().far; camera.updateProjectionMatrix();
+  snowGeo.setDrawRange(0,Math.floor(SNOW_N*Q().snow));
+  if(typeof zSnow!=='undefined'&&zSnow) zSnow.geometry.setDrawRange(0,Math.floor(1500*Q().snow));
+}
+function setQuality(v){ qSetting=v; try{ localStorage.setItem('utopia-quality',v); }catch(e){} qLevel=v==='auto'?autoQuality():v; dynScale=1; applyQuality(); }
+/* 自動模式：每 2 秒看一次 FPS，太低就降解析度，順了再慢慢調回來 */
+let fpsAcc=0, fpsN=0;
+function perfTick(dt){
+  fpsAcc+=dt; fpsN++; if(fpsAcc<2) return;
+  fpsNow=fpsN/fpsAcc; fpsAcc=0; fpsN=0;
+  if(qSetting!=='auto'||document.hidden) return;
+  if(fpsNow<27&&dynScale>0.55){ dynScale=Math.max(0.55,dynScale-0.15); applyQuality(); }
+  else if(fpsNow<20&&qLevel!=='low'&&dynScale<=0.55){ qLevel=qLevel==='high'?'mid':'low'; dynScale=0.85; applyQuality(); }
+  else if(fpsNow>52&&dynScale<1){ dynScale=Math.min(1,dynScale+0.1); applyQuality(); }
+}
+/* 動畫：只更新目前畫面上的場景；離鏡頭越遠更新得越少 */
+const _mv=new THREE.Vector3();
+function activeCam(){ return zooActive?(state==='zoowalk'?camera:zooCam):camera; }
+function updateMixersLod(dt){
+  const sc=zooActive?zooScene:scene, cam=activeCam(), far=Q().animDist;
+  for(const m of mixers){
+    const r=m.getRoot(); let o=r; while(o.parent) o=o.parent;
+    if(!o.isScene){ mixers.delete(m); continue; }
+    if(o!==sc){ m._acc=0; continue; }
+    r.getWorldPosition(_mv); const d=_mv.distanceTo(cam.position);
+    if(d<far){ if(m._acc){ m.update(m._acc); m._acc=0; } m.update(dt); }
+    else { m._acc=(m._acc||0)+dt; if(m._acc>(d<far*2?0.2:0.6)){ m.update(m._acc); m._acc=0; } }
+  }
+}
+function qualityHtml(){
+  return `<label>畫質 <select id="qSel">${[['auto','自動'],['low','低（最省電）'],['mid','中'],['high','高']].map(([v,n])=>`<option value="${v}"${qSetting===v?' selected':''}>${n}</option>`).join('')}</select></label>
+    <span>目前約 ${Math.round(fpsNow)} FPS・${Q().name}畫質${qSetting==='auto'&&dynScale<1?`・解析度 ${Math.round(dynScale*100)}%`:''}</span>`;
+}
+function wireQuality(){ const s=$('qSel'); if(s) s.onchange=e=>{ setQuality(e.target.value); const p=$('ctrlPanel'); const q=p&&p.querySelector('.qbox'); if(q){ q.innerHTML=qualityHtml(); wireQuality(); } }; }
+
+/* =========================================================
    觸控操作設定：搖桿與按鈕可以調整大小、拖曳位置
    設定只存在這台裝置（localStorage）
    ========================================================= */
@@ -4147,7 +4198,9 @@ function startCtrlEdit(){
   const p=$('ctrlPanel'); p.hidden=false;
   p.innerHTML=`<b>操作設定</b><span>直接拖曳按鈕調整位置，用滑桿調整大小。</span>
     ${Object.entries(CTRL_IDS).map(([id,n])=>`<label>${n}<input type="range" id="sz_${id}" min="0.6" max="1.6" step="0.05" value="${ctrlCfg.size[id]||1}"></label>`).join('')}
+    <div class="qbox">${qualityHtml()}</div>
     <div class="btns"><button type="button" class="btn ghost" id="ctrlReset">重設</button><button type="button" class="btn" id="ctrlDone">完成</button></div>`;
+  wireQuality();
   for(const id of Object.keys(CTRL_IDS)) $('sz_'+id).oninput=e=>{ ctrlCfg.size[id]=parseFloat(e.target.value); applyCtrl(); };
   $('ctrlReset').onclick=()=>{ ctrlCfg={size:{},pos:{}}; applyCtrl(); saveCtrl(); startCtrlEdit(); };
   $('ctrlDone').onclick=()=>endCtrlEdit();
@@ -4266,7 +4319,7 @@ function update(dt){
   if(player.temp<=0) collapse();
   if(state==='play') hud(inHeat);
 }
-function loop(){ requestAnimationFrame(loop); const dt=Math.min(clock.getDelta(),0.05); update(dt); updateMixers(dt); if(zooActive) renderer.render(zooScene,state==='zoowalk'?camera:zooCam); else renderer.render(scene,camera); }
+function loop(){ requestAnimationFrame(loop); const dt=Math.min(clock.getDelta(),0.05); update(dt); updateMixersLod(dt); perfTick(dt); if(zooActive) renderer.render(zooScene,state==='zoowalk'?camera:zooCam); else renderer.render(scene,camera); }
 
 /* =========================================================
    9. 啟動
@@ -4275,6 +4328,7 @@ player.pos.set(6,0,12); player.yaw=-0.6; player.pitch=0.05;
 screenEl.innerHTML='<div class="loading">讀取存檔中…</div>';
 loop();
 (async()=>{
+  try{ applyQuality(); }catch(e){}
   try{ await loadData(); }
   catch(e){ screenEl.innerHTML='<div class="card"><h2>遊戲資料讀取失敗</h2><p>設定表沒有載入成功，請重新整理頁面再試一次。</p></div>'; return; }
   screenEl.innerHTML='<div class="loading">載入模型與材質…</div>';

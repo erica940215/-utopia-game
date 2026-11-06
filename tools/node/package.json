@@ -1,2 +1,1 @@
-{ "name": "utopia-asset-tools", "private": true, "description": "0 A.D. 模型轉檔工具（tools/import_0ad.py 會呼叫）",
-  "dependencies": { "assimpjs": "0.0.10", "three": "0.128.0", "jsdom": "24.1.3" } }
+{"name":"utopia-asset-tools","private":true,"description":"0 A.D. 模型轉檔工具（tools/import_0ad.py 會呼叫）","dependencies":{"@gltf-transform/core":"^4.5.1","@gltf-transform/extensions":"^4.5.1","@gltf-transform/functions":"^4.5.1","assimpjs":"0.0.10","jsdom":"24.1.3","meshoptimizer":"^0.21.0","three":"0.128.0"}}

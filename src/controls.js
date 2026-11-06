@@ -24,7 +24,9 @@ function startCtrlEdit(){
   const p=$('ctrlPanel'); p.hidden=false;
   p.innerHTML=`<b>操作設定</b><span>直接拖曳按鈕調整位置，用滑桿調整大小。</span>
     ${Object.entries(CTRL_IDS).map(([id,n])=>`<label>${n}<input type="range" id="sz_${id}" min="0.6" max="1.6" step="0.05" value="${ctrlCfg.size[id]||1}"></label>`).join('')}
+    <div class="qbox">${qualityHtml()}</div>
     <div class="btns"><button type="button" class="btn ghost" id="ctrlReset">重設</button><button type="button" class="btn" id="ctrlDone">完成</button></div>`;
+  wireQuality();
   for(const id of Object.keys(CTRL_IDS)) $('sz_'+id).oninput=e=>{ ctrlCfg.size[id]=parseFloat(e.target.value); applyCtrl(); };
   $('ctrlReset').onclick=()=>{ ctrlCfg={size:{},pos:{}}; applyCtrl(); saveCtrl(); startCtrlEdit(); };
   $('ctrlDone').onclick=()=>endCtrlEdit();

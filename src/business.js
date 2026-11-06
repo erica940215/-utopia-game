@@ -97,7 +97,7 @@ function bubbleSprite(text,good){
   const s=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(c),transparent:true,depthWrite:false})); s.scale.set(4,0.75,1); return s;
 }
 function updateBubbles(dt){
-  bubbleT-=dt;
+  bubbleT-=dt; if(!Q().bubbles){ for(const b of bubbles) b.p.m.remove(b.s); bubbles=[]; return; }
   for(let i=bubbles.length-1;i>=0;i--){ const b=bubbles[i]; b.life-=dt; if(b.life<=0||!b.p.m.parent){ b.p.m.remove(b.s); bubbles.splice(i,1); } }
   if(bubbleT>0||!zooPeople.length||!bizStats.thoughts.length) return;
   bubbleT=2.5; const p=zooPeople[Math.floor(Math.random()*zooPeople.length)], t=bizStats.thoughts[Math.floor(Math.random()*bizStats.thoughts.length)];

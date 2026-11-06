@@ -16,7 +16,7 @@ function loadZad(name){
   const raw=f=>new Promise((res,rej)=>new THREE.GLTFLoader().load(modelUrl(f),res,undefined,rej));
   const tex=def.tex?new Promise(res=>{ try{ new THREE.TextureLoader().load('models/'+def.tex,t=>{ t.flipY=false; res(t); },undefined,()=>res(null)); }catch(e){ res(null); } }):Promise.resolve(null);
   assetWait[key]=Promise.all([raw(def.mesh),tex,...Object.entries(def.anims||{}).map(([k,f])=>raw(f).then(g=>[k,g]).catch(()=>null))]).then(([g,t,...an])=>{
-    g.scene.traverse(o=>{ if(o.isMesh){ o.material=new THREE.MeshStandardMaterial({map:t||null,color:t?0xffffff:0x9a8a7a,roughness:0.9,metalness:0,skinning:!!o.isSkinnedMesh}); } });
+    g.scene.traverse(o=>{ if(o.isMesh){ o.material=(typeof Q==='function'&&Q().lambert)?new THREE.MeshLambertMaterial({map:t||null,color:t?0xffffff:0x9a8a7a,skinning:!!o.isSkinnedMesh}):new THREE.MeshStandardMaterial({map:t||null,color:t?0xffffff:0x9a8a7a,roughness:0.9,metalness:0,skinning:!!o.isSkinnedMesh}); } });
     const clips=[];
     for(const x of an){ if(!x) continue; const [k,ga]=x; for(const c of ga.animations){ const cl=c.clone(); cl.name=k; cl.tracks=cl.tracks.filter(tr=>g.scene.getObjectByName(tr.name.split('.')[0])); if(cl.tracks.length) clips.push(cl); break; } }
     g.animations=clips; g.scene.updateMatrixWorld(true);
