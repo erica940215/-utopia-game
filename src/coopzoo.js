@@ -9,10 +9,12 @@ let coopZoo=null;   // {id,code,name,ch,host,members,base,gotSnap,uid,dbT,snapT}
 const CZ_LIST={buildings:'uid',props:'uid',animals:'id',stored:'id',escaped:'id'};
 const CZ_WHOLE=['terrain','unplaced','staff','ticket','assign','market','campaign','loan','tech','know','cons','wage','staffLv','memorial','ach'];
 const CZ_DELTA=['coins','research','cp'];
+const CZ_SAVE_WHOLE=['upgrades','gear','train','map','lore','food','bosses'];
 const czKey=()=>coopId+'-'+((sbUser&&sbUser.id)||'x');
 const jsonEq=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
 const deep=o=>JSON.parse(JSON.stringify(o));
-function czState(){ return {zoo:save.zoo,resources:save.resources,collection:save.collection}; }
+function czState(){ const o={zoo:save.zoo,resources:save.resources,collection:save.collection,runs:save.runs||0}; for(const k of CZ_SAVE_WHOLE) o[k]=save[k]; return o; }
+function czLoadState(d){ save.resources=d.resources||{}; save.collection=d.collection||{}; save.zoo=d.zoo; save.runs=d.runs||0; for(const k of CZ_SAVE_WHOLE) if(d[k]!==undefined) save[k]=d[k]; }
 
 /* ---------- 建立、加入、列出 ---------- */
 async function createCoopZoo(name){
@@ -43,7 +45,7 @@ async function enterCoopZoo(id){
   if(activeSlot!=='career'&&activeSlot!=='visit'&&activeSlot!=='coop'&&careerSave){ careerSave.slots=careerSave.slots||{}; careerSave.slots[activeSlot]=save; }
   leaveCoopZoo();
   activeSlot='coop';
-  const s=emptySave(); s.mode='coop'; s.resources=data.data.resources||{}; s.collection=data.data.collection||{}; s.zoo=data.data.zoo; save=s;
+  const s=emptySave(); s.mode='coop'; save=s; czLoadState(data.data);
   coopZoo={id:data.id,code:data.code,name:data.name,host:false,members:[],gotSnap:false,uid:1e6*(1+Math.floor(Math.random()*900)),dbT:0,snapT:0};
   coopZoo.base=deep(czState());
   save.zoo.nextUid=coopZoo.uid;
@@ -51,21 +53,23 @@ async function enterCoopZoo(id){
   ch.on('broadcast',{event:'snap'},({payload})=>czApplySnap(payload));
   ch.on('broadcast',{event:'edit'},({payload})=>{ if(coopZoo&&coopZoo.host){ czMerge(payload); czBroadcast(true); } });
   ch.on('presence',{event:'sync'},()=>czPresence());
+  coopAttachZoo(ch);
   ch.on('presence',{event:'join'},()=>{ if(coopZoo&&coopZoo.host) czBroadcast(true); });
-  ch.subscribe(async st=>{ if(st==='SUBSCRIBED') await ch.track({name:coopName()}); });
+  ch.subscribe(async st=>{ if(st==='SUBSCRIBED'){ coopZoo.subscribed=true; await ch.track({name:coopName(),inZoo:true}); } });
   zooBaseBuilt&&clearPeople(); enterZoo();
   toast(`進入合營園區「${data.name}」・邀請碼 ${data.code}`);
 }
 function leaveCoopZoo(){
   if(!coopZoo) return;
   const z=coopZoo; if(z.host) czSaveDb(true);
-  try{ sb.removeChannel(z.ch); }catch(e){} coopZoo=null;
+  try{ sb.removeChannel(z.ch); }catch(e){} coopZoo=null; if(coop&&coop.zoo){ for(const p of coop.peers.values()) p.g.parent&&p.g.parent.remove(p.g); coop=null; }
 }
 function czPresence(){
   if(!coopZoo) return;
   const st=coopZoo.ch.presenceState(), keys=Object.keys(st).sort();
   coopZoo.members=keys.map(k=>st[k][0]&&st[k][0].name||'?');
-  const wasHost=coopZoo.host; coopZoo.host=keys[0]===czKey();
+  const inZoo=keys.filter(k=>st[k][0]&&st[k][0].inZoo!==false);   // 優先讓在園區裡的人當主機（去遠征的人不跑園區模擬）
+  const wasHost=coopZoo.host; coopZoo.host=(inZoo.length?inZoo:keys)[0]===czKey();
   if(coopZoo.host&&!wasHost){
     if(!coopZoo.gotSnap){ const away=catchUp(); if(away&&away.minutes>=1) toast(`沒人在的 ${away.minutes} 分鐘裡：門票 +${away.coins} 金幣`); }
     save.zoo.nextUid=Math.max(save.zoo.nextUid||2,2); czBroadcast(true);
@@ -97,7 +101,7 @@ function czApplySnap(p){
   const z=coopZoo; if(!z||z.host) return;
   const structChanged=!z.gotSnap||!jsonEq(p.zoo.buildings,save.zoo.buildings)||!jsonEq(p.zoo.props,save.zoo.props)||!jsonEq(p.zoo.terrain,save.zoo.terrain);
   const animalsChanged=!jsonEq(p.zoo.animals.map(a=>a.id+a.habitat),save.zoo.animals.map(a=>a.id+a.habitat));
-  save.zoo=p.zoo; save.resources=p.resources; save.collection=p.collection||{}; save.zoo.nextUid=z.uid;
+  czLoadState(p); save.zoo.nextUid=z.uid;
   Object.assign(zooStats,p.stats.zooStats); Object.assign(opsStats,p.stats.opsStats); Object.assign(bizStats,p.stats.bizStats);
   z.base=deep(czState()); z.gotSnap=true;
   if(structChanged){ ensureTerrain(); rebuildZoo(); } else if(animalsChanged) rebuildZooAnimals();
@@ -117,6 +121,8 @@ function czDiff(){
   for(const k of CZ_DELTA){ const v=(cur.zoo[k]||0)-(base.zoo[k]||0); if(Math.abs(v)>1e-6){ d.delta[k]=v; any=true; } }
   for(const k of new Set([...Object.keys(base.resources),...Object.keys(cur.resources)])){ const v=(cur.resources[k]||0)-(base.resources[k]||0); if(Math.abs(v)>1e-6){ d.res[k]=v; any=true; } }
   for(const k of Object.keys(cur.collection)) if((cur.collection[k]||0)!==(base.collection[k]||0)){ d.col[k]=(cur.collection[k]||0)-(base.collection[k]||0); any=true; }
+  d.save={}; for(const k of CZ_SAVE_WHOLE) if(!jsonEq(base[k],cur[k])){ d.save[k]=cur[k]; any=true; }
+  if(cur.runs!==base.runs){ d.runs=cur.runs-base.runs; any=true; }
   return any?d:null;
 }
 function czSendEdit(){ const z=coopZoo; if(!z||z.host) return; const d=czDiff(); if(!d) return; z.ch.send({type:'broadcast',event:'edit',payload:d}); z.base=deep(czState()); }
@@ -131,6 +137,8 @@ function czMerge(d){
   for(const [k,v] of Object.entries(d.delta||{})) z[k]=(z[k]||0)+v;
   for(const [k,v] of Object.entries(d.res||{})) save.resources[k]=(save.resources[k]||0)+v;
   for(const [k,v] of Object.entries(d.col||{})) save.collection[k]=(save.collection[k]||0)+v;
+  for(const [k,v] of Object.entries(d.save||{})) save[k]=v;
+  if(d.runs) save.runs=(save.runs||0)+d.runs;
   migrateAnimals(); envDirty(); rebuildZoo(); simulate(0); updateZooHud();
 }
 /* persist() 在合營園區裡改走這裡 */
@@ -143,7 +151,7 @@ function showCoopGift(msg){
   screenEl.innerHTML=`<div class="hub">
     <div class="hub-head"><h1><small>SUPPLY · 從我的園區支援</small>送東西過來</h1></div>
     ${msg?`<div class="dexinfo">${esc(msg)}</div>`:''}
-    <p class="zp-empty">合營園區不能出發遠征。要用的動物和物資，從自己生涯園區的倉庫送過來。</p>
+    <p class="zp-empty">多人記錄檔的遠征收穫會直接進這座園區；也可以從自己單人記錄檔的倉庫送動物和物資過來支援。</p>
     <div class="sec-title"><span>我的倉庫動物</span></div>
     <div class="shoplist">${stored.length?stored.map(a=>`<div class="shopcard"><div class="sc-main"><b>${a.sex==='M'?'♂':'♀'} ${esc(DATA.speciesById[a.species].name)} <span class="stars">${'★'.repeat(a.stars)}</span></b></div><button type="button" class="zmini add" data-gift="${a.id}">送過來</button></div>`).join('')
       :'<p class="zp-empty">生涯園區的倉庫是空的。回自己的園區，在棲地面板按「移出」就會進倉庫。</p>'}</div>
@@ -157,3 +165,21 @@ function showCoopGift(msg){
   screenEl.querySelectorAll('[data-giftc]').forEach(el=>el.onclick=()=>{ if(!home||home.coins<500) return; home.coins-=500; z.coins+=500; persist(); showCoopGift(); });
   $('giftBack').onclick=()=>{ screenEl.hidden=true; state='zoo'; $('zooUI').hidden=false; updateZooHud(); };
 }
+
+/* ---------- 多人記錄檔裡一起遠征：用同一個頻道同步位置、撿東西、Boss 血量 ---------- */
+let czPendingExp=null;
+function coopAttachZoo(ch){
+  coop={code:'zoo',ch,host:false,peers:new Map(),zoo:true};
+  ch.on('broadcast',{event:'start'},({payload})=>{ if(state==='play'||state==='confirm') return;
+    czPendingExp={node:payload.node,seed:payload.seed,by:payload.by,until:performance.now()+90000};
+    const b=$('zJoinExp'); if(b){ b.hidden=false; b.textContent=`${payload.by||'隊友'} 出發去${payload.node.name}了，按這裡一起去`; } toast(`${payload.by||'隊友'} 出發去${payload.node.name}了，可以一起去！`); });
+  ch.on('broadcast',{event:'pos'},({payload})=>coopPeer(payload));
+  ch.on('broadcast',{event:'take'},({payload})=>{ if(state!=='play') return; const it=interactables.find(i=>!i.done&&i.type===payload.t&&Math.hypot(i.pos.x-payload.x,i.pos.z-payload.z)<0.6); if(it){ it.done=true; world.remove(it.group); } });
+  ch.on('broadcast',{event:'boss'},({payload})=>{ if(boss&&!boss.dead&&state==='play'){ boss.hp-=payload.d; boss.hit=0.2; if(boss.hp<=0) defeatBoss(); } });
+}
+function czJoinPending(){
+  const p=czPendingExp; $('zJoinExp').hidden=true; if(!p||performance.now()>p.until){ toast('隊友已經出發太久了'); return; }
+  czPendingExp=null; if(coop) coop.host=false; czSetInZoo(false);
+  simulate(0); persist(); zooActive=false; $('zooUI').hidden=true; $('zPanel').hidden=true; screenEl.hidden=true; startExpedition(p.node,p.seed);
+}
+function czSetInZoo(v){ const z=coopZoo; if(!z||!z.subscribed) return; if(!v&&z.host){ czBroadcast(true); czSaveDb(true); } z.ch.track({name:coopName(),inZoo:v}); }

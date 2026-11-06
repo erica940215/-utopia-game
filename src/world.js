@@ -136,7 +136,7 @@ let coop=null;   // {code, ch, host, id, name, peers:Map}
 const coopId=Math.random().toString(36).slice(2,10);
 function coopName(){ return (sbUser&&sbUser.email&&sbUser.email.split('@')[0])||('列車長'+coopId.slice(0,3)); }
 function coopJoin(code,host){
-  if(!sb) return; coopLeave();
+  if(!sb) return; if(coop&&coop.zoo) return; coopLeave();
   const ch=sb.channel('coop-'+code,{config:{broadcast:{self:false},presence:{key:coopId}}});
   coop={code,ch,host,peers:new Map()};
   ch.on('broadcast',{event:'start'},({payload})=>{ if(coop.host) return; const n=payload.node; toast(`隊長出發去${n.name}了，跟上！`); if(state==='zoo'||state==='dex'||state==='map') { zooActive=false; $('zooUI').hidden=true; $('zPanel').hidden=true; screenEl.hidden=true; startExpedition(n,payload.seed); } });
@@ -146,24 +146,49 @@ function coopJoin(code,host){
   ch.on('presence',{event:'sync'},()=>{ const st=ch.presenceState(); coop.members=Object.values(st).map(v=>v[0]); if(state==='dex') renderCoopBox(); });
   ch.subscribe(async s=>{ if(s==='SUBSCRIBED'){ await ch.track({id:coopId,name:coopName(),host:!!host}); toast(host?`房間 ${code} 建好了，把房號告訴朋友`:`加入了房間 ${code}`); } });
 }
-function coopLeave(){ if(coop){ try{ sb.removeChannel(coop.ch); }catch(e){} for(const p of coop.peers.values()) p.g.parent&&p.g.parent.remove(p.g); } coop=null; }
+function coopLeave(){ if(coop&&coop.zoo) return; if(coop){ try{ sb.removeChannel(coop.ch); }catch(e){} for(const p of coop.peers.values()) p.g.parent&&p.g.parent.remove(p.g); } coop=null; }
 function coopSend(event,payload){ if(coop) coop.ch.send({type:'broadcast',event,payload}); }
 let coopPosT=0;
 function coopTick(dt){
-  if(!coop||state!=='play') return; coopPosT-=dt;
+  if(!coop||state!=='play') return; coopPosT-=dt; updateMatesHud();
   if(coopPosT<=0){ coopPosT=0.1; coopSend('pos',{id:coopId,name:coopName(),x:player.pos.x,z:player.pos.z,yaw:player.yaw,node:curNode&&curNode.id}); }
   for(const p of coop.peers.values()){ if(!p.g.parent&&world&&p.node===(curNode&&curNode.id)) world.add(p.g); p.g.position.lerp(p.to,Math.min(1,dt*10)); p.g.position.y=heightAt(p.g.position.x,p.g.position.z); p.g.visible=p.node===(curNode&&curNode.id); }
+  animateMates(dt);
+}
+const MATE_COLORS=[0x2a5ad8,0xc8402a,0x3a8a4a,0xe0a02a,0x8a3a9a];
+function makeMate(name,i){
+  const g=new THREE.Group(), c=MATE_COLORS[i%MATE_COLORS.length], coat=M(c), dark=M(0x2a2c34);
+  const torso=box(0.6,0.75,0.35,coat); torso.position.y=1.15; g.add(torso);
+  const hood=sph(0.24,coat); hood.position.y=1.72; g.add(hood); const face=sph(0.17,0xe8c0a0); face.position.set(0,1.7,-0.12); g.add(face);
+  const pack=box(0.45,0.5,0.22,0x5a4030); pack.position.set(0,1.2,0.28); g.add(pack);
+  const legs=[], arms=[];
+  for(const s of [-1,1]){ const lp=new THREE.Group(); lp.position.set(s*0.16,0.78,0); const l=box(0.2,0.78,0.22,dark); l.position.y=-0.39; lp.add(l); g.add(lp); legs.push(lp);
+    const ap=new THREE.Group(); ap.position.set(s*0.4,1.45,0); const a=box(0.16,0.65,0.18,coat); a.position.y=-0.32; ap.add(a); g.add(ap); arms.push(ap); }
+  const lamp=new THREE.Sprite(new THREE.SpriteMaterial({map:DOT,color:0xffb064,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending})); lamp.scale.set(1.2,1.2,1); lamp.position.set(0.42,0.8,-0.15); g.add(lamp);
+  try{ const label=bubbleSprite(name,true); label.position.y=2.35; label.scale.set(2.4,0.45,1); g.add(label); }catch(e){}
+  return {g,legs,arms,phase:0};
 }
 function coopPeer(m){
   let p=coop.peers.get(m.id);
-  if(!p){ const g=new THREE.Group(); const b=cyl(0.3,0.35,1.2,0x2a5ad8,10); b.position.y=0.9; g.add(b); const h=sph(0.25,0xe8c0a0); h.position.y=1.75; g.add(h);
-    let label=null; try{ label=bubbleSprite(m.name,true); label.position.y=2.5; label.scale.set(2.4,0.45,1); g.add(label); }catch(e){}
-    p={g,to:new THREE.Vector3()}; coop.peers.set(m.id,p); }
-  p.node=m.node; p.to.set(m.x,0,m.z); p.g.rotation.y=m.yaw;
+  if(!p){ p={...makeMate(m.name,coop.peers.size),to:new THREE.Vector3(m.x,0,m.z),name:m.name}; p.g.position.copy(p.to); coop.peers.set(m.id,p); }
+  const moved=Math.hypot(m.x-p.to.x,m.z-p.to.z);
+  p.node=m.node; p.to.set(m.x,0,m.z); p.g.rotation.y=m.yaw; p.speed=moved/0.1; p.seen=performance.now();
+}
+function animateMates(dt){
+  for(const p of coop.peers.values()){ if(!p.legs) continue; const sp=Math.min(1,(p.speed||0)/5); p.phase+=dt*(4+sp*8);
+    const sw=Math.sin(p.phase)*0.7*sp; p.legs[0].rotation.x=sw; p.legs[1].rotation.x=-sw; p.arms[0].rotation.x=-sw*0.8; p.arms[1].rotation.x=sw*0.8;
+    if(performance.now()-(p.seen||0)>3000) p.g.visible=false; }
+}
+function updateMatesHud(){
+  const el=$('mates'); if(!el) return;
+  const list=[...coop.peers.values()].filter(p=>p.node===(curNode&&curNode.id)&&performance.now()-(p.seen||0)<3000);
+  el.hidden=!list.length;
+  el.innerHTML=list.map(p=>`<span>${esc(p.name)} ${Math.round(Math.hypot(p.g.position.x-player.pos.x,p.g.position.z-player.pos.z))} m</span>`).join('');
 }
 function renderCoopBox(){
   const el=$('coopBox'); if(!el) return;
   if(!sb){ el.innerHTML='<span class="auth-note">多人合作需要在遊戲網站上玩（Claude 裡的版本不能連線）。</span>'; return; }
+  if(coop&&coop.zoo){ el.innerHTML='<span class="auth-note">你在多人記錄檔裡：有人出發遠征時，其他人會看到「一起去」的按鈕。</span>'; return; }
   el.innerHTML=coop?`<span class="auth-note">房間 <b class="num">${esc(coop.code)}</b>・${coop.host?'你是隊長，你出發時隊友會一起去同一站':'等隊長出發'}・成員：${(coop.members||[]).map(m=>esc(m.name)).join('、')||'連線中…'}</span><button type="button" class="zmini" id="coopLeave">離開房間</button>
       <span class="auth-note">同一站的地圖、物資和冰封生物都一樣；被隊友撿走的東西會消失；Boss 血量共用。各自救回的動物進各自的園區。</span>`
     :`<button type="button" class="zmini add" id="coopNew">建立房間</button><input id="coopCode" maxlength="4" placeholder="房號" class="coopin"><button type="button" class="zmini" id="coopGo">加入</button>`;

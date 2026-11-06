@@ -329,6 +329,9 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
 .coopin{width:80px;font:inherit;text-transform:uppercase;background:rgba(0,0,0,.25);color:var(--frost);border:1px solid var(--line);border-radius:6px;padding:6px 8px}
 
 .coopin.wide{width:160px;text-transform:none}
+
+.zjoinexp{position:absolute;left:50%;top:calc(env(safe-area-inset-top,0px) + 96px);transform:translateX(-50%);z-index:3;max-width:calc(100vw - 32px)}
+#mates{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;font-size:12px;color:#9fd0ff}
 </style></head>
 <body>
 <canvas id="c"></canvas>
@@ -346,6 +349,7 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
     <div id="trainDist" class="num">火車 0 m</div>
     <div id="storm" class="num">暴風雪 5:00</div>
     <div id="trainHp" class="num"></div>
+    <div id="mates" hidden></div>
   </div>
   <div class="corner tr">
     <div class="lbl">背包 <span id="bagCap" class="num">0/12</span></div>
@@ -396,6 +400,7 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
     <button type="button" class="zbtn" id="zWalkExit" hidden>回到俯視</button>
   </div>
   <div class="zchal" id="zChal" hidden></div>
+  <button type="button" class="btn zjoinexp" id="zJoinExp" hidden></button>
   <span class="zmodetag" id="zModeTag" hidden></span>
   <div class="zpanel" id="zPanel" hidden></div>
   <div class="ztools" id="zTools"></div>
@@ -440,10 +445,16 @@ async function loadData(){
    ========================================================= */
 const SAVE_VERSION = 1;
 function emptySave(){ return { version:SAVE_VERSION, runs:0, resources:{}, collection:{}, updatedAt:null }; }
+/* 記錄檔：p1 用原本的位置（舊存檔不用搬），其他記錄檔各自一格 */
+let saveProfile=(()=>{ try{ return localStorage.getItem('utopia-profile')||'p1'; }catch(e){ return 'p1'; } })();
+const lsKey=slot=>(slot||saveProfile)==='p1'?'utopia-save':'utopia-save:'+(slot||saveProfile);
 const LocalStore = {
   mode:'local',
-  async load(){ try{ const t = localStorage.getItem('utopia-save'); return t ? JSON.parse(t) : null; }catch(e){ return null; } },
-  async save(d){ try{ localStorage.setItem('utopia-save', JSON.stringify(d)); return true; }catch(e){ return false; } }
+  async load(slot){ try{ const t = localStorage.getItem(lsKey(slot)); return t ? JSON.parse(t) : null; }catch(e){ return null; } },
+  async save(d,slot){ try{ localStorage.setItem(lsKey(slot), JSON.stringify(d)); return true; }catch(e){ return false; } },
+  async list(){ const out=[]; try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k!=='utopia-save'&&!k.startsWith('utopia-save:')) continue;
+    const id=k==='utopia-save'?'p1':k.slice(12); let d=null; try{ d=JSON.parse(localStorage.getItem(k)); }catch(e){} out.push({id,name:(d&&d.profileName)||'',updatedAt:d&&d.updatedAt,runs:d&&d.runs}); } }catch(e){} return out; },
+  async remove(slot){ try{ localStorage.removeItem(lsKey(slot)); }catch(e){} }
 };
 function waitForClaude(ms){
   return new Promise(res => {
@@ -460,11 +471,15 @@ async function makeCloudStore(){
   if(!db || !user) return null;
   const uid = await user.id();
   if(!uid) return null;
-  const ref = db.collection('data/users/' + uid).doc('save');
+  const col = db.collection('data/users/' + uid), docId=slot=>(slot||saveProfile)==='p1'?'save':'save-'+(slot||saveProfile), idx=col.doc('profiles');
+  const readIdx=async()=>{ try{ const s=await idx.get(); return s.exists?(s.data().list||[]):[]; }catch(e){ return []; } };
   return {
     mode:'cloud',
-    async load(){ const s = await ref.get(); return s.exists ? s.data() : null; },
-    async save(d){ await ref.set(d); return true; }
+    async load(slot){ const s = await col.doc(docId(slot)).get(); return s.exists ? s.data() : null; },
+    async save(d,slot){ const id=slot||saveProfile; await col.doc(docId(id)).set(d);
+      const L=await readIdx(), e={id,name:d.profileName||'',updatedAt:d.updatedAt,runs:d.runs}, i=L.findIndex(x=>x.id===id); if(i<0||L[i].name!==e.name||Math.random()<0.1){ if(i<0) L.push(e); else L[i]=e; await idx.set({list:L}); } return true; },
+    async list(){ const L=await readIdx(); if(!L.some(x=>x.id==='p1')){ const s=await col.doc('save').get(); if(s.exists){ const d=s.data(); L.unshift({id:'p1',name:d.profileName||'',updatedAt:d.updatedAt,runs:d.runs}); } } return L; },
+    async remove(slot){ try{ await col.doc(docId(slot)).delete(); }catch(e){ try{ await col.doc(docId(slot)).set({deleted:true}); }catch(_){} } const L=(await readIdx()).filter(x=>x.id!==slot); await idx.set({list:L}); }
   };
 }
 let store = LocalStore, save = emptySave(), saving = Promise.resolve();
@@ -475,8 +490,10 @@ let sbUser=null;
 function makeSupabaseStore(u){
   return {
     mode:'cloud',
-    async load(){ const {data,error}=await sb.from('saves').select('data').eq('user_id',u.id).maybeSingle(); if(error) throw error; return data?data.data:null; },
-    async save(d){ const {error}=await sb.from('saves').upsert({user_id:u.id,data:d,updated_at:new Date().toISOString()}); if(error) throw error; return true; }
+    async load(slot){ const {data,error}=await sb.from('saves').select('data').eq('user_id',u.id).eq('slot',slot||saveProfile).maybeSingle(); if(error) throw error; return data?data.data:null; },
+    async save(d,slot){ const {error}=await sb.from('saves').upsert({user_id:u.id,slot:slot||saveProfile,data:d,updated_at:new Date().toISOString()}); if(error) throw error; return true; },
+    async list(){ const {data,error}=await sb.from('saves').select('slot,updated_at,data->profileName,data->runs').eq('user_id',u.id); if(error) throw error; return (data||[]).map(r=>({id:r.slot,name:r.profileName||'',updatedAt:r.updated_at,runs:r.runs})); },
+    async remove(slot){ await sb.from('saves').delete().eq('user_id',u.id).eq('slot',slot); }
   };
 }
 async function initSave(){
@@ -502,8 +519,8 @@ function persist(){
   const root = (typeof rootSave==='function') ? rootSave() : save;
   root.updatedAt = new Date().toISOString();
   const snapshot = JSON.parse(JSON.stringify(root));
-  LocalStore.save(snapshot);
-  saving = saving.then(() => store.save(snapshot)).catch(() => { store = LocalStore; return LocalStore.save(snapshot); });
+  const slot=saveProfile; LocalStore.save(snapshot,slot);
+  saving = saving.then(() => store.save(snapshot,slot)).catch(() => { store = LocalStore; return LocalStore.save(snapshot,slot); });
   return saving;
 }
 
@@ -854,7 +871,7 @@ function distToTrain(x,z){ const cz=Math.max(TRAIN_Z0,Math.min(TRAIN_Z1,z)); ret
 function startExpedition(node,seed){
   node=node||DATA.mapById.old_town;
   const sd=seed??((Date.now()^((save.runs+1)*7919))>>>0);
-  if(coop&&coop.host) coopSend('start',{node,seed:sd});
+  if(coop&&coop.host) coopSend('start',{node,seed:sd,by:coopName()});
   buildStation(node,sd);
   bag=zeroItems(); haul=zeroItems(); rescued=[]; container=[];
   ensureProgress(); STATS=computeStats();
@@ -1334,7 +1351,7 @@ function catchUp(){
   const zoo=save.zoo, Z=ZC();
   let m=Math.min(Z.offlineCapMinutes,Math.max(0,(Date.now()-(zoo.lastTick||Date.now()))/60000));
   // 只有生涯在離線時繼續運作；沙盒與挑戰離開時暫停（挑戰中去遠征 20 分鐘內仍會計時）
-  if(modeOf()==='sandbox' || modeOf()==='visit' || modeOf()==='coop' || (modeOf()==='challenge' && m>20)) m=0;
+  if(modeOf()==='sandbox' || modeOf()==='visit' || (modeOf()==='coop'&&!(coopZoo&&coopZoo.host)) || (modeOf()==='challenge' && m>20)) m=0;
   if(m<0.05){ simulate(0); return null; }
   const c0=zoo.coins, f0=save.resources.feed||0, total=m, b0=zooBirthLog.length, d0=zooDeathLog.length;
   while(m>0){ const s=Math.min(1,m); simulate(s); m-=s; }
@@ -1351,7 +1368,7 @@ function enterZoo(){
   zooActive=true; state='zoo'; zTool='select'; zSelUid=null; updateSelBox();
   screenEl.hidden=true; $('hud').hidden=true; $('touch').hidden=true; $('touch').classList.remove('walk');
   $('zooUI').hidden=false; $('zWalkExit').hidden=true; $('zMain').hidden=false; $('zPanel').hidden=true; challengeHud();
-  $('zModeTag').textContent=modeOf()==='visit'?`參觀：${visitName}`:MODE_NAME[modeOf()]; $('zModeTag').hidden=modeOf()==='career'; $('zParks').hidden=modeOf()!=='career'; $('zShare').hidden=modeOf()==='visit'||modeOf()==='coop'; $('zGift').hidden=modeOf()!=='coop'; $('zGo').hidden=$('zShop').hidden=modeOf()==='coop'||modeOf()==='visit'; if(modeOf()==='coop') czHud();
+  $('zModeTag').textContent=modeOf()==='visit'?`參觀：${visitName}`:MODE_NAME[modeOf()]; $('zModeTag').hidden=modeOf()==='career'; $('zParks').hidden=modeOf()!=='career'; $('zShare').hidden=modeOf()==='visit'||modeOf()==='coop'; $('zGift').hidden=modeOf()!=='coop'; $('zGo').hidden=$('zShop').hidden=modeOf()==='visit'; if(modeOf()==='coop'){ czHud(); czSetInZoo(true); } $('zJoinExp').hidden=!czPendingExp;
   if(document.exitPointerLock) document.exitPointerLock();
   renderZooTools(); updateZooHud();
   if(away && away.minutes>=1) toast(`離開的 ${away.minutes} 分鐘裡：門票 +${away.coins} 金幣，吃掉飼料 ${away.feed}${away.births?`，出生了 ${away.births} 隻寶寶`:''}${away.deaths?`，有 ${away.deaths} 隻動物壽終正寢`:''}`);
@@ -1361,6 +1378,7 @@ function enterZoo(){
 function leaveZooForExpedition(node){
   simulate(0); persist();
   zooActive=false; $('zooUI').hidden=true; $('zPanel').hidden=true;
+  if(coop&&coop.zoo){ coop.host=true; czSetInZoo(false); }
   travelEvent(node,()=>startExpedition(node));
 }
 
@@ -1574,6 +1592,7 @@ $('zDex').onclick=()=>{ $('zooUI').hidden=true; showDex(); };
 $('zGo').onclick=()=>showMap();
 $('zMode').onclick=()=>{ persist(); showModeSelect(); };
 $('zLab').onclick=()=>{ $('zooUI').hidden=true; showLab(); };
+$('zJoinExp').onclick=()=>czJoinPending();
 $('zGift').onclick=()=>{ $('zooUI').hidden=true; showCoopGift(); };
 $('zParks').onclick=()=>{ $('zooUI').hidden=true; showParks(); };
 $('zShare').onclick=()=>{ $('zooUI').hidden=true; showShare(); };
@@ -2643,11 +2662,13 @@ function startChallenge(ch){ chResolved=false; if(careerSave&&careerSave.slots) 
 
 /* 模式選擇畫面 */
 function showModeSelect(){
+  if(activeSlot==='coop'){ leaveCoopZoo(); activeSlot='career'; save=careerSave; }
   state='mode'; $('zooUI').hidden=true; $('hud').hidden=true; screenEl.hidden=false;
   const done=(careerSave&&careerSave.chDone)||{}, c=careerSave||save;
   const sbx=careerSave&&careerSave.slots&&careerSave.slots.sandbox;
   screenEl.innerHTML=`<div class="hub">
-    <div class="hub-head"><h1><small>UTOPIA · 冰原最後的避難所</small>烏托邦</h1></div>
+    <div class="hub-head"><h1><small>UTOPIA · 冰原最後的避難所</small>烏托邦</h1><span class="savechip">記錄檔：${esc((careerSave&&careerSave.profileName)||(saveProfile==='p1'?'記錄檔 1':saveProfile))}</span></div>
+    <div class="zp-btns"><button type="button" class="zmini add" id="mProfiles">切換・新增記錄檔／多人記錄檔</button></div>
     <div class="modecards">
       <button type="button" class="modecard main" id="mCareer"><b>生涯模式</b><span>遠征救援、經營動物園、集滿圖鑑。已遠征 ${c.runs||0} 次・圖鑑 ${Object.keys(c.collection||{}).length} 種</span></button>
       <button type="button" class="modecard" id="mSandbox"><b>沙盒模式</b><span>資源無限、全部物種與設施解鎖，專心蓋自己的動物園。${sbx?'繼續上次的沙盒':''}</span></button>
@@ -2658,6 +2679,7 @@ function showModeSelect(){
       <button type="button" class="zmini add" data-ch="${ch.id}">開始</button></div>`).join('')}</div>
     <p class="zp-empty">沙盒和挑戰的進度分開存，不會影響生涯存檔。挑戰時間是遊戲內時間，跟現實時間一樣快。</p>
   </div>`;
+  $('mProfiles').onclick=()=>showProfiles();
   $('mCareer').onclick=()=>{ switchSlot('career'); enterZoo(); };
   $('mSandbox').onclick=()=>{ switchSlot('sandbox',()=>newSandbox()); persist(); enterZoo(); };
   const nb=$('mSandboxNew'); if(nb) nb.onclick=()=>{ careerSave.slots.sandbox=null; switchSlot('sandbox',()=>newSandbox()); persist(); enterZoo(); };
@@ -3699,7 +3721,7 @@ let coop=null;   // {code, ch, host, id, name, peers:Map}
 const coopId=Math.random().toString(36).slice(2,10);
 function coopName(){ return (sbUser&&sbUser.email&&sbUser.email.split('@')[0])||('列車長'+coopId.slice(0,3)); }
 function coopJoin(code,host){
-  if(!sb) return; coopLeave();
+  if(!sb) return; if(coop&&coop.zoo) return; coopLeave();
   const ch=sb.channel('coop-'+code,{config:{broadcast:{self:false},presence:{key:coopId}}});
   coop={code,ch,host,peers:new Map()};
   ch.on('broadcast',{event:'start'},({payload})=>{ if(coop.host) return; const n=payload.node; toast(`隊長出發去${n.name}了，跟上！`); if(state==='zoo'||state==='dex'||state==='map') { zooActive=false; $('zooUI').hidden=true; $('zPanel').hidden=true; screenEl.hidden=true; startExpedition(n,payload.seed); } });
@@ -3709,24 +3731,49 @@ function coopJoin(code,host){
   ch.on('presence',{event:'sync'},()=>{ const st=ch.presenceState(); coop.members=Object.values(st).map(v=>v[0]); if(state==='dex') renderCoopBox(); });
   ch.subscribe(async s=>{ if(s==='SUBSCRIBED'){ await ch.track({id:coopId,name:coopName(),host:!!host}); toast(host?`房間 ${code} 建好了，把房號告訴朋友`:`加入了房間 ${code}`); } });
 }
-function coopLeave(){ if(coop){ try{ sb.removeChannel(coop.ch); }catch(e){} for(const p of coop.peers.values()) p.g.parent&&p.g.parent.remove(p.g); } coop=null; }
+function coopLeave(){ if(coop&&coop.zoo) return; if(coop){ try{ sb.removeChannel(coop.ch); }catch(e){} for(const p of coop.peers.values()) p.g.parent&&p.g.parent.remove(p.g); } coop=null; }
 function coopSend(event,payload){ if(coop) coop.ch.send({type:'broadcast',event,payload}); }
 let coopPosT=0;
 function coopTick(dt){
-  if(!coop||state!=='play') return; coopPosT-=dt;
+  if(!coop||state!=='play') return; coopPosT-=dt; updateMatesHud();
   if(coopPosT<=0){ coopPosT=0.1; coopSend('pos',{id:coopId,name:coopName(),x:player.pos.x,z:player.pos.z,yaw:player.yaw,node:curNode&&curNode.id}); }
   for(const p of coop.peers.values()){ if(!p.g.parent&&world&&p.node===(curNode&&curNode.id)) world.add(p.g); p.g.position.lerp(p.to,Math.min(1,dt*10)); p.g.position.y=heightAt(p.g.position.x,p.g.position.z); p.g.visible=p.node===(curNode&&curNode.id); }
+  animateMates(dt);
+}
+const MATE_COLORS=[0x2a5ad8,0xc8402a,0x3a8a4a,0xe0a02a,0x8a3a9a];
+function makeMate(name,i){
+  const g=new THREE.Group(), c=MATE_COLORS[i%MATE_COLORS.length], coat=M(c), dark=M(0x2a2c34);
+  const torso=box(0.6,0.75,0.35,coat); torso.position.y=1.15; g.add(torso);
+  const hood=sph(0.24,coat); hood.position.y=1.72; g.add(hood); const face=sph(0.17,0xe8c0a0); face.position.set(0,1.7,-0.12); g.add(face);
+  const pack=box(0.45,0.5,0.22,0x5a4030); pack.position.set(0,1.2,0.28); g.add(pack);
+  const legs=[], arms=[];
+  for(const s of [-1,1]){ const lp=new THREE.Group(); lp.position.set(s*0.16,0.78,0); const l=box(0.2,0.78,0.22,dark); l.position.y=-0.39; lp.add(l); g.add(lp); legs.push(lp);
+    const ap=new THREE.Group(); ap.position.set(s*0.4,1.45,0); const a=box(0.16,0.65,0.18,coat); a.position.y=-0.32; ap.add(a); g.add(ap); arms.push(ap); }
+  const lamp=new THREE.Sprite(new THREE.SpriteMaterial({map:DOT,color:0xffb064,transparent:true,depthWrite:false,blending:THREE.AdditiveBlending})); lamp.scale.set(1.2,1.2,1); lamp.position.set(0.42,0.8,-0.15); g.add(lamp);
+  try{ const label=bubbleSprite(name,true); label.position.y=2.35; label.scale.set(2.4,0.45,1); g.add(label); }catch(e){}
+  return {g,legs,arms,phase:0};
 }
 function coopPeer(m){
   let p=coop.peers.get(m.id);
-  if(!p){ const g=new THREE.Group(); const b=cyl(0.3,0.35,1.2,0x2a5ad8,10); b.position.y=0.9; g.add(b); const h=sph(0.25,0xe8c0a0); h.position.y=1.75; g.add(h);
-    let label=null; try{ label=bubbleSprite(m.name,true); label.position.y=2.5; label.scale.set(2.4,0.45,1); g.add(label); }catch(e){}
-    p={g,to:new THREE.Vector3()}; coop.peers.set(m.id,p); }
-  p.node=m.node; p.to.set(m.x,0,m.z); p.g.rotation.y=m.yaw;
+  if(!p){ p={...makeMate(m.name,coop.peers.size),to:new THREE.Vector3(m.x,0,m.z),name:m.name}; p.g.position.copy(p.to); coop.peers.set(m.id,p); }
+  const moved=Math.hypot(m.x-p.to.x,m.z-p.to.z);
+  p.node=m.node; p.to.set(m.x,0,m.z); p.g.rotation.y=m.yaw; p.speed=moved/0.1; p.seen=performance.now();
+}
+function animateMates(dt){
+  for(const p of coop.peers.values()){ if(!p.legs) continue; const sp=Math.min(1,(p.speed||0)/5); p.phase+=dt*(4+sp*8);
+    const sw=Math.sin(p.phase)*0.7*sp; p.legs[0].rotation.x=sw; p.legs[1].rotation.x=-sw; p.arms[0].rotation.x=-sw*0.8; p.arms[1].rotation.x=sw*0.8;
+    if(performance.now()-(p.seen||0)>3000) p.g.visible=false; }
+}
+function updateMatesHud(){
+  const el=$('mates'); if(!el) return;
+  const list=[...coop.peers.values()].filter(p=>p.node===(curNode&&curNode.id)&&performance.now()-(p.seen||0)<3000);
+  el.hidden=!list.length;
+  el.innerHTML=list.map(p=>`<span>${esc(p.name)} ${Math.round(Math.hypot(p.g.position.x-player.pos.x,p.g.position.z-player.pos.z))} m</span>`).join('');
 }
 function renderCoopBox(){
   const el=$('coopBox'); if(!el) return;
   if(!sb){ el.innerHTML='<span class="auth-note">多人合作需要在遊戲網站上玩（Claude 裡的版本不能連線）。</span>'; return; }
+  if(coop&&coop.zoo){ el.innerHTML='<span class="auth-note">你在多人記錄檔裡：有人出發遠征時，其他人會看到「一起去」的按鈕。</span>'; return; }
   el.innerHTML=coop?`<span class="auth-note">房間 <b class="num">${esc(coop.code)}</b>・${coop.host?'你是隊長，你出發時隊友會一起去同一站':'等隊長出發'}・成員：${(coop.members||[]).map(m=>esc(m.name)).join('、')||'連線中…'}</span><button type="button" class="zmini" id="coopLeave">離開房間</button>
       <span class="auth-note">同一站的地圖、物資和冰封生物都一樣；被隊友撿走的東西會消失；Boss 血量共用。各自救回的動物進各自的園區。</span>`
     :`<button type="button" class="zmini add" id="coopNew">建立房間</button><input id="coopCode" maxlength="4" placeholder="房號" class="coopin"><button type="button" class="zmini" id="coopGo">加入</button>`;
@@ -3746,10 +3793,12 @@ let coopZoo=null;   // {id,code,name,ch,host,members,base,gotSnap,uid,dbT,snapT}
 const CZ_LIST={buildings:'uid',props:'uid',animals:'id',stored:'id',escaped:'id'};
 const CZ_WHOLE=['terrain','unplaced','staff','ticket','assign','market','campaign','loan','tech','know','cons','wage','staffLv','memorial','ach'];
 const CZ_DELTA=['coins','research','cp'];
+const CZ_SAVE_WHOLE=['upgrades','gear','train','map','lore','food','bosses'];
 const czKey=()=>coopId+'-'+((sbUser&&sbUser.id)||'x');
 const jsonEq=(a,b)=>JSON.stringify(a)===JSON.stringify(b);
 const deep=o=>JSON.parse(JSON.stringify(o));
-function czState(){ return {zoo:save.zoo,resources:save.resources,collection:save.collection}; }
+function czState(){ const o={zoo:save.zoo,resources:save.resources,collection:save.collection,runs:save.runs||0}; for(const k of CZ_SAVE_WHOLE) o[k]=save[k]; return o; }
+function czLoadState(d){ save.resources=d.resources||{}; save.collection=d.collection||{}; save.zoo=d.zoo; save.runs=d.runs||0; for(const k of CZ_SAVE_WHOLE) if(d[k]!==undefined) save[k]=d[k]; }
 
 /* ---------- 建立、加入、列出 ---------- */
 async function createCoopZoo(name){
@@ -3780,7 +3829,7 @@ async function enterCoopZoo(id){
   if(activeSlot!=='career'&&activeSlot!=='visit'&&activeSlot!=='coop'&&careerSave){ careerSave.slots=careerSave.slots||{}; careerSave.slots[activeSlot]=save; }
   leaveCoopZoo();
   activeSlot='coop';
-  const s=emptySave(); s.mode='coop'; s.resources=data.data.resources||{}; s.collection=data.data.collection||{}; s.zoo=data.data.zoo; save=s;
+  const s=emptySave(); s.mode='coop'; save=s; czLoadState(data.data);
   coopZoo={id:data.id,code:data.code,name:data.name,host:false,members:[],gotSnap:false,uid:1e6*(1+Math.floor(Math.random()*900)),dbT:0,snapT:0};
   coopZoo.base=deep(czState());
   save.zoo.nextUid=coopZoo.uid;
@@ -3788,21 +3837,23 @@ async function enterCoopZoo(id){
   ch.on('broadcast',{event:'snap'},({payload})=>czApplySnap(payload));
   ch.on('broadcast',{event:'edit'},({payload})=>{ if(coopZoo&&coopZoo.host){ czMerge(payload); czBroadcast(true); } });
   ch.on('presence',{event:'sync'},()=>czPresence());
+  coopAttachZoo(ch);
   ch.on('presence',{event:'join'},()=>{ if(coopZoo&&coopZoo.host) czBroadcast(true); });
-  ch.subscribe(async st=>{ if(st==='SUBSCRIBED') await ch.track({name:coopName()}); });
+  ch.subscribe(async st=>{ if(st==='SUBSCRIBED'){ coopZoo.subscribed=true; await ch.track({name:coopName(),inZoo:true}); } });
   zooBaseBuilt&&clearPeople(); enterZoo();
   toast(`進入合營園區「${data.name}」・邀請碼 ${data.code}`);
 }
 function leaveCoopZoo(){
   if(!coopZoo) return;
   const z=coopZoo; if(z.host) czSaveDb(true);
-  try{ sb.removeChannel(z.ch); }catch(e){} coopZoo=null;
+  try{ sb.removeChannel(z.ch); }catch(e){} coopZoo=null; if(coop&&coop.zoo){ for(const p of coop.peers.values()) p.g.parent&&p.g.parent.remove(p.g); coop=null; }
 }
 function czPresence(){
   if(!coopZoo) return;
   const st=coopZoo.ch.presenceState(), keys=Object.keys(st).sort();
   coopZoo.members=keys.map(k=>st[k][0]&&st[k][0].name||'?');
-  const wasHost=coopZoo.host; coopZoo.host=keys[0]===czKey();
+  const inZoo=keys.filter(k=>st[k][0]&&st[k][0].inZoo!==false);   // 優先讓在園區裡的人當主機（去遠征的人不跑園區模擬）
+  const wasHost=coopZoo.host; coopZoo.host=(inZoo.length?inZoo:keys)[0]===czKey();
   if(coopZoo.host&&!wasHost){
     if(!coopZoo.gotSnap){ const away=catchUp(); if(away&&away.minutes>=1) toast(`沒人在的 ${away.minutes} 分鐘裡：門票 +${away.coins} 金幣`); }
     save.zoo.nextUid=Math.max(save.zoo.nextUid||2,2); czBroadcast(true);
@@ -3834,7 +3885,7 @@ function czApplySnap(p){
   const z=coopZoo; if(!z||z.host) return;
   const structChanged=!z.gotSnap||!jsonEq(p.zoo.buildings,save.zoo.buildings)||!jsonEq(p.zoo.props,save.zoo.props)||!jsonEq(p.zoo.terrain,save.zoo.terrain);
   const animalsChanged=!jsonEq(p.zoo.animals.map(a=>a.id+a.habitat),save.zoo.animals.map(a=>a.id+a.habitat));
-  save.zoo=p.zoo; save.resources=p.resources; save.collection=p.collection||{}; save.zoo.nextUid=z.uid;
+  czLoadState(p); save.zoo.nextUid=z.uid;
   Object.assign(zooStats,p.stats.zooStats); Object.assign(opsStats,p.stats.opsStats); Object.assign(bizStats,p.stats.bizStats);
   z.base=deep(czState()); z.gotSnap=true;
   if(structChanged){ ensureTerrain(); rebuildZoo(); } else if(animalsChanged) rebuildZooAnimals();
@@ -3854,6 +3905,8 @@ function czDiff(){
   for(const k of CZ_DELTA){ const v=(cur.zoo[k]||0)-(base.zoo[k]||0); if(Math.abs(v)>1e-6){ d.delta[k]=v; any=true; } }
   for(const k of new Set([...Object.keys(base.resources),...Object.keys(cur.resources)])){ const v=(cur.resources[k]||0)-(base.resources[k]||0); if(Math.abs(v)>1e-6){ d.res[k]=v; any=true; } }
   for(const k of Object.keys(cur.collection)) if((cur.collection[k]||0)!==(base.collection[k]||0)){ d.col[k]=(cur.collection[k]||0)-(base.collection[k]||0); any=true; }
+  d.save={}; for(const k of CZ_SAVE_WHOLE) if(!jsonEq(base[k],cur[k])){ d.save[k]=cur[k]; any=true; }
+  if(cur.runs!==base.runs){ d.runs=cur.runs-base.runs; any=true; }
   return any?d:null;
 }
 function czSendEdit(){ const z=coopZoo; if(!z||z.host) return; const d=czDiff(); if(!d) return; z.ch.send({type:'broadcast',event:'edit',payload:d}); z.base=deep(czState()); }
@@ -3868,6 +3921,8 @@ function czMerge(d){
   for(const [k,v] of Object.entries(d.delta||{})) z[k]=(z[k]||0)+v;
   for(const [k,v] of Object.entries(d.res||{})) save.resources[k]=(save.resources[k]||0)+v;
   for(const [k,v] of Object.entries(d.col||{})) save.collection[k]=(save.collection[k]||0)+v;
+  for(const [k,v] of Object.entries(d.save||{})) save[k]=v;
+  if(d.runs) save.runs=(save.runs||0)+d.runs;
   migrateAnimals(); envDirty(); rebuildZoo(); simulate(0); updateZooHud();
 }
 /* persist() 在合營園區裡改走這裡 */
@@ -3880,7 +3935,7 @@ function showCoopGift(msg){
   screenEl.innerHTML=`<div class="hub">
     <div class="hub-head"><h1><small>SUPPLY · 從我的園區支援</small>送東西過來</h1></div>
     ${msg?`<div class="dexinfo">${esc(msg)}</div>`:''}
-    <p class="zp-empty">合營園區不能出發遠征。要用的動物和物資，從自己生涯園區的倉庫送過來。</p>
+    <p class="zp-empty">多人記錄檔的遠征收穫會直接進這座園區；也可以從自己單人記錄檔的倉庫送動物和物資過來支援。</p>
     <div class="sec-title"><span>我的倉庫動物</span></div>
     <div class="shoplist">${stored.length?stored.map(a=>`<div class="shopcard"><div class="sc-main"><b>${a.sex==='M'?'♂':'♀'} ${esc(DATA.speciesById[a.species].name)} <span class="stars">${'★'.repeat(a.stars)}</span></b></div><button type="button" class="zmini add" data-gift="${a.id}">送過來</button></div>`).join('')
       :'<p class="zp-empty">生涯園區的倉庫是空的。回自己的園區，在棲地面板按「移出」就會進倉庫。</p>'}</div>
@@ -3893,6 +3948,69 @@ function showCoopGift(msg){
   screenEl.querySelectorAll('[data-giftr]').forEach(el=>el.onclick=()=>{ const k=el.dataset.giftr; if((careerSave.resources[k]||0)<10) return; careerSave.resources[k]-=10; save.resources[k]=(save.resources[k]||0)+10; persist(); showCoopGift(); });
   screenEl.querySelectorAll('[data-giftc]').forEach(el=>el.onclick=()=>{ if(!home||home.coins<500) return; home.coins-=500; z.coins+=500; persist(); showCoopGift(); });
   $('giftBack').onclick=()=>{ screenEl.hidden=true; state='zoo'; $('zooUI').hidden=false; updateZooHud(); };
+}
+
+/* ---------- 多人記錄檔裡一起遠征：用同一個頻道同步位置、撿東西、Boss 血量 ---------- */
+let czPendingExp=null;
+function coopAttachZoo(ch){
+  coop={code:'zoo',ch,host:false,peers:new Map(),zoo:true};
+  ch.on('broadcast',{event:'start'},({payload})=>{ if(state==='play'||state==='confirm') return;
+    czPendingExp={node:payload.node,seed:payload.seed,by:payload.by,until:performance.now()+90000};
+    const b=$('zJoinExp'); if(b){ b.hidden=false; b.textContent=`${payload.by||'隊友'} 出發去${payload.node.name}了，按這裡一起去`; } toast(`${payload.by||'隊友'} 出發去${payload.node.name}了，可以一起去！`); });
+  ch.on('broadcast',{event:'pos'},({payload})=>coopPeer(payload));
+  ch.on('broadcast',{event:'take'},({payload})=>{ if(state!=='play') return; const it=interactables.find(i=>!i.done&&i.type===payload.t&&Math.hypot(i.pos.x-payload.x,i.pos.z-payload.z)<0.6); if(it){ it.done=true; world.remove(it.group); } });
+  ch.on('broadcast',{event:'boss'},({payload})=>{ if(boss&&!boss.dead&&state==='play'){ boss.hp-=payload.d; boss.hit=0.2; if(boss.hp<=0) defeatBoss(); } });
+}
+function czJoinPending(){
+  const p=czPendingExp; $('zJoinExp').hidden=true; if(!p||performance.now()>p.until){ toast('隊友已經出發太久了'); return; }
+  czPendingExp=null; if(coop) coop.host=false; czSetInZoo(false);
+  simulate(0); persist(); zooActive=false; $('zooUI').hidden=true; $('zPanel').hidden=true; screenEl.hidden=true; startExpedition(p.node,p.seed);
+}
+function czSetInZoo(v){ const z=coopZoo; if(!z||!z.subscribed) return; if(!v&&z.host){ czBroadcast(true); czSaveDb(true); } z.ch.track({name:coopName(),inZoo:v}); }
+
+/* =========================================================
+   記錄檔：單人可以開很多個記錄檔；多人記錄檔就是合營園區（可以一起遠征、一起經營）
+   ========================================================= */
+const profileLabel=(p,i)=>p.name||(p.id==='p1'?'記錄檔 1':`記錄檔 ${i+1}`);
+async function listProfiles(){
+  let L=[]; try{ L=await store.list(); }catch(e){}
+  if(store!==LocalStore){ try{ for(const p of await LocalStore.list()) if(!L.some(x=>x.id===p.id)) L.push({...p,localOnly:true}); }catch(e){} }
+  if(!L.some(p=>p.id===saveProfile)) L.unshift({id:saveProfile,name:careerSave&&careerSave.profileName,updatedAt:careerSave&&careerSave.updatedAt,runs:careerSave&&careerSave.runs});
+  return L.sort((a,b)=>a.id==='p1'?-1:b.id==='p1'?1:String(a.id).localeCompare(String(b.id)));
+}
+async function loadProfile(id,name){
+  if(activeSlot==='coop') leaveCoopZoo();
+  if(activeSlot!=='career'){ activeSlot='career'; save=careerSave||save; }
+  await persist();
+  saveProfile=id; try{ localStorage.setItem('utopia-profile',id); }catch(e){}
+  let d=null; try{ d=await store.load(id); }catch(e){} if(!d) d=await LocalStore.load(id);
+  save=Object.assign(emptySave(),d&&d.version?d:{profileName:name||''});
+  careerSave=save; activeSlot='career'; zooBaseBuilt&&clearPeople();
+  if(!d) await persist();
+  showModeSelect();
+}
+async function showProfiles(msg){
+  state='profiles'; $('zooUI').hidden=true; screenEl.hidden=false; screenEl.innerHTML='<div class="loading">讀取記錄檔…</div>';
+  const L=await listProfiles();
+  screenEl.innerHTML=`<div class="hub">
+    <div class="hub-head"><h1><small>SAVES · 記錄檔</small>記錄檔</h1><span class="savechip ${store.mode==='cloud'?'cloud':''}">${store.mode==='cloud'?'雲端存檔・可跨裝置':'本機存檔'}</span></div>
+    ${msg?`<div class="dexinfo">${esc(msg)}</div>`:''}
+    <div class="sec-title"><span>單人記錄檔</span><b>${L.length}</b></div>
+    <div class="shoplist">${L.map((p,i)=>{ const cur=p.id===saveProfile; return `<div class="shopcard${cur?' on':''}"><div class="sc-main"><b>${esc(profileLabel(p,i))}${cur?'（目前）':''}</b><span>已遠征 ${p.runs||0} 次${p.updatedAt?`・${new Date(p.updatedAt).toLocaleString('zh-TW')}`:''}${p.localOnly?'・只在這台裝置':''}</span></div>
+      <div class="zp-btns">${cur?'':`<button type="button" class="zmini add" data-pload="${esc(p.id)}">載入</button>`}<button type="button" class="zmini" data-pren="${esc(p.id)}">改名</button>${cur||p.id==='p1'?'':`<button type="button" class="zmini" data-pdel="${esc(p.id)}">刪除</button>`}</div></div>`; }).join('')}</div>
+    <div class="zp-btns"><input id="pNew" class="coopin wide" maxlength="16" placeholder="新記錄檔名稱（也用來改名）"><button type="button" class="zmini add" id="pNewBtn">新增記錄檔</button></div>
+    <div class="sec-title"><span>多人記錄檔（和朋友一起遠征、一起經營）</span></div><div id="czBox"><p class="zp-empty">讀取中…</p></div>
+    <button class="btn ghost" id="pBack" type="button">回到模式選擇</button></div>`;
+  screenEl.querySelectorAll('[data-pload]').forEach(el=>el.onclick=()=>loadProfile(el.dataset.pload));
+  screenEl.querySelectorAll('[data-pren]').forEach(el=>el.onclick=async()=>{ const id=el.dataset.pren, name=$('pNew').value.trim(); if(!name){ toast('先在下面的欄位輸入新名稱，再按改名'); $('pNew').focus(); return; }
+    if(id===saveProfile){ careerSave.profileName=name.slice(0,16); await persist(); }
+    else { let d=null; try{ d=await store.load(id); }catch(e){} if(!d) d=await LocalStore.load(id); if(d){ d.profileName=name.slice(0,16); await LocalStore.save(d,id); try{ await store.save(d,id); }catch(e){} } }
+    showProfiles('改好名字了'); });
+  screenEl.querySelectorAll('[data-pdel]').forEach(el=>el.onclick=async()=>{ if(el.dataset.confirm!=='1'){ el.dataset.confirm='1'; el.textContent='確定刪除？刪了就救不回來'; return; }
+    const id=el.dataset.pdel; await LocalStore.remove(id); try{ await store.remove(id); }catch(e){} showProfiles('刪除了'); });
+  $('pNewBtn').onclick=()=>{ const name=($('pNew').value.trim()||`記錄檔 ${L.length+1}`).slice(0,16); loadProfile('p'+Date.now().toString(36),name); };
+  $('pBack').onclick=()=>showModeSelect();
+  coopZooHtml().then(h=>{ const b=$('czBox'); if(b&&state==='profiles'){ b.innerHTML=h; wireCoopZoo(); } });
 }
 
 /* =========================================================

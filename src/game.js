@@ -30,10 +30,16 @@ async function loadData(){
    ========================================================= */
 const SAVE_VERSION = 1;
 function emptySave(){ return { version:SAVE_VERSION, runs:0, resources:{}, collection:{}, updatedAt:null }; }
+/* 記錄檔：p1 用原本的位置（舊存檔不用搬），其他記錄檔各自一格 */
+let saveProfile=(()=>{ try{ return localStorage.getItem('utopia-profile')||'p1'; }catch(e){ return 'p1'; } })();
+const lsKey=slot=>(slot||saveProfile)==='p1'?'utopia-save':'utopia-save:'+(slot||saveProfile);
 const LocalStore = {
   mode:'local',
-  async load(){ try{ const t = localStorage.getItem('utopia-save'); return t ? JSON.parse(t) : null; }catch(e){ return null; } },
-  async save(d){ try{ localStorage.setItem('utopia-save', JSON.stringify(d)); return true; }catch(e){ return false; } }
+  async load(slot){ try{ const t = localStorage.getItem(lsKey(slot)); return t ? JSON.parse(t) : null; }catch(e){ return null; } },
+  async save(d,slot){ try{ localStorage.setItem(lsKey(slot), JSON.stringify(d)); return true; }catch(e){ return false; } },
+  async list(){ const out=[]; try{ for(let i=0;i<localStorage.length;i++){ const k=localStorage.key(i); if(k!=='utopia-save'&&!k.startsWith('utopia-save:')) continue;
+    const id=k==='utopia-save'?'p1':k.slice(12); let d=null; try{ d=JSON.parse(localStorage.getItem(k)); }catch(e){} out.push({id,name:(d&&d.profileName)||'',updatedAt:d&&d.updatedAt,runs:d&&d.runs}); } }catch(e){} return out; },
+  async remove(slot){ try{ localStorage.removeItem(lsKey(slot)); }catch(e){} }
 };
 function waitForClaude(ms){
   return new Promise(res => {
@@ -50,11 +56,15 @@ async function makeCloudStore(){
   if(!db || !user) return null;
   const uid = await user.id();
   if(!uid) return null;
-  const ref = db.collection('data/users/' + uid).doc('save');
+  const col = db.collection('data/users/' + uid), docId=slot=>(slot||saveProfile)==='p1'?'save':'save-'+(slot||saveProfile), idx=col.doc('profiles');
+  const readIdx=async()=>{ try{ const s=await idx.get(); return s.exists?(s.data().list||[]):[]; }catch(e){ return []; } };
   return {
     mode:'cloud',
-    async load(){ const s = await ref.get(); return s.exists ? s.data() : null; },
-    async save(d){ await ref.set(d); return true; }
+    async load(slot){ const s = await col.doc(docId(slot)).get(); return s.exists ? s.data() : null; },
+    async save(d,slot){ const id=slot||saveProfile; await col.doc(docId(id)).set(d);
+      const L=await readIdx(), e={id,name:d.profileName||'',updatedAt:d.updatedAt,runs:d.runs}, i=L.findIndex(x=>x.id===id); if(i<0||L[i].name!==e.name||Math.random()<0.1){ if(i<0) L.push(e); else L[i]=e; await idx.set({list:L}); } return true; },
+    async list(){ const L=await readIdx(); if(!L.some(x=>x.id==='p1')){ const s=await col.doc('save').get(); if(s.exists){ const d=s.data(); L.unshift({id:'p1',name:d.profileName||'',updatedAt:d.updatedAt,runs:d.runs}); } } return L; },
+    async remove(slot){ try{ await col.doc(docId(slot)).delete(); }catch(e){ try{ await col.doc(docId(slot)).set({deleted:true}); }catch(_){} } const L=(await readIdx()).filter(x=>x.id!==slot); await idx.set({list:L}); }
   };
 }
 let store = LocalStore, save = emptySave(), saving = Promise.resolve();
@@ -65,8 +75,10 @@ let sbUser=null;
 function makeSupabaseStore(u){
   return {
     mode:'cloud',
-    async load(){ const {data,error}=await sb.from('saves').select('data').eq('user_id',u.id).maybeSingle(); if(error) throw error; return data?data.data:null; },
-    async save(d){ const {error}=await sb.from('saves').upsert({user_id:u.id,data:d,updated_at:new Date().toISOString()}); if(error) throw error; return true; }
+    async load(slot){ const {data,error}=await sb.from('saves').select('data').eq('user_id',u.id).eq('slot',slot||saveProfile).maybeSingle(); if(error) throw error; return data?data.data:null; },
+    async save(d,slot){ const {error}=await sb.from('saves').upsert({user_id:u.id,slot:slot||saveProfile,data:d,updated_at:new Date().toISOString()}); if(error) throw error; return true; },
+    async list(){ const {data,error}=await sb.from('saves').select('slot,updated_at,data->profileName,data->runs').eq('user_id',u.id); if(error) throw error; return (data||[]).map(r=>({id:r.slot,name:r.profileName||'',updatedAt:r.updated_at,runs:r.runs})); },
+    async remove(slot){ await sb.from('saves').delete().eq('user_id',u.id).eq('slot',slot); }
   };
 }
 async function initSave(){
@@ -92,8 +104,8 @@ function persist(){
   const root = (typeof rootSave==='function') ? rootSave() : save;
   root.updatedAt = new Date().toISOString();
   const snapshot = JSON.parse(JSON.stringify(root));
-  LocalStore.save(snapshot);
-  saving = saving.then(() => store.save(snapshot)).catch(() => { store = LocalStore; return LocalStore.save(snapshot); });
+  const slot=saveProfile; LocalStore.save(snapshot,slot);
+  saving = saving.then(() => store.save(snapshot,slot)).catch(() => { store = LocalStore; return LocalStore.save(snapshot,slot); });
   return saving;
 }
 
@@ -444,7 +456,7 @@ function distToTrain(x,z){ const cz=Math.max(TRAIN_Z0,Math.min(TRAIN_Z1,z)); ret
 function startExpedition(node,seed){
   node=node||DATA.mapById.old_town;
   const sd=seed??((Date.now()^((save.runs+1)*7919))>>>0);
-  if(coop&&coop.host) coopSend('start',{node,seed:sd});
+  if(coop&&coop.host) coopSend('start',{node,seed:sd,by:coopName()});
   buildStation(node,sd);
   bag=zeroItems(); haul=zeroItems(); rescued=[]; container=[];
   ensureProgress(); STATS=computeStats();
@@ -743,6 +755,7 @@ function wireAuth(){
 /*@@BIZ@@*/
 /*@@WORLD@@*/
 /*@@COOPZOO@@*/
+/*@@PROFILES@@*/
 /*@@CONTROLS@@*/
 /* =========================================================
    8. 主迴圈

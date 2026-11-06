@@ -195,7 +195,7 @@ function catchUp(){
   const zoo=save.zoo, Z=ZC();
   let m=Math.min(Z.offlineCapMinutes,Math.max(0,(Date.now()-(zoo.lastTick||Date.now()))/60000));
   // 只有生涯在離線時繼續運作；沙盒與挑戰離開時暫停（挑戰中去遠征 20 分鐘內仍會計時）
-  if(modeOf()==='sandbox' || modeOf()==='visit' || modeOf()==='coop' || (modeOf()==='challenge' && m>20)) m=0;
+  if(modeOf()==='sandbox' || modeOf()==='visit' || (modeOf()==='coop'&&!(coopZoo&&coopZoo.host)) || (modeOf()==='challenge' && m>20)) m=0;
   if(m<0.05){ simulate(0); return null; }
   const c0=zoo.coins, f0=save.resources.feed||0, total=m, b0=zooBirthLog.length, d0=zooDeathLog.length;
   while(m>0){ const s=Math.min(1,m); simulate(s); m-=s; }
@@ -212,7 +212,7 @@ function enterZoo(){
   zooActive=true; state='zoo'; zTool='select'; zSelUid=null; updateSelBox();
   screenEl.hidden=true; $('hud').hidden=true; $('touch').hidden=true; $('touch').classList.remove('walk');
   $('zooUI').hidden=false; $('zWalkExit').hidden=true; $('zMain').hidden=false; $('zPanel').hidden=true; challengeHud();
-  $('zModeTag').textContent=modeOf()==='visit'?`參觀：${visitName}`:MODE_NAME[modeOf()]; $('zModeTag').hidden=modeOf()==='career'; $('zParks').hidden=modeOf()!=='career'; $('zShare').hidden=modeOf()==='visit'||modeOf()==='coop'; $('zGift').hidden=modeOf()!=='coop'; $('zGo').hidden=$('zShop').hidden=modeOf()==='coop'||modeOf()==='visit'; if(modeOf()==='coop') czHud();
+  $('zModeTag').textContent=modeOf()==='visit'?`參觀：${visitName}`:MODE_NAME[modeOf()]; $('zModeTag').hidden=modeOf()==='career'; $('zParks').hidden=modeOf()!=='career'; $('zShare').hidden=modeOf()==='visit'||modeOf()==='coop'; $('zGift').hidden=modeOf()!=='coop'; $('zGo').hidden=$('zShop').hidden=modeOf()==='visit'; if(modeOf()==='coop'){ czHud(); czSetInZoo(true); } $('zJoinExp').hidden=!czPendingExp;
   if(document.exitPointerLock) document.exitPointerLock();
   renderZooTools(); updateZooHud();
   if(away && away.minutes>=1) toast(`離開的 ${away.minutes} 分鐘裡：門票 +${away.coins} 金幣，吃掉飼料 ${away.feed}${away.births?`，出生了 ${away.births} 隻寶寶`:''}${away.deaths?`，有 ${away.deaths} 隻動物壽終正寢`:''}`);
@@ -222,6 +222,7 @@ function enterZoo(){
 function leaveZooForExpedition(node){
   simulate(0); persist();
   zooActive=false; $('zooUI').hidden=true; $('zPanel').hidden=true;
+  if(coop&&coop.zoo){ coop.host=true; czSetInZoo(false); }
   travelEvent(node,()=>startExpedition(node));
 }
 
@@ -435,6 +436,7 @@ $('zDex').onclick=()=>{ $('zooUI').hidden=true; showDex(); };
 $('zGo').onclick=()=>showMap();
 $('zMode').onclick=()=>{ persist(); showModeSelect(); };
 $('zLab').onclick=()=>{ $('zooUI').hidden=true; showLab(); };
+$('zJoinExp').onclick=()=>czJoinPending();
 $('zGift').onclick=()=>{ $('zooUI').hidden=true; showCoopGift(); };
 $('zParks').onclick=()=>{ $('zooUI').hidden=true; showParks(); };
 $('zShare').onclick=()=>{ $('zooUI').hidden=true; showShare(); };
