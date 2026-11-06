@@ -127,6 +127,14 @@ function makeProp(type){
     case 'fence_wood': { for(const x of [-0.95,0,0.95]) add(box(0.1,1.1,0.1,wood),x,0.55,0); for(const y of [0.4,0.85]) add(box(2,0.1,0.05,wood),0,y,0); break; }
     case 'fence_stone': add(box(2,1.1,0.4,0x8a8a86),0,0.55,0); add(box(2.05,0.12,0.45,0xf2f6fa),0,1.15,0); break;
     case 'fence_glass': { add(box(2,1.1,0.06,glassM),0,0.6,0); add(box(2,0.06,0.1,dark),0,1.15,0); break; }
+    case 'recycle_bin': { for(const [x,c] of [[-0.18,0x2a8a4a],[0.18,0x2a5aa8]]) add(cyl(0.16,0.14,0.75,c,10),x,0.37,0); break; }
+    case 'speaker': { add(cyl(0.05,0.06,2.4,dark,6),0,1.2,0); const s=add(box(0.35,0.3,0.25,0x3a3a3e),0,2.35,0.1); s.rotation.x=0.3; break; }
+    case 'edu_station': { add(box(0.8,1.0,0.5,0x3a6aa8),0,0.5,0); add(box(0.7,0.45,0.04,new THREE.MeshBasicMaterial({color:0x9fd8ff})),0,0.95,0.27).rotation.x=-0.4; break; }
+    case 'cons_sign': { for(const x of [-0.5,0.5]) add(box(0.06,1.1,0.06,wood),x,0.55,0); add(box(1.2,0.7,0.06,0x3a8a4a),0,1.2,0); add(box(1.05,0.55,0.02,white),0,1.2,0.04); break; }
+    case 'billboard': { for(const x of [-1.2,1.2]) add(box(0.14,3.2,0.14,dark),x,1.6,0); add(box(3,1.4,0.12,0xe9c46a),0,3,0); add(box(2.8,1.2,0.02,0xc8402a),0,3,0.07); break; }
+    case 'webcam': { add(cyl(0.04,0.05,2,dark,6),0,1,0); add(box(0.2,0.14,0.28,0x2a2c30),0,2.05,0.1); add(sph(0.05,new THREE.MeshBasicMaterial({color:0xff3030})),0.06,2.12,0.25); break; }
+    case 'sec_camera': { add(cyl(0.04,0.05,2.6,dark,6),0,1.3,0); const c=add(box(0.16,0.14,0.36,0xeeeae2),0,2.6,0.15); c.rotation.x=0.4; break; }
+    case 'nofeed_sign': { add(box(0.06,1.0,0.06,wood),0,0.5,0); add(box(0.7,0.45,0.05,0xc84a4a),0,1.1,0); add(box(0.55,0.08,0.02,white),0,1.1,0.03); break; }
     case 'donation_box': { add(box(0.12,0.9,0.12,dark),0,0.45,0); add(box(0.55,0.55,0.4,0x2a6a4a),0,1.15,0); add(box(0.3,0.04,0.05,0xe9c46a),0,1.43,0); break; }
     case 'scratch_post': { add(cyl(0.18,0.2,1.8,0xb89a6a,8),0,0.9,0); add(cyl(0.5,0.5,0.1,wood,10),0,0.05,0); for(let i=0;i<5;i++) add(cyl(0.2,0.2,0.08,0x8a7a5a,8),0,0.3+i*0.3,0); break; }
     case 'ball': add(sph(0.45,0xd84a3a),0,0.45,0); add(box(0.92,0.12,0.12,0xf2efe6),0,0.45,0); break;

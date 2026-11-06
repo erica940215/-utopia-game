@@ -697,5 +697,148 @@
    0.6
   ],
   "desc": "放在步道旁，遊客會捐款，保育評價越高捐越多"
+ },
+ {
+  "id": "recycle_bin",
+  "name": "回收桶",
+  "cat": "decor",
+  "kind": "recycle_bin",
+  "cost": {
+   "coins": 8
+  },
+  "size": [
+   0.6,
+   0.6
+  ],
+  "effect": {
+   "clean": 0.15,
+   "cons": 0.5
+  },
+  "desc": "園區比較乾淨，也加一點保育評價"
+ },
+ {
+  "id": "speaker",
+  "name": "廣播喇叭",
+  "cat": "decor",
+  "kind": "speaker",
+  "cost": {
+   "coins": 12,
+   "parts": 1
+  },
+  "size": [
+   0.5,
+   0.5
+  ],
+  "effect": {
+   "edu": 3
+  },
+  "desc": "播放動物介紹：教育 +3"
+ },
+ {
+  "id": "edu_station",
+  "name": "互動教育站",
+  "cat": "decor",
+  "kind": "edu_station",
+  "cost": {
+   "coins": 30,
+   "parts": 1
+  },
+  "size": [
+   1,
+   1
+  ],
+  "effect": {
+   "edu": 5
+  },
+  "desc": "教育 +5"
+ },
+ {
+  "id": "cons_sign",
+  "name": "保育看板",
+  "cat": "decor",
+  "kind": "cons_sign",
+  "cost": {
+   "coins": 15
+  },
+  "size": [
+   1.2,
+   0.3
+  ],
+  "effect": {
+   "edu": 2,
+   "cons": 1
+  },
+  "desc": "教育 +2、保育評價 +1"
+ },
+ {
+  "id": "billboard",
+  "name": "廣告看板",
+  "cat": "decor",
+  "kind": "billboard",
+  "cost": {
+   "coins": 60,
+   "wood": 4
+  },
+  "size": [
+   3,
+   0.5
+  ],
+  "effect": {
+   "visit": 0.02
+  },
+  "desc": "遊客 +2%（最多算 5 個）"
+ },
+ {
+  "id": "webcam",
+  "name": "棲地直播鏡頭",
+  "cat": "decor",
+  "kind": "webcam",
+  "cost": {
+   "coins": 40,
+   "parts": 1
+  },
+  "size": [
+   0.4,
+   0.4
+  ],
+  "effect": {
+   "online": 0.5
+  },
+  "desc": "放在棲地旁：網友打賞每分鐘 +0.5 金幣（最多 4 個）"
+ },
+ {
+  "id": "sec_camera",
+  "name": "監視器",
+  "cat": "decor",
+  "kind": "sec_camera",
+  "cost": {
+   "coins": 35,
+   "parts": 1
+  },
+  "size": [
+   0.4,
+   0.4
+  ],
+  "effect": {
+   "security": 0.5
+  },
+  "desc": "等於半個保全"
+ },
+ {
+  "id": "nofeed_sign",
+  "name": "請勿餵食牌",
+  "cat": "decor",
+  "kind": "nofeed_sign",
+  "cost": {
+   "coins": 6
+  },
+  "size": [
+   0.8,
+   0.2
+  ],
+  "effect": {
+   "nofeed": 1
+  },
+  "desc": "放在棲地旁 6 m 內：遊客不會亂餵，動物比較不容易生病"
  }
 ]

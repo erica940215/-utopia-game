@@ -55,6 +55,7 @@ function habitatChecks(b,sp){
     if(need.foliage) list.push({k:'foliage',label:`植物 ${env.foliage} 株（需要 ${Math.ceil(need.foliage*env.tiles/4)}）`,ok:env.foliageDensity>=need.foliage,pen:env.foliageDensity>=need.foliage?0:P.foliage});
     list.push({k:'pressure',label:`遊客壓力 ${Math.round(env.pressure*100)}%`,ok:env.pressure<=(need.shy?0.5:0.85),pen:env.pressure<=(need.shy?0.5:0.85)?0:P.pressure});
   }
+  const sc=singleCheck(b); if(sc) list.push(sc);
   if(need.shelter) list.push({k:'shelter',label:'需要躲藏處（大石頭、木頭、岩洞、牆）',ok:env.shelter,pen:env.shelter?0:P.shelter});
   if(need.solitary&&adults>1){ const pair=same.filter(isAdult).every(a=>true)&&adults===2&&same.filter(isAdult).some(a=>a.sex==='M')&&same.filter(isAdult).some(a=>a.sex==='F');
     list.push({k:'solitary',label:'獨居動物，太多隻住一起會有壓力',ok:pair,pen:pair?0:P.solitary}); }

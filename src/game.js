@@ -794,6 +794,7 @@ function wireAuth(){
 /*@@TRAININSIDE@@*/
 /*@@FREEHAB@@*/
 /*@@ZOOLIFE@@*/
+/*@@FACILITIES@@*/
 /*@@CONTROLS@@*/
 /* =========================================================
    8. 主迴圈

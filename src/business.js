@@ -79,7 +79,7 @@ const tramSatBonus=()=>bizStats.tram?BIZ().tramSatisfaction:0;
 function thoughtsUpdate(v){
   const z=save.zoo, n=opsStats.needs||{}, O=OPS(), T=[];
   const add=(cond,t,good)=>{ if(cond) T.push({t,good:!!good}); };
-  add(n.restroom<0.6,'好想上廁所，廁所在哪裡？'); add(n.food<0.6,'肚子好餓，餐廳都排好長'); add(n.rest<0.6,'走好累，沒地方坐'); add(z.clean<50,'這裡好髒喔');
+  add(n.restroom<0.6,'好想上廁所，廁所在哪裡？'); add(n.food<0.6,'肚子好餓，餐廳都排好長'); add(n.drink<0.6,'好渴，找不到飲料'); add((save.zoo.toiletFee||0)>=2,'上廁所還要錢？'); add(n.rest<0.6,'走好累，沒地方坐'); add(z.clean<50,'這裡好髒喔');
   add(z.ticket>O.ticketDefault*1.8,'門票有點貴'); add(z.animals.length<4,'動物好少'); add((z.escaped||[]).length,'剛剛有動物跑出來，好可怕！');
   add(bizStats.power.ratio<1,'室內館怎麼停電了'); add(bizStats.tram,'小火車好好玩！',true);
   const happy=z.animals.length?z.animals.filter(a=>(a.happy??60)>=75).length/z.animals.length:0;

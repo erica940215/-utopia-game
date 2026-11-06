@@ -35,11 +35,11 @@ function opsBeforeAnimals(min){
   let repair=staffPower('mechanic')*S.mechanic.repairPerMin*RF().repairMult*repairMult()*eff*min;
   for(const b of wear.slice().sort((a,b)=>a.cond-b.cond)){ if(repair<=0) break; const r=Math.min(repair,100-b.cond); b.cond+=r; repair-=r; }
   // 清潔
-  z.clean=Math.max(0,Math.min(100,z.clean-(zooStats.visitors||0)*O.litterPerVisitorMin*min+staffPower('janitor')*S.janitor.cleanPerMin*RF().cleanMult*eff*min));
+  z.clean=Math.max(0,Math.min(100,z.clean-(zooStats.visitors||0)*O.litterPerVisitorMin*min+staffPower('janitor')*S.janitor.cleanPerMin*RF().cleanMult*eff*min+propEffects().clean*min));
   // 生病與獸醫
   let cure=staffPower('vet')*S.vet.curePerMin*vetMult()*eff*min;
   for(const a of z.animals){
-    if(!a.sick&&Math.random()<O.sickChancePerMin*RF().sickChanceMult*geneSickMult(a)*min*(a.food<30?3:1)) a.sick=true;
+    if(!a.sick&&Math.random()<O.sickChancePerMin*RF().sickChanceMult*geneSickMult(a)*guestFeedMult(findB(a.habitat))*min*(a.food<30?3:1)) a.sick=true;
     if(a.sick&&cure>=1){ a.sick=false; cure-=1; }
     else if(a.sick&&cure>0&&Math.random()<cure){ a.sick=false; cure=0; }
     a.health=Math.max(5,Math.min(100,(a.health??100)+(a.sick?-O.sickHealthLossPerMin:O.healthRegenPerMin)*min));
@@ -51,26 +51,30 @@ function animalOpsPenalty(a,b){
 
 /* 遊客、門票、消費、研究 */
 function facilityCoverage(service,visitors){
-  const serves=save.zoo.buildings.filter(b=>{ const d=bdef(b.type); return d.kind==='facility'&&d.service===service&&isWorking(b); }).reduce((s,b)=>s+bdef(b.type).serves,0)*bizStats.power.ratio;
+  const serves=save.zoo.buildings.filter(b=>{ const d=bdef(b.type); return d.kind==='facility'&&(d.service===service||(d.services||[]).includes(service))&&isWorking(b); }).reduce((s,b)=>s+bdef(b.type).serves,0)*bizStats.power.ratio;
   return visitors<=0?1:Math.min(1,serves/visitors);
 }
 function opsEconomy(attract,min){
   const z=save.zoo, O=OPS(), Z=ZC();
   const prevV=Math.max(1,zooStats.visitors||0);
   const viewing=z.animals.length?z.animals.reduce((s,a)=>s+(a.happy??60),0)/z.animals.length:20;
-  const needs={food:facilityCoverage('food',prevV),restroom:facilityCoverage('restroom',prevV),rest:facilityCoverage('rest',prevV),shop:facilityCoverage('shop',prevV)};
+  const pe=propEffects();
+  const needs={food:facilityCoverage('food',prevV),drink:drinkCoverage(prevV),restroom:facilityCoverage('restroom',prevV),rest:facilityCoverage('rest',prevV),shop:facilityCoverage('shop',prevV)};
   const boards=(z.props||[]).filter(p=>p.type==='info_board').length;
-  const education=Math.min(100,staffPower('educator')*DATA.staffById.educator.satisfaction*4+boards*6);
+  const education=Math.min(100,staffPower('educator')*DATA.staffById.educator.satisfaction*4+boards*6+extraEducation(pe));
   const decor=Math.min(100,(z.props||[]).length*2);
-  const needScore=(needs.food+needs.restroom+needs.rest)/3*100;
-  const sat=Math.min(100,0.35*viewing+0.25*needScore+0.2*z.clean+0.1*education+0.1*decor+tramSatBonus());
+  const needScore=(needs.food+needs.drink+needs.restroom+needs.rest)/4*100;
+  const sat=Math.min(100,0.35*viewing+0.25*needScore+0.2*z.clean+0.1*education+0.1*decor+tramSatBonus()-toiletSatPenalty());
   opsStats.needs=needs; opsStats.satisfaction=sat; opsStats.parts.sat={viewing,needScore,clean:z.clean,education,decor};
   const priceF=Math.max(0.2,1-(z.ticket-O.ticketDefault)*O.priceElasticity*RF().priceElasticityMult);
-  const visitors=Math.round(attract*Z.visitorPerAttract*(0.5+sat/100)*priceF*(0.7+0.1*opsStats.rating)*RF().visitorMult*campaignMult()*worldVisitorMult());
+  const visitors=Math.round(attract*Z.visitorPerAttract*(0.5+sat/100)*priceF*(0.7+0.1*opsStats.rating)*RF().visitorMult*campaignMult()*worldVisitorMult()*extraVisitorMult(pe));
   let ticket=visitors*z.ticket*O.coinsPerVisitorTicketMin;
   let spend=0;
   for(const b of z.buildings){ const d=bdef(b.type); if(d.kind==='facility'&&d.spendPerVisitorMin&&isWorking(b)) spend+=Math.min(visitors,d.serves)*d.spendPerVisitorMin; }
-  opsStats.theft=staffPower('security')*DATA.staffById.security.capacity<visitors&&visitors>20;
+  if(hasFacility('atm')) spend*=FAC().atmSpend;
+  spend+=toiletIncome(visitors)+pe.online;
+  if(hasFacility('info')) z.cp=(z.cp||0)+visitors*FAC().adoptionCpPerVisitorMin*min;
+  opsStats.theft=(staffPower('security')+pe.security)*DATA.staffById.security.capacity<visitors&&visitors>20;
   const mult=opsStats.theft?1-O.theftLoss:1;
   opsStats.income={ticket:ticket*mult,spend:spend*mult};
   zooStats.visitors=visitors; zooStats.coinsPerMin=(ticket+spend)*mult;
@@ -88,7 +92,7 @@ function computeRating(){
   const distinct=new Set(z.animals.map(a=>a.species));
   const diversity=Math.min(1,distinct.size/O.diversityFull)*100;
   const endangered=[...distinct].filter(id=>{ const r=DATA.speciesById[id]&&DATA.speciesById[id].rarity; return r==='endangered'||r==='legendary'; }).length;
-  const conservation=Math.min(1,(endangered+(z.released||0)*0.5+consDoneCount()*2)/O.conservationFull)*100;
+  const pe=propEffects(), conservation=Math.min(1,(endangered+(z.released||0)*0.5+consDoneCount()*2+pe.cons*0.2)/O.conservationFull)*100;
   const parts={welfare,satisfaction:opsStats.satisfaction,diversity,conservation,cleanliness:z.clean};
   const score=Object.entries(W).reduce((s,[k,w])=>s+w*parts[k],0);
   opsStats.parts.rating=parts; opsStats.score=score; opsStats.endangered=endangered;
@@ -162,10 +166,12 @@ function showOps(msg){
   } else if(opsTab==='visitors'){
     const p=opsStats.parts.sat||{}, n=opsStats.needs||{};
     body=`<div class="statline">遊客 ${zooStats.visitors} 人・滿意度 ${Math.round(opsStats.satisfaction)}・每分鐘收入：門票 ${opsStats.income.ticket.toFixed(1)}、消費 ${opsStats.income.spend.toFixed(1)}${opsStats.theft?'・<em>保全不足，損失 '+Math.round(O.theftLoss*100)+'%</em>':''}</div>
+      <label class="zopt ticket">廁所收費 <input type="range" id="toiletIn" min="0" max="${FAC().toiletFeeMax}" step="1" value="${z.toiletFee||0}"> <b class="num" id="toiletOut">${z.toiletFee||0} 金幣</b></label>
       <label class="zopt ticket">門票價格 <input type="range" id="ticketIn" min="${O.ticketMin}" max="${O.ticketMax}" step="1" value="${z.ticket}"> <b class="num" id="ticketOut">${z.ticket} 金幣</b></label>
       <div class="opsgrid">
         <label>看動物（動物平均幸福度）${bar100(p.viewing)}</label>
         <label>餐飲 ${bar100((n.food||0)*100,n.food<0.6?'low':'')}</label>
+        <label>飲料 ${bar100((n.drink||0)*100,n.drink<0.6?'low':'')}</label>
         <label>廁所 ${bar100((n.restroom||0)*100,n.restroom<0.6?'low':'')}</label>
         <label>休息區 ${bar100((n.rest||0)*100,n.rest<0.6?'low':'')}</label>
         <label>整潔 ${bar100(p.clean,p.clean<50?'low':'')}</label>
@@ -200,6 +206,7 @@ function showOps(msg){
   screenEl.querySelectorAll('[data-otab]').forEach(el=>el.onclick=()=>{ opsTab=el.dataset.otab; showOps(); });
   screenEl.querySelectorAll('[data-hire]').forEach(el=>el.onclick=()=>{ const s=DATA.staffById[el.dataset.hire]; if(z.coins<s.hireCost) return; z.coins-=s.hireCost; z.staff[s.id]=(z.staff[s.id]||0)+1; simulate(0); persist(); showOps(`雇用了一位${s.name}`); });
   screenEl.querySelectorAll('[data-fire]').forEach(el=>el.onclick=()=>{ const id=el.dataset.fire; if(!z.staff[id]) return; z.staff[id]--; simulate(0); persist(); showOps(`解雇了一位${DATA.staffById[id].name}`); });
+  const to=$('toiletIn'); if(to){ to.oninput=e=>{ $('toiletOut').textContent=e.target.value+' 金幣'; }; to.onchange=e=>{ z.toiletFee=parseInt(e.target.value,10); simulate(0); persist(); showOps(); }; }
   const ti=$('ticketIn'); if(ti){ ti.oninput=e=>{ $('ticketOut').textContent=e.target.value+' 金幣'; }; ti.onchange=e=>{ z.ticket=parseInt(e.target.value,10); simulate(0); persist(); showOps(); }; }
   const ag=$('agingTgl'); if(ag) ag.onclick=()=>{ z.noAging=!z.noAging; persist(); showOps(z.noAging?'沙盒的動物不會變老':'沙盒的動物也會變老了'); };
   wireBizOps();

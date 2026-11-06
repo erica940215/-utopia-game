@@ -121,6 +121,7 @@ function makeBuildingMesh(b){
     const rf=box(W,0.2,D,hex(d.color)); rf.position.y=4.3; g.add(rf);
     const sg=box(1.4,0.4,0.06,0xf2efe6); sg.position.set(0,3.9,D/2-0.1); g.add(sg);
   }
+  else if(d.kind==='cooler'||d.kind==='waterreg'){ const u=box(0.9,1.0,0.9,hex(d.color)); u.position.y=0.5; g.add(u); const gr=box(0.7,0.08,0.05,0x2a2c30); gr.position.set(0,0.75,0.46); g.add(gr); const f=cyl(0.3,0.3,0.05,0x2a2c30,12); f.rotation.x=Math.PI/2; f.position.set(0,0.4,0.46); g.add(f); }
   else if(d.kind==='staff'){
     const hgt=2.4, bd=box(W-0.4,hgt,D-0.4,0xe0d8c8); bd.position.y=hgt/2; g.add(bd); const rf=box(W,0.3,D,hex(d.color)); rf.position.y=hgt+0.15; g.add(rf);
     const sg=box(Math.min(1.4,W-0.6),0.35,0.06,hex(d.color)); sg.position.set(0,hgt-0.4,D/2-0.17); g.add(sg); const dr=box(0.7,1.4,0.05,0x3a2e2a); dr.position.set(0,0.7,D/2-0.18); g.add(dr);
@@ -164,7 +165,8 @@ function updateSelBox(){
 /* ---------- 模擬：需求、溫度、門票 ---------- */
 function heatersOn(){ return zooStats.heatOn; }
 function habitatTemp(b){
-  const d=bdef(b.type); let t=(d.baseTemp==='auto'?autoTemp(b):(d.baseTemp||0))+(d.baseTemp==='auto'?0:worldTempOffset(b));
+  const d=bdef(b.type); if(waterRegulated(b)) return autoTemp(b);
+  let t=(d.baseTemp==='auto'?autoTemp(b):(d.baseTemp||0))+(d.baseTemp==='auto'?0:worldTempOffset(b)+coolerOffset(b));
   if(heatersOn()) for(const h of save.zoo.buildings){ const hd=bdef(h.type); if(hd.kind==='heater' && isWorking(h) && tileDist(h,b)<=hd.radius+Math.max(...d.size)/2) t+=hd.heat; }
   return t;
 }
@@ -193,7 +195,7 @@ function simulate(min){
     const target=Math.max(0,Math.min(40,a.food/30*40)+(tempOK?40:0)+(socialOK?20:5)-animalOpsPenalty(a,b)-elderPenalty(a)+careHappyDelta(a,b)+rf.happinessBonus+knowLevel(a.species)*SR.happinessPerLevel);
     const h=a.happy??60, step=Z.happinessPerMin*min;
     a.happy=Math.abs(target-h)<=step?target:h+Math.sign(target-h)*step;
-    attract+=sp.attract*a.happy/100*(0.8+0.1*(a.stars||2))*(isAdult(a)?1:1.25)*elderAttract(a)*geneSizeMult(a)*(b.poly&&barrierDef(b.barrier).opaque?0.5:1)*(1+knowLevel(a.species)*SR.attractPerLevel);
+    attract+=sp.attract*a.happy/100*(0.8+0.1*(a.stars||2))*(isAdult(a)?1:1.25)*elderAttract(a)*geneSizeMult(a)*(b.poly&&barrierDef(b.barrier).opaque?0.5:1)*(bdef(b.type).walk?FAC().walkAttract:1)*(1+knowLevel(a.species)*SR.attractPerLevel);
   }
   opsEconomy(attract*escapeAttract(),min); computeRating();
   breedingStep(min); agingStep(min); escapeStep(min); fightStep(min); contagionStep(min);

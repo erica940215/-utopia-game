@@ -786,5 +786,23 @@
   "playChance": 0.35,
   "swimChance": 0.4,
   "eatBelow": 60
+ },
+ "fac": {
+  "restaurantDrink": 0.5,
+  "umbrellaRecover": 0.4,
+  "audioEdu": 10,
+  "adoptionCpPerVisitorMin": 0.0005,
+  "atmSpend": 1.15,
+  "talkEdu": 25,
+  "talkVisit": 1.05,
+  "walkEdu": 10,
+  "walkAttract": 1.3,
+  "billboardMax": 5,
+  "webcamMax": 4,
+  "guestFeedSick": 1.4,
+  "toiletFeeMax": 3,
+  "toiletFeeSat": 3,
+  "toiletFeeShare": 0.3,
+  "singlePenalty": 15
  }
 }
