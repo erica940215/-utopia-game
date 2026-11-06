@@ -87,7 +87,7 @@ function makeBuildingMesh(b){
   g.position.set(c.x,ZH(c.x,c.z),c.z); g.userData.uid=b.uid;
   if(d.kind==='path'){ const p=box(W,0.08,D,hex(d.color)); p.position.y=0.04; g.add(p); }
   else if(d.kind==='habitat'){
-    const gr=box(W-0.2,0.1,D-0.2,hex(d.ground)); gr.position.y=0.05; g.add(gr);
+    const gr=box(W-0.2,0.1,D-0.2,hex(d.ground)); gr.position.y=0.05; if(!d.house&&!d.water){ gr.material=gr.material.clone(); gr.material.transparent=true; gr.material.opacity=0.45; } g.add(gr);
     if(d.water){ const w=box(W-1.2,0.05,D-1.2,new THREE.MeshPhongMaterial({color:0x2a6f99,shininess:90,transparent:true,opacity:0.9})); w.position.y=0.11; g.add(w); }
     const fm=M(hex(d.fence)), fh=d.house?2.6:1.0;
     if(d.house){

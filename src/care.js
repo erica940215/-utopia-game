@@ -10,9 +10,10 @@ function habitatEnv(b){
   const key=b.uid; if(envCacheT===zEnvStamp&&envCache.has(key)) return envCache.get(key);
   if(envCacheT!==zEnvStamp){ envCache.clear(); envCacheT=zEnvStamp; }
   const r=habitatRect(b), T=save.zoo.terrain, paints=TRN().paints, cnt=new Array(paints.length).fill(0); let water=0, n=0;
+  const defPaint=paints.findIndex(p=>p.id===bdef(b.type).groundPaint);   // 沒上色的地方算棲地本身的地面
   if(T) for(let x=r.x0+0.5;x<r.x1;x+=1) for(let z=r.z0+0.5;z<r.z1;z+=1){
     const {fi,fj}=terrXY(x,z), i=Math.round(fi), j=Math.round(fj); if(i<0||j<0||i>=zTerrN||j>=zTerrN) continue;
-    n++; if(T.h[tIdx(i,j)]<TRN().waterLevel) water++; else cnt[T.p[tIdx(i,j)]||0]++;
+    n++; if(T.h[tIdx(i,j)]<TRN().waterLevel) water++; else { const pi=T.p[tIdx(i,j)]||0; cnt[pi===0&&defPaint>=0?defPaint:pi]++; }
   }
   const inside=(save.zoo.props||[]).filter(p=>p.x>r.x0&&p.x<r.x1&&p.z>r.z0&&p.z<r.z1);
   const foliage=inside.filter(p=>{ const d=pdef(p.type); return d&&d.cat==='nature'&&!/rock|log|stump/.test(d.kind); }).length;

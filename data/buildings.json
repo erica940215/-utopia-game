@@ -31,7 +31,8 @@
   ],
   "capacity": 3,
   "ground": "#e3eef6",
-  "fence": "#6b7a86"
+  "fence": "#6b7a86",
+  "groundPaint": "snow"
  },
  {
   "id": "habitat_temperate",
@@ -52,7 +53,8 @@
   ],
   "capacity": 3,
   "ground": "#6f8f5a",
-  "fence": "#5a4434"
+  "fence": "#5a4434",
+  "groundPaint": "grass"
  },
  {
   "id": "habitat_tropical",
@@ -74,7 +76,8 @@
   ],
   "capacity": 3,
   "ground": "#3f7a3a",
-  "fence": "#4a3a2a"
+  "fence": "#4a3a2a",
+  "groundPaint": "grass"
  },
  {
   "id": "habitat_desert",
@@ -96,7 +99,8 @@
   ],
   "capacity": 3,
   "ground": "#d9c08a",
-  "fence": "#8a6a48"
+  "fence": "#8a6a48",
+  "groundPaint": "sand"
  },
  {
   "id": "habitat_savanna",
@@ -118,7 +122,8 @@
   ],
   "capacity": 5,
   "ground": "#a8a050",
-  "fence": "#6a5034"
+  "fence": "#6a5034",
+  "groundPaint": "dirt"
  },
  {
   "id": "aviary",
@@ -346,7 +351,8 @@
   "ground": "#5a7a5a",
   "fence": "#c9d6dd",
   "house": true,
-  "requires": "climate_dome_tech"
+  "requires": "climate_dome_tech",
+  "groundPaint": "grass"
  },
  {
   "id": "aquarium",
