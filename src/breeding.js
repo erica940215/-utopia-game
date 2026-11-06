@@ -8,8 +8,10 @@ let zooBirthLog=[];
 function rollStars(sp){ const r=BR().rescueStars[sp.rarity]||[1,2]; return r[0]+Math.floor(Math.random()*(r[1]-r[0]+1)); }
 function newIndividual(speciesId,habitat,extra){
   const z=save.zoo, sp=DATA.speciesById[speciesId];
-  return Object.assign({ id:'a'+(z.nextUid++), species:speciesId, habitat, sex:Math.random()<0.5?'M':'F', stars:rollStars(sp),
-    born:(z.clock||0)-BR().adultMinutes-rescueAge(sp), parents:[], gen:0, food:80, happy:60, breed:true }, extra||{});
+  return withGenes(Object.assign({ id:'a'+(z.nextUid++), species:speciesId, habitat, sex:Math.random()<0.5?'M':'F', stars:rollStars(sp),
+    born:(z.clock||0)-BR().adultMinutes-rescueAge(sp), parents:[], gen:0, food:80, happy:60, breed:true }, extra||{}));
+}
+function withGenes(a){ if(!a.genes) a.genes=rollGenes(a.stars||2); return a;
 }
 function migrateAnimals(){
   const z=save.zoo; z.clock=z.clock||0; z.stored=z.stored||[];
@@ -20,6 +22,7 @@ function migrateAnimals(){
     if(!a.parents) a.parents=[];
     if(a.gen==null) a.gen=0;
     if(a.breed==null) a.breed=true;
+    withGenes(a);
   }
 }
 const isAdult=a=>(save.zoo.clock-a.born)>=BR().adultMinutes*RF().adultMinutesMult;
@@ -47,7 +50,7 @@ function breedingStep(min){
       if(Math.random()<B.starDownChance) st--;
       if(f.preg.inbred) st-=B.inbreedPenalty;
       st=Math.max(1,Math.min(B.maxStars,st));
-      const baby=newIndividual(f.species,f.habitat,{stars:st,born:z.clock,parents:[father.id,f.id],gen:Math.max(f.gen,father.gen||0)+1,happy:80});
+      const baby=newIndividual(f.species,f.habitat,{stars:st,born:z.clock,parents:[father.id,f.id],gen:Math.max(f.gen,father.gen||0)+1,happy:80,genes:inheritGenes(father,f,f.preg.inbred)});
       z.animals.push(baby); zooBirthLog.push(baby); z.births=(z.births||0)+1; consOnBirth(baby);
     }
     f.cooldownUntil=z.clock+B.cooldownMinutes; delete f.preg;
@@ -59,7 +62,7 @@ function breedingStep(min){
     if(!mates.length) continue;
     const unrelated=mates.filter(m=>!related(f,m));
     const m=(unrelated.length?unrelated:mates)[Math.floor(Math.random()*(unrelated.length||mates.length))];
-    if(Math.random()<B.chancePerMin*RF().breedChanceMult*min) f.preg={due:z.clock+B.gestationMinutes,father:m.id,inbred:!!related(f,m)};
+    if(Math.random()<B.chancePerMin*RF().breedChanceMult*geneFertMult(f)*min) f.preg={due:z.clock+B.gestationMinutes,father:m.id,inbred:!!related(f,m)};
   }
 }
 function habitatBreedNote(b){
@@ -85,7 +88,7 @@ let zooDeathLog=[];
 const agingOff=()=>!!(save.zoo&&save.zoo.noAging);
 function lifespanOf(a){
   const sp=DATA.speciesById[a.species]||{category:'mammal',rarity:'common'}, A=AG();
-  return (A.lifespanMinutes[sp.category]||4320)*(A.rarityMult[sp.rarity]||1)*(sp.lifespanMult||1)*RF().lifespanMult*(1+A.starBonusPerStar*((a.stars||2)-3));
+  return (A.lifespanMinutes[sp.category]||4320)*(A.rarityMult[sp.rarity]||1)*(sp.lifespanMult||1)*RF().lifespanMult*(1+A.starBonusPerStar*((a.stars||2)-3))*geneLifeMult(a);
 }
 function rescueAge(sp){ const A=AG(), r=A.rescueAgeRange, base=(A.lifespanMinutes[sp.category]||4320)*(A.rarityMult[sp.rarity]||1)*(sp.lifespanMult||1);
   return Math.max(0, base*(r[0]+Math.random()*(r[1]-r[0]))-BR().adultMinutes); }

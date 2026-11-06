@@ -1,5 +1,5 @@
 {
- "version": 9,
+ "version": 10,
  "expedition": {
   "runSeconds": 300,
   "stormWarnSeconds": 60,
@@ -371,5 +371,132 @@
    0.45
   ],
   "memorialMax": 60
+ },
+ "care": {
+  "_comment": "棲地需求、豐富化、圍欄脫逃、基因、打架。數值都可以調",
+  "needPenalty": {
+   "space": 14,
+   "ground": 8,
+   "water": 10,
+   "foliage": 6,
+   "shelter": 6,
+   "pressure": 6,
+   "solitary": 10
+  },
+  "groundByZone": {
+   "冰原原生": [
+    "snow",
+    "rock"
+   ],
+   "企鵝館": [
+    "snow",
+    "rock"
+   ],
+   "非洲動物區": [
+    "sand",
+    "dirt",
+    "grass"
+   ],
+   "沙漠動物區": [
+    "sand",
+    "dirt",
+    "rock"
+   ],
+   "熱帶雨林區": [
+    "grass",
+    "dirt"
+   ],
+   "熱帶雨林室內館": [
+    "grass",
+    "dirt"
+   ],
+   "澳洲動物區": [
+    "grass",
+    "dirt",
+    "sand"
+   ],
+   "無尾熊館": [
+    "grass"
+   ],
+   "鳥園": [
+    "grass"
+   ],
+   "_default": [
+    "grass",
+    "dirt",
+    "snow"
+   ]
+  },
+  "groundNeed": 0.4,
+  "waterNames": [
+   "企鵝",
+   "河馬",
+   "水獺",
+   "海獅",
+   "海豹",
+   "鱷",
+   "天鵝",
+   "鴨",
+   "鵜鶘",
+   "貘",
+   "北極熊",
+   "水豚",
+   "海狸",
+   "紅鶴",
+   "鸛",
+   "鶴"
+  ],
+  "waterNeed": 0.1,
+  "foliageByZone": {
+   "熱帶雨林區": 3,
+   "熱帶雨林室內館": 3,
+   "臺灣動物區": 2,
+   "溫帶動物區": 2,
+   "無尾熊館": 3,
+   "鳥園": 2,
+   "非洲動物區": 1,
+   "沙漠動物區": 0,
+   "冰原原生": 1,
+   "企鵝館": 0,
+   "_default": 1
+  },
+  "enrichPerItem": 4,
+  "enrichMax": 12,
+  "fences": [
+   {
+    "lv": 1,
+    "name": "木柵欄"
+   },
+   {
+    "lv": 2,
+    "name": "鋼網圍欄",
+    "cost": {
+     "scrap": 15,
+     "coins": 150
+    }
+   },
+   {
+    "lv": 3,
+    "name": "高牆電網",
+    "cost": {
+     "scrap": 35,
+     "coins": 400,
+     "research": 15
+    }
+   }
+  ],
+  "escapePerMinPerLevel": 0.012,
+  "escapeBrokenPerMin": 0.006,
+  "recapturePerSecurity": 0.12,
+  "recapturePerKeeper": 0.04,
+  "escapeLostMinutes": 180,
+  "escapeAttractMult": 0.85,
+  "fightChancePerMin": 0.03,
+  "fightHappy": 25,
+  "fightHealth": 15,
+  "genes": {
+   "mutation": 10,
+   "inbreedLoss": 15
+  }
  }
 }

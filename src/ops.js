@@ -37,7 +37,7 @@ function opsBeforeAnimals(min){
   // 生病與獸醫
   let cure=staffCount('vet')*S.vet.curePerMin*eff*min;
   for(const a of z.animals){
-    if(!a.sick&&Math.random()<O.sickChancePerMin*RF().sickChanceMult*min*(a.food<30?3:1)) a.sick=true;
+    if(!a.sick&&Math.random()<O.sickChancePerMin*RF().sickChanceMult*geneSickMult(a)*min*(a.food<30?3:1)) a.sick=true;
     if(a.sick&&cure>=1){ a.sick=false; cure-=1; }
     else if(a.sick&&cure>0&&Math.random()<cure){ a.sick=false; cure=0; }
     a.health=Math.max(5,Math.min(100,(a.health??100)+(a.sick?-O.sickHealthLossPerMin:O.healthRegenPerMin)*min));

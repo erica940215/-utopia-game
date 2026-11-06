@@ -127,6 +127,15 @@ function makeProp(type){
     case 'fence_wood': { for(const x of [-0.95,0,0.95]) add(box(0.1,1.1,0.1,wood),x,0.55,0); for(const y of [0.4,0.85]) add(box(2,0.1,0.05,wood),0,y,0); break; }
     case 'fence_stone': add(box(2,1.1,0.4,0x8a8a86),0,0.55,0); add(box(2.05,0.12,0.45,0xf2f6fa),0,1.15,0); break;
     case 'fence_glass': { add(box(2,1.1,0.06,glassM),0,0.6,0); add(box(2,0.06,0.1,dark),0,1.15,0); break; }
+    case 'scratch_post': { add(cyl(0.18,0.2,1.8,0xb89a6a,8),0,0.9,0); add(cyl(0.5,0.5,0.1,wood,10),0,0.05,0); for(let i=0;i<5;i++) add(cyl(0.2,0.2,0.08,0x8a7a5a,8),0,0.3+i*0.3,0); break; }
+    case 'ball': add(sph(0.45,0xd84a3a),0,0.45,0); add(box(0.92,0.12,0.12,0xf2efe6),0,0.45,0); break;
+    case 'hay_feeder': { for(const x of [-0.5,0.5]) add(box(0.1,1.8,0.1,wood),x,0.9,0); add(box(1.1,0.1,0.1,wood),0,1.8,0); add(sph(0.4,0xc8b060),0,1.3,0).scale.y=1.3; break; }
+    case 'scent_box': add(box(0.6,0.5,0.6,0x7a5a3a),0,0.25,0); for(let i=0;i<4;i++) add(cyl(0.05,0.05,0.05,dark,6),-0.2+i*0.13,0.5,0.31).rotation.x=Math.PI/2; break;
+    case 'perch': { add(cyl(0.08,0.1,2.2,0x5a4030,7),0,1.1,0); for(const [y,r] of [[1.4,0.4],[1.9,1.6],[2.1,-0.9]]){ const b=add(cyl(0.05,0.05,1.2,0x5a4030,6),0,y,0); b.rotation.z=Math.PI/2; b.rotation.y=r; } break; }
+    case 'climb_frame': { for(const [x,z] of [[-0.9,-0.9],[0.9,-0.9],[-0.9,0.9],[0.9,0.9]]) add(cyl(0.08,0.08,2.6,wood,7),x,1.3,z); for(const y of [0.9,1.8,2.5]){ add(box(1.9,0.08,0.08,wood),0,y,-0.9); add(box(1.9,0.08,0.08,wood),0,y,0.9); } const r=add(cyl(0.02,0.02,1.6,0xc8b080,4),0,1.6,0); add(box(1.9,0.06,1.9,0x8a6a48),0,2.55,0); break; }
+    case 'mud_pool': { add(cyl(1,1,0.08,0x5a4030,16),0,0.04,0); add(cyl(0.85,0.85,0.02,0x6a5038,16),0,0.09,0); break; }
+    case 'heat_rock': { const r=add(new THREE.Mesh(new THREE.DodecahedronGeometry(0.45,0),M(0x8a6a5a)),0,0.25,0); r.scale.y=0.6; const s=add(new THREE.Sprite(new THREE.SpriteMaterial({map:DOT,color:0xff8a4a,transparent:true,opacity:0.6,depthWrite:false,blending:THREE.AdditiveBlending})),0,0.5,0); s.scale.set(1.2,0.8,1); break; }
+    case 'cave': { const r=add(new THREE.Mesh(new THREE.SphereGeometry(1.2,10,8,0,Math.PI*2,0,Math.PI/2),M(0x6e7176)),0,0,0); r.scale.set(1,0.9,1); add(new THREE.Mesh(new THREE.CircleGeometry(0.6,12,0,Math.PI),new THREE.MeshBasicMaterial({color:0x111214,side:THREE.DoubleSide})),0,0.02,1.05); break; }
     default: add(box(1,1,1,0x888888),0,0.5,0);
   }
   return g;
@@ -176,7 +185,7 @@ function openPropPanel(p){
 function selPropBox(p){ const d=pdef(p.type), g=zPropMeshes.get(p.uid); zSelBox.visible=true; zSelBox.scale.set(d.size[0]+0.3,Math.max(1,3),d.size[1]+0.3); zSelBox.rotation.y=p.rot||0; zSelBox.position.set(p.x,ZH(p.x,p.z)+(p.y||0)+1.5,p.z); }
 
 /* ---------- 工具列分頁 ---------- */
-const Z_TABS=[['facility','設施'],['terrain','地形'],['nature','自然'],['decor','裝飾'],['build','建築構件']];
+const Z_TABS=[['facility','設施'],['terrain','地形'],['nature','自然'],['enrich','豐富化'],['decor','裝飾'],['build','建築構件']];
 function creativeTools(){
   if(zTab==='terrain') return [
     {id:'t_raise',name:'抬高',sub:'按住塗抹'},{id:'t_lower',name:'降低',sub:'低於水位就變水'},{id:'t_flat',name:'整平',sub:'以起點高度'},{id:'t_smooth',name:'平滑',sub:'柔化地形'},

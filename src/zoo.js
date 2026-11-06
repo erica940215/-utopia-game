@@ -160,7 +160,7 @@ function simulate(min){
     while(zoo.fuelDebt>=1 && (save.resources.fuel||0)>0){ save.resources.fuel--; zoo.fuelDebt--; }
     zooStats.heatOn=(save.resources.fuel||0)>0 || zoo.fuelDebt<1;
   } else zooStats.heatOn=true;
-  ensureOps(); ensureResearch(); const rf=RF(), SR=DATA.config.speciesResearch; opsBeforeAnimals(min);
+  ensureOps(); ensureResearch(); envDirty(); const rf=RF(), SR=DATA.config.speciesResearch; opsBeforeAnimals(min);
   const temps=new Map(), fed=new Map(), counts=new Map();
   for(const a of zoo.animals){ const k=a.habitat+'|'+a.species; counts.set(k,(counts.get(k)||0)+1); }
   let attract=0;
@@ -171,13 +171,13 @@ function simulate(min){
     while(a.food<Z.feedRefillAt && fed.get(b.uid) && (save.resources.feed||0)>=1){ if(Math.random()<rf.feedEfficiency) save.resources.feed--; a.food=Math.min(100,a.food+Z.feedRefillAmount); }
     const T=temps.get(b.uid), tempOK=T>=sp.tempRange[0]&&T<=sp.tempRange[1];
     const socialOK=!SOCIAL_GROUP.includes(sp.social) || counts.get(b.uid+'|'+a.species)>=2;
-    const target=Math.max(0,Math.min(40,a.food/30*40)+(tempOK?40:0)+(socialOK?20:5)-animalOpsPenalty(a,b)-elderPenalty(a)+rf.happinessBonus+knowLevel(a.species)*SR.happinessPerLevel);
+    const target=Math.max(0,Math.min(40,a.food/30*40)+(tempOK?40:0)+(socialOK?20:5)-animalOpsPenalty(a,b)-elderPenalty(a)+careHappyDelta(a,b)+rf.happinessBonus+knowLevel(a.species)*SR.happinessPerLevel);
     const h=a.happy??60, step=Z.happinessPerMin*min;
     a.happy=Math.abs(target-h)<=step?target:h+Math.sign(target-h)*step;
-    attract+=sp.attract*a.happy/100*(0.8+0.1*(a.stars||2))*(isAdult(a)?1:1.25)*elderAttract(a)*(1+knowLevel(a.species)*SR.attractPerLevel);
+    attract+=sp.attract*a.happy/100*(0.8+0.1*(a.stars||2))*(isAdult(a)?1:1.25)*elderAttract(a)*geneSizeMult(a)*(1+knowLevel(a.species)*SR.attractPerLevel);
   }
-  opsEconomy(attract,min); computeRating();
-  breedingStep(min); agingStep(min);
+  opsEconomy(attract*escapeAttract(),min); computeRating();
+  breedingStep(min); agingStep(min); escapeStep(min); fightStep(min);
   zoo.lastTick=Date.now();
 }
 function catchUp(){
@@ -219,7 +219,7 @@ function updateZooHud(){
   const z=save.zoo;
   $('zRes').innerHTML=`<span class="zstar"><i>評價</i><b>${'★'.repeat(opsStats.rating)}</b></span>`+[['金幣',Math.floor(z.coins)],['研究',Math.floor(z.research||0)],...DATA.items.map(i=>[i.name,Math.floor(save.resources[i.id]||0)]),['遊客',zooStats.visitors]]
     .map(([n,v])=>`<span><i>${esc(n)}</i><b class="num">${v}</b></span>`).join('')
-    +(zooStats.heatOn?'':'<span class="warnchip">煤炭用完，暖爐停了</span>')+(opsStats.unpaid?'<span class="warnchip">金幣不夠發薪水</span>':'')+(opsStats.coverage<0.8?'<span class="warnchip">飼育員不足</span>':'');
+    +(zooStats.heatOn?'':'<span class="warnchip">煤炭用完，暖爐停了</span>')+(opsStats.unpaid?'<span class="warnchip">金幣不夠發薪水</span>':'')+(opsStats.coverage<0.8?'<span class="warnchip">飼育員不足</span>':'')+((z.escaped||[]).length?`<span class="warnchip">${z.escaped.length} 隻動物逃走了，保全正在找</span>`:'');
   const avail=Object.values(z.unplaced).reduce((a,b)=>a+b,0);
   $('zPool').textContent=avail?`待安置 ${avail}`:'';
 }
@@ -248,11 +248,12 @@ function openHabitatPanel(b){
   $('zPanel').innerHTML=`
     <div class="zp-head"><div><b>${esc(d.name)}</b><span>${T}°C・${inside.length}/${d.capacity} 隻・${fed?'有飼料站':'<em>附近沒有飼料站</em>'}</span></div><button type="button" class="zclose" id="zpClose" aria-label="關閉">✕</button></div>
     ${note?`<div class="zp-note">${note}</div>`:''}
+    ${habitatCareHtml(b)}
     ${inside.length?inside.map(a=>{ const sp=DATA.speciesById[a.species], tOK=T>=sp.tempRange[0]&&T<=sp.tempRange[1], adult=isAdult(a);
       return `<div class="zp-row"><div class="zp-name"><b>${sexIcon(a)} ${esc(nameOf(a))} <span class="stars">${STAR_TXT(a.stars)}</span></b>
-          <span>${stageOf(a)==='老年'?'<em>老年</em>':stageOf(a)}${a.preg?'・懷孕中':''}${a.gen?`・第 ${a.gen} 代`:''}・適溫 ${sp.tempRange[0]}～${sp.tempRange[1]}°C${tOK?'':'・<em>溫度不合</em>'}</span></div>
+          <span class="genes">${genesTxt(a)}</span><span>${stageOf(a)==='老年'?'<em>老年</em>':stageOf(a)}${a.preg?'・懷孕中':''}${a.gen?`・第 ${a.gen} 代`:''}・適溫 ${sp.tempRange[0]}～${sp.tempRange[1]}°C${tOK?'':'・<em>溫度不合</em>'}</span></div>
         <div class="zp-bars"><label>幸福${bar(a.happy??60,(a.happy??60)<40?'low':'')}</label><label>飽足${bar(a.food??80,(a.food??80)<30?'low':'')}</label>${agingOff()?'':`<label>壽命${bar(Math.max(0,100-lifeFrac(a)*100),lifeFrac(a)>=AG().elderAt?'low':'')}</label>`}</div>
-        <div class="zp-btns"><button type="button" class="zmini" data-breed="${a.id}">${a.breed?'繁殖：開':'繁殖：關'}</button><button type="button" class="zmini" data-out="${a.id}">移出</button><button type="button" class="zmini" data-rel="${a.id}">野放</button></div></div>`; }).join('')
+        <div class="zp-btns"><button type="button" class="zmini" data-breed="${a.id}">${a.breed?'避孕：關':'避孕中'}</button><button type="button" class="zmini" data-out="${a.id}">移出</button><button type="button" class="zmini" data-rel="${a.id}">野放</button></div></div>`; }).join('')
       :`<p class="zp-empty">這裡還沒有動物。</p>`}
     <div class="zp-add">${full?'<span class="zp-empty">已經住滿了，寶寶要等有空位才會出生</span>'
       :(cand.length||stored.length)?[...stored.map(a=>`<button type="button" class="zmini add" data-st="${a.id}">放入 ${a.sex==='M'?'♂':'♀'} ${esc(nameOf(a))} ${'★'.repeat(a.stars)}</button>`),
@@ -261,6 +262,7 @@ function openHabitatPanel(b){
     <p class="zp-empty">同種、一公一母、都成年而且幸福度 ${BR().minHappy} 以上，就有機會懷孕。寶寶的星等接近父母的平均。${agingOff()?'':'動物會慢慢變老：老年動物不再繁殖、幸福度和吸引力稍微下降，壽命走完後會安詳離開。星等越高活得越久。'}</p>`;
   $('zPanel').hidden=false;
   const after=()=>{ rebuildZooAnimals(); simulate(0); openHabitatPanel(b); updateZooHud(); persist(); };
+  wireHabitatCare(b);
   $('zpClose').onclick=()=>{ $('zPanel').hidden=true; zSelUid=null; updateSelBox(); };
   $('zPanel').querySelectorAll('[data-in]').forEach(el=>el.onclick=()=>{ const id=el.dataset.in; z.unplaced[id]--; z.animals.push(newIndividual(id,b.uid)); after(); });
   $('zPanel').querySelectorAll('[data-st]').forEach(el=>el.onclick=()=>{ const i=z.stored.findIndex(a=>a.id===el.dataset.st); if(i<0) return; const a=z.stored.splice(i,1)[0]; a.habitat=b.uid; z.animals.push(a); after(); });

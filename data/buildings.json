@@ -139,7 +139,8 @@
   "capacity": 6,
   "ground": "#5a7a4a",
   "fence": "#c9d6dd",
-  "house": true
+  "house": true,
+  "indoor": true
  },
  {
   "id": "reptile_house",
@@ -161,7 +162,8 @@
   "capacity": 6,
   "ground": "#6a5a3a",
   "fence": "#9aa3ab",
-  "house": true
+  "house": true,
+  "indoor": true
  },
  {
   "id": "pond",
@@ -182,7 +184,8 @@
   "capacity": 4,
   "ground": "#3f86b0",
   "fence": "#8a949c",
-  "water": true
+  "water": true,
+  "indoor": true
  },
  {
   "id": "insect_house",
@@ -203,7 +206,8 @@
   "capacity": 6,
   "ground": "#4d6b4a",
   "fence": "#c9d6dd",
-  "house": true
+  "house": true,
+  "indoor": true
  },
  {
   "id": "feeder",
@@ -365,7 +369,8 @@
   "fence": "#c9d6dd",
   "water": true,
   "house": true,
-  "requires": "aquarium_tech"
+  "requires": "aquarium_tech",
+  "indoor": true
  },
  {
   "id": "gate",

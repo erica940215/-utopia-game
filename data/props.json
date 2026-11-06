@@ -494,5 +494,194 @@
    2,
    0.1
   ]
+ },
+ {
+  "id": "scratch_post",
+  "name": "抓撓柱",
+  "cat": "enrich",
+  "kind": "scratch_post",
+  "cost": {
+   "coins": 30
+  },
+  "size": [
+   1,
+   1
+  ],
+  "likes": {
+   "cats": [
+    "mammal"
+   ],
+   "diets": [
+    "肉"
+   ]
+  },
+  "desc": "肉食哺乳類喜歡"
+ },
+ {
+  "id": "ball",
+  "name": "大浮球",
+  "cat": "enrich",
+  "kind": "ball",
+  "cost": {
+   "coins": 20
+  },
+  "size": [
+   1,
+   1
+  ],
+  "likes": {
+   "cats": [
+    "mammal",
+    "aquatic"
+   ]
+  },
+  "desc": "哺乳類、水生動物喜歡"
+ },
+ {
+  "id": "hay_feeder",
+  "name": "吊掛草料架",
+  "cat": "enrich",
+  "kind": "hay_feeder",
+  "cost": {
+   "coins": 25
+  },
+  "size": [
+   1,
+   1
+  ],
+  "likes": {
+   "cats": [
+    "mammal"
+   ],
+   "diets": [
+    "草",
+    "植物",
+    "素",
+    "雜食"
+   ]
+  },
+  "desc": "草食與雜食哺乳類喜歡"
+ },
+ {
+  "id": "scent_box",
+  "name": "氣味盒",
+  "cat": "enrich",
+  "kind": "scent_box",
+  "cost": {
+   "coins": 25
+  },
+  "size": [
+   1,
+   1
+  ],
+  "likes": {
+   "cats": [
+    "mammal",
+    "reptile"
+   ]
+  },
+  "desc": "哺乳類、爬蟲喜歡"
+ },
+ {
+  "id": "perch",
+  "name": "棲木架",
+  "cat": "enrich",
+  "kind": "perch",
+  "cost": {
+   "coins": 20
+  },
+  "size": [
+   1.5,
+   1.5
+  ],
+  "likes": {
+   "cats": [
+    "bird"
+   ]
+  },
+  "desc": "鳥類喜歡"
+ },
+ {
+  "id": "climb_frame",
+  "name": "攀爬架",
+  "cat": "enrich",
+  "kind": "climb_frame",
+  "cost": {
+   "coins": 45
+  },
+  "size": [
+   2,
+   2
+  ],
+  "likes": {
+   "cats": [
+    "mammal"
+   ],
+   "bodies": [
+    "primate"
+   ]
+  },
+  "desc": "靈長類特別喜歡"
+ },
+ {
+  "id": "mud_pool",
+  "name": "泥浴池",
+  "cat": "enrich",
+  "kind": "mud_pool",
+  "cost": {
+   "coins": 35
+  },
+  "size": [
+   2,
+   2
+  ],
+  "likes": {
+   "cats": [
+    "mammal",
+    "reptile"
+   ]
+  },
+  "desc": "大型動物、爬蟲喜歡"
+ },
+ {
+  "id": "heat_rock",
+  "name": "加熱石",
+  "cat": "enrich",
+  "kind": "heat_rock",
+  "cost": {
+   "coins": 30
+  },
+  "size": [
+   1,
+   1
+  ],
+  "likes": {
+   "cats": [
+    "reptile",
+    "insect"
+   ]
+  },
+  "desc": "爬蟲、昆蟲喜歡"
+ },
+ {
+  "id": "cave",
+  "name": "岩洞",
+  "cat": "enrich",
+  "kind": "cave",
+  "cost": {
+   "coins": 50
+  },
+  "size": [
+   2.5,
+   2.5
+  ],
+  "likes": {
+   "cats": [
+    "mammal",
+    "reptile"
+   ],
+   "shelter": true
+  },
+  "desc": "可以躲起來的地方"
  }
 ]
