@@ -770,5 +770,21 @@
   "coldBelowPct": 25,
   "coldHpPerSec": 1.5,
   "frozenHpPerSec": 8
+ },
+ "life": {
+  "gateHutRadius": 9,
+  "gateRestServes": 4,
+  "farCoverage": 0.7,
+  "restMoralePenalty": 15,
+  "vetNoClinic": 0.5,
+  "quarantineCure": 2,
+  "contagionPerMin": 0.03,
+  "sickHappyPenalty": 10,
+  "researchPerCenter": 0.25,
+  "repairPerWorkshop": 0.4,
+  "sleepScaleY": 0.75,
+  "playChance": 0.35,
+  "swimChance": 0.4,
+  "eatBelow": 60
  }
 }

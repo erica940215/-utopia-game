@@ -453,6 +453,131 @@
   "color": "#c8402a"
  },
  {
+  "id": "staff_path",
+  "name": "員工步道",
+  "kind": "path",
+  "staff": true,
+  "size": [
+   1,
+   1
+  ],
+  "cost": {
+   "coins": 4
+  },
+  "color": "#6a5a4a"
+ },
+ {
+  "id": "keeper_hut",
+  "name": "飼育員小屋",
+  "kind": "staff",
+  "role": "hut",
+  "radius": 10,
+  "size": [
+   2,
+   2
+  ],
+  "cost": {
+   "wood": 10,
+   "scrap": 6,
+   "coins": 80
+  },
+  "color": "#6a7a4a",
+  "power": 1,
+  "desc": "飼育員在這裡準備食物；半徑 10 格內的棲地照護效率完整，太遠的會打折"
+ },
+ {
+  "id": "staff_room",
+  "name": "員工休息室",
+  "kind": "staff",
+  "role": "rest",
+  "serves": 8,
+  "size": [
+   2,
+   2
+  ],
+  "cost": {
+   "wood": 8,
+   "cloth": 4,
+   "coins": 70
+  },
+  "color": "#7a6a9a",
+  "power": 1,
+  "desc": "每間讓 8 位員工休息；不夠的話士氣會下降"
+ },
+ {
+  "id": "vet_clinic",
+  "name": "獸醫診所",
+  "kind": "staff",
+  "role": "vet",
+  "size": [
+   3,
+   2
+  ],
+  "cost": {
+   "scrap": 14,
+   "parts": 3,
+   "coins": 160
+  },
+  "color": "#e8e8f0",
+  "power": 2,
+  "desc": "沒有診所時獸醫只能發揮一半效率"
+ },
+ {
+  "id": "quarantine",
+  "name": "隔離區",
+  "kind": "staff",
+  "role": "quarantine",
+  "serves": 4,
+  "size": [
+   2,
+   2
+  ],
+  "cost": {
+   "scrap": 10,
+   "wood": 6,
+   "coins": 120
+  },
+  "color": "#c8a040",
+  "power": 1,
+  "desc": "生病的動物送來隔離，不會傳染，也好得比較快（每間 4 隻）"
+ },
+ {
+  "id": "research_center",
+  "name": "研究中心",
+  "kind": "staff",
+  "role": "research",
+  "size": [
+   3,
+   3
+  ],
+  "cost": {
+   "scrap": 20,
+   "parts": 6,
+   "coins": 260
+  },
+  "color": "#3a6aa8",
+  "power": 3,
+  "desc": "研究點數 +25%（最多算 3 間）"
+ },
+ {
+  "id": "zoo_workshop",
+  "name": "維修工坊",
+  "kind": "staff",
+  "role": "repair",
+  "size": [
+   2,
+   2
+  ],
+  "cost": {
+   "scrap": 16,
+   "wood": 6,
+   "coins": 120
+  },
+  "color": "#8a5a3a",
+  "power": 2,
+  "desc": "技工維修速度 +40%（最多算 2 間）"
+ },
+ {
   "id": "gate",
   "name": "入口",
   "kind": "gate",

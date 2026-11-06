@@ -122,7 +122,7 @@ function fightStep(min){
     if(!(sp.social==='獨居'||m.length>Math.max(1,f))) continue;
     if(Math.random()<C.fightChancePerMin*min*(m.length-1)){ const v=m[Math.floor(Math.random()*m.length)];
       v.happy=Math.max(0,(v.happy??60)-C.fightHappy); v.health=Math.max(5,(v.health??100)-C.fightHealth);
-      toast(`${sp.name}的公獸打架了，${nameOf(v)} 受了傷。公的太多時，可以移出幾隻`); }
+      v.fightUntil=(z.clock||0)+1; toast(`${sp.name}的公獸打架了，${nameOf(v)} 受了傷。公的太多時，可以移出幾隻`); }
   }
 }
 

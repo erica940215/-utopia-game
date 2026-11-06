@@ -32,12 +32,12 @@ function opsBeforeAnimals(min){
   // 設施耗損與技工維修
   const wear=z.buildings.filter(b=>{ const k=bdef(b.type).kind; return k!=='path'&&k!=='gate'; });
   for(const b of wear) b.cond=Math.max(0,(b.cond??100)-O.conditionDecayPerMin*min);
-  let repair=staffPower('mechanic')*S.mechanic.repairPerMin*RF().repairMult*eff*min;
+  let repair=staffPower('mechanic')*S.mechanic.repairPerMin*RF().repairMult*repairMult()*eff*min;
   for(const b of wear.slice().sort((a,b)=>a.cond-b.cond)){ if(repair<=0) break; const r=Math.min(repair,100-b.cond); b.cond+=r; repair-=r; }
   // 清潔
   z.clean=Math.max(0,Math.min(100,z.clean-(zooStats.visitors||0)*O.litterPerVisitorMin*min+staffPower('janitor')*S.janitor.cleanPerMin*RF().cleanMult*eff*min));
   // 生病與獸醫
-  let cure=staffPower('vet')*S.vet.curePerMin*eff*min;
+  let cure=staffPower('vet')*S.vet.curePerMin*vetMult()*eff*min;
   for(const a of z.animals){
     if(!a.sick&&Math.random()<O.sickChancePerMin*RF().sickChanceMult*geneSickMult(a)*min*(a.food<30?3:1)) a.sick=true;
     if(a.sick&&cure>=1){ a.sick=false; cure-=1; }
@@ -46,7 +46,7 @@ function opsBeforeAnimals(min){
   }
 }
 function animalOpsPenalty(a,b){
-  return (1-habitatCoverage(b))*25+(100-(a.health??100))*0.3+(isWorking(b)?0:12)+utilityPenalty(a,b);
+  return (a.sick?LIFE().sickHappyPenalty:0)+(1-habitatCoverage(b))*25+(100-(a.health??100))*0.3+(isWorking(b)?0:12)+utilityPenalty(a,b);
 }
 
 /* 遊客、門票、消費、研究 */
@@ -77,7 +77,7 @@ function opsEconomy(attract,min){
   z.coins+=zooStats.coinsPerMin*min;
   bizEconomy(visitors,ticket*mult,min);
   const distinct=new Set(z.animals.map(a=>a.species)).size;
-  zooStats.researchPerMin=distinct*(Z.researchPerSpeciesPerMin||0)*(1+staffCount('educator')*DATA.staffById.educator.researchBonus);
+  zooStats.researchPerMin=distinct*(Z.researchPerSpeciesPerMin||0)*(1+staffCount('educator')*DATA.staffById.educator.researchBonus)*researchMult();
   z.research=(z.research||0)+zooStats.researchPerMin*min;
 }
 
@@ -128,17 +128,17 @@ function pathTargets(){
 }
 function updatePeople(dt){
   const want=Math.min(Q().people,Math.round((zooStats.visitors||0)/4));
-  const targets=pathTargets();
-  while(zooPeople.length<want){ const p=makePerson(), t=targets[Math.floor(Math.random()*targets.length)]; p.position.set(t.x+(Math.random()-0.5),0,t.z+(Math.random()-0.5)); zooRoot.add(p); zooPeople.push({m:p,tx:p.position.x,tz:p.position.z,wait:Math.random()*3,ph:Math.random()*6}); }
+  const G=walkTiles(), keys=[...G.keys()];
+  while(zooPeople.length<want){ const p=makePerson(), k=keys.length?keys[Math.floor(Math.random()*keys.length)]:null, t=k?tileXZ(k):{x:0,z:GN()*TS()/2-3};
+    p.position.set(t.x+(Math.random()-0.5),0,t.z+(Math.random()-0.5)); zooRoot.add(p); zooPeople.push({m:p,route:[],wait:Math.random()*3,ph:Math.random()*6}); }
   while(zooPeople.length>want){ const p=zooPeople.pop(); zooRoot.remove(p.m); }
   for(const p of zooPeople){
     const m=p.m;
     if(p.wait>0){ p.wait-=dt; }
-    else{
-      const dx=p.tx-m.position.x, dz=p.tz-m.position.z, d=Math.hypot(dx,dz);
-      if(d<0.3){ const t=targets[Math.floor(Math.random()*targets.length)]; p.tx=t.x+(Math.random()-0.5)*1.4; p.tz=t.z+(Math.random()-0.5)*1.4; p.wait=Math.random()*4; }
-      else{ const s=Math.min(d,dt*1.3); m.position.x+=dx/d*s; m.position.z+=dz/d*s; m.rotation.y=Math.atan2(dx,dz); p.ph+=dt*9; }
-    }
+    else if(!p.route||!p.route.length){ p.route=nextWalk(p)||[]; p.wait=Math.random()*3; }
+    else{ const t=p.route[0], dx=t.x-m.position.x, dz=t.z-m.position.z, d=Math.hypot(dx,dz);
+      if(d<0.25){ p.route.shift(); if(!p.route.length) p.wait=1+Math.random()*4; }
+      else{ const s=Math.min(d,dt*1.3); m.position.x+=dx/d*s; m.position.z+=dz/d*s; m.rotation.y=Math.atan2(dx,dz); p.ph+=dt*9; } }
     m.position.y=ZH(m.position.x,m.position.z)+Math.abs(Math.sin(p.ph))*0.05;
   }
 }

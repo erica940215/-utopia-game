@@ -17,7 +17,7 @@ function staffEff(id){ const B=BIZ(); return (1+(staffLv(id)-1)*B.trainBonus)*(0
 const staffPower=id=>staffCount(id)*staffEff(id);
 function moraleStep(min){
   const z=save.zoo, B=BIZ();
-  const target=Math.max(0,Math.min(100,55+(z.wage-1)*160+(opsStats.unpaid?-45:0)));
+  const target=Math.max(0,Math.min(100,55+(z.wage-1)*160+(opsStats.unpaid?-45:0)-restPenalty()));
   z.morale+=(target-z.morale)*Math.min(1,min*0.05);
   if(z.morale<B.quitBelow&&totalStaff()>1&&Math.random()<B.quitChancePerMin*min){
     const ids=Object.keys(z.staff).filter(id=>z.staff[id]>0); const id=ids[Math.floor(Math.random()*ids.length)];
@@ -32,7 +32,7 @@ function computeHabCov(){
   for(const b of z.buildings){ if(bdef(b.type).kind!=='habitat') continue; const n=z.animals.filter(a=>a.habitat===b.uid).length; if(!n) continue;
     const own=(z.assign[b.uid]||0)*cap; map.set(b.uid,Math.min(1,own/n)); if(own<n) rest+=n-own; }
   const share=rest?Math.min(1,free/rest):1;
-  for(const [uid,c] of map) if(c<1) map.set(uid,Math.min(1,c+(1-c)*share));
+  for(const [uid,c] of map) map.set(uid,(c<1?Math.min(1,c+(1-c)*share):c)*hutFactor(findB(uid)));
   bizStats.habCov=map;
 }
 

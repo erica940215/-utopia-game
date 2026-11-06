@@ -121,6 +121,11 @@ function makeBuildingMesh(b){
     const rf=box(W,0.2,D,hex(d.color)); rf.position.y=4.3; g.add(rf);
     const sg=box(1.4,0.4,0.06,0xf2efe6); sg.position.set(0,3.9,D/2-0.1); g.add(sg);
   }
+  else if(d.kind==='staff'){
+    const hgt=2.4, bd=box(W-0.4,hgt,D-0.4,0xe0d8c8); bd.position.y=hgt/2; g.add(bd); const rf=box(W,0.3,D,hex(d.color)); rf.position.y=hgt+0.15; g.add(rf);
+    const sg=box(Math.min(1.4,W-0.6),0.35,0.06,hex(d.color)); sg.position.set(0,hgt-0.4,D/2-0.17); g.add(sg); const dr=box(0.7,1.4,0.05,0x3a2e2a); dr.position.set(0,0.7,D/2-0.18); g.add(dr);
+    if(d.role==='vet'||d.role==='quarantine'){ const cr=box(0.5,0.15,0.07,0xc84a4a), cr2=box(0.15,0.5,0.07,0xc84a4a); cr.position.set(0,hgt-0.4,D/2-0.12); cr2.position.copy(cr.position); g.add(cr,cr2); }
+  }
   else if(d.kind==='gate'){
     const pm=M(hex(d.color));
     for(const s of [-1,1]){ const p=box(0.6,3.4,0.6,pm); p.position.set(s*(W/2-0.3),1.7,0); g.add(p); }
@@ -191,7 +196,7 @@ function simulate(min){
     attract+=sp.attract*a.happy/100*(0.8+0.1*(a.stars||2))*(isAdult(a)?1:1.25)*elderAttract(a)*geneSizeMult(a)*(b.poly&&barrierDef(b.barrier).opaque?0.5:1)*(1+knowLevel(a.species)*SR.attractPerLevel);
   }
   opsEconomy(attract*escapeAttract(),min); computeRating();
-  breedingStep(min); agingStep(min); escapeStep(min); fightStep(min);
+  breedingStep(min); agingStep(min); escapeStep(min); fightStep(min); contagionStep(min);
   zoo.lastTick=Date.now();
 }
 function catchUp(){
@@ -266,9 +271,9 @@ function openHabitatPanel(b){
     ${freeBarrierHtml(b)}${assignHtml(b)}${habitatCareHtml(b)}
     ${inside.length?inside.map(a=>{ const sp=DATA.speciesById[a.species], tOK=T>=sp.tempRange[0]&&T<=sp.tempRange[1], adult=isAdult(a);
       return `<div class="zp-row"><div class="zp-name"><b>${sexIcon(a)} ${esc(nameOf(a))} <span class="stars">${STAR_TXT(a.stars)}</span></b>
-          <span class="genes">${genesTxt(a)}</span><span>${stageOf(a)==='老年'?'<em>老年</em>':stageOf(a)}${a.preg?'・懷孕中':''}${a.gen?`・第 ${a.gen} 代`:''}・適溫 ${sp.tempRange[0]}～${sp.tempRange[1]}°C${tOK?'':'・<em>溫度不合</em>'}</span></div>
+          <span class="genes">${genesTxt(a)}</span><span>${a.act?`正在${ACT_NAME[a.act]||'散步'}・`:''}${stageOf(a)==='老年'?'<em>老年</em>':stageOf(a)}${a.preg?'・懷孕中':''}${a.gen?`・第 ${a.gen} 代`:''}・適溫 ${sp.tempRange[0]}～${sp.tempRange[1]}°C${tOK?'':'・<em>溫度不合</em>'}</span></div>
         <div class="zp-bars"><label>幸福${bar(a.happy??60,(a.happy??60)<40?'low':'')}</label><label>飽足${bar(a.food??80,(a.food??80)<30?'low':'')}</label>${agingOff()?'':`<label>壽命${bar(Math.max(0,100-lifeFrac(a)*100),lifeFrac(a)>=AG().elderAt?'low':'')}</label>`}</div>
-        <div class="zp-btns"><button type="button" class="zmini" data-breed="${a.id}">${a.breed?'避孕：關':'避孕中'}</button><button type="button" class="zmini" data-out="${a.id}">移出</button><button type="button" class="zmini" data-rel="${a.id}">野放</button></div></div>`; }).join('')
+        <div class="zp-btns"><button type="button" class="zmini" data-breed="${a.id}">${a.breed?'避孕：關':'避孕中'}</button><button type="button" class="zmini" data-out="${a.id}">移出</button><button type="button" class="zmini" data-rel="${a.id}">野放</button>${a.sick?`<button type="button" class="zmini add" data-quar="${a.id}">送隔離</button>`:''}</div></div>`; }).join('')
       :`<p class="zp-empty">這裡還沒有動物。</p>`}
     <div class="zp-add">${full?'<span class="zp-empty">已經住滿了，寶寶要等有空位才會出生</span>'
       :(cand.length||stored.length)?[...stored.map(a=>`<button type="button" class="zmini add" data-st="${a.id}">放入 ${a.sex==='M'?'♂':'♀'} ${esc(nameOf(a))} ${'★'.repeat(a.stars)}</button>`),
@@ -278,6 +283,7 @@ function openHabitatPanel(b){
   $('zPanel').hidden=false;
   const after=()=>{ rebuildZooAnimals(); simulate(0); openHabitatPanel(b); updateZooHud(); persist(); };
   wireHabitatCare(b); wireAssign(b); wireFreeBarrier(b);
+  $('zPanel').querySelectorAll('[data-quar]').forEach(el=>el.onclick=()=>{ const a=z.animals.find(x=>x.id===el.dataset.quar); if(a&&sendToQuarantine(a)){ toast(`${nameOf(a)} 送去隔離區了`); after(); } });
   $('zpClose').onclick=()=>{ $('zPanel').hidden=true; zSelUid=null; updateSelBox(); };
   $('zPanel').querySelectorAll('[data-in]').forEach(el=>el.onclick=()=>{ const id=el.dataset.in; z.unplaced[id]--; z.animals.push(newIndividual(id,b.uid)); after(); });
   $('zPanel').querySelectorAll('[data-st]').forEach(el=>el.onclick=()=>{ const i=z.stored.findIndex(a=>a.id===el.dataset.st); if(i<0) return; const a=z.stored.splice(i,1)[0]; a.habitat=b.uid; z.animals.push(a); after(); });
@@ -319,6 +325,7 @@ function zooTap(cx,cy){
     else { $('zPanel').hidden=true;
       if(d.kind==='feeder') toast(`飼料站：半徑 ${d.radius} 格內的棲地會自動餵食（倉庫飼料 ${Math.floor(save.resources.feed||0)}）`);
       else if(d.kind==='heater') toast(`暖爐：半徑 ${d.radius} 格內的棲地 +${d.heat}°C，會慢慢消耗煤炭`);
+      else if(d.kind==='staff') toast(`${d.name}：${d.desc}${d.role==='quarantine'?`・目前 ${(save.zoo.quar||[]).length}/${quarantineCap()} 隻`:''}${d.role==='rest'?`・員工 ${totalStaff()}/${restCapacity()} 人有地方休息`:''}`);
       else if(d.kind==='facility') toast(`${d.name}：可服務 ${d.serves} 位遊客・狀況 ${Math.round(b.cond??100)}%${isWorking(b)?'':'（損壞中，需要技工）'}`);
       else toast(d.name); }
     return;
@@ -370,6 +377,7 @@ canvas.addEventListener('pointermove',e=>{
   if(zPtrs.size===1){
     zDrag+=Math.abs(dx)+Math.abs(dy);
     if(zBrushing){ const h=groundHit(e.clientX,e.clientY); if(h){ zBrushing.x=h.x; zBrushing.z=h.z; } return; }
+    if(isPathTool()&&e.button!==2){ zDrag=99; pathDragAt(e.clientX,e.clientY); return; }   // 選步道時拖曳一路鋪（兩指或右鍵移動畫面）
     if(zDrag>6){ const k=zooCamT.d*0.0022; zooCamT.x-=dx*k; zooCamT.z-=dy*k; const lim=GN()*TS()/2; zooCamT.x=Math.max(-lim,Math.min(lim,zooCamT.x)); zooCamT.z=Math.max(-lim,Math.min(lim+6,zooCamT.z)); }
     if(e.pointerType==='mouse') updateGhost(e.clientX,e.clientY);
   } else if(zPtrs.size===2){
@@ -378,7 +386,7 @@ canvas.addEventListener('pointermove',e=>{
     const k=zooCamT.d*0.0011; zooCamT.x-=dx*k; zooCamT.z-=dy*k;
   }
 });
-const zUp=e=>{ if(!zPtrs.has(e.pointerId)) return; if(zBrushing){ zBrushing=null; afterTerrainEdit(); persist(); zPtrs.delete(e.pointerId); return; } const single=zPtrs.size===1; zPtrs.delete(e.pointerId); if(state==='zoo'&&single&&zDrag<=6) zooTap(e.clientX,e.clientY); if(zPtrs.size<2) zPinch=0; };
+const zUp=e=>{ if(!zPtrs.has(e.pointerId)) return; pathDragEnd(); if(zBrushing){ zBrushing=null; afterTerrainEdit(); persist(); zPtrs.delete(e.pointerId); return; } const single=zPtrs.size===1; zPtrs.delete(e.pointerId); if(state==='zoo'&&single&&zDrag<=6) zooTap(e.clientX,e.clientY); if(zPtrs.size<2) zPinch=0; };
 canvas.addEventListener('pointerup',zUp); canvas.addEventListener('pointercancel',e=>zPtrs.delete(e.pointerId));
 canvas.addEventListener('wheel',e=>{ if(state!=='zoo') return; e.preventDefault(); zooCamT.d=Math.max(14,Math.min(80,zooCamT.d*(1+Math.sign(e.deltaY)*0.1))); },{passive:false});
 
@@ -415,11 +423,12 @@ function zooUpdate(dt){
     const m=z.mesh;
     const gy=ZH(m.position.x,m.position.z);
     const lift=DATA.speciesById[z.a.species]&&DATA.speciesById[z.a.species].category==='aquatic'?0.35:0;
-    if(z.wait>0){ z.wait-=dt; m.position.y=gy+0.1+lift; setAnim(m,'idle'); continue; }
+    if(animalBehave(z,dt,gy,lift)) continue;
+    if(z.wait>0){ z.wait-=dt; if(z.act!=='swim') m.position.y=gy+0.1+lift; setAnim(m,'idle'); continue; }
     const dx=z.tx-m.position.x, dz=z.tz-m.position.z, d=Math.hypot(dx,dz);
     if(d<0.2){ if(z.poly){ const q=randomInPoly(z.poly); z.tx=q.x; z.tz=q.z; } else { z.tx=z.c.x+(Math.random()*2-1)*z.hw; z.tz=z.c.z+(Math.random()*2-1)*z.hd; } z.wait=1+Math.random()*4; continue; }
     const s=Math.min(d,dt*1.4); m.position.x+=dx/d*s; m.position.z+=dz/d*s; m.rotation.y=Math.atan2(dx,dz); setAnim(m,'walk');
-    z.hop+=dt*10; m.position.y=gy+0.1+lift+(isAnimated(m)?0:Math.abs(Math.sin(z.hop))*0.12);
+    z.hop+=dt*10; if(!(z.act==='swim'&&gy<TRN().waterLevel)) m.position.y=gy+0.1+lift+(isAnimated(m)?0:Math.abs(Math.sin(z.hop))*0.12);
   }
   if(state==='zoowalk'){
     let ix=(keys.KeyD?1:0)-(keys.KeyA?1:0)+joy.x, iz=(keys.KeyS?1:0)-(keys.KeyW?1:0)+joy.y;
