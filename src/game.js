@@ -9,7 +9,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
    ========================================================= */
 const DATA = {};
 async function loadData(){
-  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets','staff','achievements','research','challenges','bosses','cars','events','enemies','weaponmods','food','biomes','lore','recipes'];
+  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets','staff','achievements','research','challenges','bosses','cars','events','enemies','weaponmods','food','biomes','lore','recipes','habitats'];
   const res = await Promise.all(names.map(n => fetch(`data/${n}.json`).then(r => { if(!r.ok) throw new Error(n); return r.json(); })));
   names.forEach((n,i) => DATA[n] = res[i]);
   DATA.speciesById = Object.fromEntries(DATA.species.map(s => [s.id, s]));
@@ -792,6 +792,7 @@ function wireAuth(){
 /*@@NETFIGHT@@*/
 /*@@PERF@@*/
 /*@@TRAININSIDE@@*/
+/*@@FREEHAB@@*/
 /*@@CONTROLS@@*/
 /* =========================================================
    8. 主迴圈

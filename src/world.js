@@ -81,7 +81,7 @@ function showParks(msg){
 function shareSnapshot(){
   const z=save.zoo;
   return {v:1,name:(save.parks?parkName(save.parks.active):'烏托邦站'),rating:opsStats.rating,
-    zoo:{buildings:z.buildings.map(b=>({uid:b.uid,type:b.type,x:b.x,z:b.z,rot:b.rot||0,fence:b.fence})),props:z.props||[],terrain:z.terrain,ticket:z.ticket,
+    zoo:{buildings:z.buildings.map(b=>({uid:b.uid,type:b.type,x:b.x,z:b.z,rot:b.rot||0,fence:b.fence,...(b.poly?{poly:b.poly,barrier:b.barrier,climate:b.climate,w:b.w,h:b.h,cost:b.cost}:{})})),props:z.props||[],terrain:z.terrain,ticket:z.ticket,
       animals:z.animals.map(a=>({species:a.species,sex:a.sex,stars:a.stars,habitat:a.habitat,genes:a.genes}))}};
 }
 const b64u={enc:u8=>{ let s=''; for(let i=0;i<u8.length;i+=0x8000) s+=String.fromCharCode.apply(null,u8.subarray(i,i+0x8000)); return btoa(s).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,''); },

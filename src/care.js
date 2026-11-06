@@ -4,7 +4,8 @@
    ========================================================= */
 const CARE=()=>DATA.config.care;
 /* ---------- 棲地環境：從地形、水、物件、周圍步道算出來 ---------- */
-function habitatRect(b){ const d=bdef(b.type), c=tileCenter(b), hw=d.size[0]*TS()/2, hd=d.size[1]*TS()/2; return {x0:c.x-hw,x1:c.x+hw,z0:c.z-hd,z1:c.z+hd,tiles:d.size[0]*d.size[1]}; }
+function habitatRect(b){ if(b.poly){ const xs=b.poly.map(p=>p[0]), zs=b.poly.map(p=>p[1]); return {x0:Math.min(...xs),x1:Math.max(...xs),z0:Math.min(...zs),z1:Math.max(...zs),tiles:polyArea(b.poly)/(TS()*TS()),poly:b.poly}; }
+  const d=bdef(b.type), c=tileCenter(b), hw=d.size[0]*TS()/2, hd=d.size[1]*TS()/2; return {x0:c.x-hw,x1:c.x+hw,z0:c.z-hd,z1:c.z+hd,tiles:d.size[0]*d.size[1]}; }
 let envCache=new Map(), envCacheT=-1;
 function habitatEnv(b){
   const key=b.uid; if(envCacheT===zEnvStamp&&envCache.has(key)) return envCache.get(key);
@@ -12,10 +13,11 @@ function habitatEnv(b){
   const r=habitatRect(b), T=save.zoo.terrain, paints=TRN().paints, cnt=new Array(paints.length).fill(0); let water=0, n=0;
   const defPaint=paints.findIndex(p=>p.id===bdef(b.type).groundPaint);   // 沒上色的地方算棲地本身的地面
   if(T) for(let x=r.x0+0.5;x<r.x1;x+=1) for(let z=r.z0+0.5;z<r.z1;z+=1){
+    if(r.poly&&!pointInPoly(x,z,r.poly)) continue;
     const {fi,fj}=terrXY(x,z), i=Math.round(fi), j=Math.round(fj); if(i<0||j<0||i>=zTerrN||j>=zTerrN) continue;
     n++; if(T.h[tIdx(i,j)]<TRN().waterLevel) water++; else { const pi=T.p[tIdx(i,j)]||0; cnt[pi===0&&defPaint>=0?defPaint:pi]++; }
   }
-  const inside=(save.zoo.props||[]).filter(p=>p.x>r.x0&&p.x<r.x1&&p.z>r.z0&&p.z<r.z1);
+  const inside=(save.zoo.props||[]).filter(p=>p.x>r.x0&&p.x<r.x1&&p.z>r.z0&&p.z<r.z1&&(!r.poly||pointInPoly(p.x,p.z,r.poly)));
   const foliage=inside.filter(p=>{ const d=pdef(p.type); return d&&d.cat==='nature'&&!/rock|log|stump/.test(d.kind); }).length;
   const shelter=inside.some(p=>{ const d=pdef(p.type); return d&&(/rock_l|log|stump|cave/.test(d.kind)||(d.likes&&d.likes.shelter)||/wall|roof/.test(d.kind)); });
   const enrich=[...new Set(inside.map(p=>pdef(p.type)).filter(d=>d&&d.cat==='enrich').map(d=>d.id))];
@@ -25,7 +27,8 @@ function habitatEnv(b){
     for(let ox=o.x;ox<o.x+od.size[0];ox++) for(let oz=o.z;oz<o.z+od.size[1];oz++)
       if(ox>=b.x-1&&ox<=b.x+d.size[0]&&oz>=b.z-1&&oz<=b.z+d.size[1]&&!(ox>=b.x&&ox<b.x+d.size[0]&&oz>=b.z&&oz<b.z+d.size[1])) edge++; }
   const per=2*(d.size[0]+d.size[1])+4;
-  const env={tiles:r.tiles,ground:Object.fromEntries(paints.map((p,i)=>[p.id,n?cnt[i]/n:0])),water:n?water/n:0,foliage,foliageDensity:foliage/(r.tiles/4),shelter,enrich,pressure:Math.min(1,edge/per)};
+  const br=b.poly?barrierDef(b.barrier):null, leak=br&&!br.watertight;   // 不防水的圍欄：水會漏掉
+  const env={tiles:r.tiles,ground:Object.fromEntries(paints.map((p,i)=>[p.id,n?cnt[i]/n:0])),water:n&&!leak?water/n:0,leak:leak&&water>0,foliage,foliageDensity:foliage/(r.tiles/4),shelter,enrich,pressure:Math.min(1,edge/per)*(br?(br.oneway?0:br.opaque?0.3:1):1)};
   envCache.set(key,env); return env;
 }
 let zEnvStamp=0; const envDirty=()=>{ zEnvStamp++; };
@@ -48,7 +51,7 @@ function habitatChecks(b,sp){
     const g=need.ground.reduce((s,id)=>s+(env.ground[id]||0),0);
     const gn=need.ground.map(id=>TRN().paints.find(p=>p.id===id).name).join('、');
     list.push({k:'ground',label:`地面要${gn}（${Math.round(g*100)}%）`,ok:g>=C.groundNeed,pen:g>=C.groundNeed?0:P.ground});
-    if(need.water) list.push({k:'water',label:`要有水（${Math.round(env.water*100)}%）`,ok:env.water>=C.waterNeed,pen:env.water>=C.waterNeed?0:P.water});
+    if(need.water) list.push({k:'water',label:`要有水（${Math.round(env.water*100)}%）${env.leak?'・圍欄不防水，水都漏光了':''}`,ok:env.water>=C.waterNeed,pen:env.water>=C.waterNeed?0:P.water});
     if(need.foliage) list.push({k:'foliage',label:`植物 ${env.foliage} 株（需要 ${Math.ceil(need.foliage*env.tiles/4)}）`,ok:env.foliageDensity>=need.foliage,pen:env.foliageDensity>=need.foliage?0:P.foliage});
     list.push({k:'pressure',label:`遊客壓力 ${Math.round(env.pressure*100)}%`,ok:env.pressure<=(need.shy?0.5:0.85),pen:env.pressure<=(need.shy?0.5:0.85)?0:P.pressure});
   }
@@ -70,7 +73,8 @@ function careHappyDelta(a,b){
 }
 
 /* ---------- 圍欄與脫逃 ---------- */
-const fenceLv=b=>b.fence||1;
+const fenceLv=b=>b.poly?barrierDef(b.barrier).grade:(b.fence||1);
+const climbGap=(b,sp)=>b.poly&&sp.body&&sp.body.type==='primate'&&!barrierDef(b.barrier).climbproof?1:0;
 function fenceNeed(sp){ const size=(sp.body&&sp.body.size)||1;
   if(sp.body&&sp.body.type==='primate') return 3;
   if(sp.category!=='mammal') return 1;
@@ -81,7 +85,7 @@ function escapeStep(min){
   const z=save.zoo, C=CARE(); z.escaped=z.escaped||[];
   for(const a of [...z.animals]){
     const b=findB(a.habitat), sp=DATA.speciesById[a.species]; if(!b||!sp||bdef(b.type).indoor) continue;
-    const gap=Math.max(0,fenceNeed(sp)-fenceLv(b)), p=gap*C.escapePerMinPerLevel+(isWorking(b)?0:C.escapeBrokenPerMin);
+    const gap=Math.max(0,fenceNeed(sp)-fenceLv(b))+climbGap(b,sp), p=gap*C.escapePerMinPerLevel+(isWorking(b)?0:C.escapeBrokenPerMin);
     if(p>0&&Math.random()<p*min){ z.animals.splice(z.animals.indexOf(a),1); delete a.preg; a.escapedAt=z.clock; a.from=b.uid; z.escaped.push(a); zooEscapeLog.push(a); }
   }
   // 保全與飼育員把逃走的動物抓回來
@@ -127,7 +131,7 @@ function habitatCareHtml(b){
   const d=bdef(b.type), z=save.zoo, sps=[...new Set(z.animals.filter(a=>a.habitat===b.uid).map(a=>a.species))].map(id=>DATA.speciesById[id]).filter(Boolean);
   const F=CARE().fences, lv=fenceLv(b), next=F.find(f=>f.lv===lv+1);
   const need=Math.max(1,...sps.map(fenceNeed));
-  let html=d.indoor?'':`<div class="zp-note">圍欄：${esc(F[lv-1].name)}${need>lv?`・<em>需要${esc(F[need-1].name)}，動物可能會逃走</em>`:''}${next?` <button type="button" class="zmini add" data-fence="${b.uid}" ${affordable(next.cost)?'':'disabled'}>升級成${esc(next.name)}（${esc(costText(next.cost))}）</button>`:''}</div>`;
+  let html=d.indoor||b.poly?'':`<div class="zp-note">圍欄：${esc(F[lv-1].name)}${need>lv?`・<em>需要${esc(F[need-1].name)}，動物可能會逃走</em>`:''}${next?` <button type="button" class="zmini add" data-fence="${b.uid}" ${affordable(next.cost)?'':'disabled'}>升級成${esc(next.name)}（${esc(costText(next.cost))}）</button>`:''}</div>`;
   for(const sp of sps){
     const checks=habitatChecks(b,sp), en=enrichBonus(b,sp);
     html+=`<div class="zp-note"><b>${esc(sp.name)}的需求</b><div class="needs">${checks.map(c=>`<span class="${c.ok?'ok':'bad'}">${c.ok?'✔':'✗'} ${esc(c.label)}</span>`).join('')}

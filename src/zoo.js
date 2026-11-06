@@ -31,7 +31,8 @@ function ensureZoo(){
 const tileCenter=(b)=>{ const d=bdef(b.type); return { x:(b.x+d.size[0]/2-GN()/2)*TS(), z:(b.z+d.size[1]/2-GN()/2)*TS() }; };
 const tileDist=(a,b)=>{ const d1=bdef(a.type), d2=bdef(b.type); return Math.hypot((a.x+d1.size[0]/2)-(b.x+d2.size[0]/2),(a.z+d1.size[1]/2)-(b.z+d2.size[1]/2)); };
 const findB=uid=>save.zoo.buildings.find(b=>b.uid===uid);
-function occupancy(){ const m=new Map(); for(const b of save.zoo.buildings){ const d=bdef(b.type); for(let i=0;i<d.size[0];i++) for(let j=0;j<d.size[1];j++) m.set((b.x+i)+','+(b.z+j),b.uid); } return m; }
+function occupancy(){ const m=new Map(); for(const b of save.zoo.buildings){ const d=bdef(b.type); if(!d) continue;
+    if(b.poly){ for(let i=0;i<d.size[0];i++) for(let j=0;j<d.size[1];j++){ const x=(b.x+i+0.5-GN()/2)*TS(), z=(b.z+j+0.5-GN()/2)*TS(); if(pointInPoly(x,z,b.poly)) m.set((b.x+i)+','+(b.z+j),b.uid); } continue; } for(let i=0;i<d.size[0];i++) for(let j=0;j<d.size[1];j++) m.set((b.x+i)+','+(b.z+j),b.uid); } return m; }
 function canPlace(d,x,z){ if(x<0||z<0||x+d.size[0]>GN()||z+d.size[1]>GN()) return false; const o=occupancy(); for(let i=0;i<d.size[0];i++) for(let j=0;j<d.size[1];j++) if(o.has((x+i)+','+(z+j))) return false; return true; }
 const resOf=k=>k==='coins'?save.zoo.coins:k==='research'?(save.zoo.research||0):(save.resources[k]||0);
 const resName=k=>k==='coins'?'金幣':k==='research'?'研究':(DATA.itemsById[k]?DATA.itemsById[k].name:k);
@@ -86,6 +87,7 @@ function makeBuildingMesh(b){
   const d=bdef(b.type), c=tileCenter(b), W=d.size[0]*TS(), D=d.size[1]*TS(), g=new THREE.Group();
   g.position.set(c.x,ZH(c.x,c.z),c.z); g.userData.uid=b.uid;
   if(d.kind==='path'){ const p=box(W,0.08,D,hex(d.color)); p.position.y=0.04; g.add(p); }
+  else if(d.kind==='habitat'&&d.free){ g.add(makeFenceMesh(b,c)); }
   else if(d.kind==='habitat'){
     const gr=box(W-0.2,0.1,D-0.2,hex(d.ground)); gr.position.y=0.05; if(!d.house&&!d.water){ gr.material=gr.material.clone(); gr.material.transparent=true; gr.material.opacity=0.45; } g.add(gr);
     if(d.water){ const w=box(W-1.2,0.05,D-1.2,new THREE.MeshPhongMaterial({color:0x2a6f99,shininess:90,transparent:true,opacity:0.9})); w.position.y=0.11; g.add(w); }
@@ -128,6 +130,7 @@ function makeBuildingMesh(b){
   return g;
 }
 function rebuildZoo(){
+  registerAllFreeHabs();
   for(const g of zooBMeshes.values()) zooRoot.remove(g);
   zooBMeshes.clear();
   for(const b of save.zoo.buildings){ const g=makeBuildingMesh(b); zooRoot.add(g); zooBMeshes.set(b.uid,g); }
@@ -141,9 +144,9 @@ function rebuildZooAnimals(){
     const sp=DATA.speciesById[a.species]; if(!sp) continue;
     const m=makeModel(sp); const c=tileCenter(hb), d=bdef(hb.type);
     const hw=d.size[0]*TS()/2-0.8, hd=d.size[1]*TS()/2-0.8;
-    m.position.set(c.x+(Math.random()*2-1)*hw,ZH(c.x,c.z)+0.1,c.z+(Math.random()*2-1)*hd); m.scale.setScalar(isAdult(a)?1.3:0.7);
+    if(hb.poly){ const q=randomInPoly(hb.poly); m.position.set(q.x,ZH(q.x,q.z)+0.1,q.z); } else m.position.set(c.x+(Math.random()*2-1)*hw,ZH(c.x,c.z)+0.1,c.z+(Math.random()*2-1)*hd); m.scale.setScalar(isAdult(a)?1.3:0.7);
     zooRoot.add(m);
-    zooAnimals.push({mesh:m,a,c,hw,hd,tx:m.position.x,tz:m.position.z,hop:Math.random()*6,wait:Math.random()*3});
+    zooAnimals.push({mesh:m,a,c,hw,hd,poly:hb.poly,tx:m.position.x,tz:m.position.z,hop:Math.random()*6,wait:Math.random()*3});
   }
 }
 function updateSelBox(){
@@ -185,7 +188,7 @@ function simulate(min){
     const target=Math.max(0,Math.min(40,a.food/30*40)+(tempOK?40:0)+(socialOK?20:5)-animalOpsPenalty(a,b)-elderPenalty(a)+careHappyDelta(a,b)+rf.happinessBonus+knowLevel(a.species)*SR.happinessPerLevel);
     const h=a.happy??60, step=Z.happinessPerMin*min;
     a.happy=Math.abs(target-h)<=step?target:h+Math.sign(target-h)*step;
-    attract+=sp.attract*a.happy/100*(0.8+0.1*(a.stars||2))*(isAdult(a)?1:1.25)*elderAttract(a)*geneSizeMult(a)*(1+knowLevel(a.species)*SR.attractPerLevel);
+    attract+=sp.attract*a.happy/100*(0.8+0.1*(a.stars||2))*(isAdult(a)?1:1.25)*elderAttract(a)*geneSizeMult(a)*(b.poly&&barrierDef(b.barrier).opaque?0.5:1)*(1+knowLevel(a.species)*SR.attractPerLevel);
   }
   opsEconomy(attract*escapeAttract(),min); computeRating();
   breedingStep(min); agingStep(min); escapeStep(min); fightStep(min);
@@ -236,13 +239,13 @@ function updateZooHud(){
   $('zPool').textContent=avail?`待安置 ${avail}`:'';
 }
 function renderZooTools(){
-  const tools=zTab==='facility'?[{id:'select',name:'選取',sub:'查看・放動物'},{id:'demolish',name:'拆除',sub:`退還 ${Math.round(ZC().demolishRefund*100)}%`}]
+  const tools=zTab==='facility'?[{id:'select',name:'選取',sub:'查看・放動物'},{id:'demolish',name:'拆除',sub:`退還 ${Math.round(ZC().demolishRefund*100)}%`},{id:'draw_hab',name:'畫棲地',sub:'自由形狀・選圍欄'}]
     .concat(DATA.buildings.filter(b=>b.buildable!==false).map(b=>({id:b.id,name:b.name,sub:buildingUnlocked(b)?costText(b.cost):`需要研究：${DATA.researchById[b.requires].name}`,cost:b.cost,locked:!buildingUnlocked(b)})))
     :[{id:'select',name:'選取',sub:'調整物件'},{id:'demolish',name:'拆除',sub:'物件與設施'},...creativeTools()];
   $('zTools').innerHTML=`<div class="ztabs">${Z_TABS.map(([id,n])=>`<button type="button" class="ztab${zTab===id?' on':''}" data-ztab="${id}">${n}</button>`).join('')}<span class="zopts">${creativeOptions()}</span></div>
     <div class="ztoolrow">${tools.map(t=>`<button type="button" class="ztool${zTool===t.id?' on':''}${(t.cost&&!affordable(t.cost))||t.locked?' poor':''}" data-tool="${t.id}">${t.swatch?`<i class="sw" style="background:${t.swatch}"></i>`:''}<b>${esc(t.name)}</b><span>${esc(t.sub)}</span></button>`).join('')}</div>`;
   $('zTools').querySelectorAll('[data-ztab]').forEach(el=>el.onclick=()=>{ zTab=el.dataset.ztab; zTool='select'; zGhost.visible=false; renderZooTools(); });
-  $('zTools').querySelectorAll('.ztool').forEach(el=>el.onclick=()=>{ zTool=el.dataset.tool; zGhost.visible=false; zMoveUid=null;
+  $('zTools').querySelectorAll('.ztool').forEach(el=>el.onclick=()=>{ zTool=el.dataset.tool; zGhost.visible=false; zMoveUid=null; if(zDraw&&zTool!=='draw_hab') cancelDrawHab(); if(zTool==='draw_hab'){ zDraw={pts:[]}; renderDrawBar(); }
     if(zTool!=='select'){ zSelUid=null; zSelProp=null; zSelBox.visible=false; $('zPanel').hidden=true; }
     if(zGrid) zGrid.visible=!!bdef(zTool)||zGrid.visible&&zTab==='facility';
     renderZooTools(); });
@@ -260,7 +263,7 @@ function openHabitatPanel(b){
   $('zPanel').innerHTML=`
     <div class="zp-head"><div><b>${esc(d.name)}</b><span>${T}°C・${inside.length}/${d.capacity} 隻・${fed?'有飼料站':'<em>附近沒有飼料站</em>'}</span></div><button type="button" class="zclose" id="zpClose" aria-label="關閉">✕</button></div>
     ${note?`<div class="zp-note">${note}</div>`:''}
-    ${assignHtml(b)}${habitatCareHtml(b)}
+    ${freeBarrierHtml(b)}${assignHtml(b)}${habitatCareHtml(b)}
     ${inside.length?inside.map(a=>{ const sp=DATA.speciesById[a.species], tOK=T>=sp.tempRange[0]&&T<=sp.tempRange[1], adult=isAdult(a);
       return `<div class="zp-row"><div class="zp-name"><b>${sexIcon(a)} ${esc(nameOf(a))} <span class="stars">${STAR_TXT(a.stars)}</span></b>
           <span class="genes">${genesTxt(a)}</span><span>${stageOf(a)==='老年'?'<em>老年</em>':stageOf(a)}${a.preg?'・懷孕中':''}${a.gen?`・第 ${a.gen} 代`:''}・適溫 ${sp.tempRange[0]}～${sp.tempRange[1]}°C${tOK?'':'・<em>溫度不合</em>'}</span></div>
@@ -274,7 +277,7 @@ function openHabitatPanel(b){
     <p class="zp-empty">同種、一公一母、都成年而且幸福度 ${BR().minHappy} 以上，就有機會懷孕。寶寶的星等接近父母的平均。${agingOff()?'':'動物會慢慢變老：老年動物不再繁殖、幸福度和吸引力稍微下降，壽命走完後會安詳離開。星等越高活得越久。'}</p>`;
   $('zPanel').hidden=false;
   const after=()=>{ rebuildZooAnimals(); simulate(0); openHabitatPanel(b); updateZooHud(); persist(); };
-  wireHabitatCare(b); wireAssign(b);
+  wireHabitatCare(b); wireAssign(b); wireFreeBarrier(b);
   $('zpClose').onclick=()=>{ $('zPanel').hidden=true; zSelUid=null; updateSelBox(); };
   $('zPanel').querySelectorAll('[data-in]').forEach(el=>el.onclick=()=>{ const id=el.dataset.in; z.unplaced[id]--; z.animals.push(newIndividual(id,b.uid)); after(); });
   $('zPanel').querySelectorAll('[data-st]').forEach(el=>el.onclick=()=>{ const i=z.stored.findIndex(a=>a.id===el.dataset.st); if(i<0) return; const a=z.stored.splice(i,1)[0]; a.habitat=b.uid; z.animals.push(a); after(); });
@@ -297,6 +300,7 @@ function placeOffset(d,t){ return { x:t.x-Math.floor((d.size[0]-1)/2), z:t.z-Mat
 function zooTap(cx,cy){
   if(zMoveUid){ moveProp(cx,cy); return; }
   if(zTool.startsWith('t_')) return;
+  if(zTool==='draw_hab'){ drawHabTap(cx,cy); return; }
   if(zTool.startsWith('p_')){ placeProp(cx,cy); return; }
   if(zTool==='select'||zTool==='demolish'){
     const p=pickProp(cx,cy);
@@ -413,7 +417,7 @@ function zooUpdate(dt){
     const lift=DATA.speciesById[z.a.species]&&DATA.speciesById[z.a.species].category==='aquatic'?0.35:0;
     if(z.wait>0){ z.wait-=dt; m.position.y=gy+0.1+lift; setAnim(m,'idle'); continue; }
     const dx=z.tx-m.position.x, dz=z.tz-m.position.z, d=Math.hypot(dx,dz);
-    if(d<0.2){ z.tx=z.c.x+(Math.random()*2-1)*z.hw; z.tz=z.c.z+(Math.random()*2-1)*z.hd; z.wait=1+Math.random()*4; continue; }
+    if(d<0.2){ if(z.poly){ const q=randomInPoly(z.poly); z.tx=q.x; z.tz=q.z; } else { z.tx=z.c.x+(Math.random()*2-1)*z.hw; z.tz=z.c.z+(Math.random()*2-1)*z.hd; } z.wait=1+Math.random()*4; continue; }
     const s=Math.min(d,dt*1.4); m.position.x+=dx/d*s; m.position.z+=dz/d*s; m.rotation.y=Math.atan2(dx,dz); setAnim(m,'walk');
     z.hop+=dt*10; m.position.y=gy+0.1+lift+(isAnimated(m)?0:Math.abs(Math.sin(z.hop))*0.12);
   }

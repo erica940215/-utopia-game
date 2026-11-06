@@ -1,0 +1,151 @@
+{
+ "_comment": "自由畫棲地：圍欄種類（每公尺價格）與氣候",
+ "barriers": [
+  {
+   "id": "wood",
+   "name": "木柵欄",
+   "grade": 1,
+   "climbproof": false,
+   "opaque": false,
+   "watertight": false,
+   "height": 1.2,
+   "costPerM": {
+    "coins": 4,
+    "wood": 0.3
+   },
+   "color": "#6a4a32"
+  },
+  {
+   "id": "steel",
+   "name": "鋼網圍欄",
+   "grade": 2,
+   "climbproof": false,
+   "opaque": false,
+   "watertight": false,
+   "height": 2.2,
+   "costPerM": {
+    "coins": 8,
+    "scrap": 0.4
+   },
+   "color": "#8a949c"
+  },
+  {
+   "id": "electric",
+   "name": "電網圍欄",
+   "grade": 3,
+   "climbproof": true,
+   "opaque": false,
+   "watertight": false,
+   "height": 2.6,
+   "costPerM": {
+    "coins": 14,
+    "scrap": 0.4,
+    "parts": 0.1
+   },
+   "color": "#c8a040",
+   "power": 0.1
+  },
+  {
+   "id": "concrete",
+   "name": "水泥高牆",
+   "grade": 3,
+   "climbproof": true,
+   "opaque": true,
+   "watertight": true,
+   "height": 3.0,
+   "costPerM": {
+    "coins": 12,
+    "scrap": 0.6
+   },
+   "color": "#a8a49c"
+  },
+  {
+   "id": "glass",
+   "name": "強化玻璃",
+   "grade": 3,
+   "climbproof": true,
+   "opaque": false,
+   "watertight": true,
+   "height": 2.4,
+   "costPerM": {
+    "coins": 20,
+    "scrap": 0.3,
+    "parts": 0.1
+   },
+   "color": "#cfe9f0"
+  },
+  {
+   "id": "oneway",
+   "name": "單面玻璃",
+   "grade": 3,
+   "climbproof": true,
+   "opaque": false,
+   "oneway": true,
+   "watertight": true,
+   "height": 2.4,
+   "costPerM": {
+    "coins": 28,
+    "scrap": 0.3,
+    "parts": 0.15
+   },
+   "color": "#3a4a5a"
+  }
+ ],
+ "climates": [
+  {
+   "id": "cold",
+   "name": "寒帶",
+   "temp": -10,
+   "paint": "snow",
+   "base": {
+    "coins": 30
+   }
+  },
+  {
+   "id": "temperate",
+   "name": "溫帶",
+   "temp": 8,
+   "paint": "grass",
+   "base": {
+    "coins": 40
+   }
+  },
+  {
+   "id": "tropical",
+   "name": "熱帶",
+   "temp": 26,
+   "paint": "grass",
+   "base": {
+    "coins": 60,
+    "fuel": 3
+   }
+  },
+  {
+   "id": "desert",
+   "name": "沙漠",
+   "temp": 30,
+   "paint": "sand",
+   "base": {
+    "coins": 55,
+    "fuel": 3
+   }
+  },
+  {
+   "id": "savanna",
+   "name": "草原",
+   "temp": 24,
+   "paint": "dirt",
+   "base": {
+    "coins": 50,
+    "fuel": 2
+   }
+  }
+ ],
+ "accepts": [
+  "mammal",
+  "bird",
+  "reptile"
+ ],
+ "minArea": 16,
+ "tilesPerAnimal": 2.5
+}
