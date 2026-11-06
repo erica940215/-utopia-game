@@ -49,7 +49,7 @@ function updateEnemyShots(dt){
   for(let i=eShots.length-1;i>=0;i--){
     const s=eShots[i]; s.life-=dt; s.m.position.addScaledVector(s.v,dt);
     const hit=Math.hypot(s.m.position.x-player.pos.x,s.m.position.z-player.pos.z)<0.8&&Math.abs(s.m.position.y-(player.pos.y+1.2))<1.2;
-    if(hit){ player.temp-=s.drain*(CFG().wraithTouchMult||1); hurtT=0.4; }
+    if(hit){ hurt(s.drain*(CFG().wraithTouchMult||1)); hurtT=0.4; }
     if(hit||s.life<=0){ world.remove(s.m); eShots.splice(i,1); }
   }
 }

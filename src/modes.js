@@ -20,7 +20,7 @@ function switchSlot(slot,fresh){
 }
 function newSandbox(){
   const s=emptySave(); s.mode='sandbox';
-  s.resources={fuel:9999,scrap:9999,feed:9999};
+  s.resources=Object.fromEntries(DATA.items.map(i=>[i.id,9999]));
   for(const sp of DATA.species) s.collection[sp.id]=2;
   s.upgrades=Object.fromEntries(DATA.upgrades.map(u=>[u.id,u.levels.length]));
   s.gear={owned:DATA.equipment.map(e=>e.id),equipped:{weapon:'flamethrower',body:'polar_suit',pack:'heater_pack',tool:'pro_kit',feet:'snow_boots'}};

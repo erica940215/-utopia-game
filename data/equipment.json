@@ -19,8 +19,10 @@
   "name": "獵槍",
   "slot": "weapon",
   "cost": {
-   "scrap": 25,
-   "coins": 120
+   "scrap": 20,
+   "wood": 6,
+   "parts": 3,
+   "coins": 100
   },
   "requires": 1,
   "ammo": 8,
@@ -32,15 +34,18 @@
   "refillSeconds": 1.0,
   "life": 0.6,
   "cooldown": 0.6,
-  "text": "8 發・一次 5 顆，近距離很強"
+  "text": "8 發・一次 5 顆，近距離很強",
+  "ammoItem": "ammo",
+  "perItem": 5
  },
  {
   "id": "flamethrower",
   "name": "火焰噴射器",
   "slot": "weapon",
   "cost": {
-   "scrap": 50,
-   "coins": 300,
+   "scrap": 40,
+   "parts": 10,
+   "coins": 280,
    "research": 40
   },
   "requires": 2,
@@ -53,15 +58,17 @@
   "life": 0.4,
   "cooldown": 0.06,
   "auto": true,
-  "text": "按住連發・射程短"
+  "text": "按住連發・射程短",
+  "ammoItem": "fuel",
+  "perItem": 30
  },
  {
   "id": "down_coat",
   "name": "羽絨大衣",
   "slot": "body",
   "cost": {
-   "scrap": 8,
-   "coins": 60
+   "cloth": 6,
+   "coins": 40
   },
   "requires": 0,
   "drainMult": 0.85,
@@ -72,8 +79,9 @@
   "name": "極地防寒衣",
   "slot": "body",
   "cost": {
-   "scrap": 30,
-   "coins": 180,
+   "cloth": 14,
+   "scrap": 10,
+   "coins": 150,
    "research": 20
   },
   "requires": 1,
@@ -85,8 +93,8 @@
   "name": "大背包",
   "slot": "pack",
   "cost": {
-   "scrap": 10,
-   "coins": 50
+   "cloth": 6,
+   "coins": 40
   },
   "requires": 0,
   "bagBonus": 4,
@@ -97,8 +105,9 @@
   "name": "暖爐背包",
   "slot": "pack",
   "cost": {
-   "scrap": 30,
-   "coins": 160,
+   "cloth": 8,
+   "parts": 4,
+   "coins": 140,
    "research": 20
   },
   "requires": 1,
@@ -111,8 +120,9 @@
   "name": "捕網與釣竿",
   "slot": "tool",
   "cost": {
-   "scrap": 8,
-   "coins": 40
+   "wood": 4,
+   "cloth": 2,
+   "coins": 30
   },
   "requires": 0,
   "catchSpeed": 1.5,
@@ -123,8 +133,9 @@
   "name": "專業採集組",
   "slot": "tool",
   "cost": {
-   "scrap": 25,
-   "coins": 150,
+   "wood": 6,
+   "parts": 4,
+   "coins": 120,
    "research": 20
   },
   "requires": 1,
@@ -136,8 +147,9 @@
   "name": "雪地靴",
   "slot": "feet",
   "cost": {
-   "scrap": 10,
-   "coins": 60
+   "cloth": 4,
+   "scrap": 4,
+   "coins": 50
   },
   "requires": 0,
   "sprintSpeed": 9.6,
@@ -149,8 +161,10 @@
   "name": "步槍",
   "slot": "weapon",
   "cost": {
-   "scrap": 35,
-   "coins": 180
+   "scrap": 25,
+   "wood": 6,
+   "parts": 6,
+   "coins": 150
   },
   "requires": 1,
   "ammo": 5,
@@ -161,15 +175,18 @@
   "life": 1.4,
   "cooldown": 0.9,
   "grav": 1,
-  "text": "5 發・單發傷害高、子彈幾乎不下墜"
+  "text": "5 發・單發傷害高、子彈幾乎不下墜",
+  "ammoItem": "ammo",
+  "perItem": 5
  },
  {
   "id": "machine_gun",
   "name": "機槍",
   "slot": "weapon",
   "cost": {
-   "scrap": 70,
-   "coins": 420,
+   "scrap": 50,
+   "parts": 14,
+   "coins": 380,
    "research": 40
   },
   "requires": 2,
@@ -183,15 +200,18 @@
   "cooldown": 0.09,
   "auto": true,
   "grav": 2,
-  "text": "40 發・按住連發"
+  "text": "40 發・按住連發",
+  "ammoItem": "ammo",
+  "perItem": 20
  },
  {
   "id": "ice_axe",
   "name": "冰斧",
   "slot": "weapon",
   "cost": {
-   "scrap": 10,
-   "coins": 40
+   "scrap": 6,
+   "wood": 4,
+   "coins": 30
   },
   "requires": 0,
   "melee": true,

@@ -9,7 +9,8 @@
    "slots": 3,
    "cost": {
     "scrap": 20,
-    "coins": 80
+    "coins": 80,
+    "wood": 10
    },
    "effects": {
     "bagCapacity": 4
@@ -23,7 +24,8 @@
    "slots": 3,
    "cost": {
     "scrap": 25,
-    "coins": 120
+    "coins": 120,
+    "wood": 10
    },
    "effects": {
     "followCapacity": 1
@@ -37,7 +39,8 @@
    "slots": 3,
    "cost": {
     "scrap": 25,
-    "coins": 120
+    "coins": 120,
+    "wood": 10
    },
    "effects": {
     "containerCapacity": 2
@@ -51,7 +54,8 @@
    "slots": 2,
    "cost": {
     "scrap": 40,
-    "coins": 200
+    "coins": 200,
+    "wood": 10
    },
    "effects": {
     "turrets": 1
@@ -65,7 +69,8 @@
    "slots": 2,
    "cost": {
     "scrap": 45,
-    "coins": 150
+    "coins": 150,
+    "wood": 10
    },
    "effects": {
     "trainHp": 80
@@ -80,7 +85,8 @@
    "cost": {
     "scrap": 20,
     "feed": 15,
-    "coins": 100
+    "coins": 100,
+    "wood": 10
    },
    "effects": {
     "kitchen": 1
@@ -94,7 +100,8 @@
    "slots": 3,
    "cost": {
     "scrap": 30,
-    "coins": 250
+    "coins": 250,
+    "wood": 10
    },
    "effects": {
     "researchPerRun": 5
@@ -108,7 +115,8 @@
    "slots": 3,
    "cost": {
     "scrap": 20,
-    "coins": 90
+    "coins": 90,
+    "wood": 10
    },
    "effects": {
     "heatRegenMult": 1.3
@@ -133,7 +141,8 @@
    "name": "儲物架",
    "desc": "背包 +2",
    "cost": {
-    "scrap": 6
+    "scrap": 6,
+    "wood": 4
    },
    "effects": {
     "bagCapacity": 2
@@ -150,7 +159,8 @@
    "desc": "跟隨生物 +1",
    "cost": {
     "scrap": 12,
-    "coins": 60
+    "coins": 60,
+    "wood": 4
    },
    "effects": {
     "followCapacity": 1
@@ -180,7 +190,8 @@
    "desc": "再多一座砲塔",
    "cost": {
     "scrap": 30,
-    "coins": 150
+    "coins": 150,
+    "parts": 4
    },
    "effects": {
     "turrets": 1
@@ -207,7 +218,8 @@
    "desc": "霜影出現的間隔變長 15%",
    "cost": {
     "scrap": 12,
-    "coins": 50
+    "coins": 50,
+    "parts": 4
    },
    "effects": {
     "wraithSpawnMult": 0.85
@@ -218,8 +230,8 @@
    "name": "急救箱",
    "desc": "倒下後被拖回來時體溫多 15",
    "cost": {
-    "scrap": 6,
-    "feed": 4
+    "herbs": 3,
+    "cloth": 2
    },
    "effects": {
     "respawnBonus": 15
@@ -246,7 +258,8 @@
    "desc": "每次遠征研究 +3",
    "cost": {
     "scrap": 10,
-    "coins": 80
+    "coins": 80,
+    "wood": 4
    },
    "effects": {
     "researchPerRun": 3
@@ -260,7 +273,8 @@
    "name": "雙層床",
    "desc": "熱區回溫 +15%",
    "cost": {
-    "scrap": 8
+    "scrap": 8,
+    "wood": 4
    },
    "effects": {
     "heatRegenMult": 1.15

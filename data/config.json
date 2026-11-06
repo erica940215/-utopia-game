@@ -184,6 +184,46 @@
    "get": {
     "feed": 6
    }
+  },
+  {
+   "id": "buy_wood",
+   "name": "用飼料換木材",
+   "give": {
+    "feed": 6
+   },
+   "get": {
+    "wood": 5
+   }
+  },
+  {
+   "id": "buy_cloth",
+   "name": "用廢鐵換布料",
+   "give": {
+    "scrap": 6
+   },
+   "get": {
+    "cloth": 4
+   }
+  },
+  {
+   "id": "buy_parts",
+   "name": "買零件",
+   "give": {
+    "coins": 120
+   },
+   "get": {
+    "parts": 3
+   }
+  },
+  {
+   "id": "buy_ammo",
+   "name": "買彈藥",
+   "give": {
+    "coins": 80
+   },
+   "get": {
+    "ammo": 10
+   }
   }
  ],
  "researchPerNewSpecies": 3,
@@ -722,5 +762,13 @@
    }
   ],
   "coopStartCoins": 1500
+ },
+ "health": {
+  "max": 100,
+  "respawnHp": 60,
+  "heatRegenPerSec": 1.5,
+  "coldBelowPct": 25,
+  "coldHpPerSec": 1.5,
+  "frozenHpPerSec": 8
  }
 }

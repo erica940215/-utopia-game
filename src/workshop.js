@@ -6,6 +6,7 @@ function ensureProgress(){
   save.upgrades=save.upgrades||{};
   save.gear=save.gear||{owned:['flare_gun'],equipped:{weapon:'flare_gun'}};
   if(!save.gear.owned.includes('flare_gun')) save.gear.owned.push('flare_gun');
+  if(!save.starterKit){ save.starterKit=1; save.resources.ammo=(save.resources.ammo||0)+20; save.resources.bandage=(save.resources.bandage||0)+2; }
   ensureZoo();
 }
 function upLevel(id){ return (save.upgrades&&save.upgrades[id])||0; }
@@ -40,6 +41,10 @@ function showWorkshop(msg){
     }).join('');
   } else if(shopTab==='cars'){
     body=trainTabHtml(st);
+  } else if(shopTab==='craft'){
+    body=DATA.recipes.recipes.map(r=>`<div class="shopcard"><div class="sc-main"><b>${esc(r.name)}</b><span>${esc(costText(r.give))} → ${esc(costText(r.get))}</span></div>
+      <div class="zp-btns"><button type="button" class="zmini add" data-rc="${r.id}" ${affordable(r.give)?'':'disabled'}>製作</button><button type="button" class="zmini" data-rc5="${r.id}" ${affordable(Object.fromEntries(Object.entries(r.give).map(([k,v])=>[k,v*5])))?'':'disabled'}>×5</button></div></div>`).join('')
+      +'<p class="zp-empty">材料在遠征時搜刮：森林多木材、村莊多布料、礦區和港口多零件與火藥、溫室多草藥。獵槍、步槍、機槍在熱區補子彈要消耗彈藥；火焰噴射器燒煤炭。</p>';
   } else if(shopTab==='food'){
     body=foodTabHtml(st);
   } else {
@@ -64,6 +69,7 @@ function showWorkshop(msg){
     <div class="dextabs" role="tablist">
       <button type="button" role="tab" class="dextab${shopTab==='train'?' on':''}" data-tab="train" aria-selected="${shopTab==='train'}">火車升級</button>
       <button type="button" role="tab" class="dextab${shopTab==='cars'?' on':''}" data-tab="cars" aria-selected="${shopTab==='cars'}">車廂編組</button>
+      <button type="button" role="tab" class="dextab${shopTab==='craft'?' on':''}" data-tab="craft" aria-selected="${shopTab==='craft'}">製作</button>
       <button type="button" role="tab" class="dextab${shopTab==='food'?' on':''}" data-tab="food" aria-selected="${shopTab==='food'}">廚房</button>
       <button type="button" role="tab" class="dextab${shopTab==='gear'?' on':''}" data-tab="gear" aria-selected="${shopTab==='gear'}">武器與裝備</button>
     </div>
@@ -76,6 +82,9 @@ function showWorkshop(msg){
   screenEl.querySelectorAll('[data-tab]').forEach(el=>el.onclick=()=>{ shopTab=el.dataset.tab; carPick=null; showWorkshop(); });
   if(shopTab==='cars') wireTrainTab();
   if(shopTab==='food') wireFoodTab();
+  const craft=(id,n)=>{ const r=DATA.recipes.recipes.find(x=>x.id===id), g=Object.fromEntries(Object.entries(r.give).map(([k,v])=>[k,v*n])); if(!affordable(g)) return; pay(g,-1); pay(Object.fromEntries(Object.entries(r.get).map(([k,v])=>[k,v*n])),1); persist(); showWorkshop(`做好了 ${r.name}${n>1?' ×'+n:''}`); };
+  screenEl.querySelectorAll('[data-rc]').forEach(el=>el.onclick=()=>craft(el.dataset.rc,1));
+  screenEl.querySelectorAll('[data-rc5]').forEach(el=>el.onclick=()=>craft(el.dataset.rc5,5));
   if(shopTab==='gear') wireWeaponMods();
   screenEl.querySelectorAll('[data-up]').forEach(el=>el.onclick=()=>{
     const u=DATA.upgradeById[el.dataset.up], lv=upLevel(u.id), next=u.levels[lv];

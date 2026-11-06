@@ -1,5 +1,144 @@
 [
-  { "id": "fuel",  "name": "煤炭", "color": "#24262b", "lootWeight": 42, "amount": [2, 4], "use": "火車燃料" },
-  { "id": "scrap", "name": "廢鐵", "color": "#76808a", "lootWeight": 33, "amount": [2, 4], "use": "升級與建造" },
-  { "id": "feed",  "name": "飼料", "color": "#8c7a42", "lootWeight": 25, "amount": [2, 4], "use": "餵養動物" }
+ {
+  "id": "fuel",
+  "name": "煤炭",
+  "color": "#24262b",
+  "lootWeight": 42,
+  "amount": [
+   2,
+   4
+  ],
+  "use": "火車燃料",
+  "core": true
+ },
+ {
+  "id": "scrap",
+  "name": "廢鐵",
+  "color": "#76808a",
+  "lootWeight": 33,
+  "amount": [
+   2,
+   4
+  ],
+  "use": "升級與建造",
+  "core": true
+ },
+ {
+  "id": "feed",
+  "name": "飼料",
+  "color": "#8c7a42",
+  "lootWeight": 25,
+  "amount": [
+   2,
+   4
+  ],
+  "use": "餵養動物",
+  "core": true
+ },
+ {
+  "id": "wood",
+  "name": "木材",
+  "color": "#7a5a3a",
+  "lootWeight": 18,
+  "amount": [
+   2,
+   4
+  ],
+  "use": "製作、車廂"
+ },
+ {
+  "id": "cloth",
+  "name": "布料",
+  "color": "#b8a48a",
+  "lootWeight": 14,
+  "amount": [
+   1,
+   3
+  ],
+  "use": "衣服、繃帶"
+ },
+ {
+  "id": "parts",
+  "name": "零件",
+  "color": "#5a6a7a",
+  "lootWeight": 9,
+  "amount": [
+   1,
+   2
+  ],
+  "use": "武器、改裝"
+ },
+ {
+  "id": "herbs",
+  "name": "草藥",
+  "color": "#4a8a4a",
+  "lootWeight": 8,
+  "amount": [
+   1,
+   3
+  ],
+  "use": "急救包"
+ },
+ {
+  "id": "powder",
+  "name": "火藥",
+  "color": "#3a3a3a",
+  "lootWeight": 8,
+  "amount": [
+   1,
+   2
+  ],
+  "use": "彈藥、暖暖包"
+ },
+ {
+  "id": "ammo",
+  "name": "彈藥",
+  "color": "#c8a040",
+  "lootWeight": 4,
+  "amount": [
+   3,
+   6
+  ],
+  "use": "獵槍、步槍、機槍",
+  "consumable": true
+ },
+ {
+  "id": "bandage",
+  "name": "繃帶",
+  "color": "#e8e0d0",
+  "lootWeight": 2,
+  "amount": [
+   1,
+   1
+  ],
+  "use": "回復生命 20",
+  "consumable": true,
+  "heal": 20
+ },
+ {
+  "id": "medkit",
+  "name": "急救包",
+  "color": "#c84a4a",
+  "lootWeight": 0,
+  "amount": [
+   1,
+   1
+  ],
+  "use": "回復生命 50",
+  "consumable": true,
+  "heal": 50
+ },
+ {
+  "id": "warmer",
+  "name": "暖暖包",
+  "color": "#e0802a",
+  "lootWeight": 0,
+  "amount": [
+   1,
+   1
+  ],
+  "use": "體溫回升 35",
+  "consumable": true,
+  "warm": 35
+ }
 ]

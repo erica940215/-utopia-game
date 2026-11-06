@@ -5,7 +5,8 @@
   "desc": "散射 -60%、彈速 +30%",
   "cost": {
    "scrap": 12,
-   "coins": 60
+   "coins": 60,
+   "parts": 3
   },
   "mult": {
    "spread": 0.4,
@@ -24,7 +25,8 @@
   "desc": "彈藥 +50%",
   "cost": {
    "scrap": 15,
-   "coins": 70
+   "coins": 70,
+   "parts": 3
   },
   "mult": {
    "ammo": 1.5
@@ -44,7 +46,8 @@
   "cost": {
    "scrap": 20,
    "coins": 90,
-   "research": 10
+   "research": 10,
+   "parts": 3
   },
   "mult": {
    "damage": 1.35,
@@ -63,7 +66,8 @@
   "desc": "在熱區補彈快 40%",
   "cost": {
    "scrap": 10,
-   "coins": 50
+   "coins": 50,
+   "parts": 3
   },
   "mult": {
    "refillSeconds": 0.6
@@ -82,7 +86,8 @@
   "desc": "獵槍散射 -45%、多 2 顆彈丸",
   "cost": {
    "scrap": 14,
-   "coins": 60
+   "coins": 60,
+   "parts": 3
   },
   "mult": {
    "spread": 0.55
@@ -101,7 +106,8 @@
   "cost": {
    "scrap": 18,
    "coins": 80,
-   "research": 10
+   "research": 10,
+   "parts": 3
   },
   "mult": {
    "life": 1.6
@@ -116,7 +122,8 @@
   "desc": "近戰傷害 +50%、攻擊範圍 +0.6 m",
   "cost": {
    "scrap": 10,
-   "coins": 40
+   "coins": 40,
+   "parts": 3
   },
   "mult": {
    "damage": 1.5

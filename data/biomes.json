@@ -5,7 +5,8 @@
   "ground": "#ffffff",
   "sky": "#9fb2c2",
   "treesMult": 1,
-  "style": "ruins"
+  "style": "ruins",
+  "loot": {}
  },
  {
   "id": "forest",
@@ -13,7 +14,10 @@
   "ground": "#e6eee8",
   "sky": "#93a9a8",
   "treesMult": 2.2,
-  "style": "ruins"
+  "style": "ruins",
+  "loot": {
+   "wood": 3
+  }
  },
  {
   "id": "village",
@@ -21,7 +25,11 @@
   "ground": "#f2f2ee",
   "sky": "#a7b4c0",
   "treesMult": 0.8,
-  "style": "village"
+  "style": "village",
+  "loot": {
+   "cloth": 2.5,
+   "herbs": 1.5
+  }
  },
  {
   "id": "mining",
@@ -29,7 +37,12 @@
   "ground": "#cfd2d4",
   "sky": "#8e979e",
   "treesMult": 0.4,
-  "style": "mining"
+  "style": "mining",
+  "loot": {
+   "parts": 2.5,
+   "powder": 2.5,
+   "fuel": 1.5
+  }
  },
  {
   "id": "port",
@@ -37,7 +50,11 @@
   "ground": "#e2ebf2",
   "sky": "#8fa5b8",
   "treesMult": 0.3,
-  "style": "port"
+  "style": "port",
+  "loot": {
+   "parts": 2,
+   "cloth": 1.5
+  }
  },
  {
   "id": "savanna",
@@ -45,7 +62,11 @@
   "ground": "#ece6d8",
   "sky": "#b0aa9c",
   "treesMult": 0.5,
-  "style": "ruins"
+  "style": "ruins",
+  "loot": {
+   "herbs": 2,
+   "wood": 1.5
+  }
  },
  {
   "id": "polar",
@@ -53,6 +74,10 @@
   "ground": "#eef7ff",
   "sky": "#b8cbe0",
   "treesMult": 0.1,
-  "style": "spikes"
+  "style": "spikes",
+  "loot": {
+   "parts": 2,
+   "powder": 2
+  }
  }
 ]

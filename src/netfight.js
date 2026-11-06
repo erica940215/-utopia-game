@@ -52,7 +52,7 @@ function netHandlers(ch){
     m.lookAt(m.position.clone().add(v)); m.rotateX(Math.PI/2); world.add(m); eShots.push({m,v,life:2,drain:payload.dr}); });
   ch.on('broadcast',{event:'nova'},({payload})=>{ if(state!=='play'||payload.node!==(curNode&&curNode.id)) return;
     const d=Math.hypot(player.pos.x-payload.x,player.pos.z-payload.z);
-    if(d<payload.r&&distToTrain(player.pos.x,player.pos.z)>=CFG().heatRadius){ player.temp-=payload.dr*(CFG().wraithTouchMult||1); hurtT=0.6; toast('被寒氣爆發打中了！'); } });
+    if(d<payload.r&&distToTrain(player.pos.x,player.pos.z)>=CFG().heatRadius){ hurt(payload.dr*(CFG().wraithTouchMult||1)); hurtT=0.6; toast('被寒氣爆發打中了！'); } });
   ch.on('broadcast',{event:'leave'},({payload})=>{ if(!coop) return; const p=coop.peers.get(payload.id); if(p){ p.g.parent&&p.g.parent.remove(p.g); coop.peers.delete(payload.id); } });
 }
 
@@ -87,7 +87,7 @@ function netFollowEnemy(w,dt,inHeat){
   g.position.y=heightAt(g.position.x,g.position.z)+(w.def&&w.def.look!=='wraith'?0:Math.sin(w.phase*2)*0.25);
   if(w.hit>0){ w.hit-=dt; w.mat.emissive.setHex(0x553311); } else w.mat.emissive.setHex(w.raid?0x2a0a0a:0x0a1a2a);
   const dx=player.pos.x-g.position.x, dz=player.pos.z-g.position.z, d=Math.max(0.01,Math.hypot(dx,dz));
-  if(d<1.5&&!inHeat){ player.temp-=W.touchDrainPerSec*(w.raid?0.5:1)*(w.def?w.def.touchMult:1)*(CFG().wraithTouchMult||1)*dt; hurtT=0.3; player.pos.x+=dx/d*dt*3; player.pos.z+=dz/d*dt*3; }
+  if(d<1.5&&!inHeat){ hurt(W.touchDrainPerSec*(w.raid?0.5:1)*(w.def?w.def.touchMult:1)*(CFG().wraithTouchMult||1)*dt); hurtT=0.3; player.pos.x+=dx/d*dt*3; player.pos.z+=dz/d*dt*3; }
 }
 function netFollowBoss(dt,inHeat){
   if(!boss||boss.dead){ $('bossBar').hidden=true; return; }
@@ -96,7 +96,7 @@ function netFollowBoss(dt,inHeat){
   g.position.y=heightAt(g.position.x,g.position.z)+Math.sin(b.phase*1.6)*0.3;
   if(B.attacks.nova&&b.wf>0){ const r=B.attacks.nova.radius*b.wf; b.ring.scale.set(r,r,r); b.ring.material.opacity=0.25+b.wf*0.5; } else b.ring.material.opacity=0;
   const dx=player.pos.x-g.position.x, dz=player.pos.z-g.position.z, d=Math.max(0.01,Math.hypot(dx,dz));
-  if(d<1.1*s&&!inHeat){ player.temp-=B.touchDrain*(CFG().wraithTouchMult||1)*dt; hurtT=0.3; player.pos.x+=dx/d*dt*5; player.pos.z+=dz/d*dt*5; }
+  if(d<1.1*s&&!inHeat){ hurt(B.touchDrain*(CFG().wraithTouchMult||1)*dt); hurtT=0.3; player.pos.x+=dx/d*dt*5; player.pos.z+=dz/d*dt*5; }
   if(b.hit>0){ b.hit-=dt; b.mat.emissive.setHex(0x553311); } else b.mat.emissive.setHex(b.wf>0?0x2a4a6a:0x0a1a2a);
   const bar=$('bossBar'); bar.hidden=!(b.aggro||b.hp<b.max); $('bossName').textContent=B.name; $('bossFill').style.width=Math.max(0,b.hp/b.max*100)+'%';
 }

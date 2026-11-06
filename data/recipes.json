@@ -1,0 +1,79 @@
+{
+ "_comment": "工坊「製作」分頁的配方。give 是材料，get 是成品",
+ "recipes": [
+  {
+   "id": "ammo",
+   "name": "彈藥 ×5",
+   "give": {
+    "powder": 1,
+    "scrap": 1
+   },
+   "get": {
+    "ammo": 5
+   }
+  },
+  {
+   "id": "bandage",
+   "name": "繃帶",
+   "give": {
+    "cloth": 2
+   },
+   "get": {
+    "bandage": 1
+   }
+  },
+  {
+   "id": "medkit",
+   "name": "急救包",
+   "give": {
+    "herbs": 2,
+    "cloth": 1
+   },
+   "get": {
+    "medkit": 1
+   }
+  },
+  {
+   "id": "warmer",
+   "name": "暖暖包 ×2",
+   "give": {
+    "cloth": 1,
+    "powder": 1
+   },
+   "get": {
+    "warmer": 2
+   }
+  },
+  {
+   "id": "charcoal",
+   "name": "木炭（煤炭 ×1）",
+   "give": {
+    "wood": 3
+   },
+   "get": {
+    "fuel": 1
+   }
+  },
+  {
+   "id": "salvage",
+   "name": "拆解廢鐵（零件 ×1）",
+   "give": {
+    "scrap": 5
+   },
+   "get": {
+    "parts": 1
+   }
+  },
+  {
+   "id": "fodder",
+   "name": "草料（飼料 ×3）",
+   "give": {
+    "herbs": 1,
+    "wood": 1
+   },
+   "get": {
+    "feed": 3
+   }
+  }
+ ]
+}

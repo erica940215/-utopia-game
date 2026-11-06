@@ -323,3 +323,13 @@ body{background:var(--night);color:var(--frost);font-family:var(--font-ui);overf
 
 .qbox{display:flex;flex-direction:column;gap:4px;margin:6px 0}
 .qbox select{font:inherit;background:rgba(0,0,0,.3);color:var(--frost);border:1px solid var(--line);border-radius:6px;padding:4px 6px;margin-left:6px}
+
+/* 生命值 */
+.hpl{margin-top:4px}
+.hpl b{font-size:15px}
+.hpl b.crit{color:var(--danger)}
+.bar.hp i{background:linear-gradient(90deg,#c84a4a,#ff8a6a)}
+#healTag{font-size:11px;color:var(--frost-dim)}
+#btnHeal{right:calc(max(24px,env(safe-area-inset-right,0px)) + 160px);bottom:calc(env(safe-area-inset-bottom,0px) + 104px);width:50px;height:50px;font-size:13px}
+#touch.walk #btnHeal{display:none}
+#touch.edit #btnHeal{display:grid}

@@ -229,7 +229,7 @@ function leaveZooForExpedition(node){
 /* ---------- 介面 ---------- */
 function updateZooHud(){
   const z=save.zoo;
-  $('zRes').innerHTML=worldChip()+`<span class="zstar"><i>評價</i><b>${'★'.repeat(opsStats.rating)}</b></span>`+[['金幣',Math.floor(z.coins)],['研究',Math.floor(z.research||0)],...DATA.items.map(i=>[i.name,Math.floor(save.resources[i.id]||0)]),['遊客',zooStats.visitors]]
+  $('zRes').innerHTML=worldChip()+`<span class="zstar"><i>評價</i><b>${'★'.repeat(opsStats.rating)}</b></span>`+[['金幣',Math.floor(z.coins)],['研究',Math.floor(z.research||0)],...DATA.items.filter(i=>i.core||(!i.consumable&&(save.resources[i.id]||0)>0)).map(i=>[i.name,Math.floor(save.resources[i.id]||0)]),['遊客',zooStats.visitors]]
     .map(([n,v])=>`<span><i>${esc(n)}</i><b class="num">${v}</b></span>`).join('')
     +(zooStats.heatOn?'':'<span class="warnchip">煤炭用完，暖爐停了</span>')+(opsStats.unpaid?'<span class="warnchip">金幣不夠發薪水</span>':'')+(opsStats.coverage<0.8?'<span class="warnchip">飼育員不足</span>':'')+((z.escaped||[]).length?`<span class="warnchip">${z.escaped.length} 隻動物逃走了，保全正在找</span>`:'');
   const avail=Object.values(z.unplaced).reduce((a,b)=>a+b,0);

@@ -71,7 +71,7 @@ function raidStep(w,dt){
   g.rotation.y=Math.atan2(dx,dz); g.position.y=heightAt(g.position.x,g.position.z)+Math.sin(w.phase*2)*0.25;
   if(w.hit>0){ w.hit-=dt; w.mat.emissive.setHex(0x553311); } else w.mat.emissive.setHex(0x2a0a0a);
   const pd=Math.hypot(player.pos.x-g.position.x,player.pos.z-g.position.z);
-  if(pd<1.5){ player.temp-=DATA.config.wraith.touchDrainPerSec*0.5*(CFG().wraithTouchMult||1)*dt; hurtT=0.3; }
+  if(pd<1.5){ hurt(DATA.config.wraith.touchDrainPerSec*0.5*(CFG().wraithTouchMult||1)*dt); hurtT=0.3; }
 }
 let trainHitT=0;
 function updateTrainDefense(dt,elapsed){

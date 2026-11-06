@@ -9,7 +9,7 @@ const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':
    ========================================================= */
 const DATA = {};
 async function loadData(){
-  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets','staff','achievements','research','challenges','bosses','cars','events','enemies','weaponmods','food','biomes','lore'];
+  const names = ['config','species','items','equipment','stations','buildings','map','upgrades','props','assets','staff','achievements','research','challenges','bosses','cars','events','enemies','weaponmods','food','biomes','lore','recipes'];
   const res = await Promise.all(names.map(n => fetch(`data/${n}.json`).then(r => { if(!r.ok) throw new Error(n); return r.json(); })));
   names.forEach((n,i) => DATA[n] = res[i]);
   DATA.speciesById = Object.fromEntries(DATA.species.map(s => [s.id, s]));
@@ -419,7 +419,8 @@ function placeIce(sp,x,z,rot){
   interactables.push(it); return it;
 }
 function addCrate(x,z){
-  const lw=curStation&&curStation.lootWeights; const item=pickWeighted(DATA.items, i=>lw&&lw[i.id]!=null?lw[i.id]:i.lootWeight);
+  const lw=curStation&&curStation.lootWeights; const bl=(typeof biomeOf==='function'&&biomeOf(curNode).loot)||{}, sm=(curStation&&curStation.lootMult)||{};
+  const item=pickWeighted(DATA.items, i=>(lw&&lw[i.id]!=null?lw[i.id]:i.lootWeight)*(bl[i.id]||1)*(sm[i.id]||1));
   const y=heightAt(x,z), g=new THREE.Group(); g.position.set(x,y,z); g.rotation.y=R(0,3);
   const c=box(0.9,0.6,0.6,hex(item.color)); c.position.y=0.3; g.add(c);
   const band=box(0.94,0.08,0.64,0x9a7a3a); band.position.y=0.45; g.add(band);
@@ -447,7 +448,30 @@ function spawnWraith(forceType,single){
    ========================================================= */
 let STATS=null;
 const CFG=()=>STATS||DATA.config.expedition, TMP=()=>DATA.config.temperature;
-const player={pos:new THREE.Vector3(),yaw:0,pitch:0,temp:100,bob:0};
+const player={pos:new THREE.Vector3(),yaw:0,pitch:0,temp:100,hp:100,bob:0};
+const HPC=()=>DATA.config.health;
+/* 受傷扣生命；冷只扣體溫，體溫太低才會慢慢傷到生命 */
+let ammoCredit=0, ammoWarned=false;
+/* 熱區補子彈要消耗彈藥（信號槍不用） */
+function takeAmmoRound(){
+  if(!weapon.ammoItem) return true;
+  if(ammoCredit>0){ ammoCredit--; return true; }
+  if((save.resources[weapon.ammoItem]||0)>=1){ save.resources[weapon.ammoItem]--; ammoCredit=(weapon.perItem||5)-1; return true; }
+  if(!ammoWarned){ ammoWarned=true; toast(`${resName(weapon.ammoItem)}用完了，${weapon.name}沒辦法補子彈。到工坊「製作」做彈藥`); }
+  return false;
+}
+function healLabel(){ const r=save.resources; return ['medkit','bandage','warmer'].filter(k=>r[k]>0).map(k=>`${resName(k)} ${r[k]}`).join('・')+(isTouch?'':'（H）'); }
+function useHeal(){
+  if(state!=='play') return; const r=save.resources, H=HPC().max;
+  let k=null;
+  if(player.hp<H*0.6&&r.medkit>0) k='medkit'; else if(player.hp<H-5&&r.bandage>0) k='bandage'; else if(player.hp<H-5&&r.medkit>0) k='medkit';
+  else if(player.temp<TMP().max*0.7&&r.warmer>0) k='warmer';
+  if(!k){ toast(player.hp>=H-5?'生命是滿的':'沒有治療用品。到工坊「製作」做繃帶或急救包'); return; }
+  const it=DATA.itemsById[k]; r[k]--;
+  if(it.heal) player.hp=Math.min(H,player.hp+it.heal); if(it.warm) player.temp=Math.min(TMP().max,player.temp+it.warm);
+  toast(`用了${it.name}：${it.use}`);
+}
+function hurt(v){ player.hp-=v; hurtT=Math.max(hurtT,0.3); }
 let bag={}, haul={}, rescued=[], weapon, ammo, timeLeft=0, state='boot', sprint=false, nextSpawn=0, ammoTick=0, collapses=0, hurtT=0;
 const bagCount=()=>Object.values(bag).reduce((a,b)=>a+b,0);
 const zeroItems=()=>Object.fromEntries(DATA.items.map(i=>[i.id,0]));
@@ -464,7 +488,7 @@ function startExpedition(node,seed,startedAt){
   STATS.heatRadius+=runMods.heatDelta||0; rebuildTrainCars(); initTrainDefense();
   timeLeft=Math.max(30,CFG().runSeconds+(runMods.timeDelta||0)-(startedAt?(Date.now()-startedAt)/1000:0)); collapses=0;
   if(startedAt) netSince=Date.now();   // 晚到的人不搶著負責敵人 nextSpawn=DATA.config.wraith.firstSpawnAt; sprint=false;
-  player.pos.set(4.5,0,8); player.yaw=-Math.PI/2; player.pitch=0; player.temp=TMP().max;
+  player.pos.set(4.5,0,8); player.yaw=-Math.PI/2; player.pitch=0; player.temp=TMP().max; player.hp=HPC().max; ammoCredit=0;
   buildBagHud();
   zooActive=false; $('zooUI').hidden=true;
   state='play'; screenEl.hidden=true; $('hud').hidden=false; $('touch').hidden=!isTouch;
@@ -480,7 +504,7 @@ async function goLandscape(){
 /* 輸入 */
 const keys={}; let actHeld=false, actPressed=false, locked=false, noLock=false;
 const joy={x:0,y:0,id:null};
-addEventListener('keydown',e=>{ keys[e.code]=true; if(e.code==='KeyE'){ if(!actHeld) actPressed=true; actHeld=true; } if(e.code==='KeyQ'&&!e.repeat) eatFood(); if(e.code.startsWith('Shift')) sprint=true; });
+addEventListener('keydown',e=>{ keys[e.code]=true; if(e.code==='KeyE'){ if(!actHeld) actPressed=true; actHeld=true; } if(e.code==='KeyQ'&&!e.repeat) eatFood(); if(e.code==='KeyH'&&!e.repeat) useHeal(); if(e.code.startsWith('Shift')) sprint=true; });
 addEventListener('keyup',e=>{ keys[e.code]=false; if(e.code==='KeyE') actHeld=false; if(e.code.startsWith('Shift')) sprint=false; });
 const canvas=$('c');
 function tryLock(){ if(noLock||!canvas.requestPointerLock){ noLock=true; return; } try{ const p=canvas.requestPointerLock(); if(p&&p.catch) p.catch(()=>{noLock=true;}); }catch(e){ noLock=true; } }
@@ -503,6 +527,7 @@ btnAct.addEventListener('pointerdown',e=>{ e.preventDefault(); if(state==='ctrle
 ['pointerup','pointercancel','pointerleave'].forEach(ev=>btnAct.addEventListener(ev,()=>{ actHeld=false; }));
 btnFire.addEventListener('pointerdown',e=>{ e.preventDefault(); if(state==='ctrledit') return; fireHeld=true; fire(); });
 ['pointerup','pointercancel','pointerleave'].forEach(ev=>btnFire.addEventListener(ev,()=>{ fireHeld=false; }));
+$('btnHeal').addEventListener('pointerdown',e=>{ e.preventDefault(); if(state==='ctrledit') return; useHeal(); });
 $('btnEat').addEventListener('pointerdown',e=>{ e.preventDefault(); if(state==='ctrledit') return; eatFood(); });
 btnRun.addEventListener('pointerdown',e=>{ e.preventDefault(); if(state==='ctrledit') return; sprint=!sprint; btnRun.classList.toggle('on',sprint); });
 
@@ -538,11 +563,13 @@ function hud(inHeat){
   $('heatTag').hidden=!inHeat;
   $('vignette').style.opacity=Math.max(0,(55-pct)/55)*0.95;
   $('bagCap').textContent=`${bagCount()}/${CFG().bagCapacity}`;
-  for(const i of DATA.items) $('bag_'+i.id).textContent=bag[i.id];
+  for(const i of DATA.items){ $('bag_'+i.id).textContent=bag[i.id]; $('bag_'+i.id).parentNode.hidden=!i.core&&!bag[i.id]; }
   $('bFol').textContent=`${followers.length}/${CFG().followCapacity}`;
   $('bCon').textContent=`${container.length}/${CFG().containerCapacity}`;
   $('sRes').textContent=Object.values(haul).reduce((a,b)=>a+b,0); $('sAni').textContent=rescued.length;
-  $('ammo').textContent=weapon.melee?weapon.name:`${weapon.name} ${ammo}`;
+  $('ammo').textContent=weapon.melee?weapon.name:`${weapon.name} ${ammo}${weapon.ammoItem?`・備用 ${Math.floor(save.resources[weapon.ammoItem]||0)}`:''}`;
+  const hpPct=Math.max(0,player.hp)/HPC().max*100; $('hpFill').style.width=hpPct+'%'; $('hpTxt').textContent=Math.ceil(Math.max(0,player.hp)); $('hpTxt').className='num'+(hpPct<30?' crit':'');
+  $('healTag').textContent=healLabel();
   const st=$('storm');
   if(timeLeft>0){ st.textContent='暴風雪 '+fmt(timeLeft); st.className='num'+(timeLeft<CFG().stormWarnSeconds?' warn':''); }
   else { st.textContent='暴風雪來了・快登車'; st.className='num warn'; }
@@ -640,7 +667,7 @@ function collapse(){
   followers=[]; collapses++;
   const lostC=container.length; container=[];
   if(timeLeft<=0){ finish(true); return; }
-  player.pos.set(4.5,0,8); player.temp=T.respawnTemp+(CFG().respawnBonus||0); timeLeft=Math.max(5,timeLeft-T.collapseTimePenalty);
+  player.pos.set(4.5,0,8); player.temp=T.respawnTemp+(CFG().respawnBonus||0); player.hp=HPC().respawnHp; timeLeft=Math.max(5,timeLeft-T.collapseTimePenalty);
   toast(`你失溫倒下，被列車員拖回來。掉了 ${dropN} 件物資${lost?`，${lost} 隻生物跑回原地`:''}${lostC?`，容器裡的 ${lostC} 隻生物也跑掉了`:''}`);
 }
 
@@ -809,7 +836,8 @@ function update(dt){
     if(bagCount()>0){ const n=bagCount(); depositAll(); toast(`存入車廂 ${n} 單位物資`); }
     if(container.length){ const n=boardContainer(); toast(`${n} 隻生物從容器移進車廂`); }
     if(followers.length){ const names=boardFollowers(); toast(`${names.join('、')} 安全上車了`); }
-    ammoTick+=dt; if(ammoTick>weapon.refillSeconds&&ammo<weapon.ammo){ ammo++; ammoTick=0; }
+    player.hp=Math.min(HPC().max,player.hp+HPC().heatRegenPerSec*dt);
+    ammoTick+=dt; if(ammoTick>weapon.refillSeconds&&ammo<weapon.ammo&&takeAmmoRound()){ ammo++; ammoTick=0; }
     if(curNode&&curNode.type==='stall'&&haul.fuel+bag.fuel>=(curNode.need||0)&&!curNode.told){ curNode.told=true; toast(`煤炭夠了，可以繼續前往${curNode.destName}`); }
   } else {
     const warm=warmZones.some(w=>Math.hypot(player.pos.x-w.x,player.pos.z-w.z)<w.r)?(curStation.warmDrainMult||1):inVault()?0.6:1;
@@ -842,7 +870,7 @@ function update(dt){
     g.rotation.y=Math.atan2(dx,dz); g.position.y=heightAt(g.position.x,g.position.z)+(w.def&&w.def.look!=='wraith'?0:Math.sin(w.phase*2)*0.25);
     if(w.hit>0){ w.hit-=dt; w.mat.emissive.setHex(0x553311); } else w.mat.emissive.setHex(0x0a1a2a);
     const ldx=player.pos.x-g.position.x, ldz=player.pos.z-g.position.z, ld=Math.max(0.01,Math.hypot(ldx,ldz));
-    if(ld<1.5&&!inHeat){ player.temp-=W.touchDrainPerSec*(w.def?w.def.touchMult:1)*(CFG().wraithTouchMult||1)*dt; hurtT=0.3; player.pos.x+=ldx/ld*dt*3; player.pos.z+=ldz/ld*dt*3; }
+    if(ld<1.5&&!inHeat){ hurt(W.touchDrainPerSec*(w.def?w.def.touchMult:1)*(CFG().wraithTouchMult||1)*dt); hurtT=0.3; player.pos.x+=ldx/ld*dt*3; player.pos.z+=ldz/ld*dt*3; }
   }
   if(netAuth) updateBoss(dt,inHeat,timeLeft<=0); else netFollowBoss(dt,inHeat); coopTick(dt); netTick(dt); updateEnemyShots(dt); updateFood(dt); updateVault();
   if(hurtT>0) hurtT-=dt; $('hurt').style.opacity=hurtT>0?1:0;
@@ -860,7 +888,9 @@ function update(dt){
   }
   fireCd-=dt; if(weapon.auto&&fireHeld) fire();
   interact(dt);
-  if(player.temp<=0) collapse();
+  if(player.temp<=0){ player.temp=0; player.hp-=HPC().frozenHpPerSec*dt; hurtT=Math.max(hurtT,0.15); }
+  else if(player.temp<TMP().max*HPC().coldBelowPct/100) player.hp-=HPC().coldHpPerSec*dt;
+  if(player.hp<=0) collapse();
   if(state==='play') hud(inHeat);
 }
 function loop(){ requestAnimationFrame(loop); const dt=Math.min(clock.getDelta(),0.05); update(dt); updateMixersLod(dt); perfTick(dt); if(zooActive) renderer.render(zooScene,state==='zoowalk'?camera:zooCam); else renderer.render(scene,camera); }

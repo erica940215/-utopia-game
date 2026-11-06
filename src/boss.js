@@ -99,11 +99,11 @@ function updateBoss(dt,inHeat,storm){
     if(b.windup<=0){
       b.ring.material.opacity=0.9; setTimeout(()=>{ if(b.ring) b.ring.material.opacity=0; },180);
       coopSend('nova',{node:curNode.id,x:g.position.x,z:g.position.z,r:A.nova.radius,dr:A.nova.drain});
-      if(ld<A.nova.radius && !inHeat){ player.temp-=A.nova.drain*(CFG().wraithTouchMult||1); hurtT=0.6; player.pos.x+=ldx/ld*2.5; player.pos.z+=ldz/ld*2.5; toast('被寒氣爆發打中了！'); }
+      if(ld<A.nova.radius && !inHeat){ hurt(A.nova.drain*(CFG().wraithTouchMult||1)); hurtT=0.6; player.pos.x+=ldx/ld*2.5; player.pos.z+=ldz/ld*2.5; toast('被寒氣爆發打中了！'); }
     }
   } else b.ring.material.opacity=0;
   // 碰撞
-  if(ld<1.1*s && !inHeat){ player.temp-=B.touchDrain*(CFG().wraithTouchMult||1)*dt; hurtT=0.3; player.pos.x+=ldx/ld*dt*5; player.pos.z+=ldz/ld*dt*5; if(b.charging>0){ player.temp-=A.charge.hitDrain; b.charging=0; player.pos.x+=ldx/ld*3; player.pos.z+=ldz/ld*3; toast('被撞飛了！'); } }
+  if(ld<1.1*s && !inHeat){ hurt(B.touchDrain*(CFG().wraithTouchMult||1)*dt); hurtT=0.3; player.pos.x+=ldx/ld*dt*5; player.pos.z+=ldz/ld*dt*5; if(b.charging>0){ hurt(A.charge.hitDrain); b.charging=0; player.pos.x+=ldx/ld*3; player.pos.z+=ldz/ld*3; toast('被撞飛了！'); } }
   if(b.hit>0){ b.hit-=dt; b.mat.emissive.setHex(0x553311); } else b.mat.emissive.setHex(b.windup>0?0x2a4a6a:0x0a1a2a);
   // 血條
   const bar=$('bossBar'); bar.hidden=!(b.aggro||b.hp<b.max) || fromLair>B.leash+20;
