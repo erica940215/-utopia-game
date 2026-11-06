@@ -152,8 +152,8 @@ function coopSend(event,payload){ if(coop) coop.ch.send({type:'broadcast',event,
 let coopPosT=0;
 function coopTick(dt){
   if(!coop||state!=='play') return; coopPosT-=dt; updateMatesHud();
-  if(coopPosT<=0){ coopPosT=0.1; coopSend('pos',{id:coopId,name:coopName(),x:player.pos.x,z:player.pos.z,yaw:player.yaw,node:curNode&&curNode.id,since:netSince}); }
-  for(const p of coop.peers.values()){ if(!p.g.parent&&world&&p.node===(curNode&&curNode.id)) world.add(p.g); p.g.position.lerp(p.to,Math.min(1,dt*10)); p.g.position.y=heightAt(p.g.position.x,p.g.position.z); p.g.visible=p.node===(curNode&&curNode.id); }
+  if(coopPosT<=0){ coopPosT=0.1; coopSend('pos',{id:coopId,name:coopName(),x:player.pos.x,z:player.pos.z,yaw:player.yaw,node:curNode&&curNode.id,since:netSince,y:inTrain?TRAIN_FLOOR:undefined}); }
+  for(const p of coop.peers.values()){ if(!p.g.parent&&world&&p.node===(curNode&&curNode.id)) world.add(p.g); p.g.position.lerp(p.to,Math.min(1,dt*10)); p.g.position.y=p.ty!=null?p.ty:heightAt(p.g.position.x,p.g.position.z); p.g.visible=p.node===(curNode&&curNode.id); }
   animateMates(dt);
 }
 const MATE_COLORS=[0x2a5ad8,0xc8402a,0x3a8a4a,0xe0a02a,0x8a3a9a];
@@ -173,7 +173,7 @@ function coopPeer(m){
   let p=coop.peers.get(m.id);
   if(!p){ p={...makeMate(m.name,coop.peers.size),to:new THREE.Vector3(m.x,0,m.z),name:m.name}; p.g.position.copy(p.to); coop.peers.set(m.id,p); }
   const moved=Math.hypot(m.x-p.to.x,m.z-p.to.z);
-  p.node=m.node; p.since=m.since; p.to.set(m.x,0,m.z); p.g.rotation.y=m.yaw; p.speed=moved/0.1; p.seen=performance.now();
+  p.node=m.node; p.since=m.since; p.ty=m.y; p.to.set(m.x,0,m.z); p.g.rotation.y=m.yaw; p.speed=moved/0.1; p.seen=performance.now();
 }
 function animateMates(dt){
   for(const p of coop.peers.values()){ if(!p.legs) continue; const sp=Math.min(1,(p.speed||0)/5); p.phase+=dt*(4+sp*8);

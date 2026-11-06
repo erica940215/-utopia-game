@@ -451,7 +451,7 @@ const CFG=()=>STATS||DATA.config.expedition, TMP=()=>DATA.config.temperature;
 const player={pos:new THREE.Vector3(),yaw:0,pitch:0,temp:100,hp:100,bob:0};
 const HPC=()=>DATA.config.health;
 /* 受傷扣生命；冷只扣體溫，體溫太低才會慢慢傷到生命 */
-let ammoCredit=0, ammoWarned=false;
+let ammoCredit=0, ammoWarned=false, haulBanked={};
 /* 熱區補子彈要消耗彈藥（信號槍不用） */
 function takeAmmoRound(){
   if(!weapon.ammoItem) return true;
@@ -485,7 +485,7 @@ function startExpedition(node,seed,startedAt){
   bag=zeroItems(); haul=zeroItems(); rescued=[]; container=[];
   ensureProgress(); STATS=computeStats();
   weapon=effWeapon(save.gear.equipped.weapon||'flare_gun'); ammo=weapon.ammo; foodBuffs=[]; runElapsed=0; fireCd=0; fireHeld=false;
-  STATS.heatRadius+=runMods.heatDelta||0; rebuildTrainCars(); initTrainDefense();
+  STATS.heatRadius+=runMods.heatDelta||0; rebuildTrainCars(); if(inTrain) setInTrain(false); buildTrainInterior(); haulBanked={}; initTrainDefense();
   timeLeft=Math.max(30,CFG().runSeconds+(runMods.timeDelta||0)-(startedAt?(Date.now()-startedAt)/1000:0)); collapses=0;
   if(startedAt) netSince=Date.now();   // 晚到的人不搶著負責敵人 nextSpawn=DATA.config.wraith.firstSpawnAt; sprint=false;
   player.pos.set(4.5,0,8); player.yaw=-Math.PI/2; player.pitch=0; player.temp=TMP().max; player.hp=HPC().max; ammoCredit=0;
@@ -582,8 +582,8 @@ function hud(inHeat){
 /* 互動 */
 function nearest(){
   let best=null,bd=3.2;
-  for(const it of interactables){ if(it.done) continue; const d=Math.hypot(it.pos.x-player.pos.x,it.pos.z-player.pos.z); if(d<bd){bd=d;best=it;} }
-  if(Math.hypot(DEPART.x-player.pos.x,DEPART.z-player.pos.z)<3.4) best={type:'depart'};
+  for(const it of interactables){ if(it.done||inTrain!==!!it.inside) continue; const d=Math.hypot(it.pos.x-player.pos.x,it.pos.z-player.pos.z); if(d<bd){bd=d;best=it;} }
+  if(!inTrain&&Math.hypot(DEPART.x-player.pos.x,DEPART.z-player.pos.z)<3.4) best={type:'depart'};
   return best;
 }
 let lastTarget=null;
@@ -601,6 +601,8 @@ function interact(dt){
       bag[it.item.id]+=take; it.amount-=take; toast(`取得 ${it.item.name} ×${take}`);
       if(it.amount<=0){ it.done=true; world.remove(it.group); coopSend('take',{t:'crate',x:it.pos.x,z:it.pos.z}); }
     }
+  } else if(it.type==='tdoor'||it.type==='tslot'||it.type==='tbench'){
+    trainInteract(it,pt,key);
   } else if(it.type==='vault'){
     pt.textContent=`[${key}] 打開碉堡寶箱`; if(actPressed) openVaultChest(it);
   } else if(it.type==='note'){
@@ -656,6 +658,7 @@ function askDepart(){
 }
 
 function collapse(){
+  if(inTrain) setInTrain(false);
   const D=DATA.config.death, T=TMP();
   // 隨機掉落一部分背包物品
   const units=[]; for(const k in bag) for(let i=0;i<bag[k];i++) units.push(k);
@@ -685,13 +688,14 @@ function finish(failed){
   for(const id of rescued){ save.collection[id]=(save.collection[id]||0)+1; save.zoo.unplaced[id]=(save.zoo.unplaced[id]||0)+1; }
   const bossHtml=bossSettle();
   persist();
+  for(const k in haulBanked) haul[k]=(haul[k]||0)+haulBanked[k];   // 結算畫面也算進途中存進倉庫的部分
   const total=Object.values(haul).reduce((a,b)=>a+b,0);
   const grade=trainBrokenRun?'火車被攻破了':failed?'列車在暴風雪中被迫出發':rescued.length>=4?'傳奇救援':rescued.length>=2?'順利歸隊':'勉強撐過';
   screenEl.hidden=false;
   screenEl.innerHTML=`<div class="card">
     <h1><small>EXPEDITION ${String(save.runs).padStart(2,'0')} · ${esc(curNode?curNode.name:'')}</small>${grade}</h1>
     ${trainBrokenRun?`<p>霜影攻破了火車，只能丟下一半的物資逃走。</p>`:failed?'<p>你在暴風雪中失溫，列車員把你拖上車後只能鳴笛離開。</p>':''}${STATS&&STATS.researchPerRun?`<p>研究車廂整理了資料：研究 +${STATS.researchPerRun}</p>`:''}
-    <div class="ledger">${DATA.items.map(i=>`<div><b class="num">${haul[i.id]}</b><span>${esc(i.name)}</span></div>`).join('')}<div><b class="num">${rescued.length}</b><span>生物</span></div></div>
+    <div class="ledger">${DATA.items.filter(i=>i.core||haul[i.id]).map(i=>`<div><b class="num">${haul[i.id]||0}</b><span>${esc(i.name)}</span></div>`).join('')}<div><b class="num">${rescued.length}</b><span>生物</span></div></div>
     ${rescued.length?`<div class="tags">${rescued.map(id=>`<span>${esc(DATA.speciesById[id].name)}${newOnes.includes(id)?'・新':''}</span>`).join('')}</div>`:'<p>這趟沒有救到生物。</p>'}
     ${bossHtml}
     <p>共帶回物資 ${total} 單位${collapses?`，途中倒下 ${collapses} 次`:''}${newOnes.length?`，圖鑑新增 ${new Set(newOnes).size} 種`:''}。</p>
@@ -787,6 +791,7 @@ function wireAuth(){
 /*@@PROFILES@@*/
 /*@@NETFIGHT@@*/
 /*@@PERF@@*/
+/*@@TRAININSIDE@@*/
 /*@@CONTROLS@@*/
 /* =========================================================
    8. 主迴圈
@@ -815,7 +820,7 @@ function update(dt){
   scene.fog.color.copy(SKY).lerp(STORM_SKY,stormK*0.7); scene.background.copy(scene.fog.color);
   if(state!=='play'){
     if(state==='hub'||state==='boot') player.yaw+=dt*0.03;
-    camera.position.set(player.pos.x,heightAt(player.pos.x,player.pos.z)+1.65,player.pos.z); camera.rotation.set(player.pitch,player.yaw,0); return;
+    camera.position.set(player.pos.x,(inTrain?TRAIN_FLOOR:heightAt(player.pos.x,player.pos.z))+1.65,player.pos.z); camera.rotation.set(player.pitch,player.yaw,0); return;
   }
   const C=CFG(), T=TMP(), W=DATA.config.wraith;
   timeLeft-=dt;
@@ -824,9 +829,9 @@ function update(dt){
   const il=Math.hypot(ix,iz); if(il>1){ix/=il;iz/=il;}
   const speed=sprint?C.sprintSpeed:C.walkSpeed, sy=Math.sin(player.yaw), cy=Math.cos(player.yaw);
   player.pos.x+=(ix*cy+iz*sy)*speed*dt; player.pos.z+=(-ix*sy+iz*cy)*speed*dt;
-  collide(player.pos,0.45);
+  if(inTrain) clampInTrain(); else collide(player.pos,0.45);
   const moving=il>0.1; if(moving) player.bob+=dt*(sprint?13:9);
-  const gy=heightAt(player.pos.x,player.pos.z);
+  const gy=inTrain?TRAIN_FLOOR:heightAt(player.pos.x,player.pos.z);
   camera.position.set(player.pos.x,gy+1.65+(moving?Math.sin(player.bob)*0.06:0),player.pos.z);
   camera.rotation.set(player.pitch,player.yaw,0); player.pos.y=gy;
 
